@@ -1,16 +1,15 @@
 ### Remmove .idea
-.idea
+/.idea
+*.iml
 
-### Remove batch files
-*.bat
+/target
+/*-*/target
 
-## Remove all modules
-batch/
-config-server/
-eureka-server/
-library-api/
-mail-api/
-media-api/
-user-api/
-web/
-zuul-server/
+/.settings
+/.project
+/*-*/.project
+/*-*/.settings
+/*-*/.classpath
+/*-*/.checkstyle
+/*-*/.springBeans
+
