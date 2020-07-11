@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$/batch" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/config-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/config-server/properties-repository" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/eureka-server" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/library-api" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mail-api" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/media-api" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/user-api" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/web" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/zuul-server" vcs="Git" />
+    <mapping directory="" vcs="Git" />
   </component>
 </project>

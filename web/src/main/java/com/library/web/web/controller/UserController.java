@@ -1,12 +1,12 @@
 package com.library.web.web.controller;
 
+import com.google.common.collect.Lists;
 import com.library.web.dto.global.UserDTO;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.UserApiProxy;
 import com.library.web.service.global.SecurityServiceImpl;
 import com.library.web.web.PathTable;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Lists;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

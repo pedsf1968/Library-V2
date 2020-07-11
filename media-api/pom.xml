@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
 
 	<!-- ==================================================================== -->
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-
-	<!-- ================================================= MAVEN INFORMATIONS -->
-	<groupId>com.library</groupId>
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>media-api</artifactId>
-	<version>1.0.RELEASE</version>
-	<name>media-api</name>
-	<description>Media controller api</description>
+	<name>Library-${project.artifactId}</name>
+	<description>Library multi module Media REST controller</description>
+
+	<parent>
+		<groupId>com.pedsf</groupId>
+		<artifactId>multi-module-library</artifactId>
+		<version>1.0.0.RELEASE</version>
+		<relativePath>..</relativePath>
+	</parent>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -36,15 +33,7 @@
 	<!--                                                           PROPERTIES -->
 	<!-- ==================================================================== -->
 	<properties>
-		<commons-io.version>2.6</commons-io.version>
-		<jasypt-spring-boot-starter.version>2.0.0</jasypt-spring-boot-starter.version>
 		<java.version>1.8</java.version>
-		<lombok.version>1.18.12</lombok.version>
-		<modelmapper-spring.version>2.3.0</modelmapper-spring.version>
-		<spring-boot-admin.version>2.2.1</spring-boot-admin.version>
-		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-		<springboot-starter.version>2.2.6.RELEASE</springboot-starter.version>
-		<junit-jupiter-engine.version>5.6.0</junit-jupiter-engine.version>
 		<org-jetbrains-annotations.version>16.0.1</org-jetbrains-annotations.version>
 	</properties>
 
@@ -68,7 +57,6 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
 		</dependency>
 
 		<!-- ========================================================== CONFIG -->
@@ -93,21 +81,18 @@
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
-			<version>${jasypt-spring-boot-starter.version}</version>
 		</dependency>
 
 		<!-- =========================================================== JBOSS -->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator-jboss-vfs</artifactId>
-			<version>0.1.0</version>
 		</dependency>
 
 		<!-- ========================================================== LOMBOK -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -115,7 +100,6 @@
 		<dependency>
 			<groupId>org.modelmapper.extensions</groupId>
 			<artifactId>modelmapper-spring</artifactId>
-			<version>${modelmapper-spring.version}</version>
 		</dependency>
 
 		<!-- =========================================================== RIBON -->
@@ -164,14 +148,12 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>de.codecentric</groupId>
 				<artifactId>spring-boot-admin-dependencies</artifactId>
-				<version>${spring-boot-admin.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -184,6 +166,9 @@
 	<profiles>
 		<profile>
 			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
 				<activatedProperties>development</activatedProperties>
 				<configServer>http://localhost:2000</configServer>
