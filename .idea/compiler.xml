@@ -9,12 +9,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="batch" />
         <module name="eureka-server" />
-        <module name="web" />
+        <module name="config-server" />
         <module name="user-api" />
         <module name="library-api" />
         <module name="mail-api" />
-        <module name="config-server" />
         <module name="zuul-server" />
+        <module name="web-api" />
         <module name="media-api" />
       </profile>
     </annotationProcessing>
@@ -22,12 +22,11 @@
       <module name="batch" target="1.8" />
       <module name="config-server" target="1.8" />
       <module name="eureka-server" target="1.8" />
-      <module name="eureka-server (1)" target="1.8" />
       <module name="library-api" target="1.8" />
       <module name="mail-api" target="1.8" />
       <module name="media-api" target="1.8" />
       <module name="user-api" target="1.8" />
-      <module name="web" target="1.8" />
+      <module name="web-api" target="1.8" />
       <module name="zuul-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -36,13 +35,11 @@
       <module name="batch" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
-      <module name="eureka-server (1)" options="-parameters" />
       <module name="library-api" options="-parameters" />
       <module name="mail-api" options="-parameters" />
       <module name="media-api" options="-parameters" />
-      <module name="properties-server (2)" options="-parameters" />
       <module name="user-api" options="-parameters" />
-      <module name="web" options="-parameters" />
+      <module name="web-api" options="-parameters" />
       <module name="zuul-server" options="-parameters" />
     </option>
   </component>

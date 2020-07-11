@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="73dced28-16b6-4674-a3e5-99486d444380" name="Default Changelist" comment="" />
+    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/properties-repository/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/properties-repository/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,92 +13,42 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
-        <option value="Class" />
+        <option value="XML" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$/batch" value="master" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/library-api" />
-    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="vmOptionsForImporter" value="-Xmx768m" />
-      </MavenImportingSettings>
-    </option>
     <option name="enabledProfiles">
       <list>
         <option value="development" />
       </list>
     </option>
-    <option name="disabledProfiles">
-      <list>
-        <option value="myMavenRepoRead" />
-        <option value="myMavenRepoWrite" />
-      </list>
-    </option>
   </component>
-  <component name="MavenRunner">
-    <option name="environmentProperties">
-      <map>
-        <entry key="jasypt.encryptor.password" value="${JASYPT_ENCRYPTOR_SECRET}" />
-      </map>
-    </option>
-  </component>
-  <component name="ProjectId" id="1Z70Yar5lABWLWuinvQ6Qu0bekF" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectId" id="1eSS8k9Aa0HIo8ac5QRdYvx6pVC" />
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="abbreviatePackageNames" value="true" />
+    <option name="compactDirectories" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showModules" value="false" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../myerp/src" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.40592593" />
-    <property name="settings.editor.selected.configurable" value="Docker" />
+    <property name="settings.editor.selected.configurable" value="DBNavigator.Settings" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.library.web.web" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\resources\templates\help" />
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\java\com\library\web\dto\business" />
-      <recent name="F:\dev\javaee\PROJECT-Library\batch\src\test\resources" />
-      <recent name="F:\dev\javaee\PROJECT-Library\eureka-server\src\main\resources" />
-      <recent name="F:\dev\javaee\PROJECT-Library\eureka-server\src\main\resources\docker" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.library.batch.dto.business" />
-      <recent name="com.library.web.dto.business" />
-      <recent name="com.library.web.proxy" />
-      <recent name="com.library.libraryapi.proxy" />
-      <recent name="com.library.batch.proxy" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\resources\static" />
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main" />
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\webapp" />
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\resources" />
-      <recent name="F:\dev\javaee\PROJECT-Library\web\src\main\resources\static\images" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.WebApplication9000">
+  <component name="RunManager" selected="Application.BatchApplication">
     <configuration name="BatchApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.library.batch.BatchApplication" />
       <module name="batch" />
@@ -109,26 +62,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EurekaServerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.dsf.cloud.eurekaserver.EurekaServerApplication" />
-      <module name="eureka-server" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.dsf.cloud.eurekaserver.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="LibraryApiApplication8000" type="Application" factoryName="Application">
-      <envs>
-        <env name="jasypt.encryptor.password" value="${JASYPT_ENCRYPTOR_SECRET}" />
-      </envs>
+    <configuration name="LibraryApiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.library.libraryapi.LibraryApiApplication" />
       <module name="library-api" />
-      <option name="VM_PARAMETERS" value="-Dserver.port=8000" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.library.libraryapi.*" />
@@ -152,13 +88,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserApiApplication7000" type="Application" factoryName="Application">
-      <envs>
-        <env name="jasypt.encryptor.password" value="${JASYPT_ENCRYPTOR_SECRET}" />
-      </envs>
+    <configuration name="UserApiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.user.userapi.UserApiApplication" />
       <module name="user-api" />
-      <option name="VM_PARAMETERS" value="-Dserver.port=7000" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.user.userapi.*" />
@@ -169,27 +101,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserApiApplication7100" type="Application" factoryName="Application">
-      <envs>
-        <env name="jasypt.encryptor.password" value="${JASYPT_ENCRYPTOR_SECRET}" />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="com.user.userapi.UserApiApplication" />
-      <module name="user-api" />
-      <option name="VM_PARAMETERS" value="-Dserver.port=7100" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.user.userapi.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="WebApplication9000" type="Application" factoryName="Application" temporary="true">
+    <configuration name="WebApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.library.web.WebApplication" />
-      <module name="web" />
-      <option name="VM_PARAMETERS" value="-Dserver.port=9000" />
+      <module name="web-api" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.library.web.*" />
@@ -200,243 +114,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ZuulServerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.dsf.zuulserver.ZuulServerApplication" />
-      <module name="zuul-server" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.dsf.zuulserver.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="batch:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="batch/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="batch/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="batch:1.0" />
-          <option name="buildArgs">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="-Dspring.profiles.active" />
-                <option name="value" value="docker" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="batch" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="batch/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="eureka-server/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="eureka-server:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="eureka-server" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="../eureka-server/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="library-api/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="library-api:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="eureka-server" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="library-api/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="mail-api/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="mail-api:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="mail-api" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="mail-api/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="media-api/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="media-api:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="media-api" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="media-api/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="user-api/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="user-api:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="user-api" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="user-api/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="web/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="imageTag" value="web-api:1.0" />
-          <option name="buildCliOptions" value="" />
-          <option name="buildOnly" value="true" />
-          <option name="command" value="" />
-          <option name="containerName" value="web-api" />
-          <option name="entrypoint" value="" />
-          <option name="envVars">
-            <list>
-              <DockerEnvVarImpl>
-                <option name="name" value="jasypt.encryptor.password" />
-                <option name="value" value="${JASYPT_ENCRYPTOR_SECRET}" />
-              </DockerEnvVarImpl>
-            </list>
-          </option>
-          <option name="portBindings">
-            <list>
-              <DockerPortBindingImpl>
-                <option name="containerPort" value="8080" />
-                <option name="hostPort" value="8080" />
-              </DockerPortBindingImpl>
-            </list>
-          </option>
-          <option name="commandLineOptions" value="" />
-          <option name="sourceFilePath" value="web/Dockerfile" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Application.UserApiApplication7000" />
-      <item itemvalue="Application.UserApiApplication7100" />
-      <item itemvalue="Application.LibraryApiApplication8000" />
-      <item itemvalue="Application.EurekaServerApplication" />
-      <item itemvalue="Application.ZuulServerApplication" />
-      <item itemvalue="Application.MediaApiApplication" />
-      <item itemvalue="Application.WebApplication9000" />
-      <item itemvalue="Application.BatchApplication" />
-      <item itemvalue="Docker.batch/Dockerfile" />
-      <item itemvalue="Docker.eureka-server/Dockerfile" />
-      <item itemvalue="Docker.library-api/Dockerfile" />
-      <item itemvalue="Docker.mail-api/Dockerfile" />
-      <item itemvalue="Docker.media-api/Dockerfile" />
-      <item itemvalue="Docker.user-api/Dockerfile" />
-      <item itemvalue="Docker.web/Dockerfile" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.WebApplication9000" />
         <item itemvalue="Application.BatchApplication" />
+        <item itemvalue="Application.WebApplication" />
+        <item itemvalue="Application.LibraryApiApplication" />
+        <item itemvalue="Application.UserApiApplication" />
         <item itemvalue="Application.MediaApiApplication" />
-        <item itemvalue="Application.ZuulServerApplication" />
-        <item itemvalue="Application.EurekaServerApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -445,633 +129,78 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="73dced28-16b6-4674-a3e5-99486d444380" name="Default Changelist" comment="" />
-      <created>1584174873527</created>
+      <changelist id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="" />
+      <created>1594313343663</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1584174873527</updated>
+      <updated>1594313343663</updated>
     </task>
-    <task id="LOCAL-00010" summary="add parameter mail.count.down and separate sending mail in 2 methods:&#10; - one with Async for controller, &#10; - the other without for kafka">
-      <created>1586507083358</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
+    <task id="LOCAL-00001" summary="Create POM parent and update dependencies versions">
+      <created>1594472323877</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1586507083358</updated>
+      <updated>1594472323877</updated>
     </task>
-    <task id="LOCAL-00011" summary="add parameter mail.count.down and separate sending mail in 2 methods:&#10; - one with Async for controller, &#10; - the other without for kafka">
-      <created>1586507134269</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1586507134269</updated>
-    </task>
-    <task id="LOCAL-00012" summary="add eureka-server">
-      <created>1586623920387</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1586623920387</updated>
-    </task>
-    <task id="LOCAL-00013" summary="add eureka-server">
-      <created>1586623992902</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1586623992902</updated>
-    </task>
-    <task id="LOCAL-00014" summary="add eureka-server">
-      <created>1586624057536</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1586624057536</updated>
-    </task>
-    <task id="LOCAL-00015" summary="add eureka-server">
-      <created>1586763017525</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1586763017525</updated>
-    </task>
-    <task id="LOCAL-00016" summary="numerous bug corrected">
-      <created>1586872008006</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1586872008007</updated>
-    </task>
-    <task id="LOCAL-00017" summary="numerous bug corrected">
-      <created>1586872070905</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1586872070905</updated>
-    </task>
-    <task id="LOCAL-00018" summary="add path in test properties">
-      <created>1586872828795</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1586872828795</updated>
-    </task>
-    <task id="LOCAL-00019" summary="end of feature">
-      <created>1586881802357</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1586881802357</updated>
-    </task>
-    <task id="LOCAL-00020" summary="add path in test properties">
-      <created>1586882546883</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1586882546883</updated>
-    </task>
-    <task id="LOCAL-00021" summary="change application name">
-      <created>1586884248782</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1586884248782</updated>
-    </task>
-    <task id="LOCAL-00022" summary="remove Address and JsonIgnore">
-      <created>1587025706508</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1587025706508</updated>
-    </task>
-    <task id="LOCAL-00023" summary="change controller methods">
-      <created>1587025838575</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1587025838575</updated>
-    </task>
-    <task id="LOCAL-00024" summary="remove AddressDTO">
-      <created>1587025974230</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1587025974230</updated>
-    </task>
-    <task id="LOCAL-00025" summary="end of user bugfix">
-      <created>1587030722435</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1587030722435</updated>
-    </task>
-    <task id="LOCAL-00026" summary="add replace userservice by openfeign">
-      <created>1587050870689</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1587050870690</updated>
-    </task>
-    <task id="LOCAL-00027" summary="backup before zuul integration">
-      <created>1587051636242</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1587051636242</updated>
-    </task>
-    <task id="LOCAL-00028" summary="end zuul integration">
-      <created>1587136969765</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1587136969765</updated>
-    </task>
-    <task id="LOCAL-00029" summary="end zuul integration">
-      <created>1587137106222</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1587137106222</updated>
-    </task>
-    <task id="LOCAL-00030" summary="end zuul integration">
-      <created>1587231827168</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1587231827168</updated>
-    </task>
-    <task id="LOCAL-00031" summary="end zuul integration">
-      <created>1587232003488</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232003488</updated>
-    </task>
-    <task id="LOCAL-00032" summary="end zuul integration">
-      <created>1587232331550</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232331550</updated>
-    </task>
-    <task id="LOCAL-00033" summary="end zuul integration">
-      <created>1587232619254</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232619254</updated>
-    </task>
-    <task id="LOCAL-00034" summary="end zuul integration">
-      <created>1587232734760</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232734760</updated>
-    </task>
-    <task id="LOCAL-00035" summary="end zuul integration">
-      <created>1587232848826</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232848826</updated>
-    </task>
-    <task id="LOCAL-00036" summary="end zuul integration">
-      <created>1587232990511</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1587232990511</updated>
-    </task>
-    <task id="LOCAL-00037" summary="add pipeline link">
-      <created>1587376099382</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1587376099382</updated>
-    </task>
-    <task id="LOCAL-00038" summary="end zuul integration&#10;correction batch bug">
-      <created>1587453056186</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1587453056186</updated>
-    </task>
-    <task id="LOCAL-00039" summary="add test properties">
-      <created>1587455983190</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1587455983190</updated>
-    </task>
-    <task id="LOCAL-00040" summary="add test properties">
-      <created>1587457494621</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1587457494621</updated>
-    </task>
-    <task id="LOCAL-00041" summary="add test properties">
-      <created>1587458561491</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1587458561491</updated>
-    </task>
-    <task id="LOCAL-00042" summary="add retry on failing batch job and clean properties">
-      <created>1587577366169</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1587577366169</updated>
-    </task>
-    <task id="LOCAL-00043" summary="add profiles">
-      <created>1587578060837</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1587578060837</updated>
-    </task>
-    <task id="LOCAL-00044" summary="change user-api 6000 to 7000 because 6000 is not allowed&#10;and library-api 7000 to 8000">
-      <created>1587630441243</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1587630441255</updated>
-    </task>
-    <task id="LOCAL-00045" summary="specify development profile for maven test in gitlab-ci">
-      <created>1587631759574</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1587631759574</updated>
-    </task>
-    <task id="LOCAL-00046" summary="projet working">
-      <created>1587649258842</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1587649258842</updated>
-    </task>
-    <task id="LOCAL-00047" summary="finish embeded video feature&#10;add url for music and game&#10;display embeded video and person photo in web API">
-      <created>1587663635684</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1587663635684</updated>
-    </task>
-    <task id="LOCAL-00048" summary="refactoring rename production profile in local">
-      <created>1587711098891</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1587711098891</updated>
-    </task>
-    <task id="LOCAL-00049" summary="end of feature ShopEntityMatching">
-      <created>1587738776653</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1587738776653</updated>
-    </task>
-    <task id="LOCAL-00050" summary="end of feature ShopEntityMatching">
-      <created>1587742199107</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1587742199107</updated>
-    </task>
-    <task id="LOCAL-00051" summary="end of bugfix">
-      <created>1587753743957</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1587753743957</updated>
-    </task>
-    <task id="LOCAL-00052" summary="remove request loop from test">
-      <created>1587798290473</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1587798290475</updated>
-    </task>
-    <task id="LOCAL-00053" summary="remove request loop from test">
-      <created>1587799148549</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1587799148549</updated>
-    </task>
-    <task id="LOCAL-00054" summary="remove request loop from test">
-      <created>1587819677396</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1587819677396</updated>
-    </task>
-    <task id="LOCAL-00055" summary="BUGFIX Batch">
-      <created>1587825170896</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1587825170896</updated>
-    </task>
-    <task id="LOCAL-00056" summary="Set all to RELEASE 1.0">
-      <created>1588090106739</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1588090106740</updated>
-    </task>
-    <task id="LOCAL-00057" summary="Set all to RELEASE 1.0">
-      <created>1588091616015</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1588091616015</updated>
-    </task>
-    <task id="LOCAL-00058" summary="add help">
-      <created>1588151398457</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1588151398458</updated>
-    </task>
-    <option name="localTasksCounter" value="59" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <ignored-roots>
-      <path value="$PROJECT_DIR$/library" />
-      <path value="$PROJECT_DIR$/user-lib" />
-      <path value="$PROJECT_DIR$" />
-    </ignored-roots>
-    <MESSAGE value="add path in test properties" />
-    <MESSAGE value="change application name" />
-    <MESSAGE value="remove Address and JsonIgnore" />
-    <MESSAGE value="change controller methods" />
-    <MESSAGE value="remove AddressDTO" />
-    <MESSAGE value="end of user bugfix" />
-    <MESSAGE value="add replace userservice by openfeign" />
-    <MESSAGE value="backup before zuul integration" />
-    <MESSAGE value="end zuul integration" />
-    <MESSAGE value="add pipeline link" />
-    <MESSAGE value="end zuul integration&#10;correction batch bug" />
-    <MESSAGE value="add test properties" />
-    <MESSAGE value="add retry on failing batch job and clean properties" />
-    <MESSAGE value="add profiles" />
-    <MESSAGE value="change user-api 6000 to 7000 because 6000 is not allowed&#10;and library-api 7000 to 8000" />
-    <MESSAGE value="specify development profile for maven test in gitlab-ci" />
-    <MESSAGE value="projet working" />
-    <MESSAGE value="finish embeded video feature&#10;add url for music and game&#10;display embeded video and person photo in web API" />
-    <MESSAGE value="refactoring rename production profile in local" />
-    <MESSAGE value="end of feature ShopEntityMatching" />
-    <MESSAGE value="end of bugfix" />
-    <MESSAGE value="remove request loop from test" />
-    <MESSAGE value="BUGFIX Batch" />
-    <MESSAGE value="Set all to RELEASE 1.0" />
-    <MESSAGE value="add help" />
-    <option name="LAST_COMMIT_MESSAGE" value="add help" />
+    <MESSAGE value="Create POM parent and update dependencies versions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create POM parent and update dependencies versions" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="677" y="198" key="#ConfigServerApplication" timestamp="1587018389899">
+    <state x="586" y="218" key="#Inspections" timestamp="1594450171662">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="677" y="198" key="#ConfigServerApplication/0.0.1920.1080@0.0.1920.1080" timestamp="1587018389899" />
-    <state x="552" y="197" key="#Docker" timestamp="1586272292868">
+    <state x="586" y="218" key="#Inspections/0.0.1920.1080@0.0.1920.1080" timestamp="1594450171662" />
+    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594472311171">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="197" key="#Docker/0.0.1920.1080@0.0.1920.1080" timestamp="1586272292868" />
-    <state x="552" y="198" key="#Notifications" timestamp="1588092328463">
+    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594472311171" />
+    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594453110996">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="198" key="#Notifications/0.0.1920.1080@0.0.1920.1080" timestamp="1588092328463" />
-    <state x="531" y="212" key="#Path_mapping" timestamp="1587708738875">
+    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1594453110996" />
+    <state width="1877" height="370" key="GridCell.Tab.0.bottom" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="531" y="212" key="#Path_mapping/0.0.1920.1080@0.0.1920.1080" timestamp="1587708738875" />
-    <state x="552" y="198" key="#Plugins" timestamp="1587114669210">
+    <state width="1877" height="370" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.center" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="198" key="#Plugins/0.0.1920.1080@0.0.1920.1080" timestamp="1587114669210" />
-    <state x="552" y="198" key="#Project_Structure" timestamp="1587018398404">
+    <state width="1877" height="370" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.left" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="198" key="#Project_Structure/0.0.1920.1080@0.0.1920.1080" timestamp="1587018398404" />
-    <state x="653" y="115" key="#Unnamed" timestamp="1587548371606">
+    <state width="1877" height="370" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.right" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="653" y="115" key="#Unnamed/0.0.1920.1080@0.0.1920.1080" timestamp="1587548371606" />
-    <state x="679" y="105" key="#batch/Dockerfile" timestamp="1586589587822">
+    <state width="1877" height="370" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="357" key="GridCell.Tab.1.bottom" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="679" y="105" key="#batch/Dockerfile/0.0.1920.1080@0.0.1920.1080" timestamp="1586589587822" />
-    <state x="387" y="184" width="1092" height="829" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1587649590916">
+    <state width="1877" height="357" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.center" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="387" y="184" width="1092" height="829" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587649590916" />
-    <state x="511" y="198" key="#com.intellij.ide.util.MemberChooser" timestamp="1587799105710">
+    <state width="1877" height="357" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.left" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="511" y="198" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1587799105710" />
-    <state x="662" y="382" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1587106530512">
+    <state width="1877" height="357" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.right" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="662" y="382" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587106530512" />
-    <state x="640" y="275" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1587366115277">
+    <state width="1877" height="357" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state x="625" y="299" key="NewModule_or_Project.wizard" timestamp="1594313568168">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="640" y="275" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587366115277" />
-    <state x="720" y="399" width="479" height="289" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1587106709829">
+    <state x="625" y="299" key="NewModule_or_Project.wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1594313568168" />
+    <state x="440" y="114" key="SettingsEditor" timestamp="1594313787393">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="720" y="399" width="479" height="289" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1080@0.0.1920.1080" timestamp="1587106709829" />
-    <state x="711" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1587199129412">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="711" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587199129412" />
-    <state x="424" y="29" width="1304" height="945" key="CommitChangelistDialog2" timestamp="1588151382944">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="424" y="29" width="1304" height="945" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1588151382944" />
-    <state x="92" y="92" width="1736" height="896" key="DiffContextDialog" timestamp="1587449685038">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="92" y="92" width="1736" height="896" key="DiffContextDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587449685038" />
-    <state x="694" y="301" key="EnvironmentVariablesDialog" timestamp="1586437565926">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="694" y="301" key="EnvironmentVariablesDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1586437565926" />
-    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1588147353256">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1588147353256" />
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom" timestamp="1588147772813">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1588147772813" />
-    <state width="1877" height="372" key="GridCell.Tab.0.center" timestamp="1588147772813">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="372" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1588147772813" />
-    <state width="1877" height="372" key="GridCell.Tab.0.left" timestamp="1588147772812">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="372" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1588147772812" />
-    <state width="1877" height="372" key="GridCell.Tab.0.right" timestamp="1588147772813">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="372" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1588147772813" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1587754830631">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1587754830631" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1587754830631">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1587754830631" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1587754830631">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1587754830631" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1587754830631">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1587754830631" />
-    <state x="625" y="238" key="NewModule_or_Project.wizard" timestamp="1587052440556">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="625" y="238" key="NewModule_or_Project.wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1587052440556" />
-    <state x="440" y="114" width="998" height="881" key="SettingsEditor" timestamp="1587708759207">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="440" y="114" width="998" height="881" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1587708759207" />
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2" timestamp="1588151674442">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1588151674442" />
-    <state x="601" y="315" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize" timestamp="1586428988021">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="601" y="315" key="com.intellij.docker.deployment.ui.DockerPortBindingsField.v173.dialogSize/0.0.1920.1080@0.0.1920.1080" timestamp="1586428988021" />
-    <state x="656" y="363" key="com.intellij.ide.util.TipDialog" timestamp="1588155166069">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="656" y="363" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1588155166069" />
-    <state x="660" y="201" width="1092" height="728" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1587230188373">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="660" y="201" width="1092" height="728" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1080@0.0.1920.1080" timestamp="1587230188373" />
-    <state x="739" y="252" key="git4idea.branch.GitSmartOperationDialog" timestamp="1587449419918">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="739" y="252" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587449419918" />
-    <state x="696" y="331" key="git4idea.merge.GitPullDialog" timestamp="1586448855262">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="696" y="331" key="git4idea.merge.GitPullDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1586448855262" />
-    <state x="702" y="158" key="refactoring.ChangeSignatureDialog" timestamp="1587405105114">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="702" y="158" key="refactoring.ChangeSignatureDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1587405105114" />
-    <state x="616" y="250" width="672" height="677" key="run.anything.popup" timestamp="1587548394339">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="616" y="250" width="672" height="677" key="run.anything.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1587548394339" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1587203938440">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1587203938440" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/user-api/src/main/java/com/user/userapi/service/UserServiceImpl.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/business/OldVideoServiceImpl.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/user-api/src/main/java/com/user/userapi/service/UserServiceImpl.java</url>
-          <line>189</line>
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/user-api/src/main/java/com/user/userapi/service/UserServiceImpl.java</url>
-          <line>185</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java</url>
-          <line>184</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java</url>
-          <line>178</line>
-          <option name="timeStamp" value="111" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/user-api/src/main/java/com/user/userapi/controller/UserController.java</url>
-          <line>58</line>
-          <option name="timeStamp" value="113" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java</url>
-          <line>179</line>
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java</url>
-          <line>180</line>
-          <option name="timeStamp" value="115" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BookService.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="140" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/global/SecurityServiceImpl.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="150" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/global/SecurityServiceImpl.java</url>
-          <line>42</line>
-          <option name="timeStamp" value="151" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/global/SecurityServiceImpl.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="152" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/global/UserDetailsServiceImpl.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="167" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/web/src/main/java/com/library/web/service/global/UserDetailsServiceImpl.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="168" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1594313787393" />
   </component>
 </project>

@@ -1,13 +1,0 @@
-
-‚
-java:S4601"gReorder the URL patterns from most to less specific, the pattern "/user/**" should occurs before "/**".(˜Õ¡øøÿÿÿÿ
-‡
-java:S4601"lReorder the URL patterns from most to less specific, the pattern "/resources/**" should occurs before "/**".(˜Õ¡øøÿÿÿÿ
-€
-java:S4601"eReorder the URL patterns from most to less specific, the pattern "/login" should occurs before "/**".(˜Õ¡øøÿÿÿÿ
-‡
-java:S4601"lReorder the URL patterns from most to less specific, the pattern "/registration" should occurs before "/**".(˜Õ¡øøÿÿÿÿ
-€
-java:S4601"eReorder the URL patterns from most to less specific, the pattern "/index" should occurs before "/**".(˜Õ¡øøÿÿÿÿ
-’
-java:S4601"pReorder the URL patterns from most to less specific, the pattern "/static/images/**" should occurs before "/**".(˜Õ¡øøÿÿÿÿ8Î¦Õó˜.

@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<!-- ==================================================================== -->
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-
-	<!-- ================================================= MAVEN INFORMATIONS -->
-	<groupId>com.library</groupId>
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>mail-api</artifactId>
-	<version>1.0.RELEASE</version>
-	<name>mail-api</name>
-	<description>Mail management with Kafka consumer and REST controller</description>
+	<name>Library-${project.artifactId}</name>
+	<description>Library multi module Mail management with Kafka consumer and REST controller</description>
+
+	<parent>
+		<groupId>com.pedsf</groupId>
+		<artifactId>multi-module-library</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -36,17 +33,7 @@
 	<!--                                                           PROPERTIES -->
 	<!-- ==================================================================== -->
 	<properties>
-		<commons-io.version>2.6</commons-io.version>
-		<jackson-databind.version>2.11.0.rc1</jackson-databind.version>
-		<jasypt-spring-boot-starter.version>2.0.0</jasypt-spring-boot-starter.version>
 		<java.version>1.8</java.version>
-		<junit-jupiter-engine.version>5.6.0</junit-jupiter-engine.version>
-		<lombok.version>1.18.12</lombok.version>
-		<spring-boot-admin.version>2.2.1</spring-boot-admin.version>
-		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
-		<springboot-starter.version>2.2.6.RELEASE</springboot-starter.version>
-		<springdoc-openapi-ui.version>1.2.34</springdoc-openapi-ui.version>
-		<swagger.version>2.1.1</swagger.version>
 	</properties>
 
 	<!-- ==================================================================== -->
@@ -88,14 +75,12 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson-databind.version}</version>
 		</dependency>
 
 		<!-- ========================================================== JASYPT -->
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
-			<version>${jasypt-spring-boot-starter.version}</version>
 		</dependency>
 
 		<!-- =========================================================== KAFKA -->
@@ -108,7 +93,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -116,14 +100,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
-			<version>${springboot-starter.version}</version>
 		</dependency>
 
 		<!-- ========================================================= OPENAPI -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>${springdoc-openapi-ui.version}</version>
 		</dependency>
 
 		<!-- ======================================================= OPENFEIGN -->
@@ -142,7 +124,6 @@
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>${swagger.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -150,7 +131,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-			<version>${springboot-starter.version}</version>
 		</dependency>
 
 		<!-- ============================================================= WEB -->
@@ -192,33 +172,14 @@
 	</dependencies>
 
 	<!-- ==================================================================== -->
-	<!--                                                DEPENDENCY MANAGEMENT -->
-	<!-- ==================================================================== -->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>de.codecentric</groupId>
-				<artifactId>spring-boot-admin-dependencies</artifactId>
-				<version>${spring-boot-admin.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<!-- ==================================================================== -->
 	<!--                                                             PROFILES -->
 	<!-- ==================================================================== -->
 	<profiles>
 		<profile>
 			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
 				<activatedProperties>development</activatedProperties>
 				<configServer>http://localhost:2000</configServer>

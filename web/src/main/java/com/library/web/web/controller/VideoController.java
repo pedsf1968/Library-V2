@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.net.URISyntaxException;
 import java.util.*;
 
-import static org.assertj.core.util.Lists.*;
-
 @Slf4j
 @Controller
 @RefreshScope
@@ -81,7 +79,7 @@ public class VideoController {
       }
 
       if(filter.getActorId()!=null) {
-         videoDTO.setActors(list(videosActors.get(filter.getActorId())));
+         videoDTO.setActors(Collections.singletonList(videosActors.get(filter.getActorId())));
       }
 
       log.info("filter : " + videoDTO);
