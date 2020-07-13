@@ -87,6 +87,20 @@ VALUES (1,2,'2020-07-01',0),
     (2,18,'2020-07-05',0),
     (3,19,'2020-07-10',0);
 
+INSERT INTO booking (media_id,user_id,booking_date)
+VALUES (1,1,'2020-07-01'),
+    (1,2,'2020-07-01'),
+    (1,3,'2020-07-02'),
+    (2,1,'2020-07-03'),
+    (2,2,'2020-07-04'),
+    (2,3,'2020-07-05'),
+    (3,1,'2020-07-06'),
+    (3,2,'2020-07-07'),
+    (3,3,'2020-07-08'),
+    (4,1,'2020-07-09'),
+    (4,2,'2020-07-10'),
+    (4,3,'2020-07-11');
+
 -- ALTER SEQUENCE borrowing_id_seq RESTART WITH 10;
 -- ALTER SEQUENCE media_id_seq RESTART WITH 32;
 -- ALTER SEQUENCE person_id_seq RESTART WITH 18;
