@@ -83,7 +83,7 @@ public class GameController {
    }
 
    @GetMapping(value="/game/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("gameId") Integer gameId, Model model, Locale locale){
+   public String bookView(@PathVariable("gameId") String gameId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

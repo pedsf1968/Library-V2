@@ -12,7 +12,7 @@ RUN mvn -f /srv/pom.xml clean package -DskipTests=true -Pdocker
 # Package stage
 #
 FROM openjdk:8-jdk-alpine
-COPY ./images /images/
+COPY src/main/resources/images /images/
 COPY --from=build /srv/target/media-api.jar /srv/media-api.jar
 WORKDIR /srv
 RUN sh -c 'touch media-api.jar'

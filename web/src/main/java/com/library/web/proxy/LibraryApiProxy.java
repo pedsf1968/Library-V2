@@ -20,7 +20,7 @@ public interface LibraryApiProxy {
    List<BookDTO> findAllFilteredBooks(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody BookDTO filter);
 
    @GetMapping(value = "/books/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   BookDTO findBookById(@PathVariable("bookId") Integer bookId);
+   BookDTO findBookById(@PathVariable("bookId") String bookId);
 
    @GetMapping("/books/authors")
    List<PersonDTO> getAllBooksAuthors();
@@ -39,7 +39,7 @@ public interface LibraryApiProxy {
    List<GameDTO> findAllFilteredGames(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody GameDTO filter);
 
    @GetMapping(value = "/games/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   GameDTO findGameById(@PathVariable("gameId") Integer gameId);
+   GameDTO findGameById(@PathVariable("gameId") String gameId);
 
    @GetMapping("/games/titles")
    List<String> getAllGamesTitles();
@@ -52,7 +52,7 @@ public interface LibraryApiProxy {
    List<MusicDTO> findAllfilteredMusics(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody MusicDTO filter);
 
    @GetMapping(value = "/musics/{musicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   MusicDTO findMusicById(@PathVariable("musicId") Integer musicId);
+   MusicDTO findMusicById(@PathVariable("musicId") String musicId);
 
    @GetMapping("/musics/authors")
    List<PersonDTO> getAllMusicsAuthors();
@@ -74,7 +74,7 @@ public interface LibraryApiProxy {
    List<VideoDTO> findAllFilteredVideos(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody VideoDTO filter);
 
    @GetMapping(value = "/videos/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   VideoDTO findVideoById(@PathVariable("videoId") Integer videoId);
+   VideoDTO findVideoById(@PathVariable("videoId") String videoId);
 
    @GetMapping("/videos/directors")
    List<PersonDTO> getAllVideosDirectors();
@@ -90,7 +90,7 @@ public interface LibraryApiProxy {
    List<BorrowingDTO> findByUserIdNotReturn(@PathVariable("userId") Integer userId);
 
    @PostMapping(value = "/borrowings/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
-   BorrowingDTO addBorrowing(@PathVariable("userId") Integer userId, @RequestBody Integer mediaId);
+   BorrowingDTO addBorrowing(@PathVariable("userId") Integer userId, @RequestBody String mediaEan);
 
    @PostMapping(value = "/borrowings/{userId}/extend", produces = MediaType.APPLICATION_JSON_VALUE)
    BorrowingDTO extendBorrowing(@PathVariable("userId") Integer userId, @RequestBody Integer mediaId);

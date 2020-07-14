@@ -104,7 +104,7 @@ public class BookController {
    }
 
    @GetMapping(value="/book/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("bookId") Integer bookId, Model model, Locale locale){
+   public String bookView(@PathVariable("bookId") String bookId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

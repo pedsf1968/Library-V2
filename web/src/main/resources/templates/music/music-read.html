@@ -15,7 +15,7 @@
          </div>
          <div class="col-sm my-auto">
             <a class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/musics}" th:text="#{label.back}">Back</a>
-            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{musicId}(musicId=${music.id})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{musicEan}(musicId=${musicEan.ean})}" th:text="#{label.setAside}">Book</a>
          </div>
       </div>
    </header>
@@ -26,7 +26,7 @@
             <h5 th:text="#{label.information}"></h5>
          </div>
          <div class="card-body center">
-            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + music.id}" alt="photo"/>
+            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + music.ean}" alt="photo"/>
          </div>
          <div class="card-footer row">
             <div class="input-group">
@@ -61,7 +61,7 @@
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
-               <span class="form-control" th:text="${music.remaining}"> Remaining </span>
+               <span class="form-control" th:text="${music.stock}"> Remaining </span>
             </div>
          </div>
       </div>

@@ -45,22 +45,7 @@ public class MediaDTO implements Serializable {
    @Size(max = MEDIA_TYPE_MAX, message = ERROR_MESSAGE_LESS + MEDIA_TYPE_MAX)
    protected String mediaType;
 
-   @NotNull
-   @Size(min = TITLE_MIN, max = TITLE_MAX,
-         message = ERROR_MESSAGE_BETWEEN + TITLE_MIN + " and " + TITLE_MAX  + " !")
-   private String title;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
-
-   // weight and dimensions for transport informations
-   private Integer weight;
-   private Integer length;
-   private Integer width;
-   private Integer height;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
-   private Integer stock;
-   private Integer remaining;
+   private String status;
 }

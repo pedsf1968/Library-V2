@@ -102,7 +102,7 @@ public class VideoController {
    }
 
    @GetMapping(value="/video/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("videoId") Integer videoId, Model model, Locale locale){
+   public String bookView(@PathVariable("videoId") String videoId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

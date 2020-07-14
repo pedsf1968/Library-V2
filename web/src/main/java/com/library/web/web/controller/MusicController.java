@@ -117,7 +117,7 @@ public class MusicController {
    }
 
    @GetMapping(value="/music/{musicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("musicId") Integer musicId, Model model, Locale locale){
+   public String bookView(@PathVariable("musicId") String musicId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

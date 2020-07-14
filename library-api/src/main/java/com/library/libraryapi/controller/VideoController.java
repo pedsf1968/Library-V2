@@ -66,7 +66,7 @@ public class VideoController {
    }
 
    @GetMapping(value = "/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<VideoDTO> findVideoById(@PathVariable("videoId")Integer videoId){
+   public ResponseEntity<VideoDTO> findVideoById(@PathVariable("videoId")String videoId){
 
       try {
          VideoDTO videoDTO = videoService.findById(videoId);
@@ -82,7 +82,7 @@ public class VideoController {
 
       try {
          VideoDTO videoCreated = videoService.save(videoDTO);
-         return ResponseEntity.created(new URI( "/book" + videoCreated.getId())).body(videoCreated);
+         return ResponseEntity.created(new URI( "/book" + videoCreated.getEan())).body(videoCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -110,7 +110,7 @@ public class VideoController {
    }
 
    @DeleteMapping("/{videoId}")
-   public ResponseEntity<Void> deleteVideo(@PathVariable("videoId") Integer videoId) {
+   public ResponseEntity<Void> deleteVideo(@PathVariable("videoId") String videoId) {
       try {
          videoService.deleteById(videoId);
          return ResponseEntity.ok().build();

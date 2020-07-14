@@ -7,5 +7,5 @@ public enum BookFormat {
    POCKET,
    COMICS,
    DICTIONARY,
-   PARTITION;
+   PARTITION
 }

@@ -178,7 +178,7 @@
 		<profile>
 			<id>local</id>
 			<properties>
-				<activatedProperties>development</activatedProperties>
+				<activatedProperties>local</activatedProperties>
 				<configServer>http://localhost:2000</configServer>
 			</properties>
 

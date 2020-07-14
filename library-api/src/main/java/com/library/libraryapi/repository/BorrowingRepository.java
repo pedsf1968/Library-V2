@@ -18,7 +18,7 @@ public interface BorrowingRepository extends JpaRepository<Borrowing, Integer>, 
    Borrowing save(Borrowing borrowing);
    void deleteById(Integer id);
 
-   //@Query("SELECT * FROM Borrowing b WHERE b.userId = ?1 AND b.mediaId = ?2")
+   @Query("SELECT b FROM Borrowing b WHERE b.userId = ?1 AND b.mediaId = ?2")
    Borrowing findByUserIdAndMediaId(Integer userId, Integer mediaId);
 
    @Query(value = "SELECT * FROM Borrowing b " +

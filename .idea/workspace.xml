@@ -1,7 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="" />
+    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN">
+      <change afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/MediaStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_h2database_h2_1_4_200.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/batch/batch.iml" beforeDir="false" afterPath="$PROJECT_DIR$/batch/batch.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/config-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/config-server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eureka-server/eureka-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/eureka-server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/library-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/library-api.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BookController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BorrowingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BorrowingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/MusicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/MusicController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/VideoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/BookDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/BookDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/GameDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/GameDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MediaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MediaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MusicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MusicDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/VideoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/VideoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/BookFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/BookFormat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Music.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/UserStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/UserStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Video.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Video.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BookRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BorrowingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BorrowingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/GameRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/GameRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MusicRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MusicRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/VideoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/VideoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BookService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GenericService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GenericService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MediaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MediaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MusicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MusicService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/PersonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/PersonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/VideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/VideoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library-api/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/resources/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail-api/mail-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mail-api/mail-api.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/background.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253004226.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253002864.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253003656.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253010692.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2070413119.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/6.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253096337.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/book/7.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253096344.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/game/13.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/game/5035223122470.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/game/14.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/game/0805529340299.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/library-banner.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-banner.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/library-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/library-logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/logo-background.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/logo-background.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/music/10.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/4988064587100.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/music/11.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/4988064585816.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/music/12.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/8809269506764.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/music/9.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/8809634380036.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/images/video/8.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/video/3475001058980.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/media-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/media-api.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-api/user-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/user-api/user-api.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/BookDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/BookDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/GameDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/GameDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/MusicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/MusicDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/VideoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/VideoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/proxy/LibraryApiProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/proxy/LibraryApiProxy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BookController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BorrowingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BorrowingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/MusicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/MusicController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/VideoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-read.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/borrowing/borrowing-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/borrowing/borrowing-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-read.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-read.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-all.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-read.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zuul-server/zuul-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/zuul-server/zuul-server.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -11,6 +99,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="XML" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -20,7 +109,7 @@
   <component name="MavenImportPreferences">
     <option name="enabledProfiles">
       <list>
-        <option value="development" />
+        <option value="local" />
       </list>
     </option>
   </component>
@@ -39,26 +128,25 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../myerp/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/config-server/src/main/resources" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.40592593" />
     <property name="settings.editor.selected.configurable" value="DBNavigator.Settings" />
   </component>
-  <component name="RunManager" selected="Application.BatchApplication">
-    <configuration name="BatchApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.library.batch.BatchApplication" />
-      <module name="batch" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.library.batch.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\dev\javaee\PROJECT-Library2\config-server\properties-repository" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.library.libraryapi.model" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\dev\javaee\PROJECT-Library2\config-server\src\main\resources" />
+      <recent name="F:\dev\javaee\PROJECT-Library2\media-api\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.WebApplication">
     <configuration name="LibraryApiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.library.libraryapi.LibraryApiApplication" />
       <module name="library-api" />
@@ -111,13 +199,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ZuulServerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.dsf.zuulserver.ZuulServerApplication" />
+      <module name="zuul-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.dsf.zuulserver.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.BatchApplication" />
-        <item itemvalue="Application.WebApplication" />
         <item itemvalue="Application.LibraryApiApplication" />
-        <item itemvalue="Application.UserApiApplication" />
+        <item itemvalue="Application.WebApplication" />
         <item itemvalue="Application.MediaApiApplication" />
+        <item itemvalue="Application.UserApiApplication" />
+        <item itemvalue="Application.ZuulServerApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -153,58 +254,70 @@
       <option name="project" value="LOCAL" />
       <updated>1594474007309</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Implement Booking model, DTO, repository, specification">
+      <created>1594623691319</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1594623691319</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create POM parent and update dependencies versions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create POM parent and update dependencies versions" />
+    <MESSAGE value="Implement Booking model, DTO, repository, specification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement Booking model, DTO, repository, specification" />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="218" key="#Inspections" timestamp="1594450171662">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="586" y="218" key="#Inspections/0.0.1920.1080@0.0.1920.1080" timestamp="1594450171662" />
-    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594474006532">
+    <state x="765" y="246" key="#com.intellij.ide.util.MemberChooser" timestamp="1594660545075">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594474006532" />
-    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594453110996">
+    <state x="765" y="246" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1594660545075" />
+    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594729205707">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1594453110996" />
-    <state width="1877" height="370" key="GridCell.Tab.0.bottom" timestamp="1594472232628">
+    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729205707" />
+    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594654649604">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="370" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
-    <state width="1877" height="370" key="GridCell.Tab.0.center" timestamp="1594472232628">
+    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1594654649604" />
+    <state width="1877" height="334" key="GridCell.Tab.0.bottom" timestamp="1594729001910">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="370" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
-    <state width="1877" height="370" key="GridCell.Tab.0.left" timestamp="1594472232628">
+    <state width="1877" height="334" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
+    <state width="1877" height="334" key="GridCell.Tab.0.center" timestamp="1594729001910">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="370" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
-    <state width="1877" height="370" key="GridCell.Tab.0.right" timestamp="1594472232628">
+    <state width="1877" height="334" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
+    <state width="1877" height="334" key="GridCell.Tab.0.left" timestamp="1594729001910">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="370" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
-    <state width="1877" height="357" key="GridCell.Tab.1.bottom" timestamp="1594462972593">
+    <state width="1877" height="334" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
+    <state width="1877" height="334" key="GridCell.Tab.0.right" timestamp="1594729001910">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="357" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
-    <state width="1877" height="357" key="GridCell.Tab.1.center" timestamp="1594462972593">
+    <state width="1877" height="334" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
+    <state width="1877" height="401" key="GridCell.Tab.1.bottom" timestamp="1594728097342">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="357" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
-    <state width="1877" height="357" key="GridCell.Tab.1.left" timestamp="1594462972593">
+    <state width="1877" height="401" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
+    <state width="1877" height="401" key="GridCell.Tab.1.center" timestamp="1594728097342">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="357" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
-    <state width="1877" height="357" key="GridCell.Tab.1.right" timestamp="1594462972593">
+    <state width="1877" height="401" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
+    <state width="1877" height="401" key="GridCell.Tab.1.left" timestamp="1594728097342">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="357" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="401" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
+    <state width="1877" height="401" key="GridCell.Tab.1.right" timestamp="1594728097342">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="401" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
     <state x="625" y="299" key="NewModule_or_Project.wizard" timestamp="1594313568168">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -221,5 +334,35 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="761" y="328" key="git4idea.merge.GitMergeDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1594474055351" />
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1594716755298">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1594716755298" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BookController.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BorrowingController.java</url>
+          <line>92</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java</url>
+          <line>217</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MediaService.java</url>
+          <line>174</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
