@@ -22,15 +22,10 @@ import java.util.Date;
 public class Booking {
    private static final int EAN_MAX = 20;
 
-
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy =  GenerationType.IDENTITY)
    private Integer id;
-
-   @NotNull
-   @Column(name = "media_id")
-   protected Integer mediaId;
 
    @NotNull
    @Column(name = "ean", length = EAN_MAX)

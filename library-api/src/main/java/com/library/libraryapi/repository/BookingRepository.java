@@ -12,17 +12,14 @@ import java.util.Optional;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking,Integer>, JpaSpecificationExecutor<Booking> {
    Optional<Booking> findById(Integer id);
-   List<Booking> findByMediaId(Integer id);
+   List<Booking> findByEan(String ean);
    List<Booking> findByUserId(Integer id);
    List<Booking> findAll();
 
    Booking save(Booking booking);
    void deleteById(Integer id);
 
-   @Query("SELECT b FROM Booking b WHERE b.mediaId = ?1 ORDER BY bookingDate LIMIT 1")
-   Booking findNextBookingByMediaId(Integer mediaId);
-
-   @Query("SELECT COUNT(*) FROM Booking b WHERE b.mediaId = ?1")
-   Integer getNumberOfBookingByMediaId(Integer mediaId);
+   @Query(value = "SELECT * FROM Booking WHERE ean = :ean ORDER BY booking_date LIMIT 1", nativeQuery = true)
+   Booking findNextBookingByMediaId(String ean);
 
 }

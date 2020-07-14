@@ -69,7 +69,6 @@ public class BorrowingController {
          log.error(ex.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
-
    }
 
 

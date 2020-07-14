@@ -32,7 +32,7 @@ public interface MusicRepository extends JpaRepository<Music, Integer>, JpaSpeci
    List<String> findAllTitles();
 
    @Query("SELECT m FROM Music m WHERE m.stock>(-2*m.quantity)")
-   List<Book> findAllAllowed();
+   List<Music> findAllAllowed();
 
    @Modifying
    @Transactional

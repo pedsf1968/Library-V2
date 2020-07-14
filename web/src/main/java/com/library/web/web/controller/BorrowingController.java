@@ -38,7 +38,7 @@ public class BorrowingController {
 
 
    @GetMapping("/borrowings")
-   public String booksList(Model model, Locale locale) {
+   public String borrowingsList(Model model, Locale locale) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
       Date restitutionDate = DateUtils.addDays(new Date(),-borrowingDelay);

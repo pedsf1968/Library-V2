@@ -22,10 +22,6 @@ public class BookingSpecification implements Specification<Booking> {
    public Predicate toPredicate(Root<Booking> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
       List<Predicate> predicates = new ArrayList<>();
 
-      if (filter.getMediaId() != null) {
-         predicates.add(criteriaBuilder.equal(root.get("mediaId"), filter.getMediaId()));
-      }
-
       if (filter.getEan() != null) {
          predicates.add(criteriaBuilder.like(root.get("ean"), "%" + filter.getEan() + "%"));
       }

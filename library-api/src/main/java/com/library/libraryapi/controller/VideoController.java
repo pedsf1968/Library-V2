@@ -44,6 +44,21 @@ public class VideoController {
       }
    }
 
+   @GetMapping( value = "/allowed",produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<VideoDTO>> findAllAllowedVideos(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+
+      List<VideoDTO> videoDTOS;
+
+      try {
+         videoDTOS = videoService.findAllAllowed();
+         return ResponseEntity.ok(videoDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<VideoDTO>> findAllFilteredVideos(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,

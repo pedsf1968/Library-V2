@@ -1,18 +1,55 @@
 package com.library.libraryapi.controller;
 
-import com.library.libraryapi.service.BorrowingService;
+import com.library.libraryapi.dto.business.BookingDTO;
+import com.library.libraryapi.dto.business.BorrowingDTO;
+import com.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.library.libraryapi.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/bookings")
 public class BookingController {
-   private final BorrowingService borrowingService;
+   private final BookingService bookingService;
 
-
-   public BookingController(BorrowingService borrowingService) {
-      this.borrowingService = borrowingService;
+   public BookingController(BookingService bookingService) {
+      this.bookingService = bookingService;
    }
+
+   @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<BookingDTO>> findBookingsByUserId(@PathVariable("userId") Integer userId) {
+      List<BookingDTO> bookingDTOS;
+
+      try {
+         bookingDTOS = bookingService.findBookingsByUserId(userId);
+         return ResponseEntity.ok(bookingDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+
+   }
+
+
+   @PostMapping(value = "/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<BookingDTO> addBooking(@PathVariable("userId") Integer userId,
+                                                    @RequestBody String mediaEan
+   ) {
+      try {
+
+         BookingDTO bookingCreated = bookingService.booking(userId, mediaEan);
+         return ResponseEntity.ok(bookingCreated);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
+
 }

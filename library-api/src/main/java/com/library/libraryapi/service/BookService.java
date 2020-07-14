@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("BookService")
-public class BookService implements GenericService<BookDTO,Book,String> {
+public class BookService implements GenericMediaService<BookDTO,Book,String> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Book with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Book";
 
@@ -53,6 +53,22 @@ public class BookService implements GenericService<BookDTO,Book,String> {
    @Override
    public List<BookDTO> findAll() {
       List<Book> books = bookRepository.findAll();
+      List<BookDTO> bookDTOS = new ArrayList<>();
+
+      for (Book book: books){
+         bookDTOS.add(entityToDTO(book));
+      }
+
+      if (!bookDTOS.isEmpty()) {
+         return bookDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<BookDTO> findAllAllowed() {
+      List<Book> books = bookRepository.findAllAllowed();
       List<BookDTO> bookDTOS = new ArrayList<>();
 
       for (Book book: books){

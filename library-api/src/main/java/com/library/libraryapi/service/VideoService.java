@@ -1,6 +1,5 @@
 package com.library.libraryapi.service;
 
-import com.library.libraryapi.dto.business.GameDTO;
 import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.libraryapi.dto.business.VideoDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service("VideoService")
-public class VideoService implements GenericService<VideoDTO,Video,String> {
+public class VideoService implements GenericMediaService<VideoDTO,Video,String> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Video with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Video";
 
@@ -52,6 +51,22 @@ public class VideoService implements GenericService<VideoDTO,Video,String> {
    @Override
    public List<VideoDTO> findAll() {
       List<Video> videos = videoRepository.findAll();
+      List<VideoDTO> videoDTOS = new ArrayList<>();
+
+      for (Video video: videos){
+         videoDTOS.add(entityToDTO(video));
+      }
+
+      if (!videoDTOS.isEmpty()) {
+         return videoDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<VideoDTO> findAllAllowed() {
+      List<Video> videos = videoRepository.findAllAllowed();
       List<VideoDTO> videoDTOS = new ArrayList<>();
 
       for (Video video: videos){

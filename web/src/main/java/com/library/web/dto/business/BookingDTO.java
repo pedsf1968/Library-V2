@@ -1,12 +1,10 @@
-package com.library.libraryapi.dto.business;
+package com.library.web.dto.business;
 
-import com.library.libraryapi.dto.global.UserDTO;
+import com.library.web.dto.global.UserDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,10 +24,10 @@ public class BookingDTO implements Serializable {
    private Integer id;
 
    @NotNull
-   protected UserDTO user;
+   private UserDTO user;
 
    @NotNull
-   protected MediaDTO media;
+   private MediaDTO media;
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date bookingDate;

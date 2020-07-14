@@ -13,8 +13,8 @@ import java.util.List;
 public interface LibraryApiProxy {
 
    // BOOK controller methods
-   @GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
-   List<BookDTO> findAllBooks(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
+   @GetMapping(value = "/books/allowed", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<BookDTO> findAllAllowedBooks(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
 
    @PostMapping(value = "/books/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    List<BookDTO> findAllFilteredBooks(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody BookDTO filter);
@@ -32,8 +32,8 @@ public interface LibraryApiProxy {
    List<String> getAllBooksTitles();
 
    // GAME controller methods
-   @GetMapping(value = "/games", produces = MediaType.APPLICATION_JSON_VALUE)
-   List<GameDTO> findAllGames(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
+   @GetMapping(value = "/games/allowed", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<GameDTO> findAllAllowedGames(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
 
    @PostMapping(value = "/games/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    List<GameDTO> findAllFilteredGames(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody GameDTO filter);
@@ -45,8 +45,8 @@ public interface LibraryApiProxy {
    List<String> getAllGamesTitles();
 
    // MUSIC controller methods
-   @GetMapping(value = "/musics", produces = MediaType.APPLICATION_JSON_VALUE)
-   List<MusicDTO> findAllMusics(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
+   @GetMapping(value = "/musics/allowed", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<MusicDTO> findAllAllowedMusics(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
 
    @PostMapping(value = "/musics/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    List<MusicDTO> findAllfilteredMusics(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody MusicDTO filter);
@@ -67,8 +67,8 @@ public interface LibraryApiProxy {
    List<String> getAllMusicsTitles();
 
    // VIDEO controller methods
-   @GetMapping(value = "/videos", produces = MediaType.APPLICATION_JSON_VALUE)
-   List<VideoDTO> findAllVideos(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
+   @GetMapping(value = "/videos/allowed", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<VideoDTO> findAllAllowedVideos(@RequestParam(value = "page", defaultValue = "1") int pageNumber);
 
    @PostMapping(value = "/videos/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    List<VideoDTO> findAllFilteredVideos(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestBody VideoDTO filter);
@@ -94,4 +94,9 @@ public interface LibraryApiProxy {
 
    @PostMapping(value = "/borrowings/{userId}/extend", produces = MediaType.APPLICATION_JSON_VALUE)
    BorrowingDTO extendBorrowing(@PathVariable("userId") Integer userId, @RequestBody Integer mediaId);
+
+   // BOOKING controller methods
+   @GetMapping(value = "/bookings/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<BookingDTO> findBookingsByUser(@PathVariable("userId") Integer userId);
+
 }

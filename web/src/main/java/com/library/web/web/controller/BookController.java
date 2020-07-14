@@ -55,7 +55,7 @@ public class BookController {
 
    @GetMapping("/books")
    public String booksList(Model model, Locale locale){
-      List<BookDTO> bookDTOS = libraryApiProxy.findAllBooks(1);
+      List<BookDTO> bookDTOS = libraryApiProxy.findAllAllowedBooks(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_BOOKS, bookDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, booksTitles);

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("GameService")
-public class GameService implements GenericService<GameDTO,Game,String> {
+public class GameService implements GenericMediaService<GameDTO,Game,String> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Game with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Game";
 
@@ -53,6 +53,22 @@ public class GameService implements GenericService<GameDTO,Game,String> {
    @Override
    public List<GameDTO> findAll() {
       List<Game> games = gameRepository.findAll();
+      List<GameDTO> gameDTOS = new ArrayList<>();
+
+      for (Game game: games){
+         gameDTOS.add(entityToDTO(game));
+      }
+
+      if (!gameDTOS.isEmpty()) {
+         return gameDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<GameDTO> findAllAllowed() {
+      List<Game> games = gameRepository.findAllAllowed();
       List<GameDTO> gameDTOS = new ArrayList<>();
 
       for (Game game: games){

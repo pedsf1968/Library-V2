@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("MusicService")
-public class MusicService implements GenericService<MusicDTO,Music,String>{
+public class MusicService implements GenericMediaService<MusicDTO,Music,String>{
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Music with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Music";
 
@@ -53,6 +53,22 @@ public class MusicService implements GenericService<MusicDTO,Music,String>{
    @Override
    public List<MusicDTO> findAll() {
       List<Music> musics = musicRepository.findAll();
+      List<MusicDTO> musicDTOS = new ArrayList<>();
+
+      for (Music music: musics){
+         musicDTOS.add(entityToDTO(music));
+      }
+
+      if (!musicDTOS.isEmpty()) {
+         return musicDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<MusicDTO> findAllAllowed() {
+      List<Music> musics = musicRepository.findAllAllowed();
       List<MusicDTO> musicDTOS = new ArrayList<>();
 
       for (Music music: musics){

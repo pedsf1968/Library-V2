@@ -2,11 +2,12 @@ package com.library.libraryapi.service;
 
 import java.util.List;
 
-public interface GenericService<T,S,N> {
+public interface GenericMediaService<T,S,N> {
    boolean existsById(N id);
-   T findById(N id);
+   T findById(N ean);
 
    List<T> findAll();
+   List<T> findAllAllowed();
    List <T> findAllFiltered(T filter);
 
    N getFirstId(T filter);
