@@ -1,95 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN">
-      <change afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/MediaStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_h2database_h2_1_4_200.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/batch/batch.iml" beforeDir="false" afterPath="$PROJECT_DIR$/batch/batch.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/config-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/config-server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eureka-server/eureka-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/eureka-server/eureka-server.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/library-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/library-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BorrowingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/BorrowingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/MusicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/MusicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/controller/VideoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/BookDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/BookDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/GameDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/GameDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MediaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MediaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MusicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/MusicDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/VideoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/dto/business/VideoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/BookFormat.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/BookFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Media.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Music.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/UserStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/UserStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Video.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/model/Video.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BookRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BorrowingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/BorrowingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/GameRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/GameRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MediaSpecification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MusicRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/MusicRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/VideoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/repository/VideoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/BorrowingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GenericService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/GenericService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MediaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MediaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MusicService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/MusicService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/PersonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/PersonService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/VideoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/java/com/library/libraryapi/service/VideoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library-api/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/library-api/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mail-api/mail-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/mail-api/mail-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/background.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/background.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253004226.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253002864.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253003656.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253010692.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2070413119.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/6.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253096337.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/book/7.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/book/978-2253096344.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/game/13.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/game/5035223122470.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/game/14.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/game/0805529340299.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/library-banner.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-banner.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/library-icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/library-logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/library-logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/logo-background.png" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/logo-background.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/music/10.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/4988064587100.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/music/11.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/4988064585816.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/music/12.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/8809269506764.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/music/9.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/music/8809634380036.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/images/video/8.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/src/main/resources/images/video/3475001058980.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/media-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/media-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/media-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-api/user-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/user-api/user-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/BookDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/BookDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/GameDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/GameDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/MusicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/MusicDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/VideoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/dto/business/VideoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/proxy/LibraryApiProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/proxy/LibraryApiProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BorrowingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/BorrowingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/MusicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/MusicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/java/com/library/web/web/controller/VideoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-all.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/book/book-read.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/borrowing/borrowing-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/borrowing/borrowing-all.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-all.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/game/game-read.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-all.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/music/music-read.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-all.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-all.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-read.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/main/resources/templates/video/video-read.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/zuul-server/zuul-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/zuul-server/zuul-server.iml" afterDir="false" />
-    </list>
+    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -261,13 +173,32 @@
       <option name="project" value="LOCAL" />
       <updated>1594623691319</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN">
+      <created>1594729291844</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1594729291844</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create POM parent and update dependencies versions" />
     <MESSAGE value="Implement Booking model, DTO, repository, specification" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement Booking model, DTO, repository, specification" />
+    <MESSAGE value="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN" />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="218" key="#Inspections" timestamp="1594450171662">
@@ -278,10 +209,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="765" y="246" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1594660545075" />
-    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594729205707">
+    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594729286114">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729205707" />
+    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729286114" />
     <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594654649604">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -318,6 +249,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1877" height="401" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
+    <state x="540" y="274" key="IDE.errors.dialog" timestamp="1594729486542">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="540" y="274" key="IDE.errors.dialog/0.0.1920.1080@0.0.1920.1080" timestamp="1594729486542" />
     <state x="625" y="299" key="NewModule_or_Project.wizard" timestamp="1594313568168">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -326,10 +261,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1594313787393" />
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2" timestamp="1594472897121">
+    <state x="552" y="272" key="Vcs.Push.Dialog.v2" timestamp="1594729564318">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1594472897121" />
+    <state x="552" y="272" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729564318" />
     <state x="761" y="328" key="git4idea.merge.GitMergeDialog" timestamp="1594474055351">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
