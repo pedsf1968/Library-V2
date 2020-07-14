@@ -2,7 +2,7 @@ package com.library.web.web;
 
 public final class PathTable {
 
-   public final static String HELP = "help/help";
+   public static final String HELP = "help/help";
    public static final String HOME = "redirect:/";
 
    public static final String BOOK_ALL = "book/book-all";

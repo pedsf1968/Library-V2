@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.sql.Date;
  * url : Wikipeadia URL
  */
 @Data
-public class PersonDTO {
+public class PersonDTO implements Serializable {
    private static final int FIRSTNAME_MIN = 2;
    private static final int FIRSTNAME_MAX = 50;
    private static final int LASTNAME_MIN = 2;

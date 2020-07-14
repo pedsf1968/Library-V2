@@ -8,5 +8,5 @@ public enum MusicFormat {
    BLURAY,
    SACD,
    TAPE,
-   VINYL;
+   VINYL
 }
