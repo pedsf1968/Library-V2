@@ -1,15 +1,31 @@
-### Remmove .idea
-/.idea
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
 *.iml
+*.ipr
 
-/target
-/*-*/target
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
 
-/.settings
-/.project
-/*-*/.project
-/*-*/.settings
-/*-*/.classpath
-/*-*/.checkstyle
-/*-*/.springBeans
-
+### VS Code ###
+.vscode/
