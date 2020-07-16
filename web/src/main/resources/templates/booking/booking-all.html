@@ -40,6 +40,14 @@
                   </div>
                   <span class="form-control" th:text="${#dates.format(booking.bookingDate, 'dd-MM-yyyy')}">Booking date</span>
                </div>
+               <div class="input-group">
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.bookingRank}">Booking rank</div>
+                  </div>
+                  <span class="form-control" th:text="${booking.media.stock*-1}">Cancel</span>
+                  <a class="btn btn-success mb-2" th:href="@{'/bookings/cancel/' + ${booking.id}}" th:text="#{label.cancel}">cancel</a>
+               </div>
+
             </div>
 
          </div>

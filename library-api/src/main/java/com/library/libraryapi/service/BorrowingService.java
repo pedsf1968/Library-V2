@@ -285,7 +285,6 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       borrowing.setUserId(userId);
       borrowing.setBorrowingDate(today);
       borrowing.setExtended(0);
-      borrowing.setReturnDate(returnDate);
 
       // record the borrowing in borrowing table
       borrowingRepository.save(borrowing);

@@ -2,6 +2,7 @@ package com.library.web.web.controller;
 
 import com.library.web.dto.business.BookingDTO;
 import com.library.web.dto.global.UserDTO;
+import com.library.web.exceptions.ForbiddenException;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
@@ -54,7 +55,25 @@ public class BookingController {
 
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
-         libraryApiProxy.addBorrowing(userDTO.getId(), mediaEan);
+         try {
+            libraryApiProxy.addBooking(userDTO.getId(), mediaEan);
+         } catch (ForbiddenException exception) {
+
+         }
+
+      }
+
+      return PathTable.BOOKINGS_R;
+   }
+
+   @GetMapping("/booking/cancel/{bookingId}")
+   public String cancelBooking(@PathVariable("bookingId") Integer bookingId){
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+      if(!authentication.getName().equals("anonymousUser")) {
+         UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
+         libraryApiProxy.cancelBooking(userDTO.getId(), bookingId);
       }
 
       return PathTable.BOOKINGS_R;

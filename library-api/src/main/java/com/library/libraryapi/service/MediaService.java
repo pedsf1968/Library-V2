@@ -183,7 +183,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
    MediaType findMediaTypeByEan(String ean) {
       String type = mediaRepository.findMediaTypeByEan(ean);
-      return MediaType.valueOf(ean);
+      return MediaType.valueOf(type);
    }
 
 

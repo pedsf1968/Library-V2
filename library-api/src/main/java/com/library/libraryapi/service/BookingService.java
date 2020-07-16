@@ -6,6 +6,7 @@ import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Booking;
+import com.library.libraryapi.model.Game;
 import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
@@ -155,9 +156,22 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    @Override
    public BookingDTO entityToDTO(Booking booking) {
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
-
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
       MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
+
+      if(mediaDTO.getMediaType().equals(MediaType.BOOK.name())) {
+         BookDTO bookDTO = bookService.findById(mediaDTO.getEan());
+         mediaDTO.setStock(bookDTO.getStock());
+      } else if(mediaDTO.getMediaType().equals(MediaType.GAME.name())) {
+         GameDTO gameDTO = gameService.findById(mediaDTO.getEan());
+         mediaDTO.setStock(gameDTO.getStock());
+      } else if(mediaDTO.getMediaType().equals(MediaType.MUSIC.name())) {
+         MusicDTO musicDTO = musicService.findById(mediaDTO.getEan());
+         mediaDTO.setStock(musicDTO.getStock());
+      } else if(mediaDTO.getMediaType().equals(MediaType.VIDEO.name())) {
+         VideoDTO videoDTO = videoService.findById(mediaDTO.getEan());
+         mediaDTO.setStock(videoDTO.getStock());
+      }
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
@@ -258,5 +272,40 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       }
 
       return bookingDTOS;
+   }
+
+   /**
+    * method for booking a media
+    *
+    * @param bookingId id of the booking
+    * @return the Booking DTO
+    */
+   public BookingDTO cancelBooking(Integer bookingId) {
+      Booking booking;
+
+      if (existsById(bookingId)) {
+         booking = bookingRepository.findById(bookingId).orElse(null);
+      } else {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + bookingId);
+      }
+
+      if (booking!=null) {
+         String mediaEan = booking.getEan();
+         MediaType mediaType = mediaService.findMediaTypeByEan(mediaEan);
+
+         bookingRepository.deleteById(bookingId);
+
+         if (mediaType.equals(MediaType.BOOK)) {
+            bookService.increaseStock(mediaEan);
+         } else if (mediaType.equals(MediaType.GAME)) {
+            gameService.increaseStock(mediaEan);
+         } else if (mediaType.equals(MediaType.MUSIC)) {
+            musicService.increaseStock(mediaEan);
+         } else if (mediaType.equals(MediaType.VIDEO)) {
+            videoService.increaseStock(mediaEan);
+         }
+      }
+
+      return entityToDTO(booking);
    }
 }

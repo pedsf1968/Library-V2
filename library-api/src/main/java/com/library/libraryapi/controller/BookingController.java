@@ -1,7 +1,6 @@
 package com.library.libraryapi.controller;
 
 import com.library.libraryapi.dto.business.BookingDTO;
-import com.library.libraryapi.dto.business.BorrowingDTO;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,15 +35,24 @@ public class BookingController {
 
    }
 
-
-   @PostMapping(value = "/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BookingDTO> addBooking(@PathVariable("userId") Integer userId,
-                                                    @RequestBody String mediaEan
-   ) {
+                                                    @RequestBody String mediaEan ) {
       try {
-
          BookingDTO bookingCreated = bookingService.booking(userId, mediaEan);
          return ResponseEntity.ok(bookingCreated);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
+   @PostMapping(value = "/cancel/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<BookingDTO> cancelBooking(@PathVariable("userId") Integer userId,
+                                                @RequestBody Integer bookingId ) {
+      try {
+         BookingDTO bookingCanceled = bookingService.cancelBooking( bookingId);
+         return ResponseEntity.ok(bookingCanceled);
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
