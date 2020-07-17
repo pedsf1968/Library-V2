@@ -1,47 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BranchesTreeState">
-    <expand>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:release" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:release" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
-  </component>
   <component name="ChangeListManager">
-<<<<<<< HEAD
-    <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="" />
-=======
     <list default="true" id="2783f067-92dd-482a-8f9f-69894280a2d1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
->>>>>>> 8e3cc8cf3a460d3d4143c27557dbea7450786f11
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,22 +14,16 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="XML" />
-        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="feature/F1UpdateBooking" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="enabledProfiles">
       <list>
-        <option value="local" />
+        <option value="development" />
       </list>
     </option>
   </component>
@@ -85,25 +42,26 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/config-server/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../myerp/src" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.40592593" />
     <property name="settings.editor.selected.configurable" value="DBNavigator.Settings" />
   </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\dev\javaee\PROJECT-Library2\config-server\src\main\resources" />
-      <recent name="F:\dev\javaee\PROJECT-Library2\media-api\src\main\resources" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.library.libraryapi.model" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="F:\dev\javaee\PROJECT-Library2\config-server\properties-repository" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.WebApplication">
+  <component name="RunManager" selected="Application.BatchApplication">
+    <configuration name="BatchApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.library.batch.BatchApplication" />
+      <module name="batch" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.library.batch.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="LibraryApiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.library.libraryapi.LibraryApiApplication" />
       <module name="library-api" />
@@ -156,26 +114,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ZuulServerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.dsf.zuulserver.ZuulServerApplication" />
-      <module name="zuul-server" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.dsf.zuulserver.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ZuulServerApplication" />
+        <item itemvalue="Application.BatchApplication" />
         <item itemvalue="Application.WebApplication" />
+        <item itemvalue="Application.LibraryApiApplication" />
         <item itemvalue="Application.UserApiApplication" />
         <item itemvalue="Application.MediaApiApplication" />
-        <item itemvalue="Application.LibraryApiApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -204,101 +149,58 @@
       <option name="project" value="LOCAL" />
       <updated>1594472728864</updated>
     </task>
-    <task id="LOCAL-00003" summary="Create POM parent and update dependencies versions">
-      <created>1594474007309</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1594474007309</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Implement Booking model, DTO, repository, specification">
-      <created>1594623691319</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1594623691319</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN">
-      <created>1594729291844</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1594729291844</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create POM parent and update dependencies versions" />
-    <MESSAGE value="Implement Booking model, DTO, repository, specification" />
-    <MESSAGE value="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change application to manage several media with the same EAN&#10;Media contain all medias in the library.&#10;Book, Game, Music, Video contain the description of media by EAN" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create POM parent and update dependencies versions" />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="218" key="#Inspections" timestamp="1594450171662">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="586" y="218" key="#Inspections/0.0.1920.1080@0.0.1920.1080" timestamp="1594450171662" />
-    <state x="765" y="246" key="#com.intellij.ide.util.MemberChooser" timestamp="1594660545075">
+    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594472728087">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="765" y="246" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1594660545075" />
-    <state x="888" y="142" key="CommitChangelistDialog2" timestamp="1594729286114">
+    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594472728087" />
+    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594453110996">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="888" y="142" key="CommitChangelistDialog2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729286114" />
-    <state x="740" y="294" key="FileChooserDialogImpl" timestamp="1594654649604">
+    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1594453110996" />
+    <state width="1877" height="370" key="GridCell.Tab.0.bottom" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="740" y="294" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1594654649604" />
-    <state width="1877" height="334" key="GridCell.Tab.0.bottom" timestamp="1594729001910">
+    <state width="1877" height="370" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.center" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="334" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
-    <state width="1877" height="334" key="GridCell.Tab.0.center" timestamp="1594729001910">
+    <state width="1877" height="370" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.left" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="334" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
-    <state width="1877" height="334" key="GridCell.Tab.0.left" timestamp="1594729001910">
+    <state width="1877" height="370" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="370" key="GridCell.Tab.0.right" timestamp="1594472232628">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="334" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
-    <state width="1877" height="334" key="GridCell.Tab.0.right" timestamp="1594729001910">
+    <state width="1877" height="370" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594472232628" />
+    <state width="1877" height="357" key="GridCell.Tab.1.bottom" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="334" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594729001910" />
-    <state width="1877" height="401" key="GridCell.Tab.1.bottom" timestamp="1594728097342">
+    <state width="1877" height="357" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.center" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="401" key="GridCell.Tab.1.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
-    <state width="1877" height="401" key="GridCell.Tab.1.center" timestamp="1594728097342">
+    <state width="1877" height="357" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.left" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="401" key="GridCell.Tab.1.center/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
-    <state width="1877" height="401" key="GridCell.Tab.1.left" timestamp="1594728097342">
+    <state width="1877" height="357" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
+    <state width="1877" height="357" key="GridCell.Tab.1.right" timestamp="1594462972593">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="1877" height="401" key="GridCell.Tab.1.left/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
-    <state width="1877" height="401" key="GridCell.Tab.1.right" timestamp="1594728097342">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state width="1877" height="401" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594728097342" />
-    <state x="540" y="274" key="IDE.errors.dialog" timestamp="1594729486542">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="540" y="274" key="IDE.errors.dialog/0.0.1920.1080@0.0.1920.1080" timestamp="1594729486542" />
+    <state width="1877" height="357" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1594462972593" />
     <state x="625" y="299" key="NewModule_or_Project.wizard" timestamp="1594313568168">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -307,17 +209,13 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1594313787393" />
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2" timestamp="1594729564318">
+    <state x="552" y="272" key="Vcs.Push.Dialog.v2" timestamp="1594472897121">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="552" y="272" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1594729564318" />
-    <state x="761" y="328" key="git4idea.merge.GitMergeDialog" timestamp="1594474055351">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="552" y="272" key="Vcs.Push.Dialog.v2/0.0.1920.1080@0.0.1920.1080" timestamp="1594472897121" />
+    <state x="679" y="308" key="git4idea.merge.GitPullDialog" timestamp="1594965517462">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="761" y="328" key="git4idea.merge.GitMergeDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1594474055351" />
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1594716755298">
-      <screen x="0" y="0" width="1920" height="1080" />
-    </state>
-    <state x="623" y="235" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1594716755298" />
+    <state x="679" y="308" key="git4idea.merge.GitPullDialog/0.0.1920.1040/1920.192.1440.860/-1920.0.1920.1040@0.0.1920.1040" timestamp="1594965517462" />
   </component>
 </project>
