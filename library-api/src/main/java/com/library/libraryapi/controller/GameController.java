@@ -42,6 +42,21 @@ public class GameController {
       }
    }
 
+   @GetMapping(value = "/allowed",produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<GameDTO>> findAllAllowedGames(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<GameDTO> gameDTOS;
+
+      try {
+         gameDTOS = gameService.findAllAllowed();
+         return ResponseEntity.ok(gameDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<GameDTO>> findAllFilteredGames(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,

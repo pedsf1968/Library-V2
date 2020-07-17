@@ -53,6 +53,17 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
       }
    }
 
+   public MediaDTO findOneByEan(String ean) {
+
+      Media media = mediaRepository.findOneByEan(ean);
+
+      if (media != null) {
+         return entityToDTO(media);
+      } else {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_EAN + ean);
+      }
+   }
+
    public MediaDTO findFreeByEan(String ean) {
 
       Media media = mediaRepository.findFreeByEan(ean);
@@ -168,6 +179,11 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
       media.setMediaType(MediaType.valueOf(type));
 
       return media;
+   }
+
+   MediaType findMediaTypeByEan(String ean) {
+      String type = mediaRepository.findMediaTypeByEan(ean);
+      return MediaType.valueOf(type);
    }
 
 

@@ -15,7 +15,8 @@
          </div>
          <div class="col-sm my-auto">
             <a class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/books}" th:text="#{label.back}">Back</a>
-            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{bookEan}(bookEan=${book.ean})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${book.stock>0}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{bookEan}(bookEan=${book.ean})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${book.stock<=0}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/booking/{bookEan}(bookEan=${book.ean})}" th:text="#{label.setAside}">Book</a>
          </div>
       </div>
    </header>

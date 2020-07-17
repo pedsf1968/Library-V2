@@ -1,3 +1,5 @@
+DELETE FROM person WHERE id > 0;
+
 INSERT INTO person (id,firstname,lastname,birth_date, url, photo_url)
 VALUES (1,'Emile','ZOLA','1840-04-02','https://fr.wikipedia.org/wiki/Émile_Zola','https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Emile_Zola_1902.jpg/800px-Emile_Zola_1902.jpg'),
     (2,'Gustave','FLAUBERT','1821-12-12','https://fr.wikipedia.org/wiki/Gustave_Flaubert','https://upload.wikimedia.org/wikipedia/commons/c/c6/Gustave_flaubert.jpg'),
@@ -16,6 +18,8 @@ VALUES (1,'Emile','ZOLA','1840-04-02','https://fr.wikipedia.org/wiki/Émile_Zola
     (16,'EA','Electronic Arts','1982-05-28','https://www.ea.com/fr-fr',null),
     (17,'Microsoft','Microsoft','1976-11-26','https://www.microsoft.com/fr-fr',null);
 
+DELETE FROM book WHERE ean is not null;
+
 INSERT INTO book (ean, isbn, title, quantity, stock, publication_date, author_id, editor_id, type, format,pages,summary)
 VALUES ('978-2253004226','9782253004226','Germinal',4,1,'1971-11-01',1,11,'NOVEL','POCKET',538,'Voici, dans la France moderne et industrielle, les " Misérables " de Zola. Ce roman des mineurs, c''est aussi l''Enfer, dans un monde dantesque, où l''on " voyage au bout de la nuit ". Mais à la fin du prodigieux itinéraire au centre de la terre, du fond du souterrain où il a vécu si longtemps écrasé, l''homme enfin se redresse et surgit dans une révolte pleine d''espoirs. C''est la plus belle et la plus grande œuvre de Zola, le poème de la fraternité dans la misère, et le roman de la condition humaine.'),
     ('978-2253002864','9782253002864','Au bonheur des dames',2,1,'1971-10-01',1,11,'NOVEL','POCKET',270,'Octave Mouret affole les femmes de désir. Son grand magasin parisien, Au Bonheur des Dames, est un paradis pour les sens. Les tissus s’amoncellent, éblouissants, délicats. Tout ce qu’une femme peut acheter en 1883, Octave Mouret le vend, avec des techniques révolutionnaires. Le succès est immense. Mais ce bazar est une catastrophe pour le quartier, les petits commerces meurent, les spéculations immobilières se multiplient. Et le personnel connaît une vie d’enfer. Denise échoue de Valognes dans cette fournaise, démunie mais tenace. Zola fait de la jeune fille et de son puissant patron amoureux d’elle le symbole du modernisme et des crises qu’il suscite. Personne ne pourra plus entrer dans un grand magasin sans ressentir ce que Zola raconte avec génie : les fourmillements de la vie.'),
@@ -25,23 +29,30 @@ VALUES ('978-2253004226','9782253004226','Germinal',4,1,'1971-11-01',1,11,'NOVEL
     ('978-2253096337','9782253096337','Les Misérables (Tome 1)',3,2,'1998-12-02',3,13,'NOVEL','POCKET',982,'La bataille de Waterloo, Paris, les barricades, les bagnes et les usines… Fantine, Cosette, Jean Valjean, Gavroche, les Thénardier… Les événements, les lieux et les héros les plus célèbres de toute la littérature française dans un roman d’aventures, de passion et de haine, de vengeance et de pardon, tout à tour tragique et drôle, violent et sentimental, historique et légendaire, noir et poétique. Le chef-d’œuvre de Victor Hugo, mille fois adapté et traduit, à découvrir dans sa version originale.'),
     ('978-2253096344','9782253096344','Les Misérables (Tome 2)',3,1,'1998-12-02',3,13,'NOVEL','POCKET',455,'Les Misérables sont un étourdissant rappel à l''ordre d''une société trop amoureuse d''elle-même et trop peu soucieuse de l''immortelle loi de fraternité, un plaidoyer pour les Misérables (ceux qui souffrent de la misère et que la misère déshonore), proféré par la bouche la plus éloquente de ce temps. Le nouveau livre de Victor Hugo doit être le Bienvenu (comme l''évêque dont il raconte la victorieuse charité), le livre à applaudir, le livre à remercier. N''est-il pas utile que de temps à autre le poète, le philosophe prennent un peu le Bonheur égoïste aux cheveux, et lui disent, en lui secouant le mufle dans le sang et l''ordure : « Vois ton oeuvre et bois ton oeuvre » ? Charles Baudelaire.');
 
+DELETE FROM music WHERE ean is not null;
+
 INSERT INTO music (ean, title, quantity, stock, publication_date, author_id, composer_id, interpreter_id, type, format, url)
 VALUES ('8809634380036','Kill This Love',2,2,'2019-05-24',14,14,14,'POP','CD','https://www.youtube.com/embed/2S24-y0Ij3Y'),
     ('4988064587100','DDU-DU DDU-DU',2,2,'2018-08-22',14,14,14,'POP','CD','https://www.youtube.com/embed/IHNzOHi8sJs'),
     ('4988064585816','RE BLACKPINK',1,1,'2018-04-16',14,14,14,'POP','CD','https://www.youtube.com/embed/qIQI8aoYPeQ'),
     ('8809269506764','MADE',1,1,'2017-09-15',15,15,15,'POP','CD','https://www.youtube.com/embed/LNIQ57mxvGA&list=OLAK5uy_nmV9t7lKxIMIdQc7zCPgSYK1jI5AXQwnI&index=3');
 
+DELETE FROM  video_actors WHERE ean is not null;
+DELETE FROM  video WHERE ean is not null;
+
 INSERT INTO video (ean, title, quantity, stock, publication_date, director_id,duration,type,format,image,audio,audience,url,summary)
 VALUES ('3475001058980','Parasite',3,3,'2019-12-04',4,132,'THRILLER','BLU_RAY','HD 1080p 16:9 (1920x1080 progressif)','Coréen DTS HD (Master audio) 5.1, Français DTS HD (Master audio) 5.1','Accord parental','https://www.youtube.com/embed/-Yo_lxZ6Z0k','Toute la famille de Ki-taek est au chômage, et s’inte´resse fortement au train de vie de la richissime famille Park. Un jour, leur fils réussit à` se faire recommander pour donner des cours particuliers d’anglais chez les Park. C’est le début d’un engrenage incontrôlable, dont personne ne sortira véritablement indemne...');
 
-
 INSERT INTO video_actors(ean,actor_id)
 VALUES ('3475001058980',5),('3475001058980',6),('3475001058980',7),('3475001058980',8),('3475001058980',9);
+
+DELETE FROM game WHERE ean is not null;
 
 INSERT INTO game (ean, title, quantity, stock, publication_date, editor_id,type,format,pegi,url,summary)
 VALUES ('5035223122470','NFS Need for Speed™ Heat',2,2,'2019-11-08',16,'COURSE','SONY_PS3','16+','https://www.youtube.com/embed/p4Q3uh2RaZo','Pilotez le jour et risquez tout la nuit dans Need for Speed™ Heat, une expérience palpitante qui vous met au défi d’intégrer l’élite de la course urbaine face à de redoutables policiers corrompus. Le jour, participez au Speedhunter Showdown, une compétition officielle où vous gagnerez de quoi personnaliser et améliorer les voitures performantes contenues dans votre garage. Une fois votre bagnole relookée et gonflée à bloc, et que vous vous sentez d’attaque pour vivre des moments intenses, affrontez d’autres pilotes la nuit, avec votre crew, lors de courses illégales grâce auxquelles vous vous taillerez une réputation et vous accéderez à de meilleures pièces et à des courses plus relevées. Mais sous couvert de patrouilles nocturnes, des flics corrompus veulent vous arrêter et confisquer tout ce que vous aurez gagné. Prenez des risques et devenez encore plus célèbre en leur tenant tête, ou rentrez à votre planque pour vivre une nouvelle journée de courses. Courses, risques, voitures : ici, les limites n’existent pas. Votre crew prend les mêmes risques que vous, votre garage déborde de belles voitures, et la ville est votre terrain de jeu, 24 heures sur 24.'),
     ('0805529340299','Flight Simulator 2004 : Un Siècle d''Aviation',1,1,'2003-08-29',17,'SIMULATION','PC','3+','https://www.youtube.com/embed/myMYQeBqKLw','Partez à la conquête des cieux dans Flight Simulator 2004 : Un Siècle d''Aviation sur PC. En plus des vols d''appareils classiques cet opus vous permet de voler avec des légendes de l''aviation, les premiers avions existants et de recréer leurs vols en temps réel.');
 
+DELETE FROM media WHERE id > 0;
 
 INSERT INTO media (id,ean, media_type, status)
 VALUES (1,'978-2253004226','BOOK','FREE'),
@@ -76,6 +87,8 @@ VALUES (1,'978-2253004226','BOOK','FREE'),
     (30,'5035223122470','GAME','FREE'),
     (31,'0805529340299','GAME','FREE');
 
+DELETE FROM borrowing WHERE id > 0;
+
 INSERT INTO borrowing (user_id,media_id,borrowing_date,extended)
 VALUES (1,2,'2020-07-01',0),
     (2,3,'2020-07-05',0),
@@ -86,6 +99,22 @@ VALUES (1,2,'2020-07-01',0),
     (1,16,'2020-07-01',0),
     (2,18,'2020-07-05',0),
     (3,19,'2020-07-10',0);
+
+DELETE FROM booking WHERE id > 0;
+
+INSERT INTO booking (media_id,user_id,booking_date)
+VALUES (1,1,'2020-07-01'),
+    (1,2,'2020-07-01'),
+    (1,3,'2020-07-02'),
+    (2,1,'2020-07-03'),
+    (2,2,'2020-07-04'),
+    (2,3,'2020-07-05'),
+    (3,1,'2020-07-06'),
+    (3,2,'2020-07-07'),
+    (3,3,'2020-07-08'),
+    (4,1,'2020-07-09'),
+    (4,2,'2020-07-10'),
+    (4,3,'2020-07-11');
 
 -- ALTER SEQUENCE borrowing_id_seq RESTART WITH 10;
 -- ALTER SEQUENCE media_id_seq RESTART WITH 32;

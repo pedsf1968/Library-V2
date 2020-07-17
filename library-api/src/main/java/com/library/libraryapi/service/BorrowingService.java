@@ -6,7 +6,6 @@ import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
-import com.library.libraryapi.model.Book;
 import com.library.libraryapi.model.Borrowing;
 import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.model.UserStatus;
@@ -27,6 +26,7 @@ import java.util.List;
 
 @Service("BorrowingService")
 public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,Integer> {
+   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Borrowing with the EAN : ";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Borrowing with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Borrowing";
    private static final String EXCEPTION_NO_MEDIA ="The Media is borrowed !";
@@ -182,6 +182,11 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       return borrowing;
    }
 
+
+   Boolean userHadBorrowed(Integer userId, String ean) {
+      return borrowingRepository.userHadBorrowed( userId, ean);
+   }
+
    /**
     * method for borowing a media
     *
@@ -280,7 +285,6 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       borrowing.setUserId(userId);
       borrowing.setBorrowingDate(today);
       borrowing.setExtended(0);
-      borrowing.setReturnDate(returnDate);
 
       // record the borrowing in borrowing table
       borrowingRepository.save(borrowing);

@@ -24,11 +24,17 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
    @Query("SELECT COUNT(*) FROM Media m WHERE m.status = 'FREE' AND m.ean = ?1")
    Integer remaining(Integer mediaId);
 
+   @Query(value = "SELECT * FROM Media WHERE ean = :ean LIMIT 1", nativeQuery = true)
+   Media findOneByEan(String ean);
+
    @Query(value = "SELECT * FROM Media WHERE status = 'FREE' AND ean = :ean LIMIT 1", nativeQuery = true)
    Media findFreeByEan(String ean);
 
    @Query(value = "SELECT * FROM Media WHERE status = 'BLOCKED' AND ean = :ean", nativeQuery = true)
    Media findBlockedByEan(String ean);
+
+   @Query(value="SELECT media_type FROM Media WHERE ean = :ean LIMIT 1", nativeQuery = true)
+   String findMediaTypeByEan(String ean);
 
    @Modifying
    @Transactional

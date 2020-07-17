@@ -1,14 +1,13 @@
 package com.library.web.web.controller;
 
-import com.library.web.dto.business.BorrowingDTO;
+import com.library.web.dto.business.BookingDTO;
 import com.library.web.dto.global.UserDTO;
+import com.library.web.exceptions.ForbiddenException;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
 import com.library.web.web.PathTable;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.time.DateUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,73 +16,68 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 @Slf4j
 @Controller
 @RefreshScope
-public class BorrowingController {
+public class BookingController {
    private final LibraryApiProxy libraryApiProxy;
    private final UserApiProxy userApiProxy;
 
-   @Value("${library.borrowing.delay}")
-   private Integer borrowingDelay;
-
-   public BorrowingController(LibraryApiProxy libraryApiProxy, UserApiProxy userApiProxy) {
+   public BookingController(LibraryApiProxy libraryApiProxy, UserApiProxy userApiProxy) {
       this.libraryApiProxy = libraryApiProxy;
       this.userApiProxy = userApiProxy;
    }
 
 
-   @GetMapping("/borrowings")
-   public String borrowingsList(Model model, Locale locale) {
+   @GetMapping("/bookings")
+   public String bookingsList(Model model, Locale locale) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
-      Date restitutionDate = DateUtils.addDays(new Date(),-borrowingDelay);
-      List<BorrowingDTO> borrowingDTOS;
+      List<BookingDTO> bookingDTOS;
 
       try {
-         borrowingDTOS = libraryApiProxy.findByUserIdNotReturn(userDTO.getId());
-         model.addAttribute(PathTable.ATTRIBUTE_BORROWINGS, borrowingDTOS);
+         bookingDTOS = libraryApiProxy.findBookingsByUser(userDTO.getId());
+         model.addAttribute(PathTable.ATTRIBUTE_BOOKINGS, bookingDTOS);
       } catch (ResourceNotFoundException ex) {
-         borrowingDTOS = null;
+         bookingDTOS = null;
       }
 
-      model.addAttribute(PathTable.ATTRIBUTE_RESTITUTION_DATE, restitutionDate);
-
-      return PathTable.BORROWINGS;
+      return PathTable.BOOKINGS;
    }
 
-   @GetMapping("/borrowing/{mediaEan}")
-   public String borrowing(@PathVariable("mediaEan") String mediaEan){
+   @GetMapping("/booking/{mediaEan}")
+   public String booking(@PathVariable("mediaEan") String mediaEan){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
-         libraryApiProxy.addBorrowing(userDTO.getId(), mediaEan);
+         try {
+            libraryApiProxy.addBooking(userDTO.getId(), mediaEan);
+         } catch (ForbiddenException exception) {
+
+         }
+
       }
 
-      return PathTable.BORROWINGS_R;
+      return PathTable.BOOKINGS_R;
    }
 
-   @GetMapping("/borrowings/extend/{mediaId}")
-   public String extend(@PathVariable("mediaId") Integer mediaId){
+   @GetMapping("/booking/cancel/{bookingId}")
+   public String cancelBooking(@PathVariable("bookingId") Integer bookingId){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
-         libraryApiProxy.extendBorrowing(userDTO.getId(), mediaId);
+         libraryApiProxy.cancelBooking(userDTO.getId(), bookingId);
       }
 
-      return PathTable.BORROWINGS_R;
+      return PathTable.BOOKINGS_R;
    }
 
-   @GetMapping("/help")
-   public String help(Model model){
-      return PathTable.HELP;
-   }
 }
 
