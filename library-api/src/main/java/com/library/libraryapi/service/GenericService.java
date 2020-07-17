@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GenericService<T,S,N> {
    boolean existsById(N id);
-   T findById(N id);
+   T findById(N ean);
    List<T> findAll();
    List <T> findAllFiltered(T filter);
    N getFirstId(T filter);

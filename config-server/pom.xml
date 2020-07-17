@@ -104,6 +104,12 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<targetPath>/properties-repository</targetPath>
+				<directory>${project.basedir}/properties-repository/</directory>
+			</resource>
+		</resources>
 	</build>
 
 </project>

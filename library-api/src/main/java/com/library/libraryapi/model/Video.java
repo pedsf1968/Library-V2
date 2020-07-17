@@ -1,16 +1,29 @@
 package com.library.libraryapi.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Set;
 
 /**
  * Entity to manage Video Media Type
  *
+ * ean : EAN code identification of the Media
+ * title : title of the Media
+ * quantity : number of all Media
+ * stock : Media in stock it decrease until (-1)*quantity*2 (counter of booking as well)
+ * weight : weight of the Media
+ * length : length of the Media
+ * width : width of the Media
+ * height : height of the Media
+ *
+ * publicationDate : is the date when the Media is published
  * directorId : identification of the director of the Video
  * duration : duration of the Video
  * type : Video type
@@ -18,14 +31,16 @@ import java.util.Set;
  * image : image format types
  * audio : audio format types
  * audience : type of spectators
- * url : URL for video sample
+ * url : URL link to teaser
  * actors : lists of the actors of the Video
  */
 @Data
 @Entity
 @Table(name = "video")
-@PrimaryKeyJoinColumn(name = "media_id")
-public class Video extends Media implements Serializable {
+public class Video implements Serializable {
+   private static final int EAN_MAX = 20;
+   private static final int TITLE_MIN = 1;
+   private static final int TITLE_MAX = 50;
    private static final int TYPE_MAX = 20;
    private static final int FORMAT_MAX = 20;
    private static final int AUDIO_FORMAT_MAX = 255;
@@ -33,6 +48,40 @@ public class Video extends Media implements Serializable {
    private static final int PUBLIC_TYPE_MAX = 20;
    private static final int URL_MAX = 255; // default length
    private static final int SUMMARY_MAX = 2048;
+
+   // Media information
+   @Id
+   @Column(name = "ean", length = EAN_MAX)
+   private String ean;
+
+   @NotNull
+   @NotBlank
+   @Size(min = TITLE_MIN, max = TITLE_MAX)
+   @Column(name = "title", length = TITLE_MAX)
+   private String title;
+
+   @NotNull
+   private Integer quantity;
+   @NotNull
+   private Integer stock;
+
+   // weight and dimensions for transport informations
+   @Column(name = "weight")
+   private Integer weight;
+
+   @Column(name = "length")
+   private Integer length;
+
+   @Column(name = "width")
+   private Integer width;
+
+   @Column(name = "height")
+   private Integer height;
+
+   // Video information
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "publication_date")
+   private Date publicationDate;
 
    @NotNull
    @NotBlank
@@ -67,7 +116,7 @@ public class Video extends Media implements Serializable {
 
    @OneToMany()
    @JoinTable(name="video_actors",
-         joinColumns = {@JoinColumn(name="video_id", referencedColumnName="media_id")},
+         joinColumns = {@JoinColumn(name="ean", referencedColumnName="ean")},
          inverseJoinColumns = {@JoinColumn(name="actor_id", referencedColumnName="id")})
    private Set<Person> actors;
 

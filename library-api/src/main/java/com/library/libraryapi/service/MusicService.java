@@ -1,10 +1,12 @@
 package com.library.libraryapi.service;
 
+import com.library.libraryapi.dto.business.GameDTO;
 import com.library.libraryapi.dto.business.MusicDTO;
 import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.library.libraryapi.model.Book;
 import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.model.Music;
 import com.library.libraryapi.repository.MusicRepository;
@@ -18,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("MusicService")
-public class MusicService implements GenericService<MusicDTO,Music,Integer>{
-   private static final String CANNOT_FIND_WITH_ID = "Cannot find Music with the id : ";
+public class MusicService implements GenericService<MusicDTO,Music,String>{
+   private static final String CANNOT_FIND_WITH_ID = "Cannot find Music with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Music";
 
    private final MusicRepository musicRepository;
@@ -33,18 +35,18 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
    }
 
    @Override
-   public boolean existsById(Integer id) {
-      return musicRepository.findById(id).isPresent();
+   public boolean existsById(String ean) {
+      return musicRepository.findByEan(ean).isPresent();
    }
 
    @Override
-   public MusicDTO findById(Integer id) {
+   public MusicDTO findById(String ean) {
 
-      if(existsById(id)) {
-         Music music = musicRepository.findById(id).orElse(null);
+      if(existsById(ean)) {
+         Music music = musicRepository.findByEan(ean).orElse(null);
          return entityToDTO(music);
       } else {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       }
    }
 
@@ -83,13 +85,15 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
    }
 
    @Override
-   public Integer getFirstId(MusicDTO filter) {
-      return findAllFiltered(filter).get(0).getId();
+   public String getFirstId(MusicDTO filter){
+
+      return findAllFiltered(filter).get(0).getEan();
    }
+
 
    @Override
    public MusicDTO save(MusicDTO musicDTO) {
-      if (   !StringUtils.isEmpty(musicDTO.getId()) &&
+      if (   !StringUtils.isEmpty(musicDTO.getEan()) &&
             !StringUtils.isEmpty(musicDTO.getTitle()) &&
             !StringUtils.isEmpty(musicDTO.getAuthor()) &&
             !StringUtils.isEmpty(musicDTO.getComposer()) &&
@@ -98,13 +102,14 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
             !StringUtils.isEmpty(musicDTO.getFormat())) {
 
          try {
-            Integer musicId = getFirstId(musicDTO);
-            return entityToDTO(musicRepository.findById(musicId).orElse(null));
-
+            // try to find existing Music
+            String ean = getFirstId(musicDTO);
+            Music music = musicRepository.findByEan(ean).orElse(null);
+            return entityToDTO(music);
          } catch (ResourceNotFoundException ex) {
-            musicDTO.setId(null);
             return entityToDTO(musicRepository.save(dtoToEntity(musicDTO)));
          }
+
 
       } else {
          throw new BadRequestException(CANNOT_SAVE);
@@ -113,7 +118,7 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
 
    @Override
    public MusicDTO update(MusicDTO musicDTO) {
-      if (  !StringUtils.isEmpty(musicDTO.getId()) &&
+      if (  !StringUtils.isEmpty(musicDTO.getEan()) &&
             !StringUtils.isEmpty(musicDTO.getTitle()) &&
             !StringUtils.isEmpty(musicDTO.getAuthor()) &&
             !StringUtils.isEmpty(musicDTO.getComposer()) &&
@@ -121,8 +126,8 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
             !StringUtils.isEmpty(musicDTO.getType()) &&
             !StringUtils.isEmpty(musicDTO.getFormat())) {
 
-         if (!existsById(musicDTO.getId())) {
-            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + musicDTO.getId());
+         if (!existsById(musicDTO.getEan())) {
+            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + musicDTO.getEan());
          }
          Music music = musicRepository.save(dtoToEntity(musicDTO));
 
@@ -134,11 +139,11 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
    }
 
    @Override
-   public void deleteById(Integer id) {
-      if (!existsById(id)) {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+   public void deleteById(String ean) {
+      if (!existsById(ean)) {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       } else {
-         musicRepository.deleteById(id);
+         musicRepository.deleteByEan(ean);
       }
    }
 
@@ -165,7 +170,6 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
    public Music dtoToEntity(MusicDTO musicDTO) {
       Music music = modelMapper.map(musicDTO, Music.class);
 
-      music.setMediaType(MediaType.MUSIC);
 
       if(musicDTO.getAuthor()!=null) {
          music.setAuthorId(musicDTO.getAuthor().getId());
@@ -213,4 +217,13 @@ public class MusicService implements GenericService<MusicDTO,Music,Integer>{
    public List<String> findAllTitles() {
       return musicRepository.findAllTitles();
    }
+
+   void increaseStock(String ean) {
+      musicRepository.increaseStock(ean);
+   }
+
+   void decreaseStock(String ean) {
+      musicRepository.decreaseStock(ean);
+   }
+
 }

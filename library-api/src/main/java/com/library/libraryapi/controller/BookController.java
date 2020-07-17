@@ -67,7 +67,7 @@ public class BookController {
 
 
    @GetMapping(value = "/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<BookDTO> findBookById(@PathVariable("bookId") Integer bookId){
+   public ResponseEntity<BookDTO> findBookById(@PathVariable("bookId") String bookId){
 
       try {
          BookDTO bookDTO = bookService.findById(bookId);
@@ -83,7 +83,7 @@ public class BookController {
 
       try {
          BookDTO bookCreated = bookService.save(bookDTO);
-         return ResponseEntity.created(new URI( "/book" + bookCreated.getId())).body(bookCreated);
+         return ResponseEntity.created(new URI( "/book" + bookCreated.getEan())).body(bookCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -111,7 +111,7 @@ public class BookController {
    }
 
    @DeleteMapping("/{bookId}")
-   public ResponseEntity<Void> deleteBook(@PathVariable("bookId") Integer bookId) {
+   public ResponseEntity<Void> deleteBook(@PathVariable("bookId") String bookId) {
       try {
          bookService.deleteById(bookId);
          return ResponseEntity.ok().build();

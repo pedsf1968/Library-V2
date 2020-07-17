@@ -64,7 +64,7 @@ public class MusicController {
    }
 
    @GetMapping(value = "/{musicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<MusicDTO> findMusicById(@PathVariable("musicId")Integer musicId){
+   public ResponseEntity<MusicDTO> findMusicById(@PathVariable("musicId")String musicId){
 
       try {
          MusicDTO musicDTO = musicService.findById(musicId);
@@ -80,7 +80,7 @@ public class MusicController {
 
       try {
          MusicDTO musicCreated = musicService.save(musicDTO);
-         return ResponseEntity.created(new URI( "/music" + musicCreated.getId())).body(musicCreated);
+         return ResponseEntity.created(new URI( "/music" + musicCreated.getEan())).body(musicCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -108,7 +108,7 @@ public class MusicController {
    }
 
    @DeleteMapping("/{musicId}")
-   public ResponseEntity<Void> deleteMusic(@PathVariable("musicId") Integer musicId) {
+   public ResponseEntity<Void> deleteMusic(@PathVariable("musicId") String musicId) {
       try {
          musicService.deleteById(musicId);
          return ResponseEntity.ok().build();

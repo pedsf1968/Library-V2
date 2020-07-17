@@ -28,12 +28,10 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       this.personRepository = personRepository;
    }
 
-   @Override
    public boolean existsById(Integer id) {
       return personRepository.existsById(id);
    }
 
-   @Override
    public PersonDTO findById(Integer id) {
       Person person = personRepository.findById(id).orElse(null);
 
@@ -121,8 +119,7 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       }
    }
 
-   @Override
-   public void deleteById(Integer id) {
+    public void deleteById(Integer id) {
       if (!existsById(id)) {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
       } else {

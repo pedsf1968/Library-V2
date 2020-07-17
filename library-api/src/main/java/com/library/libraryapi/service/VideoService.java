@@ -1,12 +1,11 @@
 package com.library.libraryapi.service;
 
+import com.library.libraryapi.dto.business.GameDTO;
 import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.libraryapi.dto.business.VideoDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
-import com.library.libraryapi.model.MediaType;
-import com.library.libraryapi.model.Person;
-import com.library.libraryapi.model.Video;
+import com.library.libraryapi.model.*;
 import com.library.libraryapi.repository.VideoRepository;
 import com.library.libraryapi.repository.VideoSpecification;
 import org.modelmapper.ModelMapper;
@@ -20,8 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 @Service("VideoService")
-public class VideoService implements GenericService<VideoDTO,Video,Integer> {
-   private static final String CANNOT_FIND_WITH_ID = "Cannot find Video with the id : ";
+public class VideoService implements GenericService<VideoDTO,Video,String> {
+   private static final String CANNOT_FIND_WITH_ID = "Cannot find Video with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Video";
 
    private final VideoRepository videoRepository;
@@ -35,18 +34,18 @@ public class VideoService implements GenericService<VideoDTO,Video,Integer> {
    }
 
    @Override
-   public boolean existsById(Integer id) {
-      return videoRepository.findById(id).isPresent();
+   public boolean existsById(String ean) {
+      return videoRepository.findByEan(ean).isPresent();
    }
 
    @Override
-   public VideoDTO findById(Integer id) {
+   public VideoDTO findById(String ean) {
 
-      if(existsById(id)){
-         Video video = videoRepository.findById(id).orElse(null);
+      if(existsById(ean)){
+         Video video = videoRepository.findByEan(ean).orElse(null);
          return entityToDTO(video);
       } else {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       }
    }
 
@@ -85,29 +84,29 @@ public class VideoService implements GenericService<VideoDTO,Video,Integer> {
    }
 
    @Override
-   public Integer getFirstId(VideoDTO filter) {
-      return findAllFiltered(filter).get(0).getId();
+   public String getFirstId(VideoDTO filter){
+
+      return findAllFiltered(filter).get(0).getEan();
    }
+
 
    @Override
    public VideoDTO save(VideoDTO videoDTO) {
-      return null;
-   }
-
-   @Override
-   public VideoDTO update(VideoDTO videoDTO) {
-      if (  !StringUtils.isEmpty(videoDTO.getId()) &&
+      if (   !StringUtils.isEmpty(videoDTO.getEan()) &&
             !StringUtils.isEmpty(videoDTO.getTitle()) &&
+            !StringUtils.isEmpty(videoDTO.getAudience()) &&
             !StringUtils.isEmpty(videoDTO.getDirector()) &&
+            !StringUtils.isEmpty(videoDTO.getDuration()) &&
+            !StringUtils.isEmpty(videoDTO.getAudio()) &&
             !StringUtils.isEmpty(videoDTO.getType()) &&
             !StringUtils.isEmpty(videoDTO.getFormat())) {
 
          try {
-            Integer videoId = getFirstId(videoDTO);
-            return entityToDTO(videoRepository.findById(videoId).orElse(null));
-
+            // try to find existing Video
+            String ean = getFirstId(videoDTO);
+            Video video = videoRepository.findByEan(ean).orElse(null);
+            return entityToDTO(video);
          } catch (ResourceNotFoundException ex) {
-            videoDTO.setId(null);
             return entityToDTO(videoRepository.save(dtoToEntity(videoDTO)));
          }
 
@@ -117,11 +116,32 @@ public class VideoService implements GenericService<VideoDTO,Video,Integer> {
    }
 
    @Override
-   public void deleteById(Integer id) {
-      if (!existsById(id)) {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+   public VideoDTO update(VideoDTO videoDTO) {
+      if (  !StringUtils.isEmpty(videoDTO.getEan()) &&
+            !StringUtils.isEmpty(videoDTO.getTitle()) &&
+            !StringUtils.isEmpty(videoDTO.getDirector()) &&
+            !StringUtils.isEmpty(videoDTO.getType()) &&
+            !StringUtils.isEmpty(videoDTO.getFormat())) {
+
+
+         if (!existsById(videoDTO.getEan())) {
+            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + videoDTO.getEan());
+         }
+
+         Video video = videoRepository.save(dtoToEntity(videoDTO));
+
+         return entityToDTO(video);
       } else {
-         videoRepository.deleteById(id);
+         throw new BadRequestException(CANNOT_SAVE);
+      }
+   }
+
+   @Override
+   public void deleteById(String ean) {
+      if (!existsById(ean)) {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
+      } else {
+         videoRepository.deleteByEan(ean);
       }
    }
 
@@ -157,7 +177,6 @@ public class VideoService implements GenericService<VideoDTO,Video,Integer> {
             personSet.add(personService.dtoToEntity(personDTO));
          }
       }
-      video.setMediaType(MediaType.VIDEO);
       video.setActors(personSet);
 
       if(videoDTO.getDirector()!=null) {
@@ -189,6 +208,14 @@ public class VideoService implements GenericService<VideoDTO,Video,Integer> {
 
    public List<String> findAllTitles() {
       return videoRepository.findAllTitles();
+   }
+
+   void increaseStock(String ean) {
+      videoRepository.increaseStock(ean);
+   }
+
+   void decreaseStock(String ean) {
+      videoRepository.decreaseStock(ean);
    }
 
 }

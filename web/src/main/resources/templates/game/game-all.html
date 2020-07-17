@@ -20,22 +20,22 @@
    </header>
 
    <div class="row endpage">
-      <div th:if="${game.remaining > 0}" class="card col-lg-4 col-sm-6 col-xs-12 mx-auto" th:each="game : ${games}">
+      <div th:if="${game.stock > -2*game.quantity}" class="card col-lg-4 col-sm-6 col-xs-12 mx-auto" th:each="game : ${games}">
          <div class="card-header row">
             <h5 th:text="${game.title}"></h5>
          </div>
          <div class="card-body center">
-            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + game.id}" alt="photo"/>
+            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + game.ean}" alt="photo"/>
          </div>
          <div class="card-footer row">
             <div class="input-group col-md-6">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
-               <span class="form-control" th:text="${game.remaining}"> Remaining </span>
+               <span class="form-control" th:text="${game.stock}"> Remaining </span>
             </div>
             <div class="col-md-6">
-               <a class="btn btn-primary mb-2 float-right" th:href="@{/game/{gameId}(gameId=${game.id})}" th:text="#{label.info}">Informations</a>
+               <a class="btn btn-primary mb-2 float-right" th:href="@{/game/{gameId}(gameId=${game.ean})}" th:text="#{label.info}">Informations</a>
             </div>
          </div>
       </div>

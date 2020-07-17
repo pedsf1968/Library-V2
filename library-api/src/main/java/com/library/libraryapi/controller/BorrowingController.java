@@ -88,10 +88,11 @@ public class BorrowingController {
 
    @PostMapping(value = "/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> addBorrowing(@PathVariable("userId") Integer userId,
-                                                 @RequestBody Integer mediaId
+                                                 @RequestBody String mediaEan
    ) {
       try {
-         BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaId);
+
+         BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaEan);
          return ResponseEntity.ok(borrowingCreated);
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
@@ -114,9 +115,9 @@ public class BorrowingController {
 
    @GetMapping(value = "/{userId}/{mediaId}", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> borrow(@PathVariable("userId") Integer userId,
-                                              @PathVariable("mediaId") Integer mediaId) {
+                                              @PathVariable("mediaId") String mediaEan) {
 
-      BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaId);
+      BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaEan);
 
       if(borrowingCreated!=null) {
          return ResponseEntity.ok(borrowingCreated);

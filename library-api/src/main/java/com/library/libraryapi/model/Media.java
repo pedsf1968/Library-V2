@@ -25,12 +25,10 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name = "media")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Media implements Serializable {
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
    private static final int EAN_MAX = 20;
    private static final int MEDIA_TYPE_MAX = 10;
+   private static final int STATUS_MAX = 10;
 
    @Id
    @Column(name = "id")
@@ -46,36 +44,11 @@ public class Media implements Serializable {
    @Enumerated(EnumType.STRING)
    protected MediaType mediaType;
 
-   @NotNull
-   @NotBlank
-   @Size(min = TITLE_MIN, max = TITLE_MAX)
-   @Column(name = "title", length = TITLE_MAX)
-   private String title;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   @Column(name = "publication_date")
-   private Date publicationDate;
-
-   // weight and dimensions for transport informations
-   @Column(name = "weight")
-   private Integer weight;
-
-   @Column(name = "length")
-   private Integer length;
-
-   @Column(name = "width")
-   private Integer width;
-
-   @Column(name = "height")
-   private Integer height;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "return_date")
    private Date returnDate;
 
-   @Column(name = "stock")
-   private Integer stock;
-
-   @Column(name = "remaining")
-   private Integer remaining;
+   @Column(name = "status", length = STATUS_MAX)
+   @Enumerated(EnumType.STRING)
+   private MediaStatus status;
 }
