@@ -15,5 +15,5 @@ public enum MusicType {
    POP,
    RAP,
    R_AND_B,
-   SOUL;
+   SOUL
 }

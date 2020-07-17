@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("PersonService")
-public class PersonService implements GenericService<PersonDTO,Person,Integer> {
+public class PersonService implements GenericService<PersonDTO,Person,Integer>{
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Person with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Person";
 
@@ -28,12 +28,10 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       this.personRepository = personRepository;
    }
 
-   @Override
    public boolean existsById(Integer id) {
       return personRepository.existsById(id);
    }
 
-   @Override
    public PersonDTO findById(Integer id) {
       Person person = personRepository.findById(id).orElse(null);
 
@@ -44,7 +42,6 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       }
    }
 
-   @Override
    public List<PersonDTO> findAll() {
       List<Person> persons = personRepository.findAll();
       List<PersonDTO> personDTOS = new ArrayList<>();
@@ -60,7 +57,7 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       }
    }
 
-   @Override
+
    public List<PersonDTO> findAllFiltered(PersonDTO filter) {
       Specification<Person> spec = new PersonSpecification(modelMapper.map(filter, Person.class));
 
@@ -78,13 +75,11 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       }
    }
 
-   @Override
    public Integer getFirstId(PersonDTO filter){
 
       return findAllFiltered(filter).get(0).getId();
    }
 
-   @Override
    public PersonDTO save(PersonDTO personDTO) {
       if (  !StringUtils.isEmpty(personDTO.getFirstName()) &&
             !StringUtils.isEmpty(personDTO.getLastName())) {
@@ -121,8 +116,7 @@ public class PersonService implements GenericService<PersonDTO,Person,Integer> {
       }
    }
 
-   @Override
-   public void deleteById(Integer id) {
+    public void deleteById(Integer id) {
       if (!existsById(id)) {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
       } else {

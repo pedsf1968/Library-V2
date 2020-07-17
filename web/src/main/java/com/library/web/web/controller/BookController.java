@@ -55,7 +55,7 @@ public class BookController {
 
    @GetMapping("/books")
    public String booksList(Model model, Locale locale){
-      List<BookDTO> bookDTOS = libraryApiProxy.findAllBooks(1);
+      List<BookDTO> bookDTOS = libraryApiProxy.findAllAllowedBooks(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_BOOKS, bookDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, booksTitles);
@@ -104,7 +104,7 @@ public class BookController {
    }
 
    @GetMapping(value="/book/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("bookId") Integer bookId, Model model, Locale locale){
+   public String bookView(@PathVariable("bookId") String bookId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

@@ -69,7 +69,6 @@ public class BorrowingController {
          log.error(ex.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
-
    }
 
 
@@ -86,12 +85,13 @@ public class BorrowingController {
    }
 
 
-   @PostMapping(value = "/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> addBorrowing(@PathVariable("userId") Integer userId,
-                                                 @RequestBody Integer mediaId
+                                                 @RequestBody String mediaEan
    ) {
       try {
-         BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaId);
+
+         BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaEan);
          return ResponseEntity.ok(borrowingCreated);
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
@@ -99,7 +99,7 @@ public class BorrowingController {
       }
    }
 
-   @PostMapping(value = "/{userId}/extend", produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/{userId}/extend", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> extendBorrowing(@PathVariable("userId") Integer userId,
                                                     @RequestBody Integer mediaId
    ) {
@@ -114,9 +114,9 @@ public class BorrowingController {
 
    @GetMapping(value = "/{userId}/{mediaId}", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> borrow(@PathVariable("userId") Integer userId,
-                                              @PathVariable("mediaId") Integer mediaId) {
+                                              @PathVariable("mediaId") String mediaEan) {
 
-      BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaId);
+      BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaEan);
 
       if(borrowingCreated!=null) {
          return ResponseEntity.ok(borrowingCreated);

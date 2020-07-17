@@ -18,8 +18,11 @@ public interface BorrowingRepository extends JpaRepository<Borrowing, Integer>, 
    Borrowing save(Borrowing borrowing);
    void deleteById(Integer id);
 
-   //@Query("SELECT * FROM Borrowing b WHERE b.userId = ?1 AND b.mediaId = ?2")
+   @Query("SELECT b FROM Borrowing b WHERE b.userId = ?1 AND b.mediaId = ?2")
    Borrowing findByUserIdAndMediaId(Integer userId, Integer mediaId);
+
+   @Query(value = "SELECT COUNT(*)>0 from borrowing JOIN media ON borrowing.media_id = media.id WHERE user_id = :userId AND media.ean = :ean", nativeQuery = true)
+   Boolean userHadBorrowed(Integer userId, String ean);
 
    @Query(value = "SELECT * FROM Borrowing b " +
                "WHERE (b.return_date IS NULL) AND ( ( (b.borrowing_date + (b.extended+1)*:delay) < :date ) OR (b.extended>=:max) )",

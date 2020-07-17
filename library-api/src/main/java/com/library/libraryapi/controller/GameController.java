@@ -42,6 +42,21 @@ public class GameController {
       }
    }
 
+   @GetMapping(value = "/allowed",produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<GameDTO>> findAllAllowedGames(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<GameDTO> gameDTOS;
+
+      try {
+         gameDTOS = gameService.findAllAllowed();
+         return ResponseEntity.ok(gameDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<GameDTO>> findAllFilteredGames(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -63,7 +78,7 @@ public class GameController {
    }
 
    @GetMapping(value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<GameDTO> findGameById(@PathVariable("gameId")Integer gameId){
+   public ResponseEntity<GameDTO> findGameById(@PathVariable("gameId")String gameId){
 
       try {
          GameDTO gameDTO = gameService.findById(gameId);
@@ -79,7 +94,7 @@ public class GameController {
 
       try {
          GameDTO gameCreated = gameService.save(gameDTO);
-         return ResponseEntity.created(new URI( "/book" + gameCreated.getId())).body(gameCreated);
+         return ResponseEntity.created(new URI( "/book" + gameCreated.getEan())).body(gameCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -107,7 +122,7 @@ public class GameController {
    }
 
    @DeleteMapping("/{gameId}")
-   public ResponseEntity<Void> deleteGame(@PathVariable("gameId") Integer gameId) {
+   public ResponseEntity<Void> deleteGame(@PathVariable("gameId") String gameId) {
       try {
          gameService.deleteById(gameId);
          return ResponseEntity.ok().build();

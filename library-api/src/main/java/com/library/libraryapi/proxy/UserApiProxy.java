@@ -4,13 +4,18 @@ import com.library.libraryapi.dto.global.UserDTO;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @FeignClient(name = "user-api")
 @RibbonClient(name = "user-api")
 public interface UserApiProxy {
+
+   @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+   List<UserDTO> findAllUsers();
 
    @GetMapping(value = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
    UserDTO findUserById(@PathVariable("userId") Integer userId);

@@ -1,6 +1,5 @@
 package com.library.libraryapi.service;
 
-import com.library.libraryapi.dto.business.BookDTO;
 import com.library.libraryapi.dto.business.MediaDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
@@ -15,24 +14,23 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service("MediaService")
-public class MediaService implements GenericService<MediaDTO,Media,Integer> {
+public class MediaService implements GenericService<MediaDTO, Media,Integer> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Media with the id : ";
+   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Media with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Media";
 
    private final MediaRepository mediaRepository;
-   private final BookService bookService;
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public MediaService(MediaRepository mediaRepository, BookService bookService) {
+   public MediaService(MediaRepository mediaRepository) {
       this.mediaRepository = mediaRepository;
-      this.bookService = bookService;
    }
 
 
@@ -54,6 +52,29 @@ public class MediaService implements GenericService<MediaDTO,Media,Integer> {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
       }
    }
+
+   public MediaDTO findOneByEan(String ean) {
+
+      Media media = mediaRepository.findOneByEan(ean);
+
+      if (media != null) {
+         return entityToDTO(media);
+      } else {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_EAN + ean);
+      }
+   }
+
+   public MediaDTO findFreeByEan(String ean) {
+
+      Media media = mediaRepository.findFreeByEan(ean);
+
+      if (media != null) {
+         return entityToDTO(media);
+      } else {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_EAN + ean);
+      }
+   }
+
 
    @Override
    public List<MediaDTO> findAll() {
@@ -96,7 +117,7 @@ public class MediaService implements GenericService<MediaDTO,Media,Integer> {
    @Override
    public MediaDTO save(MediaDTO mediaDTO) {
       if (  !StringUtils.isEmpty(mediaDTO.getId()) &&
-            !StringUtils.isEmpty(mediaDTO.getTitle()) &&
+            !StringUtils.isEmpty(mediaDTO.getEan()) &&
             !StringUtils.isEmpty(mediaDTO.getMediaType())) {
 
          try {
@@ -116,20 +137,17 @@ public class MediaService implements GenericService<MediaDTO,Media,Integer> {
    @Override
    public MediaDTO update(MediaDTO mediaDTO) {
       if (  !StringUtils.isEmpty(mediaDTO.getId()) &&
-            !StringUtils.isEmpty(mediaDTO.getTitle()) &&
+            !StringUtils.isEmpty(mediaDTO.getEan()) &&
             !StringUtils.isEmpty(mediaDTO.getMediaType())) {
 
-         if (existsById(mediaDTO.getId())) {
 
-            BookDTO bookDTO = bookService.findById(mediaDTO.getId());
-            bookDTO.setRemaining(mediaDTO.getRemaining());
-            bookDTO = bookService.update(bookDTO);
-
-            Media media = mediaRepository.findById(mediaDTO.getId()).orElse(null);
-            return entityToDTO(media);
-         } else {
+         if (!existsById(mediaDTO.getId())) {
             throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + mediaDTO.getId());
          }
+
+         Media media = mediaRepository.save(dtoToEntity(mediaDTO));
+         return entityToDTO(media);
+
       } else {
          throw new ConflictException(CANNOT_SAVE);
       }
@@ -163,14 +181,35 @@ public class MediaService implements GenericService<MediaDTO,Media,Integer> {
       return media;
    }
 
-
-   Integer quantityRemaining(Integer id){
-      return mediaRepository.remaining(id);
+   MediaType findMediaTypeByEan(String ean) {
+      String type = mediaRepository.findMediaTypeByEan(ean);
+      return MediaType.valueOf(type);
    }
 
-   void updateQuantityRemaining(Integer mediaId, Integer quantity){
-      mediaRepository.updateRemaining(quantity, mediaId);
+
+   MediaDTO findBlockedByEan(String ean) {
+      Media media = mediaRepository.findBlockedByEan(ean);
+
+      if (media != null) {
+         return entityToDTO(media);
+      } else {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_EAN + ean);
+      }
    }
+
+   void blockFreeByEan(String ean) {
+      mediaRepository.blockFreeByEan(ean);
+   }
+
+   void borrow(Integer mediaId, Date date) {
+      java.sql.Date sDate = new java.sql.Date(date.getTime());
+      mediaRepository.borrow(mediaId,sDate);
+   }
+
+   void release(Integer mediaId) {
+      mediaRepository.release(mediaId);
+   }
+
 
    void updateReturnDate(Integer mediaId, Date date) {
       java.sql.Date sDate = new java.sql.Date(date.getTime());

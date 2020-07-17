@@ -31,14 +31,6 @@ public class MediaSpecification implements Specification<Media> {
          predicates.add(criteriaBuilder.like(root.get("ean"), "%" + filter.getEan() + "%"));
       }
 
-      if (filter.getTitle() != null) {
-         predicates.add(criteriaBuilder.equal(root.get("title"),  filter.getTitle() ));
-      }
-
-      if (filter.getPublicationDate() != null) {
-         predicates.add(criteriaBuilder.equal(root.get("publicationDate"), filter.getPublicationDate()));
-      }
-
       return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
    }
 }

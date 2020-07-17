@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("GameService")
-public class GameService implements GenericService<GameDTO,Game,Integer> {
-   private static final String CANNOT_FIND_WITH_ID = "Cannot find Game with the id : ";
+public class GameService implements GenericMediaService<GameDTO,Game,String> {
+   private static final String CANNOT_FIND_WITH_ID = "Cannot find Game with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Game";
 
    private final GameRepository gameRepository;
@@ -34,18 +34,18 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    }
 
    @Override
-   public boolean existsById(Integer id) {
-      return gameRepository.findById(id).isPresent();
+   public boolean existsById(String ean) {
+      return gameRepository.findByEan(ean).isPresent();
    }
 
    @Override
-   public GameDTO findById(Integer id) {
+   public GameDTO findById(String ean) {
 
-      if (existsById(id)) {
-         Game game = gameRepository.findById(id).orElse(null);
+      if (existsById(ean)) {
+         Game game = gameRepository.findByEan(ean).orElse(null);
          return entityToDTO(game);
       } else {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       }
 
    }
@@ -53,6 +53,22 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    @Override
    public List<GameDTO> findAll() {
       List<Game> games = gameRepository.findAll();
+      List<GameDTO> gameDTOS = new ArrayList<>();
+
+      for (Game game: games){
+         gameDTOS.add(entityToDTO(game));
+      }
+
+      if (!gameDTOS.isEmpty()) {
+         return gameDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<GameDTO> findAllAllowed() {
+      List<Game> games = gameRepository.findAllAllowed();
       List<GameDTO> gameDTOS = new ArrayList<>();
 
       for (Game game: games){
@@ -85,23 +101,24 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    }
 
    @Override
-   public Integer getFirstId(GameDTO filter) {
-      return findAllFiltered(filter).get(0).getId();
+   public String getFirstId(GameDTO filter){
+
+      return findAllFiltered(filter).get(0).getEan();
    }
 
    @Override
    public GameDTO save(GameDTO gameDTO) {
-      if (  !StringUtils.isEmpty(gameDTO.getId()) &&
+      if (  !StringUtils.isEmpty(gameDTO.getEan()) &&
             !StringUtils.isEmpty(gameDTO.getTitle()) &&
             !StringUtils.isEmpty(gameDTO.getType()) &&
             !StringUtils.isEmpty(gameDTO.getFormat())) {
 
          try {
-            Integer bookId = getFirstId(gameDTO);
-            Game game = gameRepository.findById(bookId).orElse(null);
+            // try to find existing Game
+            String ean = getFirstId(gameDTO);
+            Game game = gameRepository.findByEan(ean).orElse(null);
             return entityToDTO(game);
          } catch (ResourceNotFoundException ex) {
-            gameDTO.setId(null);
             return entityToDTO(gameRepository.save(dtoToEntity(gameDTO)));
          }
       } else {
@@ -112,12 +129,12 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
 
    @Override
    public GameDTO update(GameDTO gameDTO) {
-      if (  !StringUtils.isEmpty(gameDTO.getId()) &&
+      if (  !StringUtils.isEmpty(gameDTO.getEan()) &&
             !StringUtils.isEmpty(gameDTO.getTitle()) &&
             !StringUtils.isEmpty(gameDTO.getType()) &&
             !StringUtils.isEmpty(gameDTO.getFormat())) {
-         if (!existsById(gameDTO.getId())) {
-            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + gameDTO.getId());
+         if (!existsById(gameDTO.getEan())) {
+            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + gameDTO.getEan());
          }
          Game game = gameRepository.save(dtoToEntity(gameDTO));
 
@@ -129,11 +146,11 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    }
 
    @Override
-   public void deleteById(Integer id) {
-      if (!existsById(id)) {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+   public void deleteById(String ean) {
+      if (!existsById(ean)) {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       } else {
-         gameRepository.deleteById(id);
+         gameRepository.deleteByEan(ean);
       }
    }
 
@@ -156,8 +173,6 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    public Game dtoToEntity(GameDTO gameDTO) {
       Game game = modelMapper.map(gameDTO, Game.class);
 
-      game.setMediaType(MediaType.GAME);
-
       if(gameDTO.getEditor()!=null) {
          game.setEditorId(gameDTO.getEditor().getId());
       }
@@ -167,4 +182,13 @@ public class GameService implements GenericService<GameDTO,Game,Integer> {
    public List<String> findAllTitles() {
       return gameRepository.findAllTitles();
    }
+
+   void increaseStock(String ean) {
+      gameRepository.increaseStock(ean);
+   }
+
+   void decreaseStock(String ean) {
+      gameRepository.decreaseStock(ean);
+   }
+
 }

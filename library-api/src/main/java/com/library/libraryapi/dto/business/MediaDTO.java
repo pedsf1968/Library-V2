@@ -16,13 +16,13 @@ import java.util.Date;
  * mediaType : type of the Media (BOOK,MUSIC,VIDEO,GAME...)
  * title : title of the Media
  * publicationDate : is the date when the Media is published
- * returnDate : the date of the next expected return (null if all Media are available in stock)
- * stock : total of this Media owned by the library
- * remaining : remaining Media in the library to be borrowed
  * weight : weight of the Media
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the date of the next expected return (null if all Media are available in stock)
+ * stock : total of this Media owned by the library
+ * remaining : remaining Media in the library to be borrowed
  */
 @Data
 public class MediaDTO implements Serializable {

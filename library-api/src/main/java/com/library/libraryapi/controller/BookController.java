@@ -45,6 +45,23 @@ public class BookController {
 
    }
 
+   @GetMapping(value = "/allowed", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<BookDTO>> findAllAllowedBooks(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<BookDTO> bookDTOS;
+
+      try {
+         bookDTOS = bookService.findAllAllowed();
+         log.info("bookDTOS : " + bookDTOS);
+         return ResponseEntity.ok(bookDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+
+   }
+
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<BookDTO>> findAllFilteredBooks(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -67,7 +84,7 @@ public class BookController {
 
 
    @GetMapping(value = "/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<BookDTO> findBookById(@PathVariable("bookId") Integer bookId){
+   public ResponseEntity<BookDTO> findBookById(@PathVariable("bookId") String bookId){
 
       try {
          BookDTO bookDTO = bookService.findById(bookId);
@@ -83,7 +100,7 @@ public class BookController {
 
       try {
          BookDTO bookCreated = bookService.save(bookDTO);
-         return ResponseEntity.created(new URI( "/book" + bookCreated.getId())).body(bookCreated);
+         return ResponseEntity.created(new URI( "/book" + bookCreated.getEan())).body(bookCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -111,7 +128,7 @@ public class BookController {
    }
 
    @DeleteMapping("/{bookId}")
-   public ResponseEntity<Void> deleteBook(@PathVariable("bookId") Integer bookId) {
+   public ResponseEntity<Void> deleteBook(@PathVariable("bookId") String bookId) {
       try {
          bookService.deleteById(bookId);
          return ResponseEntity.ok().build();

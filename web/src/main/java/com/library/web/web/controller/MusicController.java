@@ -62,7 +62,7 @@ public class MusicController {
 
    @GetMapping("/musics")
    public String booksList(Model model, Locale locale){
-      List<MusicDTO> musicDTOS = libraryApiProxy.findAllMusics(1);
+      List<MusicDTO> musicDTOS = libraryApiProxy.findAllAllowedMusics(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_MUSICS, musicDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, musicsTitles);
@@ -117,7 +117,7 @@ public class MusicController {
    }
 
    @GetMapping(value="/music/{musicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("musicId") Integer musicId, Model model, Locale locale){
+   public String bookView(@PathVariable("musicId") String musicId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

@@ -15,7 +15,8 @@
          </div>
          <div class="col-sm my-auto">
             <a class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/books}" th:text="#{label.back}">Back</a>
-            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{bookId}(bookId=${book.id})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${book.stock>0}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{bookEan}(bookEan=${book.ean})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${book.stock<=0}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/booking/{bookEan}(bookEan=${book.ean})}" th:text="#{label.setAside}">Book</a>
          </div>
       </div>
    </header>
@@ -26,7 +27,7 @@
             <h5 th:text="#{label.information}"></h5>
          </div>
          <div class="card-body center">
-            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + book.id}" alt="photo"/>
+            <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + book.ean}" alt="photo"/>
          </div>
          <div class="card-footer row">
             <div class="input-group">
@@ -87,7 +88,7 @@
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
-               <span class="form-control" th:text="${book.remaining}"> Remaining </span>
+               <span class="form-control" th:text="${book.stock}"> Remaining </span>
             </div>
 
             <div class="input-group">

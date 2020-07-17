@@ -38,7 +38,7 @@ public class BorrowingController {
 
 
    @GetMapping("/borrowings")
-   public String booksList(Model model, Locale locale) {
+   public String borrowingsList(Model model, Locale locale) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
       Date restitutionDate = DateUtils.addDays(new Date(),-borrowingDelay);
@@ -56,14 +56,14 @@ public class BorrowingController {
       return PathTable.BORROWINGS;
    }
 
-   @GetMapping("/borrowing/{mediaId}")
-   public String borrowing(@PathVariable("mediaId") Integer mediaId){
+   @GetMapping("/borrowing/{mediaEan}")
+   public String borrowing(@PathVariable("mediaEan") String mediaEan){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
-         libraryApiProxy.addBorrowing(userDTO.getId(), mediaId);
+         libraryApiProxy.addBorrowing(userDTO.getId(), mediaEan);
       }
 
       return PathTable.BORROWINGS_R;

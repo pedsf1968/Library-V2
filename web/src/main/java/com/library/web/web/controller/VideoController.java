@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.net.URISyntaxException;
 import java.util.*;
 
-import static org.assertj.core.util.Lists.*;
-
 @Slf4j
 @Controller
 @RefreshScope
@@ -55,7 +53,7 @@ public class VideoController {
 
    @GetMapping("/videos")
    public String booksList(Model model, Locale locale){
-      List<VideoDTO> videoDTOS = libraryApiProxy.findAllVideos(1);
+      List<VideoDTO> videoDTOS = libraryApiProxy.findAllAllowedVideos(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_VIDEOS, videoDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, videosTitles);
@@ -81,7 +79,7 @@ public class VideoController {
       }
 
       if(filter.getActorId()!=null) {
-         videoDTO.setActors(list(videosActors.get(filter.getActorId())));
+         videoDTO.setActors(Collections.singletonList(videosActors.get(filter.getActorId())));
       }
 
       log.info("filter : " + videoDTO);
@@ -104,7 +102,7 @@ public class VideoController {
    }
 
    @GetMapping(value="/video/{videoId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("videoId") Integer videoId, Model model, Locale locale){
+   public String bookView(@PathVariable("videoId") String videoId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

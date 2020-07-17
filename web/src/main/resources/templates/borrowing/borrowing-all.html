@@ -28,10 +28,10 @@
                </div>
             </div>
             <div class="card-body center">
-               <img  th:if="${borrowing.media.mediaType=='BOOK'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + borrowing.media.id}" alt="photo"/>
-               <img  th:if="${borrowing.media.mediaType=='GAME'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + borrowing.media.id}" alt="photo"/>
-               <img  th:if="${borrowing.media.mediaType=='MUSIC'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + borrowing.media.id}" alt="photo"/>
-               <img  th:if="${borrowing.media.mediaType=='VIDEO'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/VIDEO/' + borrowing.media.id}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='BOOK'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='GAME'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='MUSIC'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='VIDEO'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/VIDEO/' + borrowing.media.ean}" alt="photo"/>
             </div>
             <div class="card-footer">
                <div class="input-group">

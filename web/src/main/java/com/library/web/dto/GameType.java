@@ -10,5 +10,5 @@ public enum GameType {
    ARCADE,
    FIGHT,
    MMORPG,
-   SIMULATION;
+   SIMULATION
 }

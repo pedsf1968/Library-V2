@@ -46,7 +46,7 @@ public class GameController {
 
    @GetMapping("/games")
    public String booksList(Model model, Locale locale){
-      List<GameDTO> gameDTOS = libraryApiProxy.findAllGames(1);
+      List<GameDTO> gameDTOS = libraryApiProxy.findAllAllowedGames(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_GAMES, gameDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, gamesTitles);
@@ -83,7 +83,7 @@ public class GameController {
    }
 
    @GetMapping(value="/game/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public String bookView(@PathVariable("gameId") Integer gameId, Model model, Locale locale){
+   public String bookView(@PathVariable("gameId") String gameId, Model model, Locale locale){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       
       if(!authentication.getName().equals("anonymousUser")) {

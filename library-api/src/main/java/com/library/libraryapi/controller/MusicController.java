@@ -43,6 +43,20 @@ public class MusicController {
       }
    }
 
+   @GetMapping(value = "/allowed",produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<MusicDTO>> findAllAllowedMusics(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<MusicDTO> musicDTOS;
+
+      try {
+         musicDTOS = musicService.findAllAllowed();
+         return ResponseEntity.ok(musicDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<MusicDTO>> findAllfilteredMusics(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,
@@ -64,7 +78,7 @@ public class MusicController {
    }
 
    @GetMapping(value = "/{musicId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<MusicDTO> findMusicById(@PathVariable("musicId")Integer musicId){
+   public ResponseEntity<MusicDTO> findMusicById(@PathVariable("musicId")String musicId){
 
       try {
          MusicDTO musicDTO = musicService.findById(musicId);
@@ -80,7 +94,7 @@ public class MusicController {
 
       try {
          MusicDTO musicCreated = musicService.save(musicDTO);
-         return ResponseEntity.created(new URI( "/music" + musicCreated.getId())).body(musicCreated);
+         return ResponseEntity.created(new URI( "/music" + musicCreated.getEan())).body(musicCreated);
       } catch (ConflictException ex) {
          // log exception first, then return Conflict (409)
          log.error(ex.getMessage());
@@ -108,7 +122,7 @@ public class MusicController {
    }
 
    @DeleteMapping("/{musicId}")
-   public ResponseEntity<Void> deleteMusic(@PathVariable("musicId") Integer musicId) {
+   public ResponseEntity<Void> deleteMusic(@PathVariable("musicId") String musicId) {
       try {
          musicService.deleteById(musicId);
          return ResponseEntity.ok().build();

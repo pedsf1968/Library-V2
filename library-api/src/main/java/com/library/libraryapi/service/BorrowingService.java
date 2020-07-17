@@ -1,17 +1,16 @@
 package com.library.libraryapi.service;
 
-import com.library.libraryapi.dto.business.BorrowingDTO;
-import com.library.libraryapi.dto.business.MediaDTO;
+import com.library.libraryapi.dto.business.*;
 import com.library.libraryapi.dto.global.UserDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Borrowing;
+import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
-import com.library.libraryapi.repository.BorrowingRepository;
-import com.library.libraryapi.repository.BorrowingSpecification;
+import com.library.libraryapi.repository.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +26,7 @@ import java.util.List;
 
 @Service("BorrowingService")
 public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,Integer> {
+   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Borrowing with the EAN : ";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Borrowing with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Borrowing";
    private static final String EXCEPTION_NO_MEDIA ="The Media is borrowed !";
@@ -42,12 +42,23 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    private int quantityMax;
 
    private final BorrowingRepository borrowingRepository;
-   private final UserApiProxy userApiProxy;
+   private final BookService bookService;
+   private final GameService gameService;
+   private final MusicService musicService;
+   private final VideoService videoService;
    private final MediaService mediaService;
+   private final UserApiProxy userApiProxy;
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BorrowingService(BorrowingRepository borrowingRepository, UserApiProxy userApiProxy, MediaService mediaService) {
+   public BorrowingService(BorrowingRepository borrowingRepository,
+                           BookService bookService, GameService gameService,
+                           MusicService musicService, VideoService videoService,
+                           UserApiProxy userApiProxy, MediaService mediaService) {
       this.borrowingRepository = borrowingRepository;
+      this.bookService = bookService;
+      this.gameService = gameService;
+      this.musicService = musicService;
+      this.videoService = videoService;
       this.userApiProxy = userApiProxy;
       this.mediaService = mediaService;
    }
@@ -171,67 +182,111 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       return borrowing;
    }
 
+
+   Boolean userHadBorrowed(Integer userId, String ean) {
+      return borrowingRepository.userHadBorrowed( userId, ean);
+   }
+
    /**
     * method for borowing a media
     *
     * @param userId id of the User who want to borrow
-    * @param mediaId id of the Media wanted
+    * @param mediaEan id of the Media wanted
     * @return the Borrowing DTO
     */
-   public BorrowingDTO borrow(Integer userId, Integer mediaId) {
+   public BorrowingDTO borrow(Integer userId, String mediaEan) {
       Borrowing borrowing = new Borrowing();
       UserDTO userDTO = userApiProxy.findUserById(userId);
-      MediaDTO mediaDTO = mediaService.findById(mediaId);
+      MediaDTO mediaDTO = null;
+      Integer stock;
+      // calculate the restitution date adding 4 weeks 28 days
       Date today = new Date();
-
-      //verify that we can borrow this Media
-      int quantityRemaining = mediaDTO.getRemaining();
-      if(quantityRemaining==0){
-         throw new ForbiddenException(EXCEPTION_NO_MEDIA);
-      } else {
-         // decrease quantity remaining to prenvent other borrow
-         mediaService.updateQuantityRemaining(mediaId, quantityRemaining-1);
-      }
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(today);
+      calendar.add(Calendar.DATE, daysOfDelay);
+      java.sql.Date returnDate = new java.sql.Date(calendar.getTimeInMillis());
 
       // verify that the user can borrow
       int counter = userDTO.getCounter();
       if(counter>quantityMax){
-         mediaService.updateQuantityRemaining(mediaId, quantityRemaining);
          throw new ForbiddenException(EXCEPTION_NO_MORE);
       }
 
       String userStatus = userDTO.getStatus();
       if(userStatus.equals(UserStatus.FORBIDDEN.name()) ){
-         mediaService.updateQuantityRemaining(mediaId, quantityRemaining);
          throw new ForbiddenException(EXCEPTION_FORBIDDEN);
       } else if (userStatus.equals(UserStatus.BAN.name())){
-         mediaService.updateQuantityRemaining(mediaId, quantityRemaining);
          throw new ForbiddenException(EXCEPTION_BAN);
       }
 
-      // increase user borrowing counter
-      counter+=1;
+      // block a media
+      mediaService.blockFreeByEan(mediaEan);
+      // get the media blocked
+      mediaDTO = mediaService.findBlockedByEan(mediaEan);
+
+      if(mediaDTO == null) {
+         throw new ForbiddenException(EXCEPTION_NO_MEDIA);
+      }
+
+      if(mediaDTO.getMediaType().equals(MediaType.BOOK.toString())) {
+         // Media is a BOOK
+         BookDTO bookDTO = bookService.findById(mediaDTO.getEan());
+         stock = bookDTO.getStock();
+         //verify the stock
+         if(stock > 0) {
+            bookService.decreaseStock(mediaEan);
+         } else {
+            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
+         }
+
+      } else if(mediaDTO.getMediaType().equals(MediaType.GAME.toString())) {
+         // Media is a GAME
+         GameDTO gameDTO = gameService.findById(mediaDTO.getEan());
+         stock = gameDTO.getStock();
+         //verify the stock
+         if(stock > 0) {
+            gameService.decreaseStock(mediaEan);
+         } else {
+            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
+         }
+      } else if(mediaDTO.getMediaType().equals(MediaType.MUSIC.toString())) {
+         // Media is a MUSIC
+         MusicDTO musicDTO = musicService.findById(mediaDTO.getEan());
+         stock = musicDTO.getStock();
+         //verify the stock
+         if(stock > 0) {
+            musicService.decreaseStock(mediaEan);
+         } else {
+            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
+         }
+      } else if(mediaDTO.getMediaType().equals(MediaType.VIDEO.toString())) {
+         // Media is a VIDEO
+         VideoDTO videoDTO = videoService.findById(mediaDTO.getEan());
+         stock = videoDTO.getStock();
+         //verify the stock
+         if(stock > 0) {
+            videoService.decreaseStock(mediaEan);
+         } else {
+            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
+         }
+      }
+
+      // record the borrowing in media table
+      mediaService.borrow(mediaDTO.getId(),returnDate);
 
       if(userDTO.getStatus().equals("MEMBER")) {
          userApiProxy.updateUserStatus(userId,UserStatus.BORROWER.name());
       }
 
-      // calculate the restitution date adding 4 weeks 28 days
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(today);
-      calendar.add(Calendar.DATE, 28);
+      // increase user borrowing counter
+      userApiProxy.updateUserCounter(userId,++counter);
 
-
-      if (mediaDTO.getReturnDate()==null){
-         mediaService.updateReturnDate(mediaId, calendar.getTime());
-      }
-
-      userApiProxy.updateUserCounter(userId,counter);
-
-      borrowing.setMediaId(mediaId);
+      borrowing.setMediaId(mediaDTO.getId());
       borrowing.setUserId(userId);
       borrowing.setBorrowingDate(today);
+      borrowing.setExtended(0);
 
+      // record the borrowing in borrowing table
       borrowingRepository.save(borrowing);
 
       return entityToDTO(borrowing);
@@ -240,14 +295,25 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    public BorrowingDTO restitute(Integer userId, Integer mediaId) {
       Borrowing borrowing = borrowingRepository.findByUserIdAndMediaId(userId, mediaId);
       UserDTO userDTO = userApiProxy.findUserById(userId);
+      MediaDTO mediaDTO = mediaService.findById(mediaId);
 
-      //increase the Media quantity
-      int quantityRemaining = mediaService.quantityRemaining(mediaId) + 1;
-      mediaService.updateQuantityRemaining(mediaId, quantityRemaining);
+      // Increase stock
+      if (mediaDTO.getMediaType().equals(MediaType.BOOK.toString())) {
+         bookService.increaseStock(mediaDTO.getEan());
+      } else if (mediaDTO.getMediaType().equals(MediaType.GAME.toString())) {
+         gameService.increaseStock(mediaDTO.getEan());
+      } else if (mediaDTO.getMediaType().equals(MediaType.MUSIC.toString())) {
+         musicService.increaseStock(mediaDTO.getEan());
+      } else if (mediaDTO.getMediaType().equals(MediaType.VIDEO.toString())) {
+         videoService.increaseStock(mediaDTO.getEan());
+      }
 
       // increase user counter
       int counter = userDTO.getCounter() - 1;
       userApiProxy.updateUserCounter(userId,counter);
+
+      // release the media
+      mediaService.release(mediaId);
 
       borrowing.setReturnDate(new Date());
       borrowingRepository.save(borrowing);

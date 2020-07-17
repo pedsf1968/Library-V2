@@ -14,5 +14,5 @@ public enum UserStatus {
    BORROWER,
    DELAY,
    FORBIDDEN,
-   BAN;
+   BAN
 }

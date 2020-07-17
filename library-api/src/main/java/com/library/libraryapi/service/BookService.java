@@ -1,11 +1,13 @@
 package com.library.libraryapi.service;
 
 import com.library.libraryapi.dto.business.BookDTO;
+import com.library.libraryapi.dto.business.GameDTO;
 import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Book;
+import com.library.libraryapi.model.Game;
 import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.repository.BookRepository;
 import com.library.libraryapi.repository.BookSpecification;
@@ -18,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service("BookService")
-public class BookService implements GenericService<BookDTO,Book,Integer> {
-   private static final String CANNOT_FIND_WITH_ID = "Cannot find Book with the id : ";
+public class BookService implements GenericMediaService<BookDTO,Book,String> {
+   private static final String CANNOT_FIND_WITH_ID = "Cannot find Book with the EAN : ";
    private static final String CANNOT_SAVE ="Failed to save Book";
 
    private final BookRepository bookRepository;
@@ -33,24 +35,40 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
 
 
    @Override
-   public boolean existsById(Integer id) {
-      return bookRepository.findById(id).isPresent();
+   public boolean existsById(String ean) {
+      return bookRepository.findByEan(ean).isPresent();
    }
 
    @Override
-   public BookDTO findById(Integer id) {
+   public BookDTO findById(String ean) {
 
-      if (existsById(id)) {
-         Book book = bookRepository.findById(id).orElse(null);
+      if (existsById(ean)) {
+         Book book = bookRepository.findByEan(ean).orElse(null);
          return entityToDTO(book);
       } else {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       }
    }
 
    @Override
    public List<BookDTO> findAll() {
       List<Book> books = bookRepository.findAll();
+      List<BookDTO> bookDTOS = new ArrayList<>();
+
+      for (Book book: books){
+         bookDTOS.add(entityToDTO(book));
+      }
+
+      if (!bookDTOS.isEmpty()) {
+         return bookDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
+   }
+
+   @Override
+   public List<BookDTO> findAllAllowed() {
+      List<Book> books = bookRepository.findAllAllowed();
       List<BookDTO> bookDTOS = new ArrayList<>();
 
       for (Book book: books){
@@ -84,9 +102,11 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
    }
 
    @Override
-   public Integer getFirstId(BookDTO filter){
-      return findAllFiltered(filter).get(0).getId();
+   public String getFirstId(BookDTO filter){
+
+      return findAllFiltered(filter).get(0).getEan();
    }
+
 
    @Override
    public BookDTO save(BookDTO bookDTO) {
@@ -96,8 +116,14 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
             !StringUtils.isEmpty(bookDTO.getType()) &&
             !StringUtils.isEmpty(bookDTO.getFormat())) {
 
-         bookDTO.setId(null);
-         return entityToDTO(bookRepository.save(dtoToEntity(bookDTO)));
+         try {
+            // try to find existing Book
+            String ean = getFirstId(bookDTO);
+            Book book = bookRepository.findByEan(ean).orElse(null);
+            return entityToDTO(book);
+         } catch (ResourceNotFoundException ex) {
+            return entityToDTO(bookRepository.save(dtoToEntity(bookDTO)));
+         }
 
       } else {
          throw new BadRequestException(CANNOT_SAVE);
@@ -106,14 +132,14 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
 
    @Override
    public BookDTO update(BookDTO bookDTO) {
-      if (  !StringUtils.isEmpty(bookDTO.getId()) &&
+      if (  !StringUtils.isEmpty(bookDTO.getEan()) &&
             !StringUtils.isEmpty(bookDTO.getTitle()) &&
             !StringUtils.isEmpty(bookDTO.getAuthor()) &&
             !StringUtils.isEmpty(bookDTO.getEditor()) &&
             !StringUtils.isEmpty(bookDTO.getType()) &&
             !StringUtils.isEmpty(bookDTO.getFormat())) {
-         if (!existsById(bookDTO.getId())) {
-            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + bookDTO.getId());
+         if (!existsById(bookDTO.getEan())) {
+            throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + bookDTO.getEan());
          }
          Book book = bookRepository.save(dtoToEntity(bookDTO));
 
@@ -125,11 +151,11 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
 
 
    @Override
-   public void deleteById(Integer id) {
-      if (!existsById(id)) {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
+   public void deleteById(String ean) {
+      if (!existsById(ean)) {
+         throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + ean);
       } else {
-         bookRepository.deleteById(id);
+         bookRepository.deleteByEan(ean);
       }
    }
 
@@ -147,14 +173,13 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
       bookDTO.setAuthor(author);
       bookDTO.setEditor(editor);
 
+
       return bookDTO;
    }
 
    @Override
    public Book dtoToEntity(BookDTO bookDTO) {
       Book book = modelMapper.map(bookDTO, Book.class);
-
-      book.setMediaType(MediaType.BOOK);
 
       if(bookDTO.getAuthor()!=null) {
          book.setAuthorId(bookDTO.getAuthor().getId());
@@ -187,6 +212,14 @@ public class BookService implements GenericService<BookDTO,Book,Integer> {
 
    public List<String> findAllTitles() {
       return bookRepository.findAllTitles();
+   }
+
+   void increaseStock(String ean) {
+      bookRepository.increaseStock(ean);
+   }
+
+   void decreaseStock(String ean) {
+      bookRepository.decreaseStock(ean);
    }
 
 }

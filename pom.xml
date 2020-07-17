@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <!-- =================================================================== -->
+   <!--                                                PROJECT INFORMATIONS -->
+   <!-- =================================================================== -->
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.pedsf</groupId>
+   <artifactId>multi-module-library</artifactId>
+   <version>1.0.0.RELEASE</version>
+   <packaging>pom</packaging>
+   <name>multi-module-library</name>
+   <description>
+      Library project
+   </description>
+   <url>https://github.com/pedsf1968/Library-V2</url>
+
+   <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.3.1.RELEASE</version>
+      <relativePath/>
+   </parent>
+
+
+   <!-- ====================================================== ORGANIZATION -->
+   <organization>
+      <name>pedsf</name>
+      <url>http://www.pedsf.com</url>
+   </organization>
+
+   <!-- =================================================================== -->
+   <!--                                                            LICENCES -->
+   <!-- =================================================================== -->
+   <licenses>
+      <license>
+         <name>Apache License, Version 2.0</name>
+         <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      </license>
+      <license>
+         <name>The MIT License</name>
+         <url>https://projectlombok.org/LICENSE</url>
+      </license>
+      <license>
+         <name>MPL 2.0 or EPL 1.0</name>
+         <url>https://h2database.com/html/license.html</url>
+      </license>
+      <license>
+         <name>BSD-2-Clause</name>
+         <url>https://jdbc.postgresql.org/about/license.html</url>
+      </license>
+   </licenses>
+
+   <!-- =================================================================== -->
+   <!--                                                          PROPERTIES -->
+   <!-- =================================================================== -->
+   <properties>
+      <java.version>1.8</java.version>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+   </properties>
+
+
+   <!-- =================================================================== -->
+   <!--                                                             MODULES -->
+   <!-- =================================================================== -->
+   <modules>
+      <module>config-server</module>
+      <module>eureka-server</module>
+      <module>zuul-server</module>
+      <module>media-api</module>
+      <module>mail-api</module>
+      <module>user-api</module>
+      <module>library-api</module>
+      <module>web</module>
+      <module>batch</module>
+   </modules>
+
+   <!-- =================================================================== -->
+   <!--                                                            PROFILES -->
+   <!-- =================================================================== -->
+   <profiles>
+      <profile>
+         <id>development</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <properties>
+            <activatedProperties>development</activatedProperties>
+            <configServer>http://localhost:2000</configServer>
+         </properties>
+         <dependencies>
+            <!-- ================================================ H2DATABASE -->
+            <dependency>
+               <groupId>com.h2database</groupId>
+               <artifactId>h2</artifactId>
+               <scope>runtime</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+
+      <profile>
+         <id>local</id>
+         <properties>
+            <activatedProperties>local</activatedProperties>
+            <configServer>http://localhost:2000</configServer>
+         </properties>
+         <dependencies>
+            <!-- ================================================ POSTGRESQL -->
+            <dependency>
+               <groupId>org.postgresql</groupId>
+               <artifactId>postgresql</artifactId>
+               <scope>runtime</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+
+      <profile>
+         <id>docker</id>
+         <properties>
+            <activatedProperties>docker</activatedProperties>
+            <configServer>http://10.5.0.1:2000</configServer>
+         </properties>
+         <dependencies>
+            <!-- ================================================ POSTGRESQL -->
+            <dependency>
+               <groupId>org.postgresql</groupId>
+               <artifactId>postgresql</artifactId>
+               <scope>runtime</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+   </profiles>
+
+   <!-- ==================================================================== -->
+   <!--                                                 DEPENDENCY MANAGMENT -->
+   <!-- ==================================================================== -->
+   <dependencyManagement>
+      <dependencies>
+         <!-- ================================================ CONFIG-SERVER -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>config-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ================================================ EUREKA-SERVER -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>eureka-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ================================================== ZUUL-SERVER -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>zuul-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ==================================================== MEDIA-API -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>media-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ===================================================== MAIL-API -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mail-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ===================================================== USER-API -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ================================================== LIBRARY-API -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>library-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ========================================================== WEB -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>web</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- ======================================================== BATCH -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>batch</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <!-- ============================================================== -->
+         <!--                                                    SPRING BOOT -->
+         <!-- ============================================================== -->
+
+         <!-- ===================================================== ACTUATOR -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ======================================================== BATCH -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-batch</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ==================================================== DATA REST -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ===================================================== DATA JPA -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ==================================================== DATA JDBC -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ===================================================== DEVTOOLS -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>2.3.1.RELEASE</version>
+            <optional>true</optional>
+         </dependency>
+
+         <!-- ========================================================= MAIL -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ====================================================== STARTER -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ==================================================== THYMELEAF -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ====================================================== TOMCAT -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>2.3.1.RELEASE</version>
+            <scope>compile</scope>
+         </dependency>
+
+         <!-- ================================================== WEB STARTER -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.3.1.RELEASE</version>
+         </dependency>
+
+         <!-- ============================================================== -->
+         <!--                                                   SPRING CLOUD -->
+         <!-- ============================================================== -->
+
+         <!-- ======================================================== CLOUD -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>Hoxton.SR3</version>
+            <type>pom</type>
+            <scope>runtime</scope>
+         </dependency>
+
+         <!-- =============================================== CONFIG STARTER -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+         <!-- ================================================ CONFIG SERVER -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+         <!-- ================================================ EUREKA CLIENT -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+         <!-- ================================================ EUREKA SERVER -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+         <!-- ==================================================== OPENFEIGN -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+         <!-- ======================================================== RIBON -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+
+         <!-- ===================================================== SECURITY -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+            <version>2.2.2.RELEASE</version>
+         </dependency>
+
+         <!-- ============================================================ ZUUL -->
+         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>2.2.3.RELEASE</version>
+         </dependency>
+
+
+         <!-- ======================================================= CLIENT -->
+         <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.2.3</version>
+         </dependency>
+
+         <!-- =================================================== COMMONS IO -->
+         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
+         </dependency>
+
+         <!-- ================================================ COMMONS LANG3 -->
+         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.10</version>
+         </dependency>
+
+
+         <!-- =========================================================== H2 -->
+         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+         </dependency>
+
+         <!-- ========================================================= JACKSON -->
+         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.1</version>
+         </dependency>
+
+         <!-- ======================================================= JASYPT -->
+         <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.0.0</version>
+         </dependency>
+
+         <!-- ======================================================== JBOSS -->
+         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-jboss-vfs</artifactId>
+            <version>0.1.0</version>
+         </dependency>
+
+         <!-- ======================================================== KAFKA -->
+         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>2.5.3.RELEASE</version>
+         </dependency>
+
+         <!-- ======================================================= LOMBOK -->
+         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <optional>true</optional>
+         </dependency>
+
+         <!-- ================================================== MODELMAPPER -->
+         <dependency>
+            <groupId>org.modelmapper.extensions</groupId>
+            <artifactId>modelmapper-spring</artifactId>
+            <version>2.3.0</version>
+         </dependency>
+
+         <!-- ================================================== MODELMAPPER -->
+         <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>2.3.8</version>
+            <scope>compile</scope>
+         </dependency>
+
+         <!-- =================================================== OPENAPI-UI -->
+         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.2.34</version>
+         </dependency>
+
+         <!-- =================================================== POSTGRESQL -->
+         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.12</version>
+         </dependency>
+
+         <!-- ====================================================== SWAGGER -->
+         <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.1.1</version>
+            <scope>compile</scope>
+         </dependency>
+
+         <!-- =========================================== THYMELEAF SECURITY -->
+         <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+            <version>3.0.4.RELEASE</version>
+         </dependency>
+
+         <!-- =================================================== VALIDATION -->
+         <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+         </dependency>
+
+         <!-- ========================================================= WEB  -->
+         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.2.7.RELEASE</version>
+         </dependency>
+
+
+         <!-- ============================================================== -->
+         <!--                                                           TEST -->
+         <!-- ============================================================== -->
+
+         <!-- ========================================================= TEST -->
+         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.3.1.RELEASE</version>
+            <scope>test</scope>
+            <exclusions>
+               <exclusion>
+                  <groupId>org.springframework.cloud</groupId>
+                  <artifactId>spring-cloud-config-client</artifactId>
+               </exclusion>
+               <exclusion>
+                  <groupId>org.junit.vintage</groupId>
+                  <artifactId>junit-vintage-engine</artifactId>
+               </exclusion>
+            </exclusions>
+         </dependency>
+
+         <!-- ====================================================== BATCH TEST -->
+         <dependency>
+            <groupId>org.springframework.batch</groupId>
+            <artifactId>spring-batch-test</artifactId>
+            <version>4.2.4.RELEASE</version>
+            <scope>test</scope>
+         </dependency>
+
+         <!-- ====================================================== KAFKA TEST -->
+         <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <version>2.5.3.RELEASE</version>
+            <scope>test</scope>
+         </dependency>
+
+         <!-- =========================================================== JUNIT -->
+         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.0-M1</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.0-M1</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.7.0-M1</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.5.2</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
+            <scope>test</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.1.1</version>
+            <scope>test</scope>
+         </dependency>
+
+
+      </dependencies>
+   </dependencyManagement>
+
+   <!-- ==================================================================== -->
+   <!--                                                         DEPENDENCIES -->
+   <!-- ==================================================================== -->
+   <dependencies>
+   </dependencies>
+
+
+   <!-- ==================================================================== -->
+   <!--                                                                BUILD -->
+   <!-- ==================================================================== -->
+   <build></build>
+
+
+
+</project>
