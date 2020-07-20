@@ -26,12 +26,12 @@ public interface GameRepository extends JpaRepository<Game, Integer>, JpaSpecifi
 
    @Modifying
    @Transactional
-   @Query("UPDATE Game g SET g.stock = (SELECT s.stock FROM Game s WHERE s.ean = ?1) +1")
+   @Query(value = "UPDATE Game SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
    @Modifying
    @Transactional
-   @Query("UPDATE Game g SET g.stock = (SELECT s.stock FROM Game s WHERE s.ean = ?1) -1")
+   @Query(value = "UPDATE Game SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 
 }

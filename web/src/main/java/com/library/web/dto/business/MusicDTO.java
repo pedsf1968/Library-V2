@@ -1,6 +1,8 @@
 package com.library.web.dto.business;
+
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ import java.sql.Date;
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the next return date
  *
  * publicationDate : is the date when the Media is published
  * authorId : identification of the author of the Music
@@ -60,6 +63,9 @@ public class MusicDTO implements Serializable {
    private Integer length;
    private Integer width;
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
 
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

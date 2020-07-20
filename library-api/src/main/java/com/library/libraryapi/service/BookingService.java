@@ -6,23 +6,26 @@ import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Booking;
-import com.library.libraryapi.model.Game;
-import com.library.libraryapi.model.MediaType;
+import com.library.libraryapi.model.MediaStatus;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.BookingRepository;
 import com.library.libraryapi.repository.BookingSpecification;
+import com.library.libraryapi.repository.BorrowingRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service("BookingService")
 public class BookingService implements GenericService<BookingDTO, Booking,Integer> {
+   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Booking with the ean : ";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Booking with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Booking";
    private static final String EXCEPTION_FORBIDDEN ="The user is not authorized, subscription fees not updated !";
@@ -30,27 +33,25 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    private static final String EXCEPTION_HAD_ALREADY_BORROWED ="The user had already borrowed this Media !";
    private static final String EXCEPTION_CANT_BOOK_MORE ="The booking can't exceed the limit : ";
 
+   @Value("${library.booking.delay}")
+   private int daysOfDelay;
+
+   private static final Integer BOOKING_LIMIT_MAX = 2; // limit 2* media quantity
+
    private final BookingRepository bookingRepository;
-   private final BookService bookService;
-   private final GameService gameService;
-   private final MusicService musicService;
-   private final VideoService videoService;
+   private final BorrowingRepository borrowingRepository;
    private final MediaService mediaService;
-   private final BorrowingService borrowingService;
    private final UserApiProxy userApiProxy;
 
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BookingService(BookingRepository bookingRepository, BookService bookService, GameService gameService, MusicService musicService, VideoService videoService, MediaService mediaService, BorrowingService borrowingService, UserApiProxy userApiProxy) {
+   public BookingService(BookingRepository bookingRepository, MediaService mediaService, BorrowingRepository borrowingRepository, UserApiProxy userApiProxy) {
       this.bookingRepository = bookingRepository;
-      this.bookService = bookService;
-      this.gameService = gameService;
-      this.musicService = musicService;
-      this.videoService = videoService;
       this.mediaService = mediaService;
-      this.borrowingService = borrowingService;
+      this.borrowingRepository = borrowingRepository;
       this.userApiProxy = userApiProxy;
    }
+
 
    @Override
    public boolean existsById(Integer id) {
@@ -157,21 +158,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    public BookingDTO entityToDTO(Booking booking) {
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
-      MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
-
-      if(mediaDTO.getMediaType().equals(MediaType.BOOK.name())) {
-         BookDTO bookDTO = bookService.findById(mediaDTO.getEan());
-         mediaDTO.setStock(bookDTO.getStock());
-      } else if(mediaDTO.getMediaType().equals(MediaType.GAME.name())) {
-         GameDTO gameDTO = gameService.findById(mediaDTO.getEan());
-         mediaDTO.setStock(gameDTO.getStock());
-      } else if(mediaDTO.getMediaType().equals(MediaType.MUSIC.name())) {
-         MusicDTO musicDTO = musicService.findById(mediaDTO.getEan());
-         mediaDTO.setStock(musicDTO.getStock());
-      } else if(mediaDTO.getMediaType().equals(MediaType.VIDEO.name())) {
-         VideoDTO videoDTO = videoService.findById(mediaDTO.getEan());
-         mediaDTO.setStock(videoDTO.getStock());
-      }
+      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
@@ -189,6 +176,15 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       return booking;
    }
 
+   BookingDTO findByEanAndUserId(String ean, Integer userId) {
+      return entityToDTO(bookingRepository.findByEanAndUserId(ean,userId));
+   }
+
+   BookingDTO findNextBookingByMediaId(String ean) {
+      return entityToDTO(bookingRepository.findNextBookingByMediaId(ean));
+   }
+
+
    /**
     * method for booking a media
     *
@@ -199,8 +195,8 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    public BookingDTO booking(Integer userId, String mediaEan) {
       Booking booking = new Booking();
       UserDTO userDTO = userApiProxy.findUserById(userId);
-      MediaType mediaType = mediaService.findMediaTypeByEan(mediaEan);
-      Integer limit = 0;
+      MediaDTO mediaDTO = mediaService.findOneByEan(mediaEan);
+      Integer quantity = 0;
       Integer stock = 0;
 
       String userStatus = userDTO.getStatus();
@@ -208,50 +204,46 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          throw new ForbiddenException(EXCEPTION_FORBIDDEN);
       } else if (userStatus.equals(UserStatus.BAN.name())){
          throw new ForbiddenException(EXCEPTION_BAN);
-      } else if (borrowingService.userHadBorrowed(userId,mediaEan)) {
+      } else if (borrowingRepository.userHadBorrowed(userId,mediaEan).equals(Boolean.TRUE)) {
+         // user had this media
+         throw new ForbiddenException(EXCEPTION_HAD_ALREADY_BORROWED);
+      } else if (bookingRepository.userHadBooked(userId,mediaEan)) {
+         // user want to book the same media again
          throw new ForbiddenException(EXCEPTION_HAD_ALREADY_BORROWED);
       }
 
-      // get quantity of the same media
-      if (mediaType.equals(MediaType.BOOK)) {
-         limit = bookService.findById(mediaEan).getQuantity()*2;
-         stock = bookService.findById(mediaEan).getStock();
+      //
+      // La liste de réservation ne peut comporter qu’un maximum de personnes correspondant à 2x le nombre d’exemplaires de l’ouvrage.
+      quantity = mediaDTO.getQuantity();
+      stock = mediaDTO.getStock();
 
-         if (-stock < limit) {
-            bookService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + limit);
-         }
-      } else if (mediaType.equals(MediaType.GAME)) {
-         limit = gameService.findById(mediaEan).getQuantity();
-         stock = gameService.findById(mediaEan).getStock();
-         if (-stock < limit) {
-            gameService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + limit);
-         }
-      } else if (mediaType.equals(MediaType.MUSIC)) {
-         limit = musicService.findById(mediaEan).getQuantity();
-         stock = musicService.findById(mediaEan).getStock();
-            if (-stock < limit) {
-               musicService.decreaseStock(mediaEan);
-            } else {
-               throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + limit);
-            }
-      } else if (mediaType.equals(MediaType.VIDEO)) {
-         limit = videoService.findById(mediaEan).getQuantity();
-         stock = videoService.findById(mediaEan).getStock();
-               if (-stock < limit) {
-                  videoService.decreaseStock(mediaEan);
-               } else {
-                  throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + limit);
-               }
+
+      if(stock > 0) {
+         // media available we can put flag to borrow
+         mediaDTO = mediaService.findFreeByEan(mediaEan);
+         mediaService.setStatus(mediaDTO.getId(), MediaStatus.BOOKED);
+         mediaService.decreaseStock(mediaDTO);
+
+         // calculate the restitution date adding 2 days
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(new Date());
+         calendar.add(Calendar.DATE, daysOfDelay);
+         booking.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
+         // record mediaId to borrow
+         booking.setMediaId(mediaDTO.getId());
+      } else if (-stock <= quantity*BOOKING_LIMIT_MAX) {
+         // no media available we anly decrease media counter
+         mediaService.decreaseStock(mediaDTO);
+         booking.setPickUpDate(null);
+      } else {
+         // can't book
+         throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + quantity);
       }
+
 
       booking.setUserId(userId);
       booking.setEan(mediaEan);
       booking.setBookingDate(new Date());
-      booking.setPickUpDate(null);
       booking = bookingRepository.save(booking);
 
       return entityToDTO(booking);
@@ -271,7 +263,11 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          bookingDTOS.add(entityToDTO(b));
       }
 
-      return bookingDTOS;
+      if (!bookingDTOS.isEmpty()) {
+         return bookingDTOS;
+      } else {
+         throw new ResourceNotFoundException();
+      }
    }
 
    /**
@@ -282,6 +278,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     */
    public BookingDTO cancelBooking(Integer bookingId) {
       Booking booking;
+      MediaDTO mediaDTO;
 
       if (existsById(bookingId)) {
          booking = bookingRepository.findById(bookingId).orElse(null);
@@ -289,23 +286,57 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + bookingId);
       }
 
+      String ean = booking.getEan();
+      bookingRepository.deleteById(bookingId);
+
       if (booking!=null) {
-         String mediaEan = booking.getEan();
-         MediaType mediaType = mediaService.findMediaTypeByEan(mediaEan);
-
-         bookingRepository.deleteById(bookingId);
-
-         if (mediaType.equals(MediaType.BOOK)) {
-            bookService.increaseStock(mediaEan);
-         } else if (mediaType.equals(MediaType.GAME)) {
-            gameService.increaseStock(mediaEan);
-         } else if (mediaType.equals(MediaType.MUSIC)) {
-            musicService.increaseStock(mediaEan);
-         } else if (mediaType.equals(MediaType.VIDEO)) {
-            videoService.increaseStock(mediaEan);
+         Integer mediaId = booking.getMediaId();
+         if (mediaId != null) {
+            mediaDTO = mediaService.findById(mediaId);
+            // search if another claim this media
+            BookingDTO bookingDTO = findNextBookingByMediaId(ean);
+            if (bookingDTO == null) {
+               // no other we release is
+               mediaService.setStatus(mediaId, MediaStatus.FREE);
+            } else {
+               // calculate the restitution date adding 2 days
+               Calendar calendar = Calendar.getInstance();
+               calendar.setTime(new Date());
+               calendar.add(Calendar.DATE, daysOfDelay);
+               bookingDTO.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
+               bookingDTO.setMediaId(mediaId);
+            }
+         } else {
+            mediaDTO = mediaService.findOneByEan(booking.getEan());
          }
+         mediaService.increaseStock(mediaDTO);
       }
 
       return entityToDTO(booking);
+   }
+
+   /**
+    * Method to find media ready to pick up for sending mail
+    * @return
+    */
+   public List<BookingDTO> findReadyToPickUp() {
+      List<Booking> bookings = bookingRepository.findReadyToPickUp();
+
+      List<BookingDTO> bookingDTOS = new ArrayList<>();
+
+      for (Booking b : bookings) {
+         bookingDTOS.add(entityToDTO(b));
+      }
+
+      return bookingDTOS;
+   }
+
+   /**
+    * set the pickup date fot one booking
+    * @param id booking id
+    * @param date new date
+    */
+   public void updatePickUpDate(Integer id, Date date) {
+      bookingRepository.updatePickUpDate( id, new java.sql.Date(date.getTime()));
    }
 }

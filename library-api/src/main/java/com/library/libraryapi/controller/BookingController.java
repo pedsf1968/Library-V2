@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,40 @@ public class BookingController {
       this.bookingService = bookingService;
    }
 
+   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<BookingDTO>> findAllBorrowings(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<BookingDTO> bookingDTOS;
+
+      try {
+         bookingDTOS = bookingService.findAll();
+         return ResponseEntity.ok(bookingDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
+   @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<BookingDTO>> findAllFilteredBorrowings(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber,
+         @RequestBody BookingDTO filter) {
+      List<BookingDTO> bookingDTOS;
+
+      try {
+         if (StringUtils.isEmpty(filter)) {
+            bookingDTOS = bookingService.findAll();
+         } else {
+            bookingDTOS = bookingService.findAllFiltered(filter);
+         }
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+
+      return ResponseEntity.ok(bookingDTOS);
+   }
+
    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<BookingDTO>> findBookingsByUserId(@PathVariable("userId") Integer userId) {
       List<BookingDTO> bookingDTOS;
@@ -28,8 +63,8 @@ public class BookingController {
       try {
          bookingDTOS = bookingService.findBookingsByUserId(userId);
          return ResponseEntity.ok(bookingDTOS);
-      } catch (ResourceNotFoundException ex) {
-         log.error(ex.getMessage());
+      } catch (ResourceNotFoundException exception) {
+         log.error(exception.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
 
@@ -59,5 +94,17 @@ public class BookingController {
       }
    }
 
+   @GetMapping(value = "/pickup", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<BookingDTO>> findReadyToPickUp(){
+      List<BookingDTO> bookingDTOS;
+
+      try {
+         bookingDTOS = bookingService.findReadyToPickUp();
+         return  ResponseEntity.ok(bookingDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
 
 }

@@ -1,5 +1,6 @@
 package com.library.web.dto.business;
 
+import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.web.dto.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,15 +35,11 @@ import java.sql.Date;
 @Data
 public class GameFilter {
 
-   // Media attributes
-   private Integer id;
+   // Media information
    private String ean;
-   private String mediaType = MediaType.GAME.toString();
    private String title;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
-
+   private Integer quantity;
+   private Integer stock;
    private Integer weight;
    private Integer length;
    private Integer width;
@@ -50,10 +47,8 @@ public class GameFilter {
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
-   private Integer stock;
-   private Integer remaining;
-
-   // game attributes
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date publicationDate;
    private Integer editorId;
    private String type;
    private String format;

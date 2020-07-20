@@ -2,7 +2,6 @@ package com.library.web.web.controller;
 
 import com.library.web.dto.business.BookingDTO;
 import com.library.web.dto.global.UserDTO;
-import com.library.web.exceptions.ForbiddenException;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
@@ -41,7 +40,8 @@ public class BookingController {
       try {
          bookingDTOS = libraryApiProxy.findBookingsByUser(userDTO.getId());
          model.addAttribute(PathTable.ATTRIBUTE_BOOKINGS, bookingDTOS);
-      } catch (ResourceNotFoundException ex) {
+      } catch (ResourceNotFoundException exception) {
+         log.info(exception.getMessage());
          bookingDTOS = null;
       }
 
@@ -57,10 +57,9 @@ public class BookingController {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
          try {
             libraryApiProxy.addBooking(userDTO.getId(), mediaEan);
-         } catch (ForbiddenException exception) {
-
+         } catch (Exception exception) {
+            log.info(exception.getMessage());
          }
-
       }
 
       return PathTable.BOOKINGS_R;

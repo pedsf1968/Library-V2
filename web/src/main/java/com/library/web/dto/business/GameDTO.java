@@ -1,5 +1,6 @@
 package com.library.web.dto.business;
 
+import com.library.libraryapi.dto.business.PersonDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -60,6 +61,9 @@ public class GameDTO implements Serializable {
    private Integer length;
    private Integer width;
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

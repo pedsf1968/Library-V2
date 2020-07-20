@@ -7,7 +7,7 @@ import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Borrowing;
-import com.library.libraryapi.model.MediaType;
+import com.library.libraryapi.model.MediaStatus;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.*;
@@ -42,25 +42,16 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    private int quantityMax;
 
    private final BorrowingRepository borrowingRepository;
-   private final BookService bookService;
-   private final GameService gameService;
-   private final MusicService musicService;
-   private final VideoService videoService;
+   private final BookingService bookingService;
    private final MediaService mediaService;
    private final UserApiProxy userApiProxy;
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BorrowingService(BorrowingRepository borrowingRepository,
-                           BookService bookService, GameService gameService,
-                           MusicService musicService, VideoService videoService,
-                           UserApiProxy userApiProxy, MediaService mediaService) {
+   public BorrowingService(BorrowingRepository borrowingRepository, BookingService bookingService, MediaService mediaService, UserApiProxy userApiProxy) {
       this.borrowingRepository = borrowingRepository;
-      this.bookService = bookService;
-      this.gameService = gameService;
-      this.musicService = musicService;
-      this.videoService = videoService;
-      this.userApiProxy = userApiProxy;
+      this.bookingService = bookingService;
       this.mediaService = mediaService;
+      this.userApiProxy = userApiProxy;
    }
 
 
@@ -183,6 +174,13 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    }
 
 
+   /**
+    * Method to know if a media is borrowed by a user
+    *
+    * @param userId identification of the user
+    * @param ean identification of the media
+    * @return true if the user has already borrowed this media
+    */
    Boolean userHadBorrowed(Integer userId, String ean) {
       return borrowingRepository.userHadBorrowed( userId, ean);
    }
@@ -228,47 +226,10 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
          throw new ForbiddenException(EXCEPTION_NO_MEDIA);
       }
 
-      if(mediaDTO.getMediaType().equals(MediaType.BOOK.toString())) {
-         // Media is a BOOK
-         BookDTO bookDTO = bookService.findById(mediaDTO.getEan());
-         stock = bookDTO.getStock();
-         //verify the stock
-         if(stock > 0) {
-            bookService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
-         }
-
-      } else if(mediaDTO.getMediaType().equals(MediaType.GAME.toString())) {
-         // Media is a GAME
-         GameDTO gameDTO = gameService.findById(mediaDTO.getEan());
-         stock = gameDTO.getStock();
-         //verify the stock
-         if(stock > 0) {
-            gameService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
-         }
-      } else if(mediaDTO.getMediaType().equals(MediaType.MUSIC.toString())) {
-         // Media is a MUSIC
-         MusicDTO musicDTO = musicService.findById(mediaDTO.getEan());
-         stock = musicDTO.getStock();
-         //verify the stock
-         if(stock > 0) {
-            musicService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
-         }
-      } else if(mediaDTO.getMediaType().equals(MediaType.VIDEO.toString())) {
-         // Media is a VIDEO
-         VideoDTO videoDTO = videoService.findById(mediaDTO.getEan());
-         stock = videoDTO.getStock();
-         //verify the stock
-         if(stock > 0) {
-            videoService.decreaseStock(mediaEan);
-         } else {
-            throw new ForbiddenException(EXCEPTION_NO_MEDIA);
-         }
+      if(mediaDTO.getStock() > 0) {
+         mediaService.decreaseStock(mediaDTO);
+      } else {
+         throw new ForbiddenException(EXCEPTION_NO_MEDIA);
       }
 
       // record the borrowing in media table
@@ -292,36 +253,54 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       return entityToDTO(borrowing);
    }
 
+   /**
+    * Method for media restitution
+    *
+    * @param userId identification of the user
+    * @param mediaId identification of the media
+    * @return modified borrowing datas
+    */
    public BorrowingDTO restitute(Integer userId, Integer mediaId) {
       Borrowing borrowing = borrowingRepository.findByUserIdAndMediaId(userId, mediaId);
       UserDTO userDTO = userApiProxy.findUserById(userId);
       MediaDTO mediaDTO = mediaService.findById(mediaId);
 
+      borrowing.setReturnDate(new Date());
+      borrowingRepository.save(borrowing);
+
       // Increase stock
-      if (mediaDTO.getMediaType().equals(MediaType.BOOK.toString())) {
-         bookService.increaseStock(mediaDTO.getEan());
-      } else if (mediaDTO.getMediaType().equals(MediaType.GAME.toString())) {
-         gameService.increaseStock(mediaDTO.getEan());
-      } else if (mediaDTO.getMediaType().equals(MediaType.MUSIC.toString())) {
-         musicService.increaseStock(mediaDTO.getEan());
-      } else if (mediaDTO.getMediaType().equals(MediaType.VIDEO.toString())) {
-         videoService.increaseStock(mediaDTO.getEan());
-      }
+      mediaService.increaseStock(mediaDTO);
 
       // increase user counter
       int counter = userDTO.getCounter() - 1;
       userApiProxy.updateUserCounter(userId,counter);
 
+
       // release the media
       mediaService.release(mediaId);
+      BookingDTO bookingDTO = bookingService.findNextBookingByMediaId(mediaDTO.getEan());
 
-      borrowing.setReturnDate(new Date());
-      borrowingRepository.save(borrowing);
+      // set this media booked to borrow only by the user
+      mediaService.setStatus(mediaId, MediaStatus.BOOKED);
+
+      // calculate the restitution date adding 2 days
+      java.util.Date today = new java.util.Date();
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(today);
+      calendar.add(Calendar.DATE, daysOfDelay);
+
+      bookingService.updatePickUpDate(bookingDTO.getId(),new java.sql.Date(calendar.getTimeInMillis()));
+
 
       return entityToDTO(borrowing);
    }
 
-   // after 8 weeks
+   /**
+    * method to find borrowing expiration
+    *
+    * @param date when the borrowing is expirated
+    * @return list of expirated borowings
+    */
    public List<BorrowingDTO> findDelayed(Date date){
       java.sql.Date sDate = new java.sql.Date(date.getTime());
       List<Borrowing> borrowings = new ArrayList<>();
@@ -340,6 +319,12 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
    }
 
+   /**
+    * Method to find user borrowings
+    *
+    * @param userId identification of the user
+    * @return list of curent borrowings
+    */
    public List<BorrowingDTO> findByUserIdNotReturn(Integer userId) {
       List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
 
@@ -354,6 +339,13 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       }
    }
 
+   /**
+    * method to extend a borrowing
+    *
+    * @param userId identification of the user
+    * @param mediaId identification of the media
+    * @return return the borrowing modified
+    */
    public BorrowingDTO extend(Integer userId, Integer mediaId) {
       Borrowing borrowing = borrowingRepository.findByUserIdAndMediaId(userId, mediaId);
 

@@ -65,8 +65,8 @@ public class BorrowingController {
       try {
          borrowingDTOS = borrowingService.findByUserIdNotReturn(userId);
          return ResponseEntity.ok(borrowingDTOS);
-      } catch (ResourceNotFoundException ex) {
-         log.error(ex.getMessage());
+      } catch (ResourceNotFoundException exception) {
+         log.error(exception.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
    }

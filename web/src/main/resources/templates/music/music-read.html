@@ -15,7 +15,7 @@
          </div>
          <div class="col-sm my-auto">
             <a class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/musics}" th:text="#{label.back}">Back</a>
-            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/borrowing/{musicEan}(musicId=${musicEan.ean})}" th:text="#{label.setAside}">Book</a>
+            <a th:if="${canBorrow}" class="btn btn-primary mb-2 ml-2 float-right" th:href="@{/booking/{musicEan}(musicId=${musicEan.ean})}" th:text="#{label.setAside}">Book</a>
          </div>
       </div>
    </header>
@@ -57,12 +57,25 @@
                <span class="form-control" th:text="${music.format}">Format</span>
             </div>
 
-            <div class="input-group">
+            <div th:if="${music.stock > 0}" class="input-group">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
-               <span class="form-control" th:text="${music.stock}"> Remaining </span>
+               <span class="form-control" th:text="${music.stock}">Stock </span>
             </div>
+
+            <div th:if="${music.stock <= 0}" class="input-group">
+               <div class="input-group-prepend mb-2">
+                  <div class="input-group-text" th:text="#{label.bookingRank}">Booking rank</div>
+               </div>
+               <span class="form-control" th:text="${music.stock*-1}">Rank</span>
+               <div class="input-group-prepend mb-2">
+                  <div class="input-group-text" th:text="#{label.returnDate}">Next return</div>
+               </div>
+               <span class="form-control" th:text="${music.returnDate}">Date</span>
+            </div>
+
+
          </div>
       </div>
 

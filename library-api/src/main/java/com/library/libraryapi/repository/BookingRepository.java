@@ -28,6 +28,22 @@ public interface BookingRepository extends JpaRepository<Booking,Integer>, JpaSp
    @Query(value = "SELECT * FROM Booking WHERE ean = :ean ORDER BY booking_date LIMIT 1", nativeQuery = true)
    Booking findNextBookingByMediaId(String ean);
 
+   @Query(value = "SELECT COUNT(*)>0 FROM booking WHERE user_id = :userId AND ean = :ean", nativeQuery = true)
+   Boolean userHadBooked(Integer userId, String ean);
+
+   @Query(value = "SELECT * FROM booking WHERE pickup_date IS NOT NULL", nativeQuery = true)
+   List<Booking> findReadyToPickUp();
+
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE booking SET pickup_date = :date WHERE id = :id", nativeQuery = true)
+   void updatePickUpDate(Integer id, Date date);
+
+   @Modifying
+   @Transactional
+   @Query(value = "DELETE FROM booking WHERE ean = :ean AND user_id = :userId", nativeQuery = true)
+   void deleteNotPickedUp(String ean, Integer userId);
+
    @Modifying
    @Transactional
    @Query(value = "DELETE FROM booking WHERE ean = :ean AND user_id = :userId", nativeQuery = true)
