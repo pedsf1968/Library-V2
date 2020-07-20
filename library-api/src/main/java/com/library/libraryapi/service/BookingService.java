@@ -159,6 +159,9 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
       MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
+      // get booking before this booking for this ean
+      Integer rank = bookingRepository.getRankByEanAndDate(booking.getEan(),booking.getBookingDate());
+      mediaDTO.setStock(rank);
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
@@ -219,10 +222,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
 
       if(stock > 0) {
-         // media available we can put flag to borrow
+         // media available we can put flag BOOKED to be the first to borrow
          mediaDTO = mediaService.findFreeByEan(mediaEan);
          mediaService.setStatus(mediaDTO.getId(), MediaStatus.BOOKED);
-         mediaService.decreaseStock(mediaDTO);
+
 
          // calculate the restitution date adding 2 days
          Calendar calendar = Calendar.getInstance();
@@ -233,17 +236,16 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          booking.setMediaId(mediaDTO.getId());
       } else if (-stock <= quantity*BOOKING_LIMIT_MAX) {
          // no media available we anly decrease media counter
-         mediaService.decreaseStock(mediaDTO);
          booking.setPickUpDate(null);
       } else {
          // can't book
-         throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + quantity);
+         throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + quantity*BOOKING_LIMIT_MAX);
       }
-
+      mediaService.decreaseStock(mediaDTO);
 
       booking.setUserId(userId);
       booking.setEan(mediaEan);
-      booking.setBookingDate(new Date());
+      booking.setBookingDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()) );
       booking = bookingRepository.save(booking);
 
       return entityToDTO(booking);
@@ -289,28 +291,27 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       String ean = booking.getEan();
       bookingRepository.deleteById(bookingId);
 
-      if (booking!=null) {
-         Integer mediaId = booking.getMediaId();
-         if (mediaId != null) {
-            mediaDTO = mediaService.findById(mediaId);
-            // search if another claim this media
-            BookingDTO bookingDTO = findNextBookingByMediaId(ean);
-            if (bookingDTO == null) {
-               // no other we release is
-               mediaService.setStatus(mediaId, MediaStatus.FREE);
-            } else {
-               // calculate the restitution date adding 2 days
-               Calendar calendar = Calendar.getInstance();
-               calendar.setTime(new Date());
-               calendar.add(Calendar.DATE, daysOfDelay);
-               bookingDTO.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
-               bookingDTO.setMediaId(mediaId);
-            }
+      Integer mediaId = booking.getMediaId();
+      if (mediaId != null) {
+         mediaDTO = mediaService.findById(mediaId);
+         // search if another claim this media
+         BookingDTO bookingDTO = findNextBookingByMediaId(ean);
+         if (bookingDTO != null) {
+            // no other booking for this ean we release it
+            mediaService.setStatus(mediaId, MediaStatus.FREE);
+            mediaService.increaseStock(mediaDTO);
          } else {
-            mediaDTO = mediaService.findOneByEan(booking.getEan());
+            // calculate the restitution date adding 2 days
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DATE, daysOfDelay);
+            bookingDTO.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
+            bookingDTO.setMediaId(mediaId);
          }
-         mediaService.increaseStock(mediaDTO);
+      } else {
+         mediaDTO = mediaService.findOneByEan(booking.getEan());
       }
+
 
       return entityToDTO(booking);
    }

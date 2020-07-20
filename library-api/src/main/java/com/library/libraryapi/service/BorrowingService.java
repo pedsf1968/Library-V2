@@ -18,9 +18,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
@@ -198,7 +198,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       MediaDTO mediaDTO = null;
       Integer stock;
       // calculate the restitution date adding 4 weeks 28 days
-      Date today = new Date();
+      java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(today);
       calendar.add(Calendar.DATE, daysOfDelay);
@@ -265,7 +265,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       UserDTO userDTO = userApiProxy.findUserById(userId);
       MediaDTO mediaDTO = mediaService.findById(mediaId);
 
-      borrowing.setReturnDate(new Date());
+      borrowing.setReturnDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
       borrowingRepository.save(borrowing);
 
       // Increase stock
@@ -303,6 +303,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
     */
    public List<BorrowingDTO> findDelayed(Date date){
       java.sql.Date sDate = new java.sql.Date(date.getTime());
+
       List<Borrowing> borrowings = new ArrayList<>();
       List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
 
@@ -364,9 +365,12 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
          borrowing.setExtended(++extension);
 
          // increase borrowing date
-         Date date = borrowing.getBorrowingDate();
-         date = DateUtils.addDays(date, daysOfDelay);
-         borrowing.setBorrowingDate(date);
+         java.sql.Date date = borrowing.getBorrowingDate();
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(date);
+         calendar.add(Calendar.DATE, daysOfDelay);
+
+         borrowing.setBorrowingDate(new java.sql.Date(calendar.getTimeInMillis()));
 
          // delete borrowing
          borrowing = borrowingRepository.save(borrowing);
