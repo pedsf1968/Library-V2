@@ -46,7 +46,7 @@ public class GameController {
 
    @GetMapping("/games")
    public String booksList(Model model, Locale locale){
-      List<GameDTO> gameDTOS = libraryApiProxy.findAllGames(1);
+      List<GameDTO> gameDTOS = libraryApiProxy.findAllAllowedGames(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_GAMES, gameDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, gamesTitles);

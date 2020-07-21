@@ -22,6 +22,7 @@ import java.util.Set;
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the next return date
  *
  * publicationDate : is the date when the Media is published
  * directorId : identification of the director of the Video
@@ -77,6 +78,10 @@ public class Video implements Serializable {
 
    @Column(name = "height")
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   private Date returnDate;
 
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

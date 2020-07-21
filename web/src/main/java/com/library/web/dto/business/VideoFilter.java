@@ -3,6 +3,8 @@ package com.library.web.dto.business;
 import com.library.web.dto.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 /**
@@ -31,25 +33,20 @@ import java.sql.Date;
 public class VideoFilter {
 
    // Media attributes
-   private Integer id;
    private String ean;
-   private String mediaType = MediaType.VIDEO.toString();
    private String title;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
-
+   private Integer quantity;
+   private Integer stock;
    private Integer weight;
    private Integer length;
    private Integer width;
    private Integer height;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
-   private Integer stock;
-   private Integer remaining;
 
    // Video attributes
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date publicationDate;
    private Integer directorId;
    private Integer duration;
    private String type;

@@ -24,16 +24,37 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
    @Query("SELECT COUNT(*) FROM Media m WHERE m.status = 'FREE' AND m.ean = ?1")
    Integer remaining(Integer mediaId);
 
+   @Query(value = "SELECT * FROM Media WHERE ean = :ean LIMIT 1", nativeQuery = true)
+   Media findOneByEan(String ean);
+
    @Query(value = "SELECT * FROM Media WHERE status = 'FREE' AND ean = :ean LIMIT 1", nativeQuery = true)
    Media findFreeByEan(String ean);
 
    @Query(value = "SELECT * FROM Media WHERE status = 'BLOCKED' AND ean = :ean", nativeQuery = true)
    Media findBlockedByEan(String ean);
 
+   @Query(value = "SELECT * FROM Media WHERE status = 'BOOKED' AND ean = :ean", nativeQuery = true)
+   Media findBoockedByEan(String ean);
+
+   @Query(value="SELECT media_type FROM Media WHERE ean = :ean LIMIT 1", nativeQuery = true)
+   String findMediaTypeByEan(String ean);
+
+   @Query(value ="SELECT return_date FROM media WHERE ean = :ean ORDER BY return_date LIMIT 1", nativeQuery = true)
+   Date getNextReturnDateByEan(String ean);
+
+   @Query(value ="SELECT * FROM media WHERE ean = :ean ORDER BY return_date LIMIT 1", nativeQuery = true)
+   Media getNextReturnByEan(String ean);
+
+
    @Modifying
    @Transactional
    @Query(value = "UPDATE Media SET status = 'BLOCKED' WHERE id = (SELECT f.id FROM media f WHERE f.ean = :ean AND f.status = 'FREE' LIMIT 1)", nativeQuery = true)
    void blockFreeByEan(String ean);
+
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE Media SET status = 'BOOKED' WHERE id = (SELECT f.id FROM media f WHERE f.ean = :ean AND f.status = 'FREE' LIMIT 1)", nativeQuery = true)
+   void bookedFreeByEan(String ean);
 
    @Modifying
    @Transactional
@@ -49,4 +70,9 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
    @Transactional
    @Query("UPDATE Media m SET m.returnDate = ?1 WHERE m.id = ?2")
    void updateReturnDate(Date date, Integer mediaId);
+
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE Media SET status = :status WHERE id = :mediaId", nativeQuery = true)
+   void setStatus(Integer mediaId, String status);
 }

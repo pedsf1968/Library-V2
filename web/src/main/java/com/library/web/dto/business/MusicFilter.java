@@ -1,5 +1,6 @@
 package com.library.web.dto.business;
 
+import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.web.dto.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,15 +37,14 @@ import java.sql.Date;
 public class MusicFilter {
 
    // Media attributes
-   private Integer id;
    private String ean;
-   private String mediaType = MediaType.MUSIC.toString();
-
    private String title;
+   @NotNull
+   private Integer quantity;
+   @NotNull
+   private Integer stock;
 
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
-
+   // weight and dimensions for transport informations
    private Integer weight;
    private Integer length;
    private Integer width;
@@ -52,10 +52,10 @@ public class MusicFilter {
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
-   private Integer stock;
-   private Integer remaining;
 
-   // Music attributes
+   // Music information
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date publicationDate;
    private Integer authorId;
    private Integer composerId;
    private Integer interpreterId;

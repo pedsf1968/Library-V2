@@ -32,16 +32,16 @@ public interface MusicRepository extends JpaRepository<Music, Integer>, JpaSpeci
    List<String> findAllTitles();
 
    @Query("SELECT m FROM Music m WHERE m.stock>(-2*m.quantity)")
-   List<Book> findAllAllowed();
+   List<Music> findAllAllowed();
 
    @Modifying
    @Transactional
-   @Query("UPDATE Music m SET m.stock = (SELECT s.stock FROM Music s WHERE s.ean = ?1) +1")
+   @Query(value = "UPDATE Music SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
    @Modifying
    @Transactional
-   @Query("UPDATE Music m SET m.stock = (SELECT s.stock FROM Music s WHERE s.ean = ?1) -1")
+   @Query(value = "UPDATE Music SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 
 }

@@ -21,6 +21,7 @@ import java.sql.Date;
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the next return date
  *
  * isbn : ISBN number of the Book
  * publicationDate : is the date when the Media is published
@@ -72,6 +73,11 @@ public class Book implements Serializable {
    @Column(name = "height")
    private Integer height;
 
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   private Date returnDate;
+
+
    // Book information
    @NotNull
    @Column(name = "isbn", length = ISBN_MAX)
@@ -80,6 +86,7 @@ public class Book implements Serializable {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "publication_date")
    private Date publicationDate;
+
 
    @NotNull
    @Column(name = "author_id")

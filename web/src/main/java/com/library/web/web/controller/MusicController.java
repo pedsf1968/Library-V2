@@ -62,7 +62,7 @@ public class MusicController {
 
    @GetMapping("/musics")
    public String booksList(Model model, Locale locale){
-      List<MusicDTO> musicDTOS = libraryApiProxy.findAllMusics(1);
+      List<MusicDTO> musicDTOS = libraryApiProxy.findAllAllowedMusics(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_MUSICS, musicDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, musicsTitles);

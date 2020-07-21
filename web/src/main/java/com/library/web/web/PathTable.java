@@ -2,7 +2,7 @@ package com.library.web.web;
 
 public final class PathTable {
 
-   public final static String HELP = "help/help";
+   public static final String HELP = "help/help";
    public static final String HOME = "redirect:/";
 
    public static final String BOOK_ALL = "book/book-all";
@@ -20,6 +20,9 @@ public final class PathTable {
    public static final String VIDEO_ALL = "video/video-all";
    public static final String VIDEO_ALL_R = "redirect:/video/all/";
    public static final String VIDEO_READ = "video/video-read";
+
+   public static final String BOOKINGS = "booking/booking-all";
+   public static final String BOOKINGS_R = "redirect:/bookings";
 
 
    public static final String BORROWINGS = "borrowing/borrowing-all";
@@ -39,6 +42,7 @@ public final class PathTable {
    public static final String ATTRIBUTE_ADDRESS = "address";
    public static final String ATTRIBUTE_BOOK = "book";
    public static final String ATTRIBUTE_BOOKS = "books";
+   public static final String ATTRIBUTE_BOOKINGS = "bookings";
    public static final String ATTRIBUTE_BORROWINGS = "borrowings";
    public static final String ATTRIBUTE_RESTITUTION_DATE = "restitutionDate";
    public static final String ATTRIBUTE_CAN_BORROW = "canBorrow";

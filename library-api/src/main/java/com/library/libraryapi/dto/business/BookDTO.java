@@ -62,6 +62,9 @@ public class BookDTO implements Serializable {
    private Integer width;
    private Integer height;
 
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
+
    // Book attributes
    @NotNull
    @Size(max = ISBN_MAX, message = ERROR_MESSAGE_LESS + ISBN_MAX)

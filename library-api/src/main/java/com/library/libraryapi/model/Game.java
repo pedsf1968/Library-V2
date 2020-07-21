@@ -21,6 +21,7 @@ import java.sql.Date;
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the next return date
  *
  * publicationDate : is the date when the Media is published
  * type : Game type
@@ -70,6 +71,10 @@ public class Game implements Serializable {
 
    @Column(name = "height")
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   private Date returnDate;
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

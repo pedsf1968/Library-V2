@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.Date;
 import java.util.List;
 
@@ -65,11 +66,10 @@ public class BorrowingController {
       try {
          borrowingDTOS = borrowingService.findByUserIdNotReturn(userId);
          return ResponseEntity.ok(borrowingDTOS);
-      } catch (ResourceNotFoundException ex) {
-         log.error(ex.getMessage());
+      } catch (ResourceNotFoundException exception) {
+         log.error(exception.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
-
    }
 
 
@@ -86,7 +86,7 @@ public class BorrowingController {
    }
 
 
-   @PostMapping(value = "/{userId}",  produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> addBorrowing(@PathVariable("userId") Integer userId,
                                                  @RequestBody String mediaEan
    ) {
@@ -100,7 +100,7 @@ public class BorrowingController {
       }
    }
 
-   @PostMapping(value = "/{userId}/extend", produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/{userId}/extend", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> extendBorrowing(@PathVariable("userId") Integer userId,
                                                     @RequestBody Integer mediaId
    ) {

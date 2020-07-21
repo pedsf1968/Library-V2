@@ -17,5 +17,5 @@ public enum VideoType {
    SPORT,
    THEATER,
    THRILLER,
-   TRIP;
+   TRIP
 }
