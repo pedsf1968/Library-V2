@@ -4,9 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -16,11 +14,11 @@ import java.sql.Date;
  * id : identification of the Media
  * ean : ean code like ISBN for BOOKS
  * mediaType : type of the Media (BOOK,MUSIC,VIDEO,GAME...)
+ * returnDate : the date of the next expected return (null if all Media are available in stock)
+ * status : the actual status of the media (FREE, BORROWED, BOOKED, BLOCKED)
+ *
  * title : title of the book, movie, music, song, game
  * publicationDate : is the date when the Media is published
- * returnDate : the date of the next expected return (null if all Media are available in stock)
- * quantityStock : total of this Media owned by the library
- * quantityRemaining : remaining Media in the library to be borrowed
  */
 @Data
 @Entity

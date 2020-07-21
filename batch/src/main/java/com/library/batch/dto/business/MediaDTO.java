@@ -12,20 +12,23 @@ import java.util.Date;
  * Data Transfert Object to manage Media
  *
  * id : identification of the Media
- * ean : EAN code
+ * ean : ean code like ISBN for BOOKS
  * mediaType : type of the Media (BOOK,MUSIC,VIDEO,GAME...)
- * title : title of the Media
- * publicationDate : is the date when the Media is published
  * returnDate : the date of the next expected return (null if all Media are available in stock)
- * stock : total of this Media owned by the library
- * remaining : remaining Media in the library to be borrowed
+ * status : the actual status of the media (FREE, BORROWED, BOOKED, BLOCKED)
+ *
+ * title : title of the book, movie, music, song, game
+ * publicationDate : is the date when the Media is published
  * weight : weight of the Media
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * quantity : total of this Media owned by the library
+ * stock : remaining Media in the library to be borrowed. It become negative if they are bookings
  */
 @Data
 public class MediaDTO implements Serializable {
+   private static final int MEDIA_STATUS_MAX = 10;
    private static final int MEDIA_TYPE_MAX = 10;
    private static final int TITLE_MIN = 1;
    private static final int TITLE_MAX = 50;
@@ -45,6 +48,12 @@ public class MediaDTO implements Serializable {
    @Size(max = MEDIA_TYPE_MAX, message = ERROR_MESSAGE_LESS + MEDIA_TYPE_MAX)
    protected String mediaType;
 
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private java.sql.Date returnDate;
+
+   @Size(max = MEDIA_STATUS_MAX, message = ERROR_MESSAGE_LESS + MEDIA_STATUS_MAX)
+   private String status;
+
    @NotNull
    @Size(min = TITLE_MIN, max = TITLE_MAX,
          message = ERROR_MESSAGE_BETWEEN + TITLE_MIN + " and " + TITLE_MAX  + " !")
@@ -59,8 +68,6 @@ public class MediaDTO implements Serializable {
    private Integer width;
    private Integer height;
 
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date returnDate;
+   private Integer quantity;
    private Integer stock;
-   private Integer remaining;
 }

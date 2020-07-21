@@ -36,7 +36,7 @@ public class BookController {
 
       try {
          bookDTOS = bookService.findAll();
-         log.info("bookDTOS : " + bookDTOS);
+         log.info("bookDTOS : {}", bookDTOS);
          return ResponseEntity.ok(bookDTOS);
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
@@ -52,7 +52,7 @@ public class BookController {
 
       try {
          bookDTOS = bookService.findAllAllowed();
-         log.info("bookDTOS : " + bookDTOS);
+         log.info("bookDTOS : {}", bookDTOS);
          return ResponseEntity.ok(bookDTOS);
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());

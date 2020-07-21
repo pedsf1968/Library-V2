@@ -103,7 +103,7 @@ public interface LibraryApiProxy {
    @PostMapping(value = "/bookings/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    BookingDTO addBooking(@PathVariable("userId") Integer userId,  @RequestBody String mediaEan );
 
-      @PostMapping(value = "/bookings/cancel/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(value = "/bookings/cancel/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    BookingDTO cancelBooking(@PathVariable("userId") Integer userId, @RequestBody Integer bookingId );
 
-   }
+}

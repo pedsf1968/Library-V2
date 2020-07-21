@@ -44,8 +44,12 @@
                   <div class="input-group-prepend mb-2">
                      <div class="input-group-text" th:text="#{label.bookingRank}">Booking rank</div>
                   </div>
-                  <span class="form-control" th:text="${booking.media.stock*-1}">Cancel</span>
-                  <a class="btn btn-success mb-2" th:href="@{'/bookings/cancel/' + ${booking.id}}" th:text="#{label.cancel}">cancel</a>
+                  <span class="form-control" th:text="${booking.rank}">Rank</span>
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.returnDate}">Next return</div>
+                  </div>
+                  <span class="form-control" th:text="${booking.media.returnDate}">Date</span>
+                  <a class="btn btn-success mb-2" th:href="@{'/booking/cancel/' + ${booking.id}}" th:text="#{label.cancel}">cancel</a>
                </div>
 
             </div>

@@ -17,20 +17,30 @@ import org.springframework.kafka.core.KafkaTemplate;
 @EnableBatchProcessing
 public class BatchConfig {
 
-   @Value("${library.batch.request.endpoint}")
-   private String requestEndPoint;
+   @Value("${library.batch.request.borrowing.endpoint}")
+   private String requestBorrowingEndPoint;
+   @Value("${library.batch.request.booking.endpoint}")
+   private String requestBookingEndPoint;
+
    @Value("${library.batch.retry.delay}")
    private Integer retryDelay;
    @Value("${library.mail.noReply}")
    private String noReplyEmail;
-   @Value("${library.mail.subject}")
-   private String libraryMailLimitSubject;
-   @Value("${library.mail.content}")
-   private String libraryMailLimitContent;
+
+   @Value("${library.mail.borrowing.subject}")
+   private String libraryMailBorrowingLimitSubject;
+   @Value("${library.mail.borrowing.content}")
+   private String libraryMailBorrowingLimitContent;
+
+   @Value("${library.mail.booking.subject}")
+   private String libraryMailBookingSubject;
+   @Value("${library.mail.booking.content}")
+   private String libraryMailBookingContent;
+
    @Value("${spring.kafka.topic}")
    private String topic;
 
-   private JobExecutionListener jobListener = new JobListener();
+   private final JobExecutionListener jobListener = new JobListener();
 
    private final JobBuilderFactory jobs;
    private final StepBuilderFactory steps;
@@ -46,7 +56,7 @@ public class BatchConfig {
    protected Step readDatas(){
       return steps
             .get("readDatas")
-            .tasklet(new DataReader(requestEndPoint, retryDelay))
+            .tasklet(new DataReader(requestBorrowingEndPoint, requestBookingEndPoint, retryDelay))
             .build();
    }
 
@@ -54,7 +64,9 @@ public class BatchConfig {
    protected Step processDatas() {
       return steps
             .get("processDatas")
-            .tasklet(new DataProcessor(noReplyEmail, libraryMailLimitSubject, libraryMailLimitContent))
+            .tasklet(new DataProcessor(noReplyEmail,
+                  libraryMailBorrowingLimitSubject, libraryMailBorrowingLimitContent,
+                  libraryMailBookingSubject, libraryMailBookingContent))
             .build();
    }
 

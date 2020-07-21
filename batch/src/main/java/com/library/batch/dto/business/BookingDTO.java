@@ -1,6 +1,6 @@
-package com.library.web.dto.business;
+package com.library.batch.dto.business;
 
-import com.library.web.dto.global.UserDTO;
+import com.library.batch.dto.global.UserDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,21 +22,12 @@ import java.util.Date;
 public class BookingDTO implements Serializable {
 
    private Integer id;
-
    @NotNull
-   private UserDTO user;
-
+   protected UserDTO user;
    @NotNull
-   private MediaDTO media;
-
+   protected MediaDTO media;
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date bookingDate;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date pickUpDate;
-
-   private Integer mediaId;
-
-   @NotNull
-   private Integer rank;
 }

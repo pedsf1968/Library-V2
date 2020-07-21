@@ -32,12 +32,12 @@ public interface VideoRepository extends JpaRepository<Video, Integer>, JpaSpeci
 
    @Modifying
    @Transactional
-   @Query("UPDATE Video v SET v.stock = (SELECT s.stock FROM Video s WHERE s.ean = ?1) +1")
+   @Query(value = "UPDATE Video SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
    @Modifying
    @Transactional
-   @Query("UPDATE Video v SET v.stock = (SELECT s.stock FROM Video s WHERE s.ean = ?1) -1")
+   @Query(value = "UPDATE Video SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 
 }

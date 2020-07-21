@@ -33,11 +33,11 @@ public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecifi
 
    @Modifying
    @Transactional
-   @Query("UPDATE Book b SET b.stock = (SELECT s.stock FROM Book s WHERE s.ean = ?1) +1")
+   @Query(value = "UPDATE Book SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
    @Modifying
    @Transactional
-   @Query("UPDATE Book b SET b.stock = (SELECT s.stock FROM Book s WHERE s.ean = ?1) -1")
+   @Query(value = "UPDATE Book SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 }

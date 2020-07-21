@@ -5,7 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.sql.Date;
+
 
 /**
  * Entity to manage Booking
@@ -15,6 +16,7 @@ import java.util.Date;
  * userId : identification of the User
  * bookingDate : booking date
  * pickUpDate : limit date to pickup a return book
+ * mediaId : ID of a media if booked and quantity available
  */
 @Data
 @Entity
@@ -42,4 +44,11 @@ public class Booking {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "pickup_date", columnDefinition = "DATE")
    private Date pickUpDate;
+
+   @Column(name = "media_id")
+   private Integer mediaId;
+
+   @NotNull
+   @Column(name = "rank")
+   private Integer rank;
 }

@@ -28,19 +28,24 @@
             <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + game.ean}" alt="photo"/>
          </div>
          <div class="card-footer row">
-            <div th:if="${game.stock >=0}" class="input-group col-md-6">
+            <div th:if="${game.stock >=0}" class="input-group col-md-9">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
                <span class="form-control" th:text="${game.stock}">Remaining </span>
             </div>
-            <div th:if="${game.stock <0}" class="input-group col-md-6">
+            <div th:if="${game.stock <0}" class="input-group col-md-9">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.booking}">Booking</div>
                </div>
                <span class="form-control" th:text="${-game.stock}">Booking </span>
+               <div class="input-group-prepend mb-2">
+                  <div class="input-group-text" th:text="#{label.returnDate}">Next return</div>
+               </div>
+               <span class="form-control" th:text="${game.returnDate}">Date</span>
             </div>
-            <div class="col-md-6">
+
+            <div class="col-md-3">
                <a class="btn btn-primary mb-2 float-right" th:href="@{/game/{gameId}(gameId=${game.ean})}" th:text="#{label.info}">Informations</a>
             </div>
          </div>
