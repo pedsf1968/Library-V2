@@ -11,16 +11,16 @@ import com.library.libraryapi.model.MediaStatus;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.*;
-import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 

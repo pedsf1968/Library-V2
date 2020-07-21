@@ -3,7 +3,6 @@ package com.library.libraryapi.dto.business;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;

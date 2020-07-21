@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+
+import java.util.Date;
 import java.util.List;
 
 @Slf4j

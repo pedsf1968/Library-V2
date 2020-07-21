@@ -219,7 +219,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
       Integer rank = bookingRepository.getRankByEan( mediaEan);
       if (rank == null) {
-         rank = 1;
+         rank = 0;
       }
 
       if(stock > 0) {
@@ -241,7 +241,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
       mediaService.decreaseStock(mediaDTO);
 
-      booking.setRank(rank);
+      booking.setRank(++rank);
       booking.setUserId(userId);
       booking.setEan(mediaEan);
       booking.setBookingDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()) );
@@ -298,9 +298,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
          if (booking == null) {
             // no other booking for this ean we release it
-            mediaDTO = mediaService.findById(mediaId);
             mediaService.setStatus(mediaId, MediaStatus.FREE);
-            mediaService.increaseStock(mediaDTO);
          } else {
             // calculate the restitution date adding 2 days
             Calendar calendar = Calendar.getInstance();
@@ -313,14 +311,21 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          }
       }
 
+      mediaDTO = mediaService.findOneByEan(ean);
+      mediaService.increaseStock(mediaDTO);
+
       return entityToDTO(booking);
    }
 
    /**
     * Method to find media ready to pick up for sending mail
-    * @return
+    * call the method to cancel out of date booking
+    *
+    * @return BookingDTO list
     */
    public List<BookingDTO> findReadyToPickUp() {
+
+      cancelOutOfDate();
       List<Booking> bookings = bookingRepository.findReadyToPickUp();
 
       List<BookingDTO> bookingDTOS = new ArrayList<>();
@@ -330,6 +335,20 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       }
 
       return bookingDTOS;
+   }
+
+   /**
+    * Method to cancel delayed booking when the pickup date is before today
+    */
+   public void cancelOutOfDate() {
+      Calendar calendar = Calendar.getInstance();
+      calendar.setTime(new Date());
+      calendar.add(Calendar.DATE, daysOfDelay);
+      List<Booking> bookings = bookingRepository.findOutOfDate(new java.sql.Date(calendar.getTimeInMillis()));
+
+      for( Booking b : bookings) {
+         cancelBooking(b.getId());
+      }
    }
 
    /**
