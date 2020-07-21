@@ -34,4 +34,9 @@ public class BookingDTO implements Serializable {
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date pickUpDate;
+
+   private Integer mediaId;
+
+   @NotNull
+   private Integer rank;
 }

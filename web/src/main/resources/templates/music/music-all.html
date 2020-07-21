@@ -33,14 +33,14 @@
             <img  class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + music.ean}" alt="photo"/>
          </div>
          <div class="card-footer row">
-            <div th:if="${music.stock > 0}" class="input-group col-md-9">
+            <div th:if="${music.stock >= 0}" class="input-group col-md-9">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.stock}">Stock</div>
                </div>
                <span class="form-control" th:text="${music.stock}">Remaining </span>
             </div>
 
-            <div th:if="${music.stock <= 0}" class="input-group col-md-9">
+            <div th:if="${music.stock < 0}" class="input-group col-md-9">
                <div class="input-group-prepend mb-2">
                   <div class="input-group-text" th:text="#{label.booking}">Booking</div>
                </div>

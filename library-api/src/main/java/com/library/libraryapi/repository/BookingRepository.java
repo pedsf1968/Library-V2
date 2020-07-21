@@ -37,6 +37,12 @@ public interface BookingRepository extends JpaRepository<Booking,Integer>, JpaSp
    @Query(value ="SELECT COUNT(*)+1 FROM booking WHERE ean =:ean AND booking_date < :date", nativeQuery = true)
    Integer getRankByEanAndDate(String ean, Date date);
 
+   @Query(value ="SELECT rank FROM booking WHERE ean = :ean ORDER BY rank DESC LIMIT 1;", nativeQuery = true)
+   Integer getRankByEan(String ean);
+
+   @Query(value = "SELECT * FROM booking WHERE ean = :ean AND rank = 1", nativeQuery = true)
+   Booking getNextByEan(String ean);
+
    @Modifying
    @Transactional
    @Query(value = "UPDATE booking SET pickup_date = :date WHERE id = :id", nativeQuery = true)
@@ -51,6 +57,16 @@ public interface BookingRepository extends JpaRepository<Booking,Integer>, JpaSp
    @Transactional
    @Query(value = "DELETE FROM booking WHERE ean = :ean AND user_id = :userId", nativeQuery = true)
    void deleteByEanAndUserId(String ean, Integer userId);
+
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE booking SET rank = rank-1 WHERE ean = :ean", nativeQuery = true)
+   void decreaseRankByEan(String ean);
+
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE booking SET rank = rank+1 WHERE ean = :ean", nativeQuery = true)
+   void increaseRankByEan(String ean);
 
 
 }

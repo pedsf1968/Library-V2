@@ -47,4 +47,8 @@ public class Booking {
 
    @Column(name = "media_id")
    private Integer mediaId;
+
+   @NotNull
+   @Column(name = "rank")
+   private Integer rank;
 }

@@ -39,4 +39,7 @@ public class BookingDTO implements Serializable {
    private Date pickUpDate;
 
    private Integer mediaId;
+
+   @NotNull
+   private Integer rank;
 }

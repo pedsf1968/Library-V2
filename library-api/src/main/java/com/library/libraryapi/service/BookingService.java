@@ -159,9 +159,6 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
       MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
-      // get booking before this booking for this ean
-      Integer rank = bookingRepository.getRankByEanAndDate(booking.getEan(),booking.getBookingDate());
-      mediaDTO.setStock(rank);
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
@@ -220,12 +217,15 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       quantity = mediaDTO.getQuantity();
       stock = mediaDTO.getStock();
 
+      Integer rank = bookingRepository.getRankByEan( mediaEan);
+      if (rank == null) {
+         rank = 1;
+      }
 
       if(stock > 0) {
          // media available we can put flag BOOKED to be the first to borrow
          mediaDTO = mediaService.findFreeByEan(mediaEan);
          mediaService.setStatus(mediaDTO.getId(), MediaStatus.BOOKED);
-
 
          // calculate the restitution date adding 2 days
          Calendar calendar = Calendar.getInstance();
@@ -234,15 +234,14 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          booking.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
          // record mediaId to borrow
          booking.setMediaId(mediaDTO.getId());
-      } else if (-stock <= quantity*BOOKING_LIMIT_MAX) {
-         // no media available we anly decrease media counter
-         booking.setPickUpDate(null);
-      } else {
+      } else if (-stock > quantity*BOOKING_LIMIT_MAX) {
          // can't book
          throw new ForbiddenException(EXCEPTION_CANT_BOOK_MORE + quantity*BOOKING_LIMIT_MAX);
       }
+
       mediaService.decreaseStock(mediaDTO);
 
+      booking.setRank(rank);
       booking.setUserId(userId);
       booking.setEan(mediaEan);
       booking.setBookingDate(new java.sql.Date(Calendar.getInstance().getTimeInMillis()) );
@@ -289,15 +288,17 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       }
 
       String ean = booking.getEan();
-      bookingRepository.deleteById(bookingId);
-
       Integer mediaId = booking.getMediaId();
+      bookingRepository.deleteById(bookingId);
+      bookingRepository.decreaseRankByEan(ean);
+
       if (mediaId != null) {
-         mediaDTO = mediaService.findById(mediaId);
-         // search if another claim this media
-         BookingDTO bookingDTO = findNextBookingByMediaId(ean);
-         if (bookingDTO != null) {
+         // a media is BOOKED find next user who claim the same media
+         booking = bookingRepository.getNextByEan(ean);
+
+         if (booking == null) {
             // no other booking for this ean we release it
+            mediaDTO = mediaService.findById(mediaId);
             mediaService.setStatus(mediaId, MediaStatus.FREE);
             mediaService.increaseStock(mediaDTO);
          } else {
@@ -305,13 +306,12 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DATE, daysOfDelay);
-            bookingDTO.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
-            bookingDTO.setMediaId(mediaId);
+            booking.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
+            booking.setMediaId(mediaId);
+            // Update the booking of the next user
+            bookingRepository.save(booking);
          }
-      } else {
-         mediaDTO = mediaService.findOneByEan(booking.getEan());
       }
-
 
       return entityToDTO(booking);
    }
