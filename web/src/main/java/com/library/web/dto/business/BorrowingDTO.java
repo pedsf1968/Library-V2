@@ -19,11 +19,11 @@ import java.util.Date;
  */
 @Data
 public class BorrowingDTO {
-   protected Integer id;
+   private Integer id;
    @NotNull
-   protected UserDTO user;
+   private UserDTO user;
    @NotNull
-   protected MediaDTO media;
+   private MediaDTO media;
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date borrowingDate;
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -33,27 +33,22 @@ import java.sql.Date;
  */
 @Data
 public class BookFilter {
-   // Media attributes
-   private Integer id;
+   // Media information
    private String ean;
-   private String mediaType = MediaType.BOOK.toString();
    private String title;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
-
+   private Integer quantity;
+   private Integer stock;
    private Integer weight;
    private Integer length;
    private Integer width;
    private Integer height;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
-   private Integer stock;
-   private Integer remaining;
 
    // Book attributes
    private String isbn;
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date publicationDate;
    private Integer authorId;
    private Integer editorId;
    private String type;

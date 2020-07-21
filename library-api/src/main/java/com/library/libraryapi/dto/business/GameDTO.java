@@ -61,6 +61,9 @@ public class GameDTO implements Serializable {
    private Integer width;
    private Integer height;
 
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
+
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;

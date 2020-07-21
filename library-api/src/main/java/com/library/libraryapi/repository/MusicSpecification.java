@@ -45,7 +45,7 @@ public class MusicSpecification implements Specification<Music> {
       }
 
       if (filter.getInterpreterId() != null) {
-         predicates.add(criteriaBuilder.equal(root.get("InterpreterId"), filter.getInterpreterId()));
+         predicates.add(criteriaBuilder.equal(root.get("interpreterId"), filter.getInterpreterId()));
       }
 
       if (filter.getType() != null) {

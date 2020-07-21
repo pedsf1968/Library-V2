@@ -19,6 +19,7 @@ import java.util.List;
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
+ * returnDate : the next return date
  *
  * publicationDate : is the date when the Media is published
  * directorId : identification of the director of the Video
@@ -65,6 +66,9 @@ public class VideoDTO implements Serializable {
    private Integer length;
    private Integer width;
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
 
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

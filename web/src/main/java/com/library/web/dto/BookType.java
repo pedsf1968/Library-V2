@@ -17,5 +17,5 @@ public enum BookType {
    SCIENCE,
    SPORT,
    THEATER,
-   THRILLER;
+   THRILLER
 }

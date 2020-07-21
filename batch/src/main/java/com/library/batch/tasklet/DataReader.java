@@ -1,5 +1,6 @@
 package com.library.batch.tasklet;
 
+import com.library.batch.dto.business.BookingDTO;
 import com.library.batch.dto.business.BorrowingDTO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,34 +23,39 @@ import java.util.List;
 @Slf4j
 public class DataReader implements Tasklet, StepExecutionListener {
    private static final String DATE_FORMAT = "ddMMyyyy";
-   private final String requestEndPoint;
+   private final String requestBookingEndPoint;
+   private final String requestBorrowingEndPoint;
    private final Integer retryDelay;
    private List<BorrowingDTO> borrowingDTOS;
+   private List<BookingDTO> bookingDTOS;
 
-   public DataReader(String requestEndPoint, Integer retryDelay) {
-      this.requestEndPoint = requestEndPoint;
+   public DataReader(String requestBorrowingEndPoint, String requestBookingEndPoint, Integer retryDelay) {
+      this.requestBookingEndPoint = requestBookingEndPoint;
+      this.requestBorrowingEndPoint = requestBorrowingEndPoint;
       this.retryDelay = retryDelay;
    }
+
 
    @SneakyThrows
    @Override
    public void beforeStep(StepExecution stepExecution) {
       RestTemplate restTemplate = new RestTemplate();
-      ResponseEntity<List<BorrowingDTO>> responseEntity = null;
+      ResponseEntity<List<BorrowingDTO>> responseEntityBorrowing = null;
+      ResponseEntity<List<BookingDTO>> responseEntityBooking = null;
 
       // calculate the date daysOfDelay before now
       SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-      String url = requestEndPoint + format.format(new Date());
+      String url = requestBorrowingEndPoint + format.format(new Date());
       log.info("GET Request : " + url);
 
       try {
-         responseEntity = restTemplate.exchange(
+         responseEntityBorrowing = restTemplate.exchange(
                url,
                HttpMethod.GET,
                null,
                new ParameterizedTypeReference<List<BorrowingDTO>>() {
                });
-         this.borrowingDTOS = responseEntity.getBody();
+         this.borrowingDTOS = responseEntityBorrowing.getBody();
       } catch (RestClientException ex) {
          log.error( ex.getMessage());
          log.info("Retry delay : " + retryDelay + " seconds" );
@@ -58,6 +64,24 @@ public class DataReader implements Tasklet, StepExecutionListener {
             beforeStep(stepExecution);
          }
       }
+
+      try {
+         responseEntityBooking = restTemplate.exchange(
+               requestBookingEndPoint,
+               HttpMethod.GET,
+               null,
+               new ParameterizedTypeReference<List<BookingDTO>>() {
+               });
+         this.bookingDTOS = responseEntityBooking.getBody();
+      } catch (RestClientException ex) {
+         log.error( ex.getMessage());
+         log.info("Retry delay : " + retryDelay + " seconds" );
+         if(retryDelay>0) {
+            Thread.sleep(retryDelay * 1000L);
+            beforeStep(stepExecution);
+         }
+      }
+
 
       log.info("Data Reader initialized.");
    }
@@ -73,8 +97,14 @@ public class DataReader implements Tasklet, StepExecutionListener {
    @Override
    public ExitStatus afterStep(StepExecution stepExecution) {
       stepExecution.getJobExecution().getExecutionContext().put("borrowings", this.borrowingDTOS);
+      stepExecution.getJobExecution().getExecutionContext().put("bookings", this.bookingDTOS);
       if(borrowingDTOS!=null) {
          for (BorrowingDTO b : borrowingDTOS) {
+            log.info(b.toString());
+         }
+      }
+      if(bookingDTOS!=null) {
+         for (BookingDTO b : bookingDTOS) {
             log.info(b.toString());
          }
       }

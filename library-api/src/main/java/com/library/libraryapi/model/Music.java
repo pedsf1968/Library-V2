@@ -20,7 +20,7 @@ import java.sql.Date;
  * weight : weight of the Media
  * length : length of the Media
  * width : width of the Media
- * height : height of the Media
+ * returnDate : the next return date
  *
  * publicationDate : is the date when the Media is published
  * authorId : identification of the author of the Music
@@ -70,6 +70,10 @@ public class Music implements Serializable {
 
    @Column(name = "height")
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   private Date returnDate;
 
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

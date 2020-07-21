@@ -42,7 +42,7 @@ public class BookDTO implements Serializable {
    private static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
    private static final String ERROR_MESSAGE_LESS = "Length should less than : ";
 
-   // Media attributes
+   // Media information
    @NotNull
    @Size(max = EAN_MAX, message = ERROR_MESSAGE_LESS + EAN_MAX)
    private String ean;
@@ -65,11 +65,10 @@ public class BookDTO implements Serializable {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
 
+   // Book attributes
    @NotNull
    @Size(max = ISBN_MAX, message = ERROR_MESSAGE_LESS + ISBN_MAX)
    private String isbn;
-
-   // Book attributes
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
    @NotNull
