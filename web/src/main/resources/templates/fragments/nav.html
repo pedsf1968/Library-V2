@@ -30,7 +30,8 @@
             </li>
 
             <li sec:authorize="isAuthenticated()">
-               <a class="btn btn-lg active align-right" th:href="@{/borrowings}"  th:text="#{label.myList}">My Borrowing List</a>
+               <a class="btn btn-lg active align-right" th:href="@{/borrowings}"  th:text="#{label.myBorrowingList}">My Borrowing List</a>
+               <a class="btn btn-lg active align-right" th:href="@{/bookings}"  th:text="#{label.myBookingList}">My Booking List</a>
                <a class="btn btn-lg active align-right" th:href="@{/user/edit/}"  th:text="#{label.myAccount}">My account</a>
                <a class="fas fa-sign-out-alt btn btn-lg active" th:href="@{/logout}"  th:text="' ' +  #{label.logout}">Logout</a>
             </li>

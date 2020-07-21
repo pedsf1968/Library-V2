@@ -6,5 +6,5 @@ package com.library.web.dto;
 public enum  VideoFormat {
    TAPE,
    DVD,
-   BLU_RAY;
+   BLU_RAY
 }

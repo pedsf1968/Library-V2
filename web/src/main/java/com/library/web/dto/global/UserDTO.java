@@ -5,12 +5,13 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Data
-public class UserDTO {
+public class UserDTO implements Serializable {
     static final int FIRSTNAME_MIN = 2;
     static final int FIRSTNAME_MAX = 50;
     static final int LASTNAME_MIN = 2;

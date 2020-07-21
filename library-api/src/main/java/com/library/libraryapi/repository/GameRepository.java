@@ -1,6 +1,5 @@
 package com.library.libraryapi.repository;
 
-import com.library.libraryapi.model.Book;
 import com.library.libraryapi.model.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -23,16 +22,16 @@ public interface GameRepository extends JpaRepository<Game, Integer>, JpaSpecifi
    List<String> findAllTitles();
 
    @Query("SELECT g FROM Game g WHERE g.stock>(-2*g.quantity)")
-   List<Book> findAllAllowed();
+   List<Game> findAllAllowed();
 
    @Modifying
    @Transactional
-   @Query("UPDATE Game g SET g.stock = (SELECT s.stock FROM Game s WHERE s.ean = ?1) +1")
+   @Query(value = "UPDATE Game SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
    @Modifying
    @Transactional
-   @Query("UPDATE Game g SET g.stock = (SELECT s.stock FROM Game s WHERE s.ean = ?1) -1")
+   @Query(value = "UPDATE Game SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 
 }

@@ -53,7 +53,7 @@ public class VideoController {
 
    @GetMapping("/videos")
    public String booksList(Model model, Locale locale){
-      List<VideoDTO> videoDTOS = libraryApiProxy.findAllVideos(1);
+      List<VideoDTO> videoDTOS = libraryApiProxy.findAllAllowedVideos(1);
 
       model.addAttribute(PathTable.ATTRIBUTE_VIDEOS, videoDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, videosTitles);

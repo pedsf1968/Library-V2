@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<div class="container-fluid page">
+   <nav th:replace="~{fragments/nav :: nav}"></nav>
+
+   <header class="jumbotron">
+      <div class="row">
+         <div class="col-sm my-auto">
+            <H1  class="display-4 float-left" th:text="${bookings}==null ? #{message.noBooking} : #{title.bookingList}">Bookings list</H1>
+         </div>
+      </div>
+   </header>
+
+   <div class="row endpage">
+      <div class="card-deck col-lg-4 col-sm-6 col-xs-12 mx-auto" th:each="booking : ${bookings}">
+         <div class="card col-md-12">
+            <div class="card-header row">
+               <div class="col-sm">
+                  <h5 th:text="${booking.media.title}"></h5>
+               </div>
+               <div class="col-sm">
+
+               </div>
+            </div>
+            <div class="card-body center">
+               <img  th:if="${booking.media.mediaType=='BOOK'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + booking.media.ean}" alt="photo"/>
+               <img  th:if="${booking.media.mediaType=='GAME'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + booking.media.ean}" alt="photo"/>
+               <img  th:if="${booking.media.mediaType=='MUSIC'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + booking.media.ean}" alt="photo"/>
+               <img  th:if="${booking.media.mediaType=='VIDEO'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/VIDEO/' + booking.media.ean}" alt="photo"/>
+            </div>
+            <div class="card-footer">
+               <div class="input-group">
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.bookingDate}">Booking date</div>
+                  </div>
+                  <span class="form-control" th:text="${#dates.format(booking.bookingDate, 'dd-MM-yyyy')}">Booking date</span>
+               </div>
+               <div class="input-group">
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.bookingRank}">Booking rank</div>
+                  </div>
+                  <span class="form-control" th:text="${booking.media.stock}">Rank</span>
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.returnDate}">Next return</div>
+                  </div>
+                  <span class="form-control" th:text="${booking.media.returnDate}">Date</span>
+                  <a class="btn btn-success mb-2" th:href="@{'/booking/cancel/' + ${booking.id}}" th:text="#{label.cancel}">cancel</a>
+               </div>
+
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+   <footer th:replace="~{fragments/footer :: footer}">&copy; 2020 La Grande Librarie</footer>
+</body>
+</html>

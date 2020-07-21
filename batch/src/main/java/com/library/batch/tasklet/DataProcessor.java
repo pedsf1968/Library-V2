@@ -1,5 +1,6 @@
 package com.library.batch.tasklet;
 
+import com.library.batch.dto.business.BookingDTO;
 import com.library.batch.dto.business.BorrowingDTO;
 import com.library.batch.dto.global.MessageDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +20,24 @@ import java.util.List;
 public class DataProcessor implements Tasklet, StepExecutionListener {
 
 
-   private final String libraryMailLimitSubject;
-   private final String libraryMailLimitContent;
+   private final String libraryMailBorrowingLimitSubject;
+   private final String libraryMailBorrowingLimitContent;
+   private final String libraryMailBookingSubject;
+   private final String libraryMailBookingContent;
 
    private final String from;
+   private final List<MessageDTO> messageDTOS = new ArrayList<>();
    private List<BorrowingDTO> borrowingDTOS;
-   private List<MessageDTO> messageDTOS = new ArrayList<>();
+   private List<BookingDTO> bookingDTOS;
 
-   public DataProcessor(String from, String libraryMailLimitSubject, String libraryMailLimitContent) {
+
+   public DataProcessor(String from, String libraryMailBorrowingLimitSubject, String libraryMailBorrowingLimitContent,
+                        String libraryMailBookingSubject, String libraryMailBookingContent) {
       this.from = from;
-      this.libraryMailLimitSubject = libraryMailLimitSubject;
-      this.libraryMailLimitContent = libraryMailLimitContent;
+      this.libraryMailBorrowingLimitSubject = libraryMailBorrowingLimitSubject;
+      this.libraryMailBorrowingLimitContent = libraryMailBorrowingLimitContent;
+      this.libraryMailBookingSubject = libraryMailBookingSubject;
+      this.libraryMailBookingContent = libraryMailBookingContent;
    }
 
 
@@ -39,7 +47,9 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
             .getJobExecution()
             .getExecutionContext();
       this.borrowingDTOS = (List<BorrowingDTO>) executionContext.get("borrowings");
+      this.bookingDTOS = (List<BookingDTO>) executionContext.get("bookings");
       stepExecution.getJobExecution().getExecutionContext().remove("borrowings");
+      stepExecution.getJobExecution().getExecutionContext().remove("bookings");
       log.info("Data Processor initialized.");
    }
 
@@ -54,10 +64,10 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
             messageDTO.setTo(b.getUser().getEmail());
             messageDTO.setFirstName(b.getUser().getFirstName());
             messageDTO.setLastName(b.getUser().getLastName());
-            messageDTO.setSubject(libraryMailLimitSubject);
+            messageDTO.setSubject(libraryMailBorrowingLimitSubject);
 
 
-            String content = String.format(libraryMailLimitContent,
+            String content = String.format(libraryMailBorrowingLimitContent,
                   b.getMedia().getMediaType(),
                   b.getMedia().getTitle(),
                   b.getMedia().getEan(),
@@ -65,6 +75,31 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
 
             messageDTO.setContent(content);
             log.info("Borrowing : " + b);
+            log.info("Message :" + messageDTO);
+
+            messageDTOS.add(messageDTO);
+         }
+      }
+
+      if(bookingDTOS!=null) {
+         for (BookingDTO b : bookingDTOS) {
+            MessageDTO messageDTO = new MessageDTO();
+
+            messageDTO.setFrom(from);
+            messageDTO.setTo(b.getUser().getEmail());
+            messageDTO.setFirstName(b.getUser().getFirstName());
+            messageDTO.setLastName(b.getUser().getLastName());
+            messageDTO.setSubject(libraryMailBookingSubject);
+
+
+            String content = String.format(libraryMailBookingContent,
+                  b.getMedia().getMediaType(),
+                  b.getMedia().getTitle(),
+                  b.getMedia().getEan(),
+                  b.getBookingDate());
+
+            messageDTO.setContent(content);
+            log.info("Booking : " + b);
             log.info("Message :" + messageDTO);
 
             messageDTOS.add(messageDTO);

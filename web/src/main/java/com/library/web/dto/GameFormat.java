@@ -16,5 +16,5 @@ public enum GameFormat {
    SONY_PS5,
    MICROSOFT_XBOX,
    MICROSOFT_XBOX_ONE,
-   PC;
+   PC
 }

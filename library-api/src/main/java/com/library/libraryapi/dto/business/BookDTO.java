@@ -3,6 +3,7 @@ package com.library.libraryapi.dto.business;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -61,6 +62,9 @@ public class BookDTO implements Serializable {
    private Integer length;
    private Integer width;
    private Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date returnDate;
 
    // Book attributes
    @NotNull

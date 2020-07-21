@@ -43,6 +43,20 @@ public class MusicController {
       }
    }
 
+   @GetMapping(value = "/allowed",produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<MusicDTO>> findAllAllowedMusics(
+         @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
+      List<MusicDTO> musicDTOS;
+
+      try {
+         musicDTOS = musicService.findAllAllowed();
+         return ResponseEntity.ok(musicDTOS);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
+   }
+
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<List<MusicDTO>> findAllfilteredMusics(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber,
