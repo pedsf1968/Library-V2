@@ -1,23 +1,23 @@
 language: java
-           sudo: true
-           dist: trusty
+sudo: true
+dist: trusty
 
-           # use Java 8
-           jdk: openjdk8
+# use Java 8
+jdk: openjdk8
 
-           script: ./mvnw -DskipTests=true -Dmaven.test.skip=true clean install
+script: ./mvnw -DskipTests=true -Dmaven.test.skip=true clean install
 
-           before_install:
-             - chmod +x mvnw
+before_install:
+  - chmod +x mvnw
 
-           jobs:
-             include:
-               - stage: Install
-                 script: ./mvnw -DskipTests=true -Dmaven.test.skip=true clean install
+jobs:
+  include:
+    - stage: Install
+      script: ./mvnw -DskipTests=true -Dmaven.test.skip=true clean install
 
-           cache:
-             directories:
-               - $HOME/.m2
+cache:
+  directories:
+    - $HOME/.m2
 
-           notifications:
-             email: pe.dsf@free.fr
+notifications:
+  email: pe.dsf@free.fr
