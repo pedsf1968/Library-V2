@@ -1,10 +1,8 @@
 package com.library.web.dto.business;
 
-import com.library.web.dto.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 /**
