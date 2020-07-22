@@ -1,10 +1,9 @@
 package com.library.libraryapi.proxy;
 
-import com.library.libraryapi.dto.global.UserDTO;
+import com.user.userapi.dto.UserDTO;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

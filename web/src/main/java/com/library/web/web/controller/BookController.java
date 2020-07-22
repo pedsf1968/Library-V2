@@ -1,15 +1,15 @@
 package com.library.web.web.controller;
 
+import com.library.libraryapi.dto.business.BookDTO;
+import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.web.dto.BookFormat;
 import com.library.web.dto.BookType;
-import com.library.web.dto.business.BookDTO;
 import com.library.web.dto.business.BookFilter;
-import com.library.web.dto.business.PersonDTO;
-import com.library.web.dto.global.UserDTO;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
 import com.library.web.web.PathTable;
+import com.user.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -33,7 +33,7 @@ public class BookController {
    private final LibraryApiProxy libraryApiProxy;
    private final UserApiProxy userApiProxy;
    private final List<String> booksTitles;
-   private final Map<Integer,PersonDTO> booksAuthors = new HashMap<>();
+   private final Map<Integer, PersonDTO> booksAuthors = new HashMap<>();
    private final Map<Integer,PersonDTO> booksEditors = new HashMap<>();
 
    @Value("${library.borrowing.quantity.max}")

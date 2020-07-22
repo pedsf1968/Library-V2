@@ -6,16 +6,17 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>library-api</artifactId>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module library REST controller</description>
-
 	<parent>
 		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
+
+	<artifactId>library-api</artifactId>
+	<name>${project.artifactId}</name>
+	<description>Library multi module library REST controller</description>
+
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -48,6 +49,13 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>user-api</artifactId>
+		</dependency>
+
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -179,8 +187,14 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+      <dependency>
+         <groupId>com.pedsf</groupId>
+         <artifactId>user-api</artifactId>
+         <version>1.0.0.RELEASE</version>
+         <scope>compile</scope>
+      </dependency>
 
-	</dependencies>
+   </dependencies>
 
 	<!-- ==================================================================== -->
 	<!--                                                             PROFILES -->

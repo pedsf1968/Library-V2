@@ -6,10 +6,10 @@
    <!-- =================================================================== -->
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.pedsf</groupId>
-   <artifactId>multi-module-library</artifactId>
+   <artifactId>Library</artifactId>
    <version>1.0.0.RELEASE</version>
    <packaging>pom</packaging>
-   <name>multi-module-library</name>
+   <name>LIBRARY</name>
    <description>
       Library project
    </description>
@@ -55,10 +55,31 @@
    <!--                                                          PROPERTIES -->
    <!-- =================================================================== -->
    <properties>
+      <jacoco.version>0.8.5</jacoco.version>
       <java.version>1.8</java.version>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <!-- =================================================================== -->
+      <!--                                                           SONARQUBE -->
+      <!-- =================================================================== -->
+      <sonar.projectKey>pedsf1968_Library-V2</sonar.projectKey>
+      <sonar.moduleKey>
+         ${project.artifactId}
+      </sonar.moduleKey>
+      <sonar.organization>pedsf1968</sonar.organization>
+      <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+      <sonar.login>ddb8d5e3b2278124f9e3a1871d67f1cac7e5041f</sonar.login>
+      <sonar.language>java</sonar.language>
+      <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+      <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+      <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+      <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+      <sonar.coverage.exclusions>
+         config-server/src/main/java/com/dsf/configserver/ConfigServerApplication.*
+         eureka-server/src/main/java/com/dsf/cloud/eurekaserver/EurekaServerApplication.*
+         zuul-server/src/main/java/com/dsf/zuulserver/ZuulServerApplication.java
+      </sonar.coverage.exclusions>
    </properties>
 
 
@@ -131,6 +152,22 @@
             </dependency>
          </dependencies>
       </profile>
+
+      <profile>
+         <id>test</id>
+         <properties>
+            <activatedProperties>development</activatedProperties>
+            <configServer>http://localhost:2000</configServer>
+         </properties>
+         <dependencies>
+            <!-- ================================================ H2DATABASE -->
+            <dependency>
+               <groupId>com.h2database</groupId>
+               <artifactId>h2</artifactId>
+               <scope>runtime</scope>
+            </dependency>
+         </dependencies>
+      </profile>
    </profiles>
 
    <!-- ==================================================================== -->
@@ -138,6 +175,61 @@
    <!-- ==================================================================== -->
    <dependencyManagement>
       <dependencies>
+         <!-- ========================================================= MODULES -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>config-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>eureka-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>zuul-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>media-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mail-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>library-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>web-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>batch</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
          <!-- ================================================ CONFIG-SERVER -->
          <dependency>
             <groupId>${project.groupId}</groupId>
@@ -576,10 +668,59 @@
    </dependencies>
 
 
+
    <!-- ==================================================================== -->
    <!--                                                                BUILD -->
    <!-- ==================================================================== -->
-   <build></build>
+   <build>
+      <!-- ================================================================= -->
+      <!--                                                 PLUGIN MANAGEMENT -->
+      <!-- ================================================================= -->
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.jacoco</groupId>
+               <artifactId>jacoco-maven-plugin</artifactId>
+               <version>${jacoco.version}</version>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+
+      <!-- ================================================================= -->
+      <!--                                                           PLUGINS -->
+      <!-- ================================================================= -->
+      <plugins>
+         <!-- ==================================================== Jacoco -->
+         <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>prepare-and-report</id>
+                  <goals>
+                     <goal>prepare-agent</goal>
+                     <goal>report</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>report-aggregate</id>
+                  <phase>verify</phase>
+                  <goals>
+                     <goal>report-aggregate</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${project.basedir}/../target/site/jacoco-aggregate</outputDirectory>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+
+         <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </build>
 
 
 

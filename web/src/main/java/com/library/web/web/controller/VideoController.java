@@ -1,13 +1,15 @@
 package com.library.web.web.controller;
 
+import com.library.libraryapi.dto.business.PersonDTO;
+import com.library.libraryapi.dto.business.VideoDTO;
 import com.library.web.dto.VideoFormat;
 import com.library.web.dto.VideoType;
 import com.library.web.dto.business.*;
-import com.library.web.dto.global.UserDTO;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
 import com.library.web.web.PathTable;
+import com.user.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

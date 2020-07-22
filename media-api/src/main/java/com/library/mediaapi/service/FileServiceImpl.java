@@ -16,7 +16,7 @@ public class FileServiceImpl implements FileService {
 
       if(file!=null) {
          try {
-            log.info("\n\nINFO directory :" + directory);
+            log.info("\n\nINFO directory : {}", directory);
             Files.write(Paths.get(directory), file.getBytes());
          } catch (Exception e) {
             e.printStackTrace();

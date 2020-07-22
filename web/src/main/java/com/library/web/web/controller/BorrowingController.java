@@ -1,11 +1,11 @@
 package com.library.web.web.controller;
 
-import com.library.web.dto.business.BorrowingDTO;
-import com.library.web.dto.global.UserDTO;
+import com.library.libraryapi.dto.business.BorrowingDTO;
 import com.library.web.exceptions.ResourceNotFoundException;
 import com.library.web.proxy.LibraryApiProxy;
 import com.library.web.proxy.UserApiProxy;
 import com.library.web.web.PathTable;
+import com.user.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Value;

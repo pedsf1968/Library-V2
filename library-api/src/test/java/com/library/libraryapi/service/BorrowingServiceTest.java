@@ -1,11 +1,10 @@
 package com.library.libraryapi.service;
 
 import com.library.libraryapi.dto.business.MediaDTO;
-import com.library.libraryapi.dto.global.UserDTO;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.BorrowingRepository;
+import com.user.userapi.dto.UserDTO;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

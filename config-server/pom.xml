@@ -6,16 +6,16 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>config-server</artifactId>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module properties server</description>
-
 	<parent>
 		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
+
+	<artifactId>config-server</artifactId>
+	<name>${project.artifactId}</name>
+	<description>Library multi module properties server</description>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>

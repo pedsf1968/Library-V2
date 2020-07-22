@@ -6,17 +6,17 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>web-api</artifactId>
-	<packaging>jar</packaging>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module Web application for users</description>
-
 	<parent>
 		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
+
+	<artifactId>web-api</artifactId>
+	<packaging>jar</packaging>
+	<name>${project.artifactId}</name>
+	<description>Library multi module Web application for users</description>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -41,6 +41,17 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>user-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>library-api</artifactId>
+		</dependency>
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

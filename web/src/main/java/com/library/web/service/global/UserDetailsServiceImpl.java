@@ -1,7 +1,7 @@
 package com.library.web.service.global;
 
-import com.library.web.dto.global.UserDTO;
 import com.library.web.proxy.UserApiProxy;
+import com.user.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

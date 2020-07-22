@@ -6,16 +6,17 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>batch</artifactId>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module batch service that query database and send messages to mail-api using Kafka</description>
-
 	<parent>
 		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
+
+	<artifactId>batch</artifactId>
+	<name>${project.artifactId}</name>
+	<description>Library multi module batch service that query database and send messages to mail-api using Kafka</description>
+
 
 
 	<!-- =========================================================== LICENCES -->
@@ -156,7 +157,13 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 		</dependency>
-	</dependencies>
+      <dependency>
+         <groupId>com.pedsf</groupId>
+         <artifactId>library-api</artifactId>
+         <version>1.0.0.RELEASE</version>
+         <scope>compile</scope>
+      </dependency>
+   </dependencies>
 
 
 	<!-- ==================================================================== -->

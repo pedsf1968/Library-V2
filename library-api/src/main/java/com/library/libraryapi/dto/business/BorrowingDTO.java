@@ -1,6 +1,6 @@
 package com.library.libraryapi.dto.business;
 
-import com.library.libraryapi.dto.global.UserDTO;
+import com.user.userapi.dto.UserDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 

@@ -1,6 +1,6 @@
 package com.library.web.proxy;
 
-import com.library.web.dto.business.*;
+import com.library.libraryapi.dto.business.*;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

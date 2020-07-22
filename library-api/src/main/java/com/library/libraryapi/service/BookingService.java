@@ -1,7 +1,6 @@
 package com.library.libraryapi.service;
 
 import com.library.libraryapi.dto.business.*;
-import com.library.libraryapi.dto.global.UserDTO;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ForbiddenException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
@@ -12,6 +11,7 @@ import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.BookingRepository;
 import com.library.libraryapi.repository.BookingSpecification;
 import com.library.libraryapi.repository.BorrowingRepository;
+import com.user.userapi.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;

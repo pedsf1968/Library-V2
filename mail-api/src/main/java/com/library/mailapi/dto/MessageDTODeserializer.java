@@ -23,13 +23,13 @@ public MessageDTO deserialize(String arg0, byte[] devBytes) {
 
 @Override
 public void close() {
-      // TODO Auto-generated method stub
+
 
       }
 
 @Override
 public void configure(Map<String, ?> arg0, boolean arg1) {
-      // TODO Auto-generated method stub
+
 
       }
 }

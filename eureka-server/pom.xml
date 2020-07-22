@@ -6,12 +6,12 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>eureka-server</artifactId>
-	<name>Library-${project.artifactId}</name>
+	<name>${project.artifactId}</name>
 	<description>Library multi module Eureka server</description>
 
 	<parent>
 		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>

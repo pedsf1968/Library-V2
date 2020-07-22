@@ -52,7 +52,7 @@ public class KafkaConfig {
    @Bean
    public ProducerFactory<String, MessageDTO> producerFactory() {
 
-      return new DefaultKafkaProducerFactory<>(producerConfig(), new StringSerializer(), new JsonSerializer<MessageDTO>());
+      return new DefaultKafkaProducerFactory<>(producerConfig(), new StringSerializer(), new JsonSerializer<>());
    }
 
    @Bean
