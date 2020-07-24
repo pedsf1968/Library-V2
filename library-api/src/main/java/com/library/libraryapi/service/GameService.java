@@ -6,7 +6,6 @@ import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
 import com.library.libraryapi.model.Game;
-import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.repository.GameRepository;
 import com.library.libraryapi.repository.GameSpecification;
 import org.modelmapper.ModelMapper;
@@ -16,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service("GameService")
 public class GameService implements GenericMediaService<GameDTO,Game,String> {

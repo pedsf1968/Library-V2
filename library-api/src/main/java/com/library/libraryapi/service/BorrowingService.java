@@ -26,7 +26,6 @@ import java.util.List;
 
 @Service("BorrowingService")
 public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,Integer> {
-   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Borrowing with the EAN : ";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Borrowing with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Borrowing";
    private static final String EXCEPTION_NO_MEDIA ="The Media is borrowed !";
@@ -196,7 +195,6 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       Borrowing borrowing = new Borrowing();
       UserDTO userDTO = userApiProxy.findUserById(userId);
       MediaDTO mediaDTO = null;
-      Integer stock;
       // calculate the restitution date adding 4 weeks 28 days
       java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
       Calendar calendar = Calendar.getInstance();

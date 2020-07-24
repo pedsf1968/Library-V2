@@ -1,13 +1,10 @@
 package com.library.libraryapi.service;
 
-import com.library.libraryapi.dto.business.GameDTO;
 import com.library.libraryapi.dto.business.MusicDTO;
 import com.library.libraryapi.dto.business.PersonDTO;
 import com.library.libraryapi.exceptions.BadRequestException;
 import com.library.libraryapi.exceptions.ConflictException;
 import com.library.libraryapi.exceptions.ResourceNotFoundException;
-import com.library.libraryapi.model.Book;
-import com.library.libraryapi.model.MediaType;
 import com.library.libraryapi.model.Music;
 import com.library.libraryapi.repository.MusicRepository;
 import com.library.libraryapi.repository.MusicSpecification;
