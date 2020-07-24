@@ -9,6 +9,8 @@
    <artifactId>Library</artifactId>
    <version>1.0.0.RELEASE</version>
    <packaging>pom</packaging>
+
+   <!-- ===== General information ===== -->
    <name>LIBRARY</name>
    <description>
       Library project
@@ -55,10 +57,13 @@
    <!--                                                          PROPERTIES -->
    <!-- =================================================================== -->
    <properties>
+      <application.name>LIBRARY</application.name>
+      <buildTime>${maven.build.timestamp}</buildTime>
       <jacoco.version>0.8.5</jacoco.version>
       <java.version>1.8</java.version>
-      <maven.compiler.source>1.8</maven.compiler.source>
-      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
+      <maven.compiler.source>${java.version}</maven.compiler.source>
+      <maven.compiler.target>${java.version}</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <!-- =================================================================== -->
       <!--                                                           SONARQUBE -->
@@ -176,59 +181,6 @@
    <dependencyManagement>
       <dependencies>
          <!-- ========================================================= MODULES -->
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>config-server</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>eureka-server</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>zuul-server</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>media-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mail-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>user-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>library-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>web-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>batch</artifactId>
-            <version>${project.version}</version>
-         </dependency>
 
          <!-- ================================================ CONFIG-SERVER -->
          <dependency>
@@ -718,6 +670,7 @@
          <plugin>
             <groupId>org.sonarsource.scanner.maven</groupId>
             <artifactId>sonar-maven-plugin</artifactId>
+             <version>3.7.0.1746</version>
          </plugin>
       </plugins>
    </build>

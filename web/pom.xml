@@ -45,13 +45,13 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>user-api</artifactId>
-			<version>${project.version}</version>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>library-api</artifactId>
-			<version>${project.version}</version>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 		<!-- ======================================================== ACTUATOR -->

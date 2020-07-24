@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>user-api</artifactId>
-			<version>${project.version}</version>
+			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 

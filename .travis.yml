@@ -13,7 +13,7 @@ jobs:
     - stage: test
       script: ./mvnw clean test
     - stage: sonar
-      script: ./mvnw clean verify sonar:sonar
+      script: ./mvnw verify sonar:sonar
 
 cache:
   directories:
