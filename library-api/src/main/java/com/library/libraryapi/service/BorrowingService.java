@@ -11,6 +11,7 @@ import com.library.libraryapi.model.MediaStatus;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.*;
+import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
@@ -349,6 +350,8 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
     */
    public BorrowingDTO extend(Integer userId, Integer mediaId) {
       Borrowing borrowing = borrowingRepository.findByUserIdAndMediaId(userId, mediaId);
+      Calendar calendar = Calendar.getInstance();
+
 
       if(borrowing==null) {
          throw new ResourceNotFoundException("This borrowing doesn't exist !");
@@ -361,13 +364,15 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
          extension = borrowing.getExtended();
       }
 
-      if(extension<maxExtention) {
+      java.sql.Date limitDate = new java.sql.Date(DateUtils.addDays(new Date(),-daysOfDelay).getTime());
+      java.sql.Date borrowingDate = borrowing.getBorrowingDate();
+
+
+      if(extension<maxExtention && borrowingDate.after(limitDate)) {
          borrowing.setExtended(++extension);
 
          // increase borrowing date
-         java.sql.Date date = borrowing.getBorrowingDate();
-         Calendar calendar = Calendar.getInstance();
-         calendar.setTime(date);
+         calendar.setTime(borrowingDate);
          calendar.add(Calendar.DATE, daysOfDelay);
 
          borrowing.setBorrowingDate(new java.sql.Date(calendar.getTimeInMillis()));
