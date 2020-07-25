@@ -1,9 +1,8 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.libraryapi.dto.business.PersonDTO;
-import com.pedsf.library.libraryapi.dto.business.VideoDTO;
-import com.pedsf.library.libraryapi.exceptions.BadRequestException;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.dto.business.VideoDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Person;
 import com.pedsf.library.libraryapi.model.Video;
 import com.pedsf.library.libraryapi.repository.VideoRepository;

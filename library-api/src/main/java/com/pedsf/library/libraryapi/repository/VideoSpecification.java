@@ -12,7 +12,7 @@ import java.util.List;
 
 public class VideoSpecification implements Specification<Video> {
 
-   private final Video filter;
+   private final transient Video filter;
 
    public VideoSpecification(Video filter) {
       super();

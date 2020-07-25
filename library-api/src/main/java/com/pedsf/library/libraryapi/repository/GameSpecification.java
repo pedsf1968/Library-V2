@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GameSpecification implements Specification<Game> {
 
-   private final Game filter;
+   private final transient Game filter;
 
    public GameSpecification(Game filter) {
       super();

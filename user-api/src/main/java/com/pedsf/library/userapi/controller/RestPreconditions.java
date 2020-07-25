@@ -1,10 +1,7 @@
 package com.pedsf.library.userapi.controller;
 
-import com.pedsf.library.userapi.exception.BadRequestException;
-import com.pedsf.library.userapi.exception.ConflictException;
-import com.pedsf.library.userapi.exception.ForbiddenException;
-import com.pedsf.library.userapi.exception.ResourceNotFoundException;
 
+import com.pedsf.library.exception.*;
 
 public class RestPreconditions {
    private RestPreconditions() {

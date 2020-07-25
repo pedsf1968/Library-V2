@@ -1,7 +1,7 @@
 package com.pedsf.library.mailapi.listener;
 
-import com.pedsf.library.mailapi.dto.MessageDTO;
-import com.pedsf.library.mailapi.exception.BadRequestException;
+import com.pedsf.library.dto.global.MessageDTO;
+import com.pedsf.library.exception.BadRequestException;
 import com.pedsf.library.mailapi.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

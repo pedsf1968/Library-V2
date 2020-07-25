@@ -1,7 +1,7 @@
 package com.pedsf.library.mailapi.service;
 
-import com.pedsf.library.mailapi.dto.MessageDTO;
-import com.pedsf.library.mailapi.exception.BadRequestException;
+import com.pedsf.library.dto.global.MessageDTO;
+import com.pedsf.library.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

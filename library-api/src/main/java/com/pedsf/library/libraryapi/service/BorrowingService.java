@@ -1,19 +1,16 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.libraryapi.dto.business.BookingDTO;
-import com.pedsf.library.libraryapi.dto.business.BorrowingDTO;
-import com.pedsf.library.libraryapi.dto.business.MediaDTO;
-import com.pedsf.library.libraryapi.exceptions.BadRequestException;
-import com.pedsf.library.libraryapi.exceptions.ConflictException;
-import com.pedsf.library.libraryapi.exceptions.ForbiddenException;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.business.BorrowingDTO;
+import com.pedsf.library.dto.business.MediaDTO;
+import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Borrowing;
 import com.pedsf.library.libraryapi.model.MediaStatus;
 import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingSpecification;
-import com.pedsf.library.userapi.dto.UserDTO;
 import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;

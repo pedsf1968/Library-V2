@@ -1,7 +1,7 @@
 package com.pedsf.library.userapi.service;
 
+import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.userapi.model.User;
-import com.pedsf.library.userapi.dto.UserDTO;
 
 import java.util.List;
 

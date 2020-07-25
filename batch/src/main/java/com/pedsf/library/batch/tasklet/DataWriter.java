@@ -1,6 +1,6 @@
 package com.pedsf.library.batch.tasklet;
 
-import com.pedsf.library.batch.dto.global.MessageDTO;
+import com.pedsf.library.dto.global.MessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;

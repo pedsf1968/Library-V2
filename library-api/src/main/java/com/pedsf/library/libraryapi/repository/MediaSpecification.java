@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MediaSpecification implements Specification<Media> {
 
-   private final Media filter;
+   private final transient Media filter;
 
    public MediaSpecification(Media filter) {
       super();

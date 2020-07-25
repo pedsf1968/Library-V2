@@ -1,11 +1,11 @@
 package com.library.libraryapi.service;
 
-import com.pedsf.library.libraryapi.dto.business.MediaDTO;
+import com.pedsf.library.dto.business.MediaDTO;
+import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.service.BorrowingService;
 import com.pedsf.library.libraryapi.service.MediaService;
-import com.pedsf.library.userapi.dto.UserDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

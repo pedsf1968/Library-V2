@@ -1,7 +1,7 @@
 package com.pedsf.library.web.service.global;
 
+import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.web.proxy.UserApiProxy;
-import com.pedsf.library.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

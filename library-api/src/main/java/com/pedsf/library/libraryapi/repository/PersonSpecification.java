@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PersonSpecification implements Specification<Person> {
 
-   private final Person filter;
+   private final transient Person filter;
 
    public PersonSpecification(Person filter) {
       super();

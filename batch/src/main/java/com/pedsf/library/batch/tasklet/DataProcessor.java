@@ -1,8 +1,8 @@
 package com.pedsf.library.batch.tasklet;
 
-import com.pedsf.library.batch.dto.global.MessageDTO;
-import com.pedsf.library.libraryapi.dto.business.BookingDTO;
-import com.pedsf.library.libraryapi.dto.business.BorrowingDTO;
+import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.business.BorrowingDTO;
+import com.pedsf.library.dto.global.MessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -58,10 +58,8 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
 
       if(borrowingDTOS!=null) {
          for (BorrowingDTO b : borrowingDTOS) {
-            MessageDTO messageDTO = new MessageDTO();
+            MessageDTO messageDTO = new MessageDTO(from,b.getUser().getEmail());
 
-            messageDTO.setFrom(from);
-            messageDTO.setTo(b.getUser().getEmail());
             messageDTO.setFirstName(b.getUser().getFirstName());
             messageDTO.setLastName(b.getUser().getLastName());
             messageDTO.setSubject(libraryMailBorrowingLimitSubject);
@@ -83,10 +81,7 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
 
       if(bookingDTOS!=null) {
          for (BookingDTO b : bookingDTOS) {
-            MessageDTO messageDTO = new MessageDTO();
-
-            messageDTO.setFrom(from);
-            messageDTO.setTo(b.getUser().getEmail());
+            MessageDTO messageDTO = new MessageDTO(from,b.getUser().getEmail());
             messageDTO.setFirstName(b.getUser().getFirstName());
             messageDTO.setLastName(b.getUser().getLastName());
             messageDTO.setSubject(libraryMailBookingSubject);

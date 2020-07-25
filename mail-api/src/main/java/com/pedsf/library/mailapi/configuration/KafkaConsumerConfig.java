@@ -1,6 +1,6 @@
 package com.pedsf.library.mailapi.configuration;
 
-import com.pedsf.library.mailapi.dto.MessageDTO;
+import com.pedsf.library.dto.global.MessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SaslConfigs;

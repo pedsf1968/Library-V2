@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BookSpecification implements Specification<Book> {
 
-   private final Book filter;
+   private final transient Book filter;
 
    public BookSpecification(Book filter) {
       super();

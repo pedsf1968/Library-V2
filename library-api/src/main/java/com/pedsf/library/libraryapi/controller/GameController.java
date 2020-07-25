@@ -1,9 +1,7 @@
 package com.pedsf.library.libraryapi.controller;
 
-import com.pedsf.library.libraryapi.dto.business.GameDTO;
-import com.pedsf.library.libraryapi.exceptions.BadRequestException;
-import com.pedsf.library.libraryapi.exceptions.ConflictException;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.GameDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.service.GameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BookingSpecification implements Specification<Booking> {
 
-   private final Booking filter;
+   private final transient Booking filter;
 
    public BookingSpecification(Booking filter) {
       this.filter = filter;

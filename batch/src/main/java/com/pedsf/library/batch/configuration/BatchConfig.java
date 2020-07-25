@@ -1,9 +1,10 @@
 package com.pedsf.library.batch.configuration;
 
-import com.pedsf.library.batch.dto.global.MessageDTO;
+
 import com.pedsf.library.batch.tasklet.DataProcessor;
 import com.pedsf.library.batch.tasklet.DataReader;
 import com.pedsf.library.batch.tasklet.DataWriter;
+import com.pedsf.library.dto.global.MessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

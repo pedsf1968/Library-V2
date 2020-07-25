@@ -1,7 +1,7 @@
 package com.pedsf.library.batch.tasklet;
 
-import com.pedsf.library.libraryapi.dto.business.BookingDTO;
-import com.pedsf.library.libraryapi.dto.business.BorrowingDTO;
+import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.business.BorrowingDTO;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;

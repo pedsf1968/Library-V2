@@ -1,8 +1,8 @@
 package com.pedsf.library.libraryapi.controller;
 
-import com.pedsf.library.libraryapi.dto.business.MediaDTO;
+import com.pedsf.library.dto.business.MediaDTO;
 
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.service.MediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

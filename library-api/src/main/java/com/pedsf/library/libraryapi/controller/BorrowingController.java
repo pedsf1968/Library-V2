@@ -1,7 +1,7 @@
 package com.pedsf.library.libraryapi.controller;
 
-import com.pedsf.library.libraryapi.dto.business.BorrowingDTO;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.BorrowingDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.service.BorrowingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;

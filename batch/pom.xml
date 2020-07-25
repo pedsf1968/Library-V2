@@ -46,6 +46,11 @@
 		<!-- ========================================================= MODULES -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>library-api</artifactId>
 		</dependency>
 

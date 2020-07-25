@@ -1,11 +1,10 @@
 package com.pedsf.library.userapi.service;
 
-import com.pedsf.library.userapi.exception.ConflictException;
+import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.userapi.repository.RoleRepository;
 import com.pedsf.library.userapi.repository.UserRepository;
 import com.pedsf.library.userapi.repository.UserSpecification;
-import com.pedsf.library.userapi.dto.UserDTO;
-import com.pedsf.library.userapi.exception.ResourceNotFoundException;
 import com.pedsf.library.userapi.model.Role;
 import com.pedsf.library.userapi.model.User;
 import lombok.extern.slf4j.Slf4j;

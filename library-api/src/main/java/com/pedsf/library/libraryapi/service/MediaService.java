@@ -1,14 +1,12 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.libraryapi.dto.business.*;
-import com.pedsf.library.libraryapi.exceptions.BadRequestException;
-import com.pedsf.library.libraryapi.exceptions.ConflictException;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Media;
 import com.pedsf.library.libraryapi.model.MediaStatus;
-import com.pedsf.library.libraryapi.model.MediaType;
 import com.pedsf.library.libraryapi.repository.MediaRepository;
 import com.pedsf.library.libraryapi.repository.MediaSpecification;
+import com.pedsf.library.model.MediaType;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;

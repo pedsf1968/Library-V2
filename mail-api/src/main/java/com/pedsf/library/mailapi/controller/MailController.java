@@ -1,9 +1,8 @@
 package com.pedsf.library.mailapi.controller;
 
 
-import com.pedsf.library.mailapi.dto.MessageDTO;
-
-import com.pedsf.library.mailapi.exception.BadRequestException;
+import com.pedsf.library.dto.global.MessageDTO;
+import com.pedsf.library.exception.BadRequestException;
 import com.pedsf.library.mailapi.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

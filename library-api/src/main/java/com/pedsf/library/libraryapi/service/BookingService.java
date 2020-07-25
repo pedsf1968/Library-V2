@@ -1,10 +1,9 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.libraryapi.dto.business.BookingDTO;
-import com.pedsf.library.libraryapi.dto.business.MediaDTO;
-import com.pedsf.library.libraryapi.exceptions.ConflictException;
-import com.pedsf.library.libraryapi.exceptions.ForbiddenException;
-import com.pedsf.library.libraryapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.business.MediaDTO;
+import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Booking;
 import com.pedsf.library.libraryapi.model.MediaStatus;
 import com.pedsf.library.libraryapi.model.UserStatus;
@@ -12,7 +11,6 @@ import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BookingSpecification;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
-import com.pedsf.library.userapi.dto.UserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;

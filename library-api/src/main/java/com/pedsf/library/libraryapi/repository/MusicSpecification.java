@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MusicSpecification implements Specification<Music> {
 
-   private final Music filter;
+   private final transient Music filter;
 
    public MusicSpecification(Music filter) {
       super();

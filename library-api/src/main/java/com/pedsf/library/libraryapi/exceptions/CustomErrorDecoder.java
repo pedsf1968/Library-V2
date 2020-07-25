@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.exceptions;
 
+import com.pedsf.library.exception.*;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 

@@ -1,11 +1,11 @@
 package com.pedsf.library.web.web.controller;
 
-import com.pedsf.library.libraryapi.dto.business.BookingDTO;
-import com.pedsf.library.web.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.web.proxy.LibraryApiProxy;
 import com.pedsf.library.web.proxy.UserApiProxy;
 import com.pedsf.library.web.web.PathTable;
-import com.pedsf.library.userapi.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.core.Authentication;

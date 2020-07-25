@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 

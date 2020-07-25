@@ -1,6 +1,6 @@
 package com.pedsf.library.libraryapi.proxy;
 
-import com.pedsf.library.userapi.dto.UserDTO;
+import com.pedsf.library.dto.global.UserDTO;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

@@ -1,9 +1,7 @@
 package com.pedsf.library.userapi.controller;
 
-import com.pedsf.library.userapi.dto.UserDTO;
-import com.pedsf.library.userapi.exception.BadRequestException;
-import com.pedsf.library.userapi.exception.ConflictException;
-import com.pedsf.library.userapi.exception.ResourceNotFoundException;
+import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.userapi.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 

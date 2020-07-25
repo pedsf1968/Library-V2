@@ -1,6 +1,6 @@
 package com.pedsf.library.batch.configuration;
 
-import com.pedsf.library.batch.dto.global.MessageDTO;
+import com.pedsf.library.dto.global.MessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;

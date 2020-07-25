@@ -98,9 +98,10 @@
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
       <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
       <sonar.coverage.exclusions>
-         config-server/src/main/java/com/dsf/configserver/ConfigServerApplication.*
-         eureka-server/src/main/java/com/dsf/cloud/eurekaserver/EurekaServerApplication.*
-         zuul-server/src/main/java/com/dsf/zuulserver/ZuulServerApplication.java
+         data-model/src/mail/java/com/pedsf/library/*.java
+         config-server/src/main/java/com/pedsf/library/configserver/ConfigServerApplication.*
+         eureka-server/src/main/java/com/pedsf/library/eurekaserver/EurekaServerApplication.*
+         zuul-server/src/main/java/com/pedsf/library/zuulserver/ZuulServerApplication.java
       </sonar.coverage.exclusions>
    </properties>
 
@@ -112,6 +113,7 @@
       <module>config-server</module>
       <module>eureka-server</module>
       <module>zuul-server</module>
+      <module>data-model</module>
       <module>media-api</module>
       <module>mail-api</module>
       <module>user-api</module>
@@ -215,6 +217,12 @@
          <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>zuul-server</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <!-- =================================================== DATA-MODEL -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>data-model</artifactId>
             <version>${project.version}</version>
          </dependency>
          <!-- ==================================================== MEDIA-API -->
