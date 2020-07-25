@@ -261,7 +261,7 @@
 
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>src/main/resources/com.library.libraryapi</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

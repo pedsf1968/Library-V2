@@ -248,7 +248,7 @@
 
 		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
+				<directory>src/main/resources/com.user.userapi</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
