@@ -7,8 +7,8 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -53,7 +53,6 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>user-api</artifactId>
-			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 
@@ -188,12 +187,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-      <dependency>
-         <groupId>com.pedsf</groupId>
-         <artifactId>user-api</artifactId>
-         <version>1.0.0.RELEASE</version>
-         <scope>compile</scope>
-      </dependency>
 
    </dependencies>
 
@@ -261,7 +254,7 @@
 
 		<resources>
 			<resource>
-				<directory>src/main/resources/com.library.libraryapi</directory>
+				<directory>src/main/resources/com.pedsf.library.libraryapi</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

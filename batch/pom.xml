@@ -7,8 +7,8 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -43,6 +43,12 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>library-api</artifactId>
+		</dependency>
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -157,12 +163,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 		</dependency>
-      <dependency>
-         <groupId>com.pedsf</groupId>
-         <artifactId>library-api</artifactId>
-         <version>1.0.0.RELEASE</version>
-         <scope>compile</scope>
-      </dependency>
    </dependencies>
 
 
