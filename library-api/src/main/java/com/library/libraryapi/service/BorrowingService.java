@@ -10,11 +10,8 @@ import com.library.libraryapi.model.MediaStatus;
 import com.library.libraryapi.model.UserStatus;
 import com.library.libraryapi.proxy.UserApiProxy;
 import com.library.libraryapi.repository.*;
-<<<<<<< HEAD
 import com.user.userapi.dto.UserDTO;
-=======
 import org.apache.commons.lang.time.DateUtils;
->>>>>>> T3BorrowingDelayBug
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
