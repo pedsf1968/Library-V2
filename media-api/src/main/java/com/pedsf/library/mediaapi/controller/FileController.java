@@ -1,5 +1,6 @@
 package com.pedsf.library.mediaapi.controller;
 
+import com.pedsf.library.mediaapi.exception.ConflictException;
 import com.pedsf.library.mediaapi.model.FileType;
 import com.pedsf.library.mediaapi.service.FileService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,18 +45,22 @@ public class FileController {
                                     @RequestParam("fileType") FileType fileType,
                                     @RequestParam("fileName") String fileName) {
 
+      if (!fileName.matches("[a-zA-Z0-9]")) {
+         throw new ConflictException("Invalid fileName "+ fileName);
+      }
+
       if (fileType.equals(FileType.BOOK)) {
-         fileService.uploadFile(file, bookImagesRepository + fileName);
+         fileService.uploadFile(file, bookImagesRepository, fileName);
       } else if (fileType.equals(FileType.MUSIC)) {
-         fileService.uploadFile(file, musicImagesRepository + fileName);
+         fileService.uploadFile(file, musicImagesRepository, fileName);
       } else if (fileType.equals(FileType.VIDEO)) {
-         fileService.uploadFile(file, videoImagesRepository + fileName);
+         fileService.uploadFile(file, videoImagesRepository, fileName);
       } else if (fileType.equals(FileType.GAME)) {
-         fileService.uploadFile(file, gameImagesRepository + fileName);
+         fileService.uploadFile(file, gameImagesRepository, fileName);
       } else if (fileType.equals(FileType.USER)) {
-         fileService.uploadFile(file, userImagesRepository + fileName);
+         fileService.uploadFile(file, userImagesRepository,fileName);
       } else {
-         fileService.uploadFile(file, imagesRepository + fileName);
+         fileService.uploadFile(file, imagesRepository, fileName);
       }
 
       return ResponseEntity.ok().build();

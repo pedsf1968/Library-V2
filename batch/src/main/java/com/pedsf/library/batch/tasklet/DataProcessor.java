@@ -58,20 +58,20 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
 
       if(borrowingDTOS!=null) {
          for (BorrowingDTO b : borrowingDTOS) {
-            MessageDTO messageDTO = new MessageDTO(from,b.getUser().getEmail());
-
-            messageDTO.setFirstName(b.getUser().getFirstName());
-            messageDTO.setLastName(b.getUser().getLastName());
-            messageDTO.setSubject(libraryMailBorrowingLimitSubject);
-
-
             String content = String.format(libraryMailBorrowingLimitContent,
                   b.getMedia().getMediaType(),
                   b.getMedia().getTitle(),
                   b.getMedia().getEan(),
                   b.getBorrowingDate());
 
-            messageDTO.setContent(content);
+            MessageDTO messageDTO = new MessageDTO(
+                  b.getUser().getFirstName(),
+                  b.getUser().getLastName(),
+                  from,
+                  b.getUser().getEmail(),
+                  libraryMailBorrowingLimitSubject,
+                  content);
+
             log.info("Borrowing : " + b);
             log.info("Message :" + messageDTO);
 
@@ -81,19 +81,19 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
 
       if(bookingDTOS!=null) {
          for (BookingDTO b : bookingDTOS) {
-            MessageDTO messageDTO = new MessageDTO(from,b.getUser().getEmail());
-            messageDTO.setFirstName(b.getUser().getFirstName());
-            messageDTO.setLastName(b.getUser().getLastName());
-            messageDTO.setSubject(libraryMailBookingSubject);
-
-
             String content = String.format(libraryMailBookingContent,
                   b.getMedia().getMediaType(),
                   b.getMedia().getTitle(),
                   b.getMedia().getEan(),
                   b.getBookingDate());
 
-            messageDTO.setContent(content);
+            MessageDTO messageDTO = new MessageDTO(
+                  b.getUser().getFirstName(),
+                  b.getUser().getLastName(),
+                  from,
+                  b.getUser().getEmail(),
+                  libraryMailBookingSubject,
+                  content);
             log.info("Booking : " + b);
             log.info("Message :" + messageDTO);
 

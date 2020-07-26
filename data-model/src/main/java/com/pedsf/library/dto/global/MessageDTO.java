@@ -21,11 +21,6 @@ public class MessageDTO implements Serializable {
    static final String EMAIL_REGEXP = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
    static final String ERROR_MESSAGE = "Length should be between : ";
 
-   public MessageDTO(@NotNull @Size(min = EMAIL_MIN, max = EMAIL_MAX, message = ERROR_MESSAGE + EMAIL_MIN + " AND " + EMAIL_MAX + " !") @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_ERROR_MESSAGE) String from, @NotNull @Size(min = EMAIL_MIN, max = EMAIL_MAX, message = ERROR_MESSAGE + EMAIL_MIN + " AND " + EMAIL_MAX + " !") @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_ERROR_MESSAGE) String to) {
-      this.from = from;
-      this.to = to;
-   }
-
    @NotNull
    @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX, message = ERROR_MESSAGE + FIRSTNAME_MIN + " AND " + FIRSTNAME_MAX + " !")
    private String firstName;
@@ -62,6 +57,5 @@ public class MessageDTO implements Serializable {
       this.subject = subject;
       this.content = content;
    }
-
 
 }

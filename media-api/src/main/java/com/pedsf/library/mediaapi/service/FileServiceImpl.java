@@ -6,21 +6,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Slf4j
 @Service("FileService")
 public class FileServiceImpl implements FileService {
 
-   public void uploadFile(MultipartFile file, String directory) {
+   public void uploadFile(MultipartFile multipartFile, String directoryOutput, String finename) {
 
-      if(file!=null) {
+      StringBuilder sb = new StringBuilder();
+      sb.append(directoryOutput);
+      sb.append(finename);
+
+      if(multipartFile!=null) {
          try {
-            log.info("\n\nINFO directory : {}", directory);
-            Files.write(Paths.get(directory), file.getBytes());
-         } catch (Exception e) {
-            e.printStackTrace();
-            throw new FileStorageException("Could not store file " + file.getOriginalFilename()
+            log.info("\n\nINFO output : {}", sb);
+            byte[] bytes = multipartFile.getBytes();
+            Path path = Paths.get(sb.toString());
+            Files.write(path, bytes);
+         } catch (Exception exception) {
+            log.error(exception.getMessage());
+            throw new FileStorageException("Could not store file " + multipartFile.getOriginalFilename()
                   + ". Please try again!");
          }
       }

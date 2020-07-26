@@ -28,41 +28,8 @@ import java.sql.Date;
  * summary : Game summary
  */
 @Data
-public class GameDTO implements Serializable {
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
-   private static final int EAN_MAX = 20;
-   private static final int TYPE_MAX = 20;
-   private static final int FORMAT_MAX = 20;
+public class GameDTO extends CommonDTO implements Serializable {
    private static final int PEGI_MAX = 4;
-   private static final int URL_MAX = 255; // default length
-   private static final int SUMMARY_MAX = 2048;
-
-   private static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
-   private static final String ERROR_MESSAGE_LESS = "Length should less than : ";
-
-   // Media information
-   @NotNull
-   @Size(max = EAN_MAX, message = ERROR_MESSAGE_LESS + EAN_MAX)
-   private String ean;
-
-   @NotNull
-   @Size(min = TITLE_MIN, max = TITLE_MAX,
-         message = ERROR_MESSAGE_BETWEEN + TITLE_MIN + " and " + TITLE_MAX  + " !")
-   private String title;
-
-   @NotNull
-   private Integer quantity;
-   @NotNull
-   private Integer stock;
-
-   private Integer weight;
-   private Integer length;
-   private Integer width;
-   private Integer height;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date returnDate;
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

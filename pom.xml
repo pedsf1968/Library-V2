@@ -98,10 +98,15 @@
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
       <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
       <sonar.coverage.exclusions>
+         batch/src/main/java/com/pedsf/library/batch/configuration/*.java
          data-model/src/mail/java/com/pedsf/library/*.java
-         config-server/src/main/java/com/pedsf/library/configserver/ConfigServerApplication.*
-         eureka-server/src/main/java/com/pedsf/library/eurekaserver/EurekaServerApplication.*
-         zuul-server/src/main/java/com/pedsf/library/zuulserver/ZuulServerApplication.java
+         config-server/src/main/java/com/pedsf/library/configserver/*.java
+         eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java
+         mail-api/src/main/java/com/pedsf/library/mailapi/configuration/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/configuration/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/model/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/repository/*.java
+         zuul-server/src/main/java/com/pedsf/library/zuulserver/*.java
       </sonar.coverage.exclusions>
    </properties>
 

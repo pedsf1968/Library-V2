@@ -28,50 +28,22 @@ import java.util.Date;
  * stock : remaining Media in the library to be borrowed. It become negative if they are bookings
  */
 @Data
-public class MediaDTO implements Serializable {
+public class MediaDTO extends CommonDTO implements Serializable {
    private static final int MEDIA_STATUS_MAX = 10;
    private static final int MEDIA_TYPE_MAX = 10;
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
-   private static final int EAN_MAX = 20;
-
-   private static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
-   private static final String ERROR_MESSAGE_LESS = "Length should less than : ";
 
    @NotNull
    protected Integer id;
 
    @NotNull
-   @Size(max = EAN_MAX, message = ERROR_MESSAGE_LESS + EAN_MAX)
-   protected String ean;
-
-   @NotNull
    @Size(max = MEDIA_TYPE_MAX, message = ERROR_MESSAGE_LESS + MEDIA_TYPE_MAX)
    protected String mediaType;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private java.sql.Date returnDate;
 
    @Size(max = MEDIA_STATUS_MAX, message = ERROR_MESSAGE_LESS + MEDIA_STATUS_MAX)
    private String status;
 
-   @NotNull
-   @Size(min = TITLE_MIN, max = TITLE_MAX,
-         message = ERROR_MESSAGE_BETWEEN + TITLE_MIN + " and " + TITLE_MAX  + " !")
-   private String title;
-
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
-
-   // weight and dimensions for transport informations
-   private Integer weight;
-   private Integer length;
-   private Integer width;
-   private Integer height;
-
-   private Integer quantity;
-   private Integer stock;
-
 
    public void initialise( BookDTO bookDTO) {
       this.mediaType = MediaType.BOOK.name();
