@@ -18,14 +18,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service("BookingService")
 public class BookingService implements GenericService<BookingDTO, Booking,Integer> {
-   private static final String CANNOT_FIND_WITH_EAN = "Cannot find Booking with the ean : ";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Booking with the id : ";
    private static final String CANNOT_SAVE ="Failed to save Booking";
    private static final String EXCEPTION_FORBIDDEN ="The user is not authorized, subscription fees not updated !";
@@ -207,7 +203,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       } else if (borrowingRepository.userHadBorrowed(userId,mediaEan).equals(Boolean.TRUE)) {
          // user had this media
          throw new ForbiddenException(EXCEPTION_HAD_ALREADY_BORROWED);
-      } else if (bookingRepository.userHadBooked(userId,mediaEan)) {
+      } else if (Boolean.TRUE.equals(bookingRepository.userHadBooked(userId,mediaEan))) {
          // user want to book the same media again
          throw new ForbiddenException(EXCEPTION_HAD_ALREADY_BORROWED);
       }
@@ -278,41 +274,48 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     * @return the Booking DTO
     */
    public BookingDTO cancelBooking(Integer bookingId) {
-      Booking booking;
+      Booking booking = null;
+      Optional<Booking> optionalBooking;
       MediaDTO mediaDTO;
+      String ean;
+      Integer mediaId;
 
       if (existsById(bookingId)) {
-         booking = bookingRepository.findById(bookingId).orElse(null);
+         optionalBooking = bookingRepository.findById(bookingId);
       } else {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + bookingId);
       }
 
-      String ean = booking.getEan();
-      Integer mediaId = booking.getMediaId();
-      bookingRepository.deleteById(bookingId);
-      bookingRepository.decreaseRankByEan(ean);
+      if (optionalBooking.isPresent()) {
+         booking = optionalBooking.get();
+         ean = booking.getEan();
+         mediaId = booking.getMediaId();
 
-      if (mediaId != null) {
-         // a media is BOOKED find next user who claim the same media
-         booking = bookingRepository.getNextByEan(ean);
+         bookingRepository.deleteById(bookingId);
+         bookingRepository.decreaseRankByEan(ean);
 
-         if (booking == null) {
-            // no other booking for this ean we release it
-            mediaService.setStatus(mediaId, MediaStatus.FREE);
-         } else {
-            // calculate the restitution date adding 2 days
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.add(Calendar.DATE, daysOfDelay);
-            booking.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
-            booking.setMediaId(mediaId);
-            // Update the booking of the next user
-            bookingRepository.save(booking);
+         if (mediaId != null) {
+            // a media is BOOKED find next user who claim the same media
+            booking = bookingRepository.getNextByEan(ean);
+
+            if (booking == null) {
+               // no other booking for this ean we release it
+               mediaService.setStatus(mediaId, MediaStatus.FREE);
+            } else {
+               // calculate the restitution date adding 2 days
+               Calendar calendar = Calendar.getInstance();
+               calendar.setTime(new Date());
+               calendar.add(Calendar.DATE, daysOfDelay);
+               booking.setPickUpDate(new java.sql.Date(calendar.getTimeInMillis()));
+               booking.setMediaId(mediaId);
+               // Update the booking of the next user
+               bookingRepository.save(booking);
+            }
          }
-      }
 
-      mediaDTO = mediaService.findOneByEan(ean);
-      mediaService.increaseStock(mediaDTO);
+         mediaDTO = mediaService.findOneByEan(ean);
+         mediaService.increaseStock(mediaDTO);
+      }
 
       return entityToDTO(booking);
    }
