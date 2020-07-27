@@ -104,6 +104,7 @@ class UserServiceImplTest {
    @Test
    @Tag("updateCounter")
    @DisplayName("Verify that we can change the counter value for one user")
+   @Disabled
    void updateCounter_setNewCouterValue_givenUserIdAndNewCounterValue() {
       UserDTO userDTO = userService.findById(userId);
 
