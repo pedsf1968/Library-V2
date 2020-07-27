@@ -1,6 +1,24 @@
 # library
 Library project
 
+[![Build Status](https://travis-ci.org/pedsf1968/Library-V2.svg?branch=master)](https://travis-ci.org/pedsf1968/Library-V2)
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=pedsf1968_Library-V2)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=bugs)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=code_smells)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=coverage)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=ncloc)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=alert_status)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=security_rating)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=sqale_index)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=pedsf1968_Library-V2&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+
+
 # How to
 ## Starting with Docker
 - Copy docker-compose.yml.

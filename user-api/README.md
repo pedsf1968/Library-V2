@@ -1,7 +1,5 @@
 # user-api
 
-[![pipeline status](https://gitlab.com/library3/website/user-api/badges/master/pipeline.svg)](https://gitlab.com/library3/website/user-api/-/commits/master)
-
 ## Object
 Rest controller for users management. the properties files are in Git repository :
 https://github.com/pedsf1968/properties-repository.git

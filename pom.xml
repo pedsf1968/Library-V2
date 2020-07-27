@@ -5,8 +5,8 @@
    <!--                                                PROJECT INFORMATIONS -->
    <!-- =================================================================== -->
    <modelVersion>4.0.0</modelVersion>
-   <groupId>com.pedsf</groupId>
-   <artifactId>Library</artifactId>
+   <groupId>com.pedsf.library</groupId>
+   <artifactId>library</artifactId>
    <version>1.0.0.RELEASE</version>
    <packaging>pom</packaging>
 
@@ -59,12 +59,30 @@
    <properties>
       <application.name>LIBRARY</application.name>
       <buildTime>${maven.build.timestamp}</buildTime>
-      <jacoco.version>0.8.5</jacoco.version>
       <java.version>1.8</java.version>
       <maven.build.timestamp.format>dd/MM/yyyy</maven.build.timestamp.format>
       <maven.compiler.source>${java.version}</maven.compiler.source>
       <maven.compiler.target>${java.version}</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+
+      <!-- ========================================================== VERSIONS -->
+      <com.fasterxml.jackson.core.version>2.11.1</com.fasterxml.jackson.core.version>
+      <com.github.ulisesbocchio.version>2.0.0</com.github.ulisesbocchio.version>
+      <com.h2database.version>1.4.200</com.h2database.version>
+      <commons-io.version>2.7</commons-io.version>
+      <de.codecentric.version>2.2.3</de.codecentric.version>
+      <jacoco.version>0.8.5</jacoco.version>
+
+      <org.apache.commons.version>3.10</org.apache.commons.version>
+      <org.springframework.boot.version>2.3.1.RELEASE</org.springframework.boot.version>
+      <org.springframework.cloud.version>2.2.3.RELEASE</org.springframework.cloud.version>
+      <org.springframework.cloud.pom.version>Hoxton.SR3</org.springframework.cloud.pom.version>
+      <org.springframework.kafka.version>2.5.3.RELEASE</org.springframework.kafka.version>
+      <org.webjars.version>0.1.0</org.webjars.version>
+      <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+      <spring-cloud-starter-security.version>2.2.2.RELEASE</spring-cloud-starter-security.version>
+
       <!-- =================================================================== -->
       <!--                                                           SONARQUBE -->
       <!-- =================================================================== -->
@@ -78,12 +96,17 @@
       <sonar.language>java</sonar.language>
       <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-      <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
       <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
       <sonar.coverage.exclusions>
-         config-server/src/main/java/com/dsf/configserver/ConfigServerApplication.*
-         eureka-server/src/main/java/com/dsf/cloud/eurekaserver/EurekaServerApplication.*
-         zuul-server/src/main/java/com/dsf/zuulserver/ZuulServerApplication.java
+         batch/src/main/java/com/pedsf/library/batch/configuration/*.java
+         data-model/src/mail/java/com/pedsf/library/*.java
+         config-server/src/main/java/com/pedsf/library/configserver/*.java
+         eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java
+         mail-api/src/main/java/com/pedsf/library/mailapi/configuration/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/configuration/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/model/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/repository/*.java
+         zuul-server/src/main/java/com/pedsf/library/zuulserver/*.java
       </sonar.coverage.exclusions>
    </properties>
 
@@ -95,6 +118,7 @@
       <module>config-server</module>
       <module>eureka-server</module>
       <module>zuul-server</module>
+      <module>data-model</module>
       <module>media-api</module>
       <module>mail-api</module>
       <module>user-api</module>
@@ -200,6 +224,12 @@
             <artifactId>zuul-server</artifactId>
             <version>${project.version}</version>
          </dependency>
+         <!-- =================================================== DATA-MODEL -->
+         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>data-model</artifactId>
+            <version>${project.version}</version>
+         </dependency>
          <!-- ==================================================== MEDIA-API -->
          <dependency>
             <groupId>${project.groupId}</groupId>
@@ -245,42 +275,42 @@
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ======================================================== BATCH -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-batch</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ==================================================== DATA REST -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ===================================================== DATA JPA -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ==================================================== DATA JDBC -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ===================================================== DEVTOOLS -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
             <optional>true</optional>
          </dependency>
 
@@ -288,28 +318,28 @@
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ====================================================== STARTER -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ==================================================== THYMELEAF -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ====================================================== TOMCAT -->
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
             <scope>compile</scope>
          </dependency>
 
@@ -317,7 +347,7 @@
          <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.3.1.RELEASE</version>
+            <version>${org.springframework.boot.version}</version>
          </dependency>
 
          <!-- ============================================================== -->
@@ -328,7 +358,7 @@
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-dependencies</artifactId>
-            <version>Hoxton.SR3</version>
+            <version>${org.springframework.cloud.pom.version}</version>
             <type>pom</type>
             <scope>runtime</scope>
          </dependency>
@@ -337,42 +367,42 @@
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
          <!-- ================================================ CONFIG SERVER -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
          <!-- ================================================ EUREKA CLIENT -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
          <!-- ================================================ EUREKA SERVER -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
          <!-- ==================================================== OPENFEIGN -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
          <!-- ======================================================== RIBON -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
 
@@ -380,14 +410,14 @@
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
-            <version>2.2.2.RELEASE</version>
+            <version>${spring-cloud-starter-security.version}</version>
          </dependency>
 
          <!-- ============================================================ ZUUL -->
          <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-            <version>2.2.3.RELEASE</version>
+            <version>${org.springframework.cloud.version}</version>
          </dependency>
 
 
@@ -395,21 +425,21 @@
          <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>2.2.3</version>
+            <version>${de.codecentric.version}</version>
          </dependency>
 
          <!-- =================================================== COMMONS IO -->
          <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.7</version>
+            <version>${commons-io.version}</version>
          </dependency>
 
          <!-- ================================================ COMMONS LANG3 -->
          <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.10</version>
+            <version>${org.apache.commons.version}</version>
          </dependency>
 
 
@@ -417,35 +447,35 @@
          <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <version>${com.h2database.version}</version>
          </dependency>
 
          <!-- ========================================================= JACKSON -->
          <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.11.1</version>
+            <version>${com.fasterxml.jackson.core.version}</version>
          </dependency>
 
          <!-- ======================================================= JASYPT -->
          <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>2.0.0</version>
+            <version>${com.github.ulisesbocchio.version}</version>
          </dependency>
 
          <!-- ======================================================== JBOSS -->
          <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-jboss-vfs</artifactId>
-            <version>0.1.0</version>
+            <version>${org.webjars.version}</version>
          </dependency>
 
          <!-- ======================================================== KAFKA -->
          <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
-            <version>2.5.3.RELEASE</version>
+            <version>${org.springframework.kafka.version}</version>
          </dependency>
 
          <!-- ======================================================= LOMBOK -->

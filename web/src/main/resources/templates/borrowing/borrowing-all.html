@@ -47,7 +47,6 @@
                   </div>
                   <span class="form-control" th:text="${borrowing.extended}">Extended</span>
                   <a th:if="${borrowing.borrowingDate > restitutionDate}" class="btn btn-secondary mb-2" th:href="@{'/borrowings/extend/' + ${borrowing.media.id}}" th:text="#{label.extend}">Extend</a>
-                  <a th:if="${borrowing.borrowingDate < restitutionDate}" class="btn btn-success mb-2" th:href="@{'/borrowings/extend/' + ${borrowing.media.id}}" th:text="#{label.extend}">Extend</a>
                </div>
             </div>
 
