@@ -56,6 +56,11 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -245,6 +250,22 @@
 				<activatedProperties>docker</activatedProperties>
 				<configServer>http://10.5.0.1:2000</configServer>
 			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+				<configServer>http://localhost:2000</configServer>
+			</properties>
+			<dependencies>
+				<!-- ================================================ H2DATABASE -->
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 
