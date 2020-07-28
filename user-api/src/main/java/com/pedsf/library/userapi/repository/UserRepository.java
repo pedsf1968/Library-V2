@@ -33,13 +33,13 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
 
    @Transactional
-   @Modifying
+   @Modifying(clearAutomatically = true)
    @Query("UPDATE User u SET u.counter = :counter WHERE u.id = :userId")
    int updateCounter(@Param("userId") Integer userId, @Param("counter") Integer counter);
 
 
    @Transactional
-   @Modifying
+   @Modifying(clearAutomatically = true)
    @Query("UPDATE User u SET u.status = :status WHERE u.id = :userId")
    int updateStatus(@Param("userId") Integer userId, @Param("status") String status);
 }
