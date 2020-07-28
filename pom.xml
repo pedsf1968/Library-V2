@@ -75,7 +75,7 @@
       <jacoco.version>0.8.5</jacoco.version>
 
       <org.apache.commons.version>3.10</org.apache.commons.version>
-      <org.springframework.boot.version>2.3.1.RELEASE</org.springframework.boot.version>
+      <org.springframework.boot.version>2.3.2.RELEASE</org.springframework.boot.version>
       <org.springframework.cloud.version>2.2.3.RELEASE</org.springframework.cloud.version>
       <org.springframework.cloud.pom.version>Hoxton.SR3</org.springframework.cloud.pom.version>
       <org.springframework.kafka.version>2.5.3.RELEASE</org.springframework.kafka.version>
@@ -103,6 +103,7 @@
          config-server/src/main/java/com/pedsf/library/configserver/*.java
          eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java
          mail-api/src/main/java/com/pedsf/library/mailapi/configuration/*.java
+         user-api/src/main/java/com/pedsf/library/userapi/UserApiApplication.java
          user-api/src/main/java/com/pedsf/library/userapi/configuration/*.java
          user-api/src/main/java/com/pedsf/library/userapi/model/*.java
          user-api/src/main/java/com/pedsf/library/userapi/repository/*.java
@@ -647,6 +648,12 @@
       <!-- ================================================================= -->
       <pluginManagement>
          <plugins>
+            <plugin>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-maven-plugin</artifactId>
+               <version>${org.springframework.boot.version}</version>
+            </plugin>
+
             <plugin>
                <groupId>org.jacoco</groupId>
                <artifactId>jacoco-maven-plugin</artifactId>

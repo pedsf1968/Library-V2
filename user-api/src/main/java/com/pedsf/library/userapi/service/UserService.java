@@ -9,9 +9,8 @@ public interface UserService {
    boolean existsById(Integer id);
    boolean existsByEmail(String email);
    UserDTO findById(Integer id);
-   UserDTO findByStatus(String status);
-   Integer getFirstId(UserDTO filter);
    UserDTO findByEmail(String email);
+   Integer getFirstId(UserDTO filter);
    List<UserDTO> findAll();
    List<UserDTO> findAllFiltered(UserDTO filter);
    UserDTO save(UserDTO userDto);

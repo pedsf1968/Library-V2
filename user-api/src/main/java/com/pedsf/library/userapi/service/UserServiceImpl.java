@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
    private static final String ALREADY_EXIST = " already exists";
    private static final String CANNOT_FIND_WITH_ID = "Cannot find User with the id : ";
    private static final String CANNOT_FIND_WITH_EMAIL = "Cannot find User with the email : ";
-   private static final String CANNOT_FIND_WITH_STATUS = "Cannot find User with the status : ";
    private static final String CANNOT_SAVE ="Failed to save User";
 
    private final UserRepository userRepository;
@@ -118,18 +117,6 @@ public class UserServiceImpl implements UserService {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_EMAIL + email);
       }
    }
-
-   @Override
-   public UserDTO findByStatus(String status) {
-      User user = userRepository.findByStatus(status);
-
-      if (user!=null) {
-         return userToUserDTO(user);
-      } else {
-         throw new ResourceNotFoundException(CANNOT_FIND_WITH_STATUS + status);
-      }
-   }
-
 
    @Override
    public List<UserDTO> findAll() {

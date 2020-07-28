@@ -104,6 +104,7 @@ public class User implements Serializable {
    private String country = "FRANCE";
 
    public User() {
+      // empty constructor for creating empty user and add attribute after
    }
 
    public Integer getId() {

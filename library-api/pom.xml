@@ -249,6 +249,25 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+				<configServer>http://localhost:2000</configServer>
+			</properties>
+			<dependencies>
+				<!-- ================================================ H2DATABASE -->
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<!-- ==================================================================== -->

@@ -26,7 +26,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
    User getOne(Integer id);
    User findByEmail(String email);
-   User findByStatus(String status);
    List<User> findAll();
    User save(User user);
    void deleteById(Integer id);

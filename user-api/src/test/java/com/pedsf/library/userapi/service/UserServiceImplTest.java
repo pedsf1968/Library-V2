@@ -22,7 +22,8 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 class UserServiceImplTest {
-   private static final Integer userId = 1;
+   private static final Integer USER_ID_TEST = 1;
+   private static final String EMAIL_TEST = "user.test@gmail.com";
 
    @TestConfiguration
    static class testconfiguration {
@@ -105,33 +106,33 @@ class UserServiceImplTest {
    @Tag("updateCounter")
    @DisplayName("Verify that we can change the counter value for one user")
    void updateCounter_returnNewCounter_ofUpdatedUserCounter() {
-      UserDTO userDTO = userService.findById(userId);
+      UserDTO userDTO = userService.findById(USER_ID_TEST);
       Integer oldCounter = userDTO.getCounter();
       Integer newCounter = 11;
 
-      userService.updateCounter(userId,newCounter);
-      userDTO = userService.findById(userId);
+      userService.updateCounter(USER_ID_TEST,newCounter);
+      userDTO = userService.findById(USER_ID_TEST);
       assertThat(userDTO.getCounter()).isEqualTo(newCounter);
 
-      userService.updateCounter(userId,oldCounter);
-      userDTO = userService.findById(userId);
-      //assertThat(userDTO.getCounter()).isEqualTo(oldCounter);
+      userService.updateCounter(USER_ID_TEST,oldCounter);
+      userDTO = userService.findById(USER_ID_TEST);
+      assertThat(userDTO.getCounter()).isEqualTo(oldCounter);
    }
 
    @Test
    @Tag("updateStatus")
    @DisplayName("Verify thaht we can update the user statusupdateStatus")
    void updateStatus_returnNewStatus_ofUserChangedStatus() {
-      UserDTO userDTO = userService.findById(userId);
+      UserDTO userDTO = userService.findById(USER_ID_TEST);
       String newStatus = "NewStatus";
       String oldStatus = userDTO.getStatus();
 
-      userService.updateStatus(userId,newStatus);
-      userDTO = userService.findById(userId);
+      userService.updateStatus(USER_ID_TEST,newStatus);
+      userDTO = userService.findById(USER_ID_TEST);
       assertThat(userDTO.getStatus()).isEqualTo(newStatus);
 
-      userService.updateStatus(userId,oldStatus);
-      userDTO = userService.findById(userId);
+      userService.updateStatus(USER_ID_TEST,oldStatus);
+      userDTO = userService.findById(USER_ID_TEST);
       assertThat(userDTO.getStatus()).isEqualTo(oldStatus);
    }
 
@@ -143,7 +144,7 @@ class UserServiceImplTest {
 
       for(UserDTO userDTO : userDTOS) {
          Integer id = userDTO.getId();
-         assertThat(userService.existsById(userId)).isTrue();
+         assertThat(userService.existsById(USER_ID_TEST)).isTrue();
       }
    }
 
@@ -152,21 +153,6 @@ class UserServiceImplTest {
    @DisplayName("Verify that return FALSE if the user doesn't exist")
    void existsById_returnFalse_OfAnInexistingUserId() {
       assertThat(userService.existsById(55)).isFalse();
-   }
-
-   @Test
-   @Tag("existsByEmail")
-   @DisplayName("existsByEmail")
-   void existsByEmail() {
-      List<UserDTO> userDTOS = userService.findAll();
-      UserDTO found;
-
-      for(UserDTO userDTO : userDTOS) {
-         String email = userDTO.getEmail();
-
-         found = userService.findByEmail(email);
-         assertThat(found).isEqualTo(userDTO);
-      }
    }
 
    @Test
@@ -185,6 +171,36 @@ class UserServiceImplTest {
    }
 
    @Test
+   @Tag("findById")
+   @DisplayName("Verify that we can't find user with wrong ID")
+   void findById_returnException_ofInexistingUserId() {
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         UserDTO found = userService.findById(45);
+      });
+   }
+
+   @Test
+   @Tag("existsByEmail")
+   @DisplayName("Verify that return TRUE if the user with this email exist")
+   void existsByEmail_returnTrue_ofAnExistingEmail() {
+      List<UserDTO> userDTOS = userService.findAll();
+      UserDTO found;
+
+      for(UserDTO userDTO : userDTOS) {
+         String email = userDTO.getEmail();
+         assertThat(userService.existsByEmail(email)).isTrue();
+      }
+   }
+
+   @Test
+   @Tag("existsByEmail")
+   @DisplayName("Verify that return FALSE if the user with this email exist")
+   void existsByEmail_returnFalse_ofAnInexistingEmail() {
+      assertThat(userService.existsByEmail(EMAIL_TEST)).isFalse();
+   }
+
+   @Test
    @Tag("findByEmail")
    @DisplayName("Verify that we can find user by existing email")
    void findByEmail_returnUser_ofExistingEmail() {
@@ -200,65 +216,111 @@ class UserServiceImplTest {
    }
 
    @Test
-   @Tag("findByStatus")
-   @DisplayName("findByStatus")
-   void findByStatus() {
+   @Tag("findByEmail")
+   @DisplayName("Verify that we can find user with wrong email")
+   void findByEmail_returnException_ofInexistingEmail() {
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         UserDTO found = userService.findByEmail("email@lqkjsdhlqksjdh");
+      });
    }
 
    @Test
    @Tag("findAll")
-   @DisplayName("findAll")
-   void findAll() {
+   @DisplayName("Verify that we have the list of all users")
+   void findAll_returnAllUser() {
       List<UserDTO> userDTOS = userService.findAll();
       assertThat(userDTOS.size()).isEqualTo(5);
    }
 
    @Test
    @Tag("findAllFiltered")
-   @DisplayName("findAllFiltered")
-   void findAllFiltered() {
+   @DisplayName("Verify that we can find one user by his name and email")
+   void findAllFiltered_returnOnlyOneUser_ofExistingFirstNameLastNameAndEmail() {
+      List<UserDTO> userDTOS = userService.findAll();
+      List<UserDTO> found;
+      for(UserDTO u:userDTOS) {
+         UserDTO filter = new UserDTO();
+         filter.setFirstName(u.getFirstName());
+         filter.setLastName(u.getLastName());
+         filter.setEmail(u.getEmail());
+
+         found = userService.findAllFiltered(filter);
+         assertThat(found.size()).isEqualTo(1);
+         assertThat(found.get(0)).isEqualTo(u);
+      }
    }
 
    @Test
    @Tag("getFirstId")
    @DisplayName("getFirstId")
    void getFirstId() {
+      List<UserDTO> userDTOS = userService.findAll();
+      List<UserDTO> found;
+      UserDTO filter = new UserDTO();
 
+      filter.setCity("Paris");
+      found = userService.findAllFiltered(filter);
+      assertThat(found.size()).isEqualTo(2);
+      Integer foundId = userService.getFirstId(filter);
+
+      assertThat(found.get(0).getId()).isEqualTo(foundId);
    }
 
    @Test
    @Tag("save")
-   @DisplayName("save")
-   void save() {
+   @DisplayName("Verify that we can create a new user")
+   void save_returnCreatedUser_ofNewUser() {
+      UserDTO userDTO = userService.findById(USER_ID_TEST);
+
+      userDTO.setId(null);
+      userDTO.setEmail(EMAIL_TEST);
+      userDTO = userService.save(userDTO);
+      Integer id = userDTO.getId();
+
+      assertThat(userService.existsById(id)).isTrue();
+      userService.deleteById(id);
    }
 
    @Test
    @Tag("update")
-   @DisplayName("update")
-   void update() {
+   @DisplayName("Verify that we can update an user")
+   void update_returnUpdatedUser_ofUserAndNewEmail() {
+      UserDTO userDTO = userService.findById(USER_ID_TEST);
+      String oldEmail = userDTO.getEmail();
+      userDTO.setEmail(EMAIL_TEST);
+
+      UserDTO userSaved = userService.update(userDTO);
+      assertThat(userSaved).isEqualTo(userDTO);
+      UserDTO userfound = userService.findByEmail(EMAIL_TEST);
+      assertThat(userfound).isEqualTo(userDTO);
+
+      userDTO.setEmail(oldEmail);
+      userService.update(userDTO);
    }
 
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a user by his ID")
-   @Disabled
-   void deleteById_() {
-       UserDTO userDTO = userService.findById(userId);
+   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+      UserDTO userDTO = userService.findById(USER_ID_TEST);
 
-       userService.deleteById(userId);
+      userDTO.setId(null);
+      userDTO.setEmail(EMAIL_TEST);
+      userDTO = userService.save(userDTO);
+      Integer id = userDTO.getId();
 
-       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-           userService.findById(userId);
-       });
+      assertThat(userService.existsById(id)).isTrue();
+      userService.deleteById(id);
 
-     //  userService.save(userDTO);
-
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         userService.findById(id);
+      });
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of users")
-   void count_() {
+   void count_returnTheNomberOfUsers() {
       assertThat(userService.count()).isEqualTo(5);
    }
 }

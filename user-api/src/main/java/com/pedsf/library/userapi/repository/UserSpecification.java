@@ -28,7 +28,7 @@ public class UserSpecification implements Specification<User> {
       }
 
       if (filter.getLastName() != null) {
-         predicates.add(criteriaBuilder.like(root.get("lastname"), "%" + filter.getLastName() + "%"));
+         predicates.add(criteriaBuilder.like(root.get("lastName"), "%" + filter.getLastName() + "%"));
       }
 
       if (filter.getEmail() != null) {
@@ -41,6 +41,10 @@ public class UserSpecification implements Specification<User> {
 
       if (filter.getStatus()!= null) {
          predicates.add(criteriaBuilder.like(root.get("status"), "%" + filter.getStatus() + "%"));
+      }
+
+      if (filter.getCity()!= null) {
+         predicates.add(criteriaBuilder.like(root.get("city"), "%" + filter.getCity() + "%"));
       }
 
       if (filter.getCounter()!= null) {
