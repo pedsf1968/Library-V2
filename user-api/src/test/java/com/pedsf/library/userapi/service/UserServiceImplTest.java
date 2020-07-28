@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
@@ -41,6 +42,7 @@ class UserServiceImplTest {
 
    @Autowired
    private UserService userService;
+
 
    @Test
    @Tag("userDTOtoUser")
@@ -105,45 +107,102 @@ class UserServiceImplTest {
    @Tag("updateCounter")
    @DisplayName("Verify that we can change the counter value for one user")
    @Disabled
-   void updateCounter_setNewCouterValue_givenUserIdAndNewCounterValue() {
+   void updateCounter_returnNewCounter_ofUpdatedUserCounter() {
       UserDTO userDTO = userService.findById(userId);
+      Integer oldCounter = userDTO.getCounter();
+      Integer newCounter = 11;
 
-
-      assertThat(userDTO.getCounter()).isEqualTo(0);
-      userService.updateCounter(userId,11);
-
+      userService.updateCounter(userId,newCounter);
       userDTO = userService.findById(userId);
-      assertThat(userDTO.getCounter()).isEqualTo(11);
+      assertThat(userDTO.getCounter()).isEqualTo(newCounter);
+
+      userService.updateCounter(userId,oldCounter);
+      userDTO = userService.findById(userId);
+      assertThat(userDTO.getCounter()).isEqualTo(oldCounter);
    }
 
    @Test
    @Tag("updateStatus")
-   @DisplayName("updateStatus")
-   void updateStatus() {
+   @DisplayName("Verify thaht we can update the user statusupdateStatus")
+   @Disabled
+   void updateStatus_returnNewStatus_ofUserChangedStatus() {
+      UserDTO userDTO = userService.findById(userId);
+      String newStatus = "NewStatus";
+      String oldStatus = userDTO.getStatus();
+
+      userService.updateStatus(userId,newStatus);
+      userDTO = userService.findById(userId);
+      assertThat(userDTO.getStatus()).isEqualTo(newStatus);
+
+      userService.updateStatus(userId,oldStatus);
+      userDTO = userService.findById(userId);
+      assertThat(userDTO.getStatus()).isEqualTo(oldStatus);
    }
 
    @Test
    @Tag("existsById")
-   @DisplayName("existsById")
-   void existsById() {
+   @DisplayName("Verify that return TRUE if the user exist")
+   void existsById_returnTrue_OfAnExistingUserId() {
+      List<UserDTO> userDTOS = userService.findAll();
+
+      for(UserDTO userDTO : userDTOS) {
+         Integer id = userDTO.getId();
+         assertThat(userService.existsById(userId)).isTrue();
+      }
+
+
+   }
+
+   @Test
+   @Tag("existsById")
+   @DisplayName("Verify that return FALSE if the user doesn't exist")
+   void existsById_returnFalse_OfAnInexistingUserId() {
+      assertThat(userService.existsById(55)).isFalse();
    }
 
    @Test
    @Tag("existsByEmail")
    @DisplayName("existsByEmail")
    void existsByEmail() {
+      List<UserDTO> userDTOS = userService.findAll();
+      UserDTO found;
+
+      for(UserDTO userDTO : userDTOS) {
+         String email = userDTO.getEmail();
+
+         found = userService.findByEmail(email);
+         assertThat(found).isEqualTo(userDTO);
+      }
    }
 
    @Test
    @Tag("findById")
-   @DisplayName("findById")
-   void findById() {
+   @DisplayName("Verify that we can find user by is ID")
+   void findById_returnUser_ofExistingUserId() {
+      List<UserDTO> userDTOS = userService.findAll();
+      UserDTO found;
+
+      for(UserDTO userDTO : userDTOS) {
+         Integer id = userDTO.getId();
+         found = userService.findById(id);
+
+         assertThat(found).isEqualTo(userDTO);
+      }
    }
 
    @Test
    @Tag("findByEmail")
-   @DisplayName("findByEmail")
-   void findByEmail() {
+   @DisplayName("Verify that we can find user by existing email")
+   void findByEmail_returnUser_ofExistingEmail() {
+      List<UserDTO> userDTOS = userService.findAll();
+      UserDTO found;
+
+      for(UserDTO userDTO : userDTOS) {
+         String email = userDTO.getEmail();
+         found = userService.findByEmail(email);
+
+         assertThat(found).isEqualTo(userDTO);
+      }
    }
 
    @Test
@@ -191,7 +250,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("count")
-   @DisplayName("count")
+   @DisplayName("Verify that we have the right number of users")
    void count_() {
       assertThat(userService.count()).isEqualTo(5);
    }
