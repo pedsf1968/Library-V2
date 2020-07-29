@@ -30,14 +30,14 @@ public interface VideoRepository extends JpaRepository<Video, Integer>, JpaSpeci
    @Query("SELECT v FROM Video v WHERE v.stock>(-2*v.quantity)")
    List<Video> findAllAllowed();
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Video SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
-   @Modifying
    @Transactional
-   @Query(value = "UPDATE Video SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
+   @Modifying(clearAutomatically = true)
+   @Query(value = "UPDATE Video SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 
 }

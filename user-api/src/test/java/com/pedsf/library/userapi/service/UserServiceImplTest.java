@@ -144,20 +144,20 @@ class UserServiceImplTest {
 
       for(UserDTO userDTO : userDTOS) {
          Integer id = userDTO.getId();
-         assertThat(userService.existsById(USER_ID_TEST)).isTrue();
+         assertThat(userService.existsById(id)).isTrue();
       }
    }
 
    @Test
    @Tag("existsById")
-   @DisplayName("Verify that return FALSE if the user doesn't exist")
+   @DisplayName("Verify that return FALSE if the User doesn't exist")
    void existsById_returnFalse_OfAnInexistingUserId() {
       assertThat(userService.existsById(55)).isFalse();
    }
 
    @Test
    @Tag("findById")
-   @DisplayName("Verify that we can find user by is ID")
+   @DisplayName("Verify that we can find User by is ID")
    void findById_returnUser_ofExistingUserId() {
       List<UserDTO> userDTOS = userService.findAll();
       UserDTO found;
@@ -172,7 +172,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("findById")
-   @DisplayName("Verify that we can't find user with wrong ID")
+   @DisplayName("Verify that we can't find User with wrong ID")
    void findById_returnException_ofInexistingUserId() {
 
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
@@ -182,7 +182,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("existsByEmail")
-   @DisplayName("Verify that return TRUE if the user with this email exist")
+   @DisplayName("Verify that return TRUE if the User with this email exist")
    void existsByEmail_returnTrue_ofAnExistingEmail() {
       List<UserDTO> userDTOS = userService.findAll();
       UserDTO found;
@@ -195,14 +195,14 @@ class UserServiceImplTest {
 
    @Test
    @Tag("existsByEmail")
-   @DisplayName("Verify that return FALSE if the user with this email exist")
+   @DisplayName("Verify that return FALSE if the User with this email exist")
    void existsByEmail_returnFalse_ofAnInexistingEmail() {
       assertThat(userService.existsByEmail(EMAIL_TEST)).isFalse();
    }
 
    @Test
    @Tag("findByEmail")
-   @DisplayName("Verify that we can find user by existing email")
+   @DisplayName("Verify that we can find User by existing email")
    void findByEmail_returnUser_ofExistingEmail() {
       List<UserDTO> userDTOS = userService.findAll();
       UserDTO found;
@@ -217,7 +217,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("findByEmail")
-   @DisplayName("Verify that we can find user with wrong email")
+   @DisplayName("Verify that we can find User with wrong email")
    void findByEmail_returnException_ofInexistingEmail() {
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
          UserDTO found = userService.findByEmail("email@lqkjsdhlqksjdh");
@@ -226,15 +226,15 @@ class UserServiceImplTest {
 
    @Test
    @Tag("findAll")
-   @DisplayName("Verify that we have the list of all users")
-   void findAll_returnAllUser() {
+   @DisplayName("Verify that we have the list of all Users")
+   void findAll_returnAllUsers() {
       List<UserDTO> userDTOS = userService.findAll();
       assertThat(userDTOS.size()).isEqualTo(5);
    }
 
    @Test
    @Tag("findAllFiltered")
-   @DisplayName("Verify that we can find one user by his name and email")
+   @DisplayName("Verify that we can find one User by his name and email")
    void findAllFiltered_returnOnlyOneUser_ofExistingFirstNameLastNameAndEmail() {
       List<UserDTO> userDTOS = userService.findAll();
       List<UserDTO> found;
@@ -268,7 +268,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("save")
-   @DisplayName("Verify that we can create a new user")
+   @DisplayName("Verify that we can create a new User")
    void save_returnCreatedUser_ofNewUser() {
       UserDTO userDTO = userService.findById(USER_ID_TEST);
 
@@ -283,7 +283,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("update")
-   @DisplayName("Verify that we can update an user")
+   @DisplayName("Verify that we can update an User")
    void update_returnUpdatedUser_ofUserAndNewEmail() {
       UserDTO userDTO = userService.findById(USER_ID_TEST);
       String oldEmail = userDTO.getEmail();
@@ -300,7 +300,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("deleteById")
-   @DisplayName("Verify that we can delete a user by his ID")
+   @DisplayName("Verify that we can delete a User by his ID")
    void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
       UserDTO userDTO = userService.findById(USER_ID_TEST);
 
@@ -319,8 +319,8 @@ class UserServiceImplTest {
 
    @Test
    @Tag("count")
-   @DisplayName("Verify that we have the right number of users")
-   void count_returnTheNomberOfUsers() {
+   @DisplayName("Verify that we have the right number of Users")
+   void count_returnTheNumberOfUsers() {
       assertThat(userService.count()).isEqualTo(5);
    }
 }

@@ -33,13 +33,13 @@ public interface MusicRepository extends JpaRepository<Music, Integer>, JpaSpeci
    @Query("SELECT m FROM Music m WHERE m.stock>(-2*m.quantity)")
    List<Music> findAllAllowed();
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Music SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Music SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 

@@ -31,11 +31,11 @@ public class BookingSpecification implements Specification<Booking> {
       }
 
       if (filter.getBookingDate() != null) {
-         predicates.add(criteriaBuilder.like(root.get("bookingDate"), "%" + filter.getBookingDate() + "%"));
+         predicates.add(criteriaBuilder.equal(root.get("bookingDate"), filter.getBookingDate()));
       }
 
       if (filter.getPickUpDate() != null) {
-         predicates.add(criteriaBuilder.like(root.get("pickUpDate"), "%" + filter.getPickUpDate() + "%"));
+         predicates.add(criteriaBuilder.equal(root.get("pickUpDate"), filter.getPickUpDate()));
       }
 
       return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

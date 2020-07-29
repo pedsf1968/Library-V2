@@ -24,13 +24,13 @@ public interface GameRepository extends JpaRepository<Game, Integer>, JpaSpecifi
    @Query("SELECT g FROM Game g WHERE g.stock>(-2*g.quantity)")
    List<Game> findAllAllowed();
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Game SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Game SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 

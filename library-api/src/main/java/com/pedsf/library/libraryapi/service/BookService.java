@@ -167,7 +167,7 @@ public class BookService implements GenericMediaService<BookDTO,Book,String> {
 
       bookDTO.setAuthor(author);
       bookDTO.setEditor(editor);
-
+      bookDTO.setPublicationDate(book.getPublicationDate());
 
       return bookDTO;
    }
@@ -182,6 +182,8 @@ public class BookService implements GenericMediaService<BookDTO,Book,String> {
       if(bookDTO.getEditor()!=null) {
          book.setEditorId(bookDTO.getEditor().getId());
       }
+
+      book.setPublicationDate(bookDTO.getPublicationDate());
       return book;
    }
 

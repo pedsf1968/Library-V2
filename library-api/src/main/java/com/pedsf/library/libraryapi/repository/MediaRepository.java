@@ -46,33 +46,33 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
    Media getNextReturnByEan(String ean);
 
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Media SET status = 'BLOCKED' WHERE id = (SELECT f.id FROM media f WHERE f.ean = :ean AND f.status = 'FREE' LIMIT 1)", nativeQuery = true)
    void blockFreeByEan(String ean);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Media SET status = 'BOOKED' WHERE id = (SELECT f.id FROM media f WHERE f.ean = :ean AND f.status = 'FREE' LIMIT 1)", nativeQuery = true)
    void bookedFreeByEan(String ean);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Media SET status = 'BORROWED', return_date = :date WHERE id = :mediaId", nativeQuery = true)
    void borrow(Integer mediaId, Date date);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query("UPDATE Media m SET m.status = 'FREE', m.returnDate = null WHERE m.id = ?1")
    void release(Integer mediaId);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query("UPDATE Media m SET m.returnDate = ?1 WHERE m.id = ?2")
    void updateReturnDate(Date date, Integer mediaId);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Media SET status = :status WHERE id = :mediaId", nativeQuery = true)
    void setStatus(Integer mediaId, String status);
 }

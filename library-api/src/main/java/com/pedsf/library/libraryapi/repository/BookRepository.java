@@ -30,13 +30,13 @@ public interface BookRepository extends JpaRepository<Book, Integer>, JpaSpecifi
    @Query("SELECT b FROM Book b WHERE b.stock>(-2*b.quantity)")
    List<Book> findAllAllowed();
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Book SET stock = stock + 1 WHERE ean = :ean", nativeQuery = true)
    void increaseStock(String ean);
 
-   @Modifying
    @Transactional
+   @Modifying(clearAutomatically = true)
    @Query(value = "UPDATE Book SET stock = stock - 1 WHERE ean = :ean", nativeQuery = true)
    void decreaseStock(String ean);
 }
