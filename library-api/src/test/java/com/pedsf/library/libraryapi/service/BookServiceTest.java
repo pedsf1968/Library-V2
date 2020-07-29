@@ -15,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@Disabled
 class BookServiceTest {
 
    @TestConfiguration
@@ -75,7 +74,7 @@ class BookServiceTest {
 
    @Test
    void count() {
-      assertThat(bookService.count()).isEqualTo(10);
+      assertThat(bookService.count()).isEqualTo(7);
    }
 
    @Test
