@@ -1,6 +1,6 @@
 package com.pedsf.library.mediaapi.service;
 
-import com.pedsf.library.mediaapi.exception.FileStorageException;
+import com.pedsf.library.exception.FileStorageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

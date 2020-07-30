@@ -2,6 +2,7 @@ package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.libraryapi.model.Book;
 import com.pedsf.library.libraryapi.repository.BookRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class BookServiceTest {
    private static final String BOOK_EAN_TEST = "978-2253002864";
+   private static final String BOOK_TITLE_TEST = "Le Horla";
 
    @TestConfiguration
    static class bookServiceTestConfiguration {
@@ -95,7 +98,21 @@ class BookServiceTest {
    }
 
    @Test
-   void findAllAllowed() {
+   @Tag("findAllAllowed")
+   @DisplayName("Verify that we got the list of Books that can be booked")
+   void findAllAllowed_returnBookableBooks_ofAllBooks() {
+      List<BookDTO> bookDTOS = bookService.findAll();
+      List<BookDTO> alloweds = bookService.findAllAllowed();
+
+      for(BookDTO bookDTO: bookDTOS) {
+         if (alloweds.contains(bookDTO)) {
+            // allowed
+            assertThat(bookDTO.getStock()).isGreaterThan(-bookDTO.getQuantity()*2);
+         } else {
+            // not allowed
+            assertThat(bookDTO.getStock()).isLessThanOrEqualTo(-bookDTO.getQuantity()*2);
+         }
+      }
    }
 
    @Test
@@ -138,11 +155,43 @@ class BookServiceTest {
    }
 
    @Test
-   void update() {
+   @Tag("update")
+   @DisplayName("Verify that we can update an Book")
+   void update_returnUpdatedBook_ofBookAndNewTitle() {
+      BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
+      String oldTitle = bookDTO.getTitle();
+      bookDTO.setTitle(BOOK_TITLE_TEST);
+
+      BookDTO bookSaved = bookService.update(bookDTO);
+      assertThat(bookSaved).isEqualTo(bookDTO);
+      BookDTO bookFound = bookService.findById(bookDTO.getEan());
+      assertThat(bookFound).isEqualTo(bookDTO);
+
+      bookDTO.setTitle(oldTitle);
+      bookService.update(bookDTO);
    }
 
    @Test
-   void deleteById() {
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Book by his EAN")
+   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+      BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
+      String newEan = "newEAN";
+      String newTitle = "NewTitle";
+
+      bookDTO.setEan(newEan);
+      bookDTO.setTitle(newTitle);
+      bookDTO.setReturnDate(null);
+      bookDTO.setPublicationDate(null);
+      bookDTO = bookService.save(bookDTO);
+      String ean = bookDTO.getEan();
+
+      assertThat(bookService.existsById(ean)).isTrue();
+      bookService.deleteById(ean);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         bookService.findById(ean);
+      });
    }
 
    @Test
@@ -153,11 +202,68 @@ class BookServiceTest {
    }
 
    @Test
-   void entityToDTO() {
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Book DTO is converted in right Book Entity")
+   void dtoToEntity_returnRightBookEntity_ofBookDTO() {
+      List<BookDTO> bookDTOS = bookService.findAll();
+      Book entity;
+
+      for (BookDTO dto: bookDTOS) {
+         entity = bookService.dtoToEntity(dto);
+         assertThat(entity.getEan()).isEqualTo(dto.getEan());
+         assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
+         assertThat(entity.getQuantity()).isEqualTo(dto.getQuantity());
+         assertThat(entity.getStock()).isEqualTo(dto.getStock());
+         assertThat(entity.getHeight()).isEqualTo(dto.getHeight());
+         assertThat(entity.getLength()).isEqualTo(dto.getLength());
+         assertThat(entity.getWeight()).isEqualTo(dto.getWeight());
+         assertThat(entity.getWidth()).isEqualTo(dto.getWidth());
+         assertThat(entity.getReturnDate()).isEqualTo(dto.getReturnDate());
+
+         assertThat(entity.getIsbn()).isEqualTo(dto.getIsbn());
+         assertThat(entity.getAuthorId()).isEqualTo(dto.getAuthor().getId());
+         assertThat(entity.getEditorId()).isEqualTo(dto.getEditor().getId());
+         assertThat(entity.getPages()).isEqualTo(dto.getPages());
+         assertThat(entity.getPublicationDate()).isEqualTo(dto.getPublicationDate());
+         assertThat(entity.getFormat().name()).isEqualTo(dto.getFormat());
+         assertThat(entity.getType().name()).isEqualTo(dto.getType());
+         assertThat(entity.getSummary()).isEqualTo(dto.getSummary());
+      }
    }
 
    @Test
-   void dtoToEntity() {
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Book Entity is converted in right Book DTO")
+   void dtoToEntity_returnRightBookDTO_ofBookEntity() {
+      List<BookDTO> bookDTOS = bookService.findAll();
+      List<Book> books = new ArrayList<>();
+      BookDTO dto;
+
+      for (BookDTO b: bookDTOS) {
+         books.add(bookService.dtoToEntity(b));
+      }
+
+      for (Book entity: books) {
+         dto = bookService.entityToDTO(entity);
+         assertThat(dto.getEan()).isEqualTo(entity.getEan());
+         assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
+         assertThat(dto.getQuantity()).isEqualTo(entity.getQuantity());
+         assertThat(dto.getStock()).isEqualTo(entity.getStock());
+         assertThat(dto.getHeight()).isEqualTo(entity.getHeight());
+         assertThat(dto.getLength()).isEqualTo(entity.getLength());
+         assertThat(dto.getWeight()).isEqualTo(entity.getWeight());
+         assertThat(dto.getWidth()).isEqualTo(entity.getWidth());
+         assertThat(dto.getReturnDate()).isEqualTo(entity.getReturnDate());
+
+         assertThat(dto.getIsbn()).isEqualTo(entity.getIsbn());
+         assertThat(dto.getAuthor().getId()).isEqualTo(entity.getAuthorId());
+         assertThat(dto.getEditor().getId()).isEqualTo(entity.getEditorId());
+         assertThat(dto.getPages()).isEqualTo(entity.getPages());
+         assertThat(dto.getPublicationDate()).isEqualTo(entity.getPublicationDate());
+         assertThat(dto.getFormat()).isEqualTo(entity.getFormat().name());
+         assertThat(dto.getType()).isEqualTo(entity.getType().name());
+         assertThat(dto.getSummary()).isEqualTo(entity.getSummary());
+      }
    }
 
    @Test

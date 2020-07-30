@@ -11,20 +11,16 @@ import java.sql.Date;
 /**
  * Data Transfert Object to manage Media
  *
- * id : identification of the Media
- * ean : ean code like ISBN for BOOKS
- * mediaType : type of the Media (BOOK,MUSIC,VIDEO,GAME...)
- * returnDate : the date of the next expected return (null if all Media are available in stock)
- * status : the actual status of the media (FREE, BORROWED, BOOKED, BLOCKED)
- *
+ * ean : EAN code of the media
  * title : title of the book, movie, music, song, game
- * publicationDate : is the date when the Media is published
+ * quantity : total of this Media owned by the library
+ * stock : remaining Media in the library to be borrowed. It become negative if they are bookings
+ *
  * weight : weight of the Media
  * length : length of the Media
  * width : width of the Media
  * height : height of the Media
- * quantity : total of this Media owned by the library
- * stock : remaining Media in the library to be borrowed. It become negative if they are bookings
+ * returnDate : the date of the next expected return (null if all Media are available in stock)
  */
 @Data
 public class CommonDTO implements Serializable {

@@ -41,6 +41,13 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -138,7 +145,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+   </dependencies>
 
 	<!-- ==================================================================== -->
 	<!--                                                             PROFILES -->

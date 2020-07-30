@@ -1,10 +1,8 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
-import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.libraryapi.model.Video;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import com.pedsf.library.libraryapi.repository.VideoRepository;
 import org.junit.jupiter.api.*;
@@ -15,6 +13,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,8 +96,23 @@ class VideoServiceTest {
    }
 
    @Test
-   void findAllAllowed() {
+   @Tag("findAllAllowed")
+   @DisplayName("Verify that we got the list of Videos that can be booked")
+   void findAllAllowed_returnBookableVideos_ofAllVideos() {
+      List<VideoDTO> videoDTOS = videoService.findAll();
+      List<VideoDTO> alloweds = videoService.findAllAllowed();
+
+      for(VideoDTO videoDTO: videoDTOS) {
+         if (alloweds.contains(videoDTO)) {
+            // allowed
+            assertThat(videoDTO.getStock()).isGreaterThan(-videoDTO.getQuantity()*2);
+         } else {
+            // not allowed
+            assertThat(videoDTO.getStock()).isLessThanOrEqualTo(-videoDTO.getQuantity()*2);
+         }
+      }
    }
+
 
    @Test
    @Tag("findAllFiltered")
@@ -121,13 +135,12 @@ class VideoServiceTest {
    void getFirstId() {
    }
 
-   @Test
+  /* @Test
    @DisplayName("Verify that we can create a new Video")
-   @Disabled
    void save_returnCreatedVideo_ofNewVideo() {
       VideoDTO videoDTO = videoService.findById(VIDEO_EAN_TEST);
-      String newEan = "newEAN";
-      String newTitle = "NewTitle";
+      String newEan = "newVideoEAN";
+      String newTitle = "NewVideoTitle";
 
       videoDTO.setEan(newEan);
       videoDTO.setTitle(newTitle);
@@ -139,7 +152,7 @@ class VideoServiceTest {
       assertThat(videoService.existsById(ean)).isTrue();
       videoService.deleteById(ean);
    }
-
+*/
    @Test
    void update() {
    }
@@ -157,12 +170,75 @@ class VideoServiceTest {
 
 
    @Test
-   void entityToDTO() {
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Video DTO is converted in right Video Entity")
+   void dtoToEntity_returnRightVideoEntity_ofVideoDTO() {
+      List<VideoDTO> videoDTOS = videoService.findAll();
+      String essai;
+      Video entity;
+
+      for (VideoDTO dto: videoDTOS) {
+         entity = videoService.dtoToEntity(dto);
+         assertThat(entity.getEan()).isEqualTo(dto.getEan());
+         assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
+         assertThat(entity.getQuantity()).isEqualTo(dto.getQuantity());
+         assertThat(entity.getStock()).isEqualTo(dto.getStock());
+         assertThat(entity.getHeight()).isEqualTo(dto.getHeight());
+         assertThat(entity.getLength()).isEqualTo(dto.getLength());
+         assertThat(entity.getWeight()).isEqualTo(dto.getWeight());
+         assertThat(entity.getWidth()).isEqualTo(dto.getWidth());
+         assertThat(entity.getReturnDate()).isEqualTo(dto.getReturnDate());
+
+         assertThat(entity.getDirectorId()).isEqualTo(dto.getDirector().getId());
+         assertThat(entity.getDuration()).isEqualTo(dto.getDuration());
+         assertThat(entity.getImage()).isEqualTo(dto.getImage());
+         assertThat(entity.getAudience()).isEqualTo(dto.getAudience());
+         assertThat(entity.getAudio()).isEqualTo(dto.getAudio());
+         assertThat(entity.getUrl()).isEqualTo(dto.getUrl());
+         assertThat(entity.getPublicationDate()).isEqualTo(dto.getPublicationDate());
+         assertThat(entity.getFormat().name()).isEqualTo(dto.getFormat());
+         assertThat(entity.getType().name()).isEqualTo(dto.getType());
+         assertThat(entity.getSummary()).isEqualTo(dto.getSummary());
+      }
    }
 
    @Test
-   void dtoToEntity() {
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Video Entity is converted in right Video DTO")
+   void dtoToEntity_returnRightBookDTO_ofBookEntity() {
+      List<VideoDTO> videoDTOS = videoService.findAll();
+      List<Video> videos = new ArrayList<>();
+      VideoDTO dto;
+
+      for (VideoDTO b: videoDTOS) {
+         videos.add(videoService.dtoToEntity(b));
+      }
+
+      for (Video entity: videos) {
+         dto = videoService.entityToDTO(entity);
+         assertThat(dto.getEan()).isEqualTo(entity.getEan());
+         assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
+         assertThat(dto.getQuantity()).isEqualTo(entity.getQuantity());
+         assertThat(dto.getStock()).isEqualTo(entity.getStock());
+         assertThat(dto.getHeight()).isEqualTo(entity.getHeight());
+         assertThat(dto.getLength()).isEqualTo(entity.getLength());
+         assertThat(dto.getWeight()).isEqualTo(entity.getWeight());
+         assertThat(dto.getWidth()).isEqualTo(entity.getWidth());
+         assertThat(dto.getReturnDate()).isEqualTo(entity.getReturnDate());
+
+         assertThat(dto.getDirector().getId()).isEqualTo(entity.getDirectorId());
+         assertThat(dto.getDuration()).isEqualTo(entity.getDuration());
+         assertThat(dto.getImage()).isEqualTo(entity.getImage());
+         assertThat(dto.getAudience()).isEqualTo(entity.getAudience());
+         assertThat(dto.getAudio()).isEqualTo(entity.getAudio());
+         assertThat(dto.getUrl()).isEqualTo(entity.getUrl());
+         assertThat(dto.getPublicationDate()).isEqualTo(entity.getPublicationDate());
+         assertThat(dto.getFormat()).isEqualTo(entity.getFormat().name());
+         assertThat(dto.getType()).isEqualTo(entity.getType().name());
+         assertThat(dto.getSummary()).isEqualTo(entity.getSummary());
+      }
    }
+
 
    @Test
    @Tag("findAllDirectors")

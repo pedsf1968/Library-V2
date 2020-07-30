@@ -1,6 +1,6 @@
 package com.pedsf.library.mediaapi.controller;
 
-import com.pedsf.library.mediaapi.exception.ConflictException;
+import com.pedsf.library.exception.ConflictException;
 import com.pedsf.library.mediaapi.model.FileType;
 import com.pedsf.library.mediaapi.service.FileService;
 import lombok.extern.slf4j.Slf4j;

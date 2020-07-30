@@ -1,9 +1,6 @@
 package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.MediaDTO;
-import com.pedsf.library.dto.business.VideoDTO;
-import com.pedsf.library.dto.global.UserDTO;
-import com.pedsf.library.libraryapi.model.Media;
 import com.pedsf.library.libraryapi.repository.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -151,7 +148,6 @@ class MediaServiceTest {
 
    @Test
    @DisplayName("Verify that we can create a new Media")
-
    void save_returnCreatedMedia_ofNewMedia() {
    /*   MediaDTO MediaDTO = mediaService.findById(MEDIA_EAN_ID);
 

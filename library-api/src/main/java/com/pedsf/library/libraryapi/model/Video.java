@@ -89,7 +89,6 @@ public class Video implements Serializable {
    private Date publicationDate;
 
    @NotNull
-   @NotBlank
    @Column(name = "director_id")
    private Integer directorId;
 

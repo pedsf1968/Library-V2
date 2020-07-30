@@ -1,6 +1,9 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
+import com.pedsf.library.libraryapi.model.Book;
+import com.pedsf.library.libraryapi.model.Game;
 import com.pedsf.library.libraryapi.repository.GameRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,8 +98,23 @@ class GameServiceTest {
    }
 
    @Test
-   void findAllAllowed() {
+   @Tag("findAllAllowed")
+   @DisplayName("Verify that we got the list of Games that can be booked")
+   void findAllAllowed_returnBookableGames_ofAllGames() {
+      List<GameDTO> gameDTOS = gameService.findAll();
+      List<GameDTO> alloweds = gameService.findAllAllowed();
+
+      for(GameDTO gameDTO: gameDTOS) {
+         if (alloweds.contains(gameDTO)) {
+            // allowed
+            assertThat(gameDTO.getStock()).isGreaterThan(-gameDTO.getQuantity()*2);
+         } else {
+            // not allowed
+            assertThat(gameDTO.getStock()).isLessThanOrEqualTo(-gameDTO.getQuantity()*2);
+         }
+      }
    }
+
 
    @Test
    @Tag("findAllFiltered")
@@ -122,8 +141,8 @@ class GameServiceTest {
    @DisplayName("Verify that we can create a new Game")
    void save_returnCreatedGame_ofNewGame() {
       GameDTO gameDTO = gameService.findById(GAME_EAN_TEST);
-      String newEan = "newEAN";
-      String newTitle = "NewTitle";
+      String newEan = "newGameEAN";
+      String newTitle = "NewGameTitle";
 
       gameDTO.setEan(newEan);
       gameDTO.setTitle(newTitle);
@@ -153,11 +172,66 @@ class GameServiceTest {
 
 
    @Test
-   void entityToDTO() {
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Game DTO is converted in right Game Entity")
+   void dtoToEntity_returnRightGameEntity_ofGameDTO() {
+      List<GameDTO> gameDTOS = gameService.findAll();
+      Game entity;
+
+      for (GameDTO dto: gameDTOS) {
+         entity = gameService.dtoToEntity(dto);
+         assertThat(entity.getEan()).isEqualTo(dto.getEan());
+         assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
+         assertThat(entity.getQuantity()).isEqualTo(dto.getQuantity());
+         assertThat(entity.getStock()).isEqualTo(dto.getStock());
+         assertThat(entity.getHeight()).isEqualTo(dto.getHeight());
+         assertThat(entity.getLength()).isEqualTo(dto.getLength());
+         assertThat(entity.getWeight()).isEqualTo(dto.getWeight());
+         assertThat(entity.getWidth()).isEqualTo(dto.getWidth());
+         assertThat(entity.getReturnDate()).isEqualTo(dto.getReturnDate());
+
+         assertThat(entity.getEditorId()).isEqualTo(dto.getEditor().getId());
+         assertThat(entity.getUrl()).isEqualTo(dto.getUrl());
+         assertThat(entity.getPublicationDate()).isEqualTo(dto.getPublicationDate());
+         assertThat(entity.getFormat().name()).isEqualTo(dto.getFormat());
+         assertThat(entity.getType().name()).isEqualTo(dto.getType());
+         assertThat(entity.getPegi()).isEqualTo(dto.getPegi());
+         assertThat(entity.getSummary()).isEqualTo(dto.getSummary());
+      }
    }
 
    @Test
-   void dtoToEntity() {
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Game Entity is converted in right Game DTO")
+   void dtoToEntity_returnRightGameDTO_ofGameEntity() {
+      List<GameDTO> gameDTOS = gameService.findAll();
+      List<Game> games = new ArrayList<>();
+      GameDTO dto;
+
+      for (GameDTO g: gameDTOS) {
+         games.add(gameService.dtoToEntity(g));
+      }
+
+      for (Game entity: games) {
+         dto = gameService.entityToDTO(entity);
+         assertThat(dto.getEan()).isEqualTo(entity.getEan());
+         assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
+         assertThat(dto.getQuantity()).isEqualTo(entity.getQuantity());
+         assertThat(dto.getStock()).isEqualTo(entity.getStock());
+         assertThat(dto.getHeight()).isEqualTo(entity.getHeight());
+         assertThat(dto.getLength()).isEqualTo(entity.getLength());
+         assertThat(dto.getWeight()).isEqualTo(entity.getWeight());
+         assertThat(dto.getWidth()).isEqualTo(entity.getWidth());
+         assertThat(dto.getReturnDate()).isEqualTo(entity.getReturnDate());
+
+         assertThat(dto.getEditor().getId()).isEqualTo(entity.getEditorId());
+         assertThat(dto.getUrl()).isEqualTo(entity.getUrl());
+         assertThat(dto.getPublicationDate()).isEqualTo(entity.getPublicationDate());
+         assertThat(dto.getFormat()).isEqualTo(entity.getFormat().name());
+         assertThat(dto.getType()).isEqualTo(entity.getType().name());
+         assertThat(dto.getPegi()).isEqualTo(entity.getPegi());
+         assertThat(dto.getSummary()).isEqualTo(entity.getSummary());
+      }
    }
 
    @Test

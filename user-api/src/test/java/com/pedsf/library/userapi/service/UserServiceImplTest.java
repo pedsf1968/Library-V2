@@ -73,7 +73,7 @@ class UserServiceImplTest {
    @Test
    @Tag("userToUserDTO")
    @DisplayName("Verify that User Entity is converted in right User DTO")
-   void userDTOtoUser_returnRightUserEntity_ofUserDTO() {
+   void usertoUserDTO_returnRightUserEntity_ofUserDTO() {
       List<UserDTO> userDTOS = userService.findAll();
       List<User> users = new ArrayList<>();
       UserDTO userDTO;
@@ -254,7 +254,6 @@ class UserServiceImplTest {
    @Tag("getFirstId")
    @DisplayName("getFirstId")
    void getFirstId() {
-      List<UserDTO> userDTOS = userService.findAll();
       List<UserDTO> found;
       UserDTO filter = new UserDTO();
 

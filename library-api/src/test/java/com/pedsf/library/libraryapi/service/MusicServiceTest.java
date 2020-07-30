@@ -1,7 +1,10 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.libraryapi.model.Book;
+import com.pedsf.library.libraryapi.model.Music;
 import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,8 +100,23 @@ class MusicServiceTest {
    }
 
    @Test
-   void findAllAllowed() {
+   @Tag("findAllAllowed")
+   @DisplayName("Verify that we got the list of Musics that can be booked")
+   void findAllAllowed_returnBookableMusics_ofAllMusics() {
+      List<MusicDTO> musicDTOS = musicService.findAll();
+      List<MusicDTO> alloweds = musicService.findAllAllowed();
+
+      for(MusicDTO musicDTO: musicDTOS) {
+         if (alloweds.contains(musicDTO)) {
+            // allowed
+            assertThat(musicDTO.getStock()).isGreaterThan(-musicDTO.getQuantity()*2);
+         } else {
+            // not allowed
+            assertThat(musicDTO.getStock()).isLessThanOrEqualTo(-musicDTO.getQuantity()*2);
+         }
+      }
    }
+
 
    @Test
    @Tag("findAllFiltered")
@@ -124,8 +143,8 @@ class MusicServiceTest {
    @DisplayName("Verify that we can create a new Music")
    void save_returnCreatedMusic_ofNewMusic() {
       MusicDTO musicDTO = musicService.findById(MUSIC_EAN_TEST);
-      String newEan = "newEAN";
-      String newTitle = "NewTitle";
+      String newEan = "newMusicEAN";
+      String newTitle = "NewMusicTitle";
 
       musicDTO.setEan(newEan);
       musicDTO.setTitle(newTitle);
@@ -153,13 +172,69 @@ class MusicServiceTest {
       assertThat(musicService.count()).isEqualTo(4);
    }
 
-
    @Test
-   void entityToDTO() {
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Music DTO is converted in right Music Entity")
+   void dtoToEntity_returnRightMusicEntity_ofMusicDTO() {
+      List<MusicDTO> musicDTOS = musicService.findAll();
+      Music entity;
+
+      for (MusicDTO dto: musicDTOS) {
+         entity = musicService.dtoToEntity(dto);
+         assertThat(entity.getEan()).isEqualTo(dto.getEan());
+         assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
+         assertThat(entity.getQuantity()).isEqualTo(dto.getQuantity());
+         assertThat(entity.getStock()).isEqualTo(dto.getStock());
+         assertThat(entity.getHeight()).isEqualTo(dto.getHeight());
+         assertThat(entity.getLength()).isEqualTo(dto.getLength());
+         assertThat(entity.getWeight()).isEqualTo(dto.getWeight());
+         assertThat(entity.getWidth()).isEqualTo(dto.getWidth());
+         assertThat(entity.getReturnDate()).isEqualTo(dto.getReturnDate());
+
+         assertThat(entity.getDuration()).isEqualTo(dto.getDuration());
+         assertThat(entity.getAuthorId()).isEqualTo(dto.getAuthor().getId());
+         assertThat(entity.getComposerId()).isEqualTo(dto.getComposer().getId());
+         assertThat(entity.getInterpreterId()).isEqualTo(dto.getInterpreter().getId());
+         assertThat(entity.getUrl()).isEqualTo(dto.getUrl());
+         assertThat(entity.getPublicationDate()).isEqualTo(dto.getPublicationDate());
+         assertThat(entity.getFormat().name()).isEqualTo(dto.getFormat());
+         assertThat(entity.getType().name()).isEqualTo(dto.getType());
+      }
    }
 
    @Test
-   void dtoToEntity() {
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Music Entity is converted in right Music DTO")
+   void dtoToEntity_returnRightMusicDTO_ofMusicEntity() {
+      List<MusicDTO> musicDTOS = musicService.findAll();
+      List<Music> music = new ArrayList<>();
+      MusicDTO dto;
+
+      for (MusicDTO m: musicDTOS) {
+         music.add(musicService.dtoToEntity(m));
+      }
+
+      for (Music entity: music) {
+         dto = musicService.entityToDTO(entity);
+         assertThat(dto.getEan()).isEqualTo(entity.getEan());
+         assertThat(dto.getTitle()).isEqualTo(entity.getTitle());
+         assertThat(dto.getQuantity()).isEqualTo(entity.getQuantity());
+         assertThat(dto.getStock()).isEqualTo(entity.getStock());
+         assertThat(dto.getHeight()).isEqualTo(entity.getHeight());
+         assertThat(dto.getLength()).isEqualTo(entity.getLength());
+         assertThat(dto.getWeight()).isEqualTo(entity.getWeight());
+         assertThat(dto.getWidth()).isEqualTo(entity.getWidth());
+         assertThat(dto.getReturnDate()).isEqualTo(entity.getReturnDate());
+
+         assertThat(dto.getDuration()).isEqualTo(entity.getDuration());
+         assertThat(dto.getAuthor().getId()).isEqualTo(entity.getAuthorId());
+         assertThat(dto.getComposer().getId()).isEqualTo(entity.getComposerId());
+         assertThat(dto.getInterpreter().getId()).isEqualTo(entity.getInterpreterId());
+         assertThat(dto.getUrl()).isEqualTo(entity.getUrl());
+         assertThat(dto.getPublicationDate()).isEqualTo(entity.getPublicationDate());
+         assertThat(dto.getFormat()).isEqualTo(entity.getFormat().name());
+         assertThat(dto.getType()).isEqualTo(entity.getType().name());
+      }
    }
 
    @Test
