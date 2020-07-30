@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.MusicDTO;
+import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -162,19 +163,35 @@ class MusicServiceTest {
    }
 
    @Test
+   @Tag("findAllAuthors")
+   @DisplayName("Verify that we get all Musics authors")
    void findAllAuthors() {
+      List<PersonDTO> personDTOS = musicService.findAllAuthors();
+      assertThat(personDTOS.size()).isEqualTo(2);
    }
 
    @Test
+   @Tag("findAllComposers")
+   @DisplayName("Verify that we get all Musics composers")
    void findAllComposers() {
+      List<PersonDTO> personDTOS = musicService.findAllComposers();
+      assertThat(personDTOS.size()).isEqualTo(2);
    }
 
    @Test
+   @Tag("findAllInterpreters")
+   @DisplayName("Verify that we get all Musics interpreters")
    void findAllInterpreters() {
+      List<PersonDTO> personDTOS = musicService.findAllInterpreters();
+      assertThat(personDTOS.size()).isEqualTo(2);
    }
 
    @Test
+   @Tag("findAllTitles")
+   @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
+      List<String> titles = musicService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(4);
    }
 
    @Test

@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.BookDTO;
+import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.repository.BookRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import org.junit.jupiter.api.Assertions;
@@ -160,15 +161,27 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("findAllAuthors")
+   @DisplayName("Verify that we get all Books authors")
    void findAllAuthors() {
+      List<PersonDTO> personDTOS = bookService.findAllAuthors();
+      assertThat(personDTOS.size()).isEqualTo(3);
    }
 
    @Test
+   @Tag("findAllEditors")
+   @DisplayName("Verify that we get all Books editors")
    void findAllEditors() {
+      List<PersonDTO> personDTOS = bookService.findAllEditors();
+      assertThat(personDTOS.size()).isEqualTo(3);
    }
 
    @Test
+   @Tag("findAllTitles")
+   @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
+      List<String> titles = bookService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(7);
    }
 
    @Test

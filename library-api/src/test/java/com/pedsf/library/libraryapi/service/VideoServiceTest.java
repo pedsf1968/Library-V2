@@ -2,6 +2,7 @@ package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
+import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
@@ -164,15 +165,27 @@ class VideoServiceTest {
    }
 
    @Test
+   @Tag("findAllDirectors")
+   @DisplayName("Verify that we get all Videos Director")
    void findAllDirectors() {
+      List<PersonDTO> personDTOS = videoService.findAllDirectors();
+      assertThat(personDTOS.size()).isEqualTo(1);
    }
 
    @Test
+   @Tag("findAllActors")
+   @DisplayName("Verify that we get all Videos actors")
    void findAllActors() {
+      List<PersonDTO> personDTOS = videoService.findAllActors();
+      assertThat(personDTOS.size()).isEqualTo(5);
    }
 
    @Test
+   @Tag("findAllTitles")
+   @DisplayName("Verify that we get all Videos titles")
    void findAllTitles() {
+      List<String> titles = videoService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(1);
    }
 
    @Test

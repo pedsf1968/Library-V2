@@ -161,7 +161,11 @@ class GameServiceTest {
    }
 
    @Test
+   @Tag("findAllTitles")
+   @DisplayName("Verify that we get all Games titles")
    void findAllTitles() {
+      List<String> titles = gameService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(2);
    }
 
    @Test
