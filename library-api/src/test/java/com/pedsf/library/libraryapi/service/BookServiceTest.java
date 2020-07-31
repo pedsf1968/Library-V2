@@ -3,12 +3,11 @@ package com.pedsf.library.libraryapi.service;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.model.Book;
+import com.pedsf.library.libraryapi.model.BookFormat;
+import com.pedsf.library.libraryapi.model.BookType;
 import com.pedsf.library.libraryapi.repository.BookRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,13 +26,14 @@ class BookServiceTest {
    private static final String BOOK_EAN_TEST = "978-2253002864";
    private static final String BOOK_TITLE_TEST = "Le Horla";
 
+   private static Book newBook = new Book();
+
    @TestConfiguration
    static class bookServiceTestConfiguration {
       @Autowired
       private BookRepository bookRepository;
       @Autowired
       private PersonRepository personRepository;
-
 
       @Bean
       public BookService bookService() {
@@ -45,6 +45,24 @@ class BookServiceTest {
 
    @Autowired
    private BookService bookService;
+
+   @BeforeAll
+   static void beforeAll() {
+      newBook.setTitle("The green tomato");
+      newBook.setAuthorId(1);
+      newBook.setEditorId(1);
+      newBook.setEan("954-8789797");
+      newBook.setIsbn("9548789797");
+      newBook.setPages(125);
+      newBook.setFormat(BookFormat.COMICS);
+      newBook.setType(BookType.HUMOR);
+      newBook.setHeight(11);
+      newBook.setLength(11);
+      newBook.setWidth(11);
+      newBook.setWeight(220);
+      newBook.setStock(1);
+      newBook.setQuantity(1);
+   }
 
    @Test
    @DisplayName("Verify that return TRUE if the Book exist")
@@ -91,16 +109,26 @@ class BookServiceTest {
 
    @Test
    @Tag("findAll")
-   @DisplayName("Verify that we have the list of all Users")
+   @DisplayName("Verify that we have the list of all Books")
    void findAll_returnAllBooks() {
+      BookDTO newBookDTO = bookService.entityToDTO(newBook);
       List<BookDTO> bookDTOS = bookService.findAll();
       assertThat(bookDTOS.size()).isEqualTo(7);
+
+      // add one book to increasee the list
+      newBookDTO = bookService.save(newBookDTO);
+      bookDTOS = bookService.findAll();
+      assertThat(bookDTOS.size()).isEqualTo(8);
+
+      bookService.deleteById(newBookDTO.getEan());
    }
 
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Books that can be booked")
    void findAllAllowed_returnBookableBooks_ofAllBooks() {
+      newBook.setStock(-2);
+      BookDTO newBookDTO = bookService.save(bookService.entityToDTO(newBook));
       List<BookDTO> bookDTOS = bookService.findAll();
       List<BookDTO> alloweds = bookService.findAllAllowed();
 
@@ -110,9 +138,13 @@ class BookServiceTest {
             assertThat(bookDTO.getStock()).isGreaterThan(-bookDTO.getQuantity()*2);
          } else {
             // not allowed
+
             assertThat(bookDTO.getStock()).isLessThanOrEqualTo(-bookDTO.getQuantity()*2);
          }
       }
+
+      newBook.setStock(1);
+      bookService.deleteById(newBookDTO.getEan());
    }
 
    @Test
@@ -137,16 +169,11 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("save")
    @DisplayName("Verify that we can create a new Book")
    void save_returnCreatedBook_ofNewBook() {
-      BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
-      String newEan = "newEAN";
-      String newTitle = "NewTitle";
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
 
-      bookDTO.setEan(newEan);
-      bookDTO.setTitle(newTitle);
-      bookDTO.setReturnDate(null);
-      bookDTO.setPublicationDate(null);
       bookDTO = bookService.save(bookDTO);
       String ean = bookDTO.getEan();
 
@@ -175,14 +202,8 @@ class BookServiceTest {
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
    void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
-      BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
-      String newEan = "newEAN";
-      String newTitle = "NewTitle";
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
 
-      bookDTO.setEan(newEan);
-      bookDTO.setTitle(newTitle);
-      bookDTO.setReturnDate(null);
-      bookDTO.setPublicationDate(null);
       bookDTO = bookService.save(bookDTO);
       String ean = bookDTO.getEan();
 
@@ -198,7 +219,13 @@ class BookServiceTest {
    @Tag("count")
    @DisplayName("Verify that we have the right number of Books")
    void count_returnTheNumberOfBooks() {
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
       assertThat(bookService.count()).isEqualTo(7);
+
+      // add an other book
+      bookDTO = bookService.save(bookDTO);
+      assertThat(bookService.count()).isEqualTo(8);
+      bookService.deleteById(bookDTO.getEan());
    }
 
    @Test
@@ -286,8 +313,16 @@ class BookServiceTest {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
       List<String> titles = bookService.findAllTitles();
       assertThat(titles.size()).isEqualTo(7);
+
+      // add an other book
+      bookDTO = bookService.save(bookDTO);
+      titles = bookService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(8);
+
+      bookService.deleteById(bookDTO.getEan());
    }
 
    @Test

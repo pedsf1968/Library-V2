@@ -1,7 +1,9 @@
 package com.pedsf.library.libraryapi.service;
 
 import com.pedsf.library.dto.business.MediaDTO;
+import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.model.MediaType;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MediaServiceTest {
    private static final String MEDIA_EAN_TEST = "978-2253002864";
    private static final Integer MEDIA_EAN_ID = 5;
+
+   private static Media newMedia = new Media();
 
    @TestConfiguration
    static class mediaServiceTestConfiguration {
@@ -51,6 +55,15 @@ class MediaServiceTest {
 
    @Autowired
    private MediaService mediaService;
+
+   @BeforeAll
+   static void beforeAll() {
+      newMedia.setId(44);
+      newMedia.setEan("954-8789797");
+      newMedia.setMediaType(MediaType.BOOK);
+      newMedia.setStatus(MediaStatus.BOOKED);
+      newMedia.setReturnDate(null);
+   }
 
    @Test
    @DisplayName("Verify that return TRUE if the Media exist")

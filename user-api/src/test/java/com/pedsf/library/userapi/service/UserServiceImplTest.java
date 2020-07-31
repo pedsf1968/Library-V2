@@ -43,6 +43,7 @@ class UserServiceImplTest {
    private UserService userService;
 
 
+
    @Test
    @Tag("userDTOtoUser")
    @DisplayName("Verify that User DTO is converted in right User Entity")
@@ -121,7 +122,7 @@ class UserServiceImplTest {
 
    @Test
    @Tag("updateStatus")
-   @DisplayName("Verify thaht we can update the user statusupdateStatus")
+   @DisplayName("Verify that we can update the user statusupdateStatus")
    void updateStatus_returnNewStatus_ofUserChangedStatus() {
       UserDTO userDTO = userService.findById(USER_ID_TEST);
       String newStatus = "NewStatus";
