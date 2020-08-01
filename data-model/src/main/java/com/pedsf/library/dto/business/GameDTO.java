@@ -27,7 +27,7 @@ import java.sql.Date;
  * summary : Game summary
  */
 @Data
-public class GameDTO extends CommonDTO implements Serializable {
+public class GameDTO extends MediaCommonDTO implements Serializable {
    private static final int PEGI_MAX = 4;
 
    // Game information

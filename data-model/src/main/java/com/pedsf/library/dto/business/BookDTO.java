@@ -30,7 +30,7 @@ import java.sql.Date;
  * summary : Book summary
  */
 @Data
-public class BookDTO extends CommonDTO implements Serializable {
+public class BookDTO extends MediaCommonDTO implements Serializable {
    private static final int ISBN_MAX = 20;
 
    // Book attributes

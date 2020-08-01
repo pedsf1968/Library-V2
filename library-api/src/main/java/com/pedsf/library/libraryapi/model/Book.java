@@ -1,10 +1,10 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.dto.business.PersonDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -35,48 +35,11 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name = "book")
-public class Book implements Serializable {
-   private static final int EAN_MAX = 20;
+public class Book extends MediaCommon implements Serializable {
    private static final int ISBN_MAX = 20;
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
    private static final int TYPE_MAX = 20;
    private static final int FORMAT_MAX = 20;
    private static final int SUMMARY_MAX = 2048;
-
-   // Media information
-   @Id
-   @Column(name = "ean", length = EAN_MAX)
-   private String ean;
-
-   @NotNull
-   @NotBlank
-   @Size(min = TITLE_MIN, max = TITLE_MAX)
-   @Column(name = "title", length = TITLE_MAX)
-   private String title;
-
-   @NotNull
-   private Integer quantity;
-   @NotNull
-   private Integer stock;
-
-   // weight and dimensions for transport informations
-   @Column(name = "weight")
-   private Integer weight;
-
-   @Column(name = "length")
-   private Integer length;
-
-   @Column(name = "width")
-   private Integer width;
-
-   @Column(name = "height")
-   private Integer height;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   @Column(name = "return_date")
-   private Date returnDate;
-
 
    // Book information
    @NotNull

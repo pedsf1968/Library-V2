@@ -1,21 +1,17 @@
-package com.pedsf.library.libraryapi.service;
+package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
-import com.pedsf.library.libraryapi.model.Book;
-import com.pedsf.library.libraryapi.model.Game;
+import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.GameRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import com.pedsf.library.libraryapi.service.GameService;
+import com.pedsf.library.libraryapi.service.PersonService;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,34 +20,57 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class GameServiceTest {
+class GameServiceTestIT {
    private static final String GAME_EAN_TEST = "0805529340299";
+   private static final String GAME_TITLE_TEST = "The green tomato";
 
-   @TestConfiguration
-   static class gameServiceTestConfiguration {
-      @Autowired
-      private GameRepository gameRepository;
-      @Autowired
-      private PersonRepository personRepository;
+   private static GameService gameService;
+   private static Game newGame;
+   private static GameDTO newGameDTO = new GameDTO();
+   private static List<GameDTO> allGameDTOS;
 
 
-      @Bean
-      public GameService gameService() {
-         PersonService personService = new PersonService(personRepository);
+   @BeforeAll
+   static void beforeAll(@Autowired GameRepository gameRepository, @Autowired PersonRepository personRepository) {
 
-         return new GameService(gameRepository,personService);
-      }
+      PersonService personService = new PersonService(personRepository);
+      gameService =  new GameService(gameRepository,personService);
    }
 
-   @Autowired
-   private GameService gameService;
+   @BeforeEach
+   void beforeEach() {
+      newGame = new Game();
+
+      newGame.setTitle("The green tomato");
+      newGame.setEditorId(3);
+      newGame.setEan("954-87sdf797");
+      newGame.setFormat(GameFormat.NINTENDO_WII);
+      newGame.setType(GameType.ADVENTURE);
+      newGame.setHeight(11);
+      newGame.setLength(11);
+      newGame.setWidth(11);
+      newGame.setWeight(220);
+      newGame.setStock(1);
+      newGame.setQuantity(1);
+      newGame.setPegi("3+");
+      newGame.setSummary("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
+            "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin " +
+            "professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur," +
+            " from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered " +
+            "the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et " +
+            "Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory" +
+            " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
+            " comes from a line in section 1.10.32.");
+
+      newGameDTO = gameService.entityToDTO(newGame);
+      allGameDTOS = gameService.findAll();
+   }
+
 
    @Test
    @DisplayName("Verify that return TRUE if the Game exist")
    void existsById_returnTrue_OfAnExistingGameId() {
-      List<GameDTO> gameDTOS = gameService.findAll();
-
-      for(GameDTO gameDTO : gameDTOS) {
+      for(GameDTO gameDTO : allGameDTOS) {
          String ean = gameDTO.getEan();
          assertThat(gameService.existsById(ean)).isTrue();
       }
@@ -68,10 +87,9 @@ class GameServiceTest {
    @Tag("findById")
    @DisplayName("Verify that we can find Game by is ID")
    void findById_returnUser_ofExistingGameId() {
-      List<GameDTO> gameDTOS = gameService.findAll();
       GameDTO found;
 
-      for(GameDTO gameDTO : gameDTOS) {
+      for(GameDTO gameDTO : allGameDTOS) {
          String ean = gameDTO.getEan();
          found = gameService.findById(ean);
 
@@ -93,14 +111,25 @@ class GameServiceTest {
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Games")
    void findAll_returnAllGamesUser() {
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
+      assertThat(allGameDTOS.size()).isEqualTo(2);
+
+      // add new Game to increase the list
+      newGameDTO = gameService.save(newGameDTO);
       List<GameDTO> gameDTOS = gameService.findAll();
-      assertThat(gameDTOS.size()).isEqualTo(2);
+      assertThat(gameDTOS.size()).isEqualTo(3);
+      assertThat(gameDTOS.contains(newGameDTO)).isTrue();
+
+      gameService.deleteById(newGameDTO.getEan());
    }
 
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Games that can be booked")
    void findAllAllowed_returnBookableGames_ofAllGames() {
+      newGame.setStock(-2);
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
+      newGameDTO = gameService.save(newGameDTO);
       List<GameDTO> gameDTOS = gameService.findAll();
       List<GameDTO> alloweds = gameService.findAllAllowed();
 
@@ -113,6 +142,10 @@ class GameServiceTest {
             assertThat(gameDTO.getStock()).isLessThanOrEqualTo(-gameDTO.getQuantity()*2);
          }
       }
+
+      newGame.setStock(1);
+      gameService.deleteById(newGameDTO.getEan());
+
    }
 
 
@@ -120,9 +153,8 @@ class GameServiceTest {
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Game by his title and editor")
    void findAllFiltered_returnOnlyOneGame_ofExistingTitleAndEditor() {
-      List<GameDTO> gameDTOS = gameService.findAll();
       List<GameDTO> found;
-      for(GameDTO g:gameDTOS) {
+      for(GameDTO g:allGameDTOS) {
          GameDTO filter = new GameDTO();
          filter.setTitle(g.getTitle());
          filter.setEditor(g.getEditor());
@@ -140,27 +172,44 @@ class GameServiceTest {
    @Test
    @DisplayName("Verify that we can create a new Game")
    void save_returnCreatedGame_ofNewGame() {
-      GameDTO gameDTO = gameService.findById(GAME_EAN_TEST);
-      String newEan = "newGameEAN";
-      String newTitle = "NewGameTitle";
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
 
-      gameDTO.setEan(newEan);
-      gameDTO.setTitle(newTitle);
-      gameDTO.setReturnDate(null);
-      gameDTO.setPublicationDate(null);
-      gameDTO = gameService.save(gameDTO);
-      String ean = gameDTO.getEan();
+      newGameDTO = gameService.save(newGameDTO);
+      String ean = newGameDTO.getEan();
 
       assertThat(gameService.existsById(ean)).isTrue();
       gameService.deleteById(ean);
    }
 
    @Test
-   void update() {
+   @Tag("update")
+   @DisplayName("Verify that we can update an Game")
+   void update_returnUpdatedGame_ofGameAndNewTitle() {
+      GameDTO gameDTO = gameService.findById(GAME_EAN_TEST);
+      String oldTitle = gameDTO.getTitle();
+      gameDTO.setTitle(GAME_TITLE_TEST);
+
+      GameDTO gameSaved = gameService.update(gameDTO);
+      assertThat(gameSaved).isEqualTo(gameDTO);
+      GameDTO gameFound = gameService.findById(gameDTO.getEan());
+      assertThat(gameFound).isEqualTo(gameDTO);
+
+      gameDTO.setTitle(oldTitle);
+      gameService.update(gameDTO);
    }
 
    @Test
-   void deleteById() {
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Game by his EAN")
+   void deleteById_returnExceptionWhenGetGameById_ofDeletedGameById() {
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
+
+      newGameDTO = gameService.save(newGameDTO);
+      String ean = newGameDTO.getEan();
+
+      assertThat(gameService.existsById(ean)).isTrue();
+      gameService.deleteById(ean);
+
    }
 
    @Test
@@ -175,10 +224,9 @@ class GameServiceTest {
    @Tag("dtoToEntity")
    @DisplayName("Verify that Game DTO is converted in right Game Entity")
    void dtoToEntity_returnRightGameEntity_ofGameDTO() {
-      List<GameDTO> gameDTOS = gameService.findAll();
       Game entity;
 
-      for (GameDTO dto: gameDTOS) {
+      for (GameDTO dto: allGameDTOS) {
          entity = gameService.dtoToEntity(dto);
          assertThat(entity.getEan()).isEqualTo(dto.getEan());
          assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
@@ -204,11 +252,10 @@ class GameServiceTest {
    @Tag("entityToDTO")
    @DisplayName("Verify that Game Entity is converted in right Game DTO")
    void dtoToEntity_returnRightGameDTO_ofGameEntity() {
-      List<GameDTO> gameDTOS = gameService.findAll();
       List<Game> games = new ArrayList<>();
       GameDTO dto;
 
-      for (GameDTO g: gameDTOS) {
+      for (GameDTO g: allGameDTOS) {
          games.add(gameService.dtoToEntity(g));
       }
 
@@ -238,8 +285,19 @@ class GameServiceTest {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Games titles")
    void findAllTitles() {
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
       List<String> titles = gameService.findAllTitles();
+
       assertThat(titles.size()).isEqualTo(2);
+
+      // add new Game
+      newGameDTO.setTitle(GAME_TITLE_TEST);
+      newGameDTO = gameService.save(newGameDTO);
+      titles = gameService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(3);
+      assertThat(titles.contains(GAME_TITLE_TEST)).isTrue();
+
+      gameService.deleteById(newGameDTO.getEan());
    }
 
    @Test
@@ -248,9 +306,11 @@ class GameServiceTest {
    void increaseStock_returnGameWithIncrementedStock_ofOneGame() {
       GameDTO gameDTO = gameService.findById(GAME_EAN_TEST);
       Integer oldStock = gameDTO.getStock();
+
       gameService.increaseStock(GAME_EAN_TEST);
       gameDTO = gameService.findById(GAME_EAN_TEST);
       assertThat(gameDTO.getStock()).isEqualTo(oldStock+1);
+
       gameDTO.setStock(oldStock);
       gameService.update(gameDTO);
    }
@@ -261,9 +321,12 @@ class GameServiceTest {
    void decreaseStock_returnGameWithDecrementedStock_ofOneGame() {
       GameDTO gameDTO = gameService.findById(GAME_EAN_TEST);
       Integer oldStock = gameDTO.getStock();
+
       gameService.decreaseStock(GAME_EAN_TEST);
       gameDTO = gameService.findById(GAME_EAN_TEST);
+
       assertThat(gameDTO.getStock()).isEqualTo(oldStock-1);
+
       gameDTO.setStock(oldStock);
       gameService.update(gameDTO);
    }

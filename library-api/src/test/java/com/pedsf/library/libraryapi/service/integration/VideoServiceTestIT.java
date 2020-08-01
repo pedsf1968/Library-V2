@@ -1,10 +1,12 @@
-package com.pedsf.library.libraryapi.service;
+package com.pedsf.library.libraryapi.service.integration;
 
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.libraryapi.model.Video;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import com.pedsf.library.libraryapi.repository.VideoRepository;
+import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.libraryapi.service.VideoService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class VideoServiceTest {
+class VideoServiceTestIT {
    private static final String VIDEO_EAN_TEST = "3475001058980";
 
    @TestConfiguration

@@ -23,7 +23,7 @@ import java.sql.Date;
  * returnDate : the date of the next expected return (null if all Media are available in stock)
  */
 @Data
-public class CommonDTO implements Serializable {
+public class MediaCommonDTO implements Serializable {
    protected static final int TITLE_MIN = 1;
    protected static final int TITLE_MAX = 50;
    protected static final int EAN_MAX = 20;

@@ -225,11 +225,11 @@ public class VideoService implements GenericMediaService<VideoDTO, Video,String>
       return videoRepository.findAllTitles();
    }
 
-   void increaseStock(String ean) {
+   public void increaseStock(String ean) {
       videoRepository.increaseStock(ean);
    }
 
-   void decreaseStock(String ean) {
+   public void decreaseStock(String ean) {
       videoRepository.decreaseStock(ean);
    }
 

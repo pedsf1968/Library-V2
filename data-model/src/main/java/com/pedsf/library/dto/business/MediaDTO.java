@@ -28,7 +28,7 @@ import java.util.Date;
  * stock : remaining Media in the library to be borrowed. It become negative if they are bookings
  */
 @Data
-public class MediaDTO extends CommonDTO implements Serializable {
+public class MediaDTO extends MediaCommonDTO implements Serializable {
    private static final int MEDIA_STATUS_MAX = 10;
    private static final int MEDIA_TYPE_MAX = 10;
 

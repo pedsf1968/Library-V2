@@ -1,8 +1,9 @@
-package com.pedsf.library.libraryapi.service;
+package com.pedsf.library.libraryapi.service.integration;
 
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import com.pedsf.library.model.MediaType;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class MediaServiceTest {
+class MediaServiceTestIT {
    private static final String MEDIA_EAN_TEST = "978-2253002864";
    private static final Integer MEDIA_EAN_ID = 5;
 

@@ -38,10 +38,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "video")
-public class Video implements Serializable {
-   private static final int EAN_MAX = 20;
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
+public class Video extends MediaCommon implements Serializable {
    private static final int TYPE_MAX = 20;
    private static final int FORMAT_MAX = 20;
    private static final int AUDIO_FORMAT_MAX = 255;
@@ -49,39 +46,6 @@ public class Video implements Serializable {
    private static final int PUBLIC_TYPE_MAX = 20;
    private static final int URL_MAX = 255; // default length
    private static final int SUMMARY_MAX = 2048;
-
-   // Media information
-   @Id
-   @Column(name = "ean", length = EAN_MAX)
-   private String ean;
-
-   @NotNull
-   @NotBlank
-   @Size(min = TITLE_MIN, max = TITLE_MAX)
-   @Column(name = "title", length = TITLE_MAX)
-   private String title;
-
-   @NotNull
-   private Integer quantity;
-   @NotNull
-   private Integer stock;
-
-   // weight and dimensions for transport informations
-   @Column(name = "weight")
-   private Integer weight;
-
-   @Column(name = "length")
-   private Integer length;
-
-   @Column(name = "width")
-   private Integer width;
-
-   @Column(name = "height")
-   private Integer height;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   @Column(name = "return_date")
-   private Date returnDate;
 
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

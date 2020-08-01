@@ -1,4 +1,4 @@
-package com.pedsf.library.eurekaserver.eurekaserver;
+package com.pedsf.library.eurekaserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

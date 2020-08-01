@@ -5,10 +5,12 @@ import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
+import com.pedsf.library.libraryapi.model.Booking;
 import com.pedsf.library.libraryapi.model.Borrowing;
 import com.pedsf.library.libraryapi.model.MediaStatus;
 import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
+import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingSpecification;
 import org.apache.commons.lang.time.DateUtils;
@@ -41,15 +43,15 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    @Value("${library.borrowing.quantity.max}")
    private int quantityMax;
 
+   private final BookingRepository bookingRepository;
    private final BorrowingRepository borrowingRepository;
-   private final BookingService bookingService;
    private final MediaService mediaService;
    private final UserApiProxy userApiProxy;
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BorrowingService(BorrowingRepository borrowingRepository, BookingService bookingService, MediaService mediaService, UserApiProxy userApiProxy) {
+   public BorrowingService(BorrowingRepository borrowingRepository, BookingRepository bookingRepository, MediaService mediaService, UserApiProxy userApiProxy) {
       this.borrowingRepository = borrowingRepository;
-      this.bookingService = bookingService;
+      this.bookingRepository = bookingRepository;
       this.mediaService = mediaService;
       this.userApiProxy = userApiProxy;
    }
@@ -277,7 +279,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
       // release the media
       mediaService.release(mediaId);
-      BookingDTO bookingDTO = bookingService.findNextBookingByMediaId(mediaDTO.getEan());
+      Booking booking = bookingRepository.findNextBookingByMediaId(mediaDTO.getEan());
 
       // set this media booked to borrow only by the user
       mediaService.setStatus(mediaId, MediaStatus.BOOKED);
@@ -288,7 +290,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       calendar.setTime(today);
       calendar.add(Calendar.DATE, daysOfDelay);
 
-      bookingService.updatePickUpDate(bookingDTO.getId(),new java.sql.Date(calendar.getTimeInMillis()));
+      bookingRepository.updatePickUpDate(booking.getId(),new java.sql.Date(calendar.getTimeInMillis()));
 
 
       return entityToDTO(borrowing);
@@ -303,7 +305,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    public List<BorrowingDTO> findDelayed(Date date){
       java.sql.Date sDate = new java.sql.Date(date.getTime());
 
-      List<Borrowing> borrowings = new ArrayList<>();
+      List<Borrowing> borrowings;
       List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
 
       borrowings = borrowingRepository.findDelayed( sDate, daysOfDelay, maxExtention);

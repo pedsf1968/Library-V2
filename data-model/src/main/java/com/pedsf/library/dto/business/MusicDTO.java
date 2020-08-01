@@ -29,7 +29,7 @@ import java.sql.Date;
  * url : URL link to teaser
  */
 @Data
-public class MusicDTO extends CommonDTO implements Serializable {
+public class MusicDTO extends MediaCommonDTO implements Serializable {
    private static final int PEGI_MAX = 4;
 
    // Music information

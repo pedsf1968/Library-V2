@@ -229,11 +229,11 @@ public class MusicService implements GenericMediaService<MusicDTO,Music,String>{
       return musicRepository.findAllTitles();
    }
 
-   void increaseStock(String ean) {
+   public void increaseStock(String ean) {
       musicRepository.increaseStock(ean);
    }
 
-   void decreaseStock(String ean) {
+   public void decreaseStock(String ean) {
       musicRepository.decreaseStock(ean);
    }
 

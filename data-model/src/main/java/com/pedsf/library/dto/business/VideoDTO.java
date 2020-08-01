@@ -33,7 +33,7 @@ import java.util.List;
  * actors : lists of the actors of the Video
  */
 @Data
-public class VideoDTO extends CommonDTO implements Serializable {
+public class VideoDTO extends MediaCommonDTO implements Serializable {
    private static final int AUDIO_FORMAT_MAX = 255;
    private static final int IMAGE_FORMAT_MAX = 255;
    private static final int PUBLIC_TYPE_MAX = 20;

@@ -211,11 +211,11 @@ public class BookService implements GenericMediaService<BookDTO,Book,String> {
       return bookRepository.findAllTitles();
    }
 
-   void increaseStock(String ean) {
+   public void increaseStock(String ean) {
       bookRepository.increaseStock(ean);
    }
 
-   void decreaseStock(String ean) {
+   public void decreaseStock(String ean) {
       bookRepository.decreaseStock(ean);
    }
 

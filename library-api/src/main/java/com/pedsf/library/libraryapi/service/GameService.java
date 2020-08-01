@@ -179,11 +179,11 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
       return gameRepository.findAllTitles();
    }
 
-   void increaseStock(String ean) {
+   public void increaseStock(String ean) {
       gameRepository.increaseStock(ean);
    }
 
-   void decreaseStock(String ean) {
+   public void decreaseStock(String ean) {
       gameRepository.decreaseStock(ean);
    }
 

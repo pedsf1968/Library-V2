@@ -1,12 +1,12 @@
-package com.pedsf.library.libraryapi.service;
+package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.libraryapi.model.Book;
 import com.pedsf.library.libraryapi.model.Music;
 import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
+import com.pedsf.library.libraryapi.service.MusicService;
+import com.pedsf.library.libraryapi.service.PersonService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class MusicServiceTest {
+class MusicServiceTestIT {
    private static final String MUSIC_EAN_TEST = "4988064587100";
 
    @TestConfiguration
