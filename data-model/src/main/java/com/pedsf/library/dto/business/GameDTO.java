@@ -30,6 +30,9 @@ import java.sql.Date;
 public class GameDTO extends MediaCommonDTO implements Serializable {
    private static final int PEGI_MAX = 4;
 
+   public GameDTO() {
+   }
+
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;

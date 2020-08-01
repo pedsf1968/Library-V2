@@ -29,18 +29,7 @@ public class PersonDTO implements Serializable {
    private static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
    private static final String ERROR_MESSAGE_LESS = "Length should less than : ";
 
-   public PersonDTO(@NotNull Integer id,
-                    @NotNull @NotBlank @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX, message = ERROR_MESSAGE_BETWEEN + FIRSTNAME_MIN + " and " + FIRSTNAME_MAX) String firstName,
-                    @NotNull @NotBlank @Size(min = LASTNAME_MIN, max = LASTNAME_MAX, message = ERROR_MESSAGE_BETWEEN + LASTNAME_MIN + " and " + LASTNAME_MAX) String lastName,
-                    Date birthDate,
-                    @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX) String url,
-                    @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX) String photoUrl) {
-      this.id = id;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.birthDate = birthDate;
-      this.url = url;
-      this.photoUrl = photoUrl;
+   public PersonDTO() {
    }
 
    @NotNull

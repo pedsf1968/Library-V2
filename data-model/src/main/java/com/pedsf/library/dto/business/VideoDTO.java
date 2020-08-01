@@ -38,6 +38,9 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
    private static final int IMAGE_FORMAT_MAX = 255;
    private static final int PUBLIC_TYPE_MAX = 20;
 
+   public VideoDTO() {
+   }
+
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;

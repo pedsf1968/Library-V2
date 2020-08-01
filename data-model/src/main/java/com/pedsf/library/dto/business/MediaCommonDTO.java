@@ -34,6 +34,9 @@ public class MediaCommonDTO implements Serializable {
    protected static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
    protected static final String ERROR_MESSAGE_LESS = "Length should less than : ";
 
+   public MediaCommonDTO() {
+   }
+
    // Media information
    @NotNull
    @Size(max = EAN_MAX, message = ERROR_MESSAGE_LESS + EAN_MAX)

@@ -1,6 +1,5 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -49,7 +48,8 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    private final UserApiProxy userApiProxy;
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BorrowingService(BorrowingRepository borrowingRepository, BookingRepository bookingRepository, MediaService mediaService, UserApiProxy userApiProxy) {
+   public BorrowingService(BorrowingRepository borrowingRepository, BookingRepository bookingRepository,
+                           MediaService mediaService, UserApiProxy userApiProxy) {
       this.borrowingRepository = borrowingRepository;
       this.bookingRepository = bookingRepository;
       this.mediaService = mediaService;

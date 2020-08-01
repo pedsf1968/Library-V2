@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "media-api")
+@FeignClient(name = "zuul-server")
 @RibbonClient(name = "media-api")
 public interface MediaApiProxy {
    @GetMapping("/static/images/{imageName}")

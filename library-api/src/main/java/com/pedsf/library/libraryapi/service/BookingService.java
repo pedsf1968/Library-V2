@@ -12,6 +12,7 @@ import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BookingSpecification;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
    private final ModelMapper modelMapper = new ModelMapper();
 
-   public BookingService(BookingRepository bookingRepository, MediaService mediaService, BorrowingRepository borrowingRepository, UserApiProxy userApiProxy) {
+   public BookingService(BookingRepository bookingRepository, MediaService mediaService,
+                         BorrowingRepository borrowingRepository, UserApiProxy userApiProxy) {
       this.bookingRepository = bookingRepository;
       this.mediaService = mediaService;
       this.borrowingRepository = borrowingRepository;

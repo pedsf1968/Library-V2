@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@FeignClient(name = "user-api")
+@FeignClient(name = "zuul-server")
 @RibbonClient(name = "user-api")
 public interface UserApiProxy {
 

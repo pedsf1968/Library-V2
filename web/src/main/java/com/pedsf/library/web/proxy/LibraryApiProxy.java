@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "library-api")
+@FeignClient(name = "zuul-server")
 @RibbonClient(name = "library-api")
 public interface LibraryApiProxy {
 

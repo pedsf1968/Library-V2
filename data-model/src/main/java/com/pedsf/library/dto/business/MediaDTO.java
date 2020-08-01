@@ -32,6 +32,9 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    private static final int MEDIA_STATUS_MAX = 10;
    private static final int MEDIA_TYPE_MAX = 10;
 
+   public MediaDTO() {
+   }
+
    @NotNull
    protected Integer id;
 

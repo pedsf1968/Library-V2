@@ -33,6 +33,9 @@ import java.sql.Date;
 public class BookDTO extends MediaCommonDTO implements Serializable {
    private static final int ISBN_MAX = 20;
 
+   public BookDTO() {
+   }
+
    // Book attributes
    @NotNull
    @Size(max = ISBN_MAX, message = ERROR_MESSAGE_LESS + ISBN_MAX)

@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients("com.library.web")
+@EnableFeignClients("com.pedsf.library.web")
 public class WebApplication {
 
 	public static void main(String[] args) {

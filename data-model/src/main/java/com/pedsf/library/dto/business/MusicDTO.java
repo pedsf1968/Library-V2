@@ -32,6 +32,9 @@ import java.sql.Date;
 public class MusicDTO extends MediaCommonDTO implements Serializable {
    private static final int PEGI_MAX = 4;
 
+   public MusicDTO() {
+   }
+
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
