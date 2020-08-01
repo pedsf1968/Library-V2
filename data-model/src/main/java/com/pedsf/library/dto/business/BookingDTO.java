@@ -21,10 +21,6 @@ import java.util.Date;
  */
 @Data
 public class BookingDTO implements Serializable {
-
-   public BookingDTO() {
-   }
-
    private Integer id;
 
    @NotNull

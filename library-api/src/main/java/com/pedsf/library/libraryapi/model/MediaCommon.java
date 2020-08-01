@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,35 +12,31 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
- * Entity to manage common part of all Media
+ * Entity to manage common part of all medias
  *
- * id : identification of the Media
- * ean : ean code like ISBN for BOOKS
- * mediaType : type of the Media (BOOK,MUSIC,VIDEO,GAME...)
- * returnDate : the date of the next expected return (null if all Media are available in stock)
- * status : the actual status of the media (FREE, BORROWED, BOOKED, BLOCKED)
- *
- * title : title of the book, movie, music, song, game
- * publicationDate : is the date when the Media is published
+ * ean : EAN code identification of the media
+ * title : title of the media
+ * quantity : number of all media
+ * stock : media in stock it decrease until (-1)*quantity*2 (counter of booking as well)
+ * weight : weight of the media
+ * length : length of the media
+ * width : width of the media
+ * height : height of the media
+ * returnDate : the next return date
  */
 @Data
 @MappedSuperclass
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class MediaCommon implements Serializable {
-   private static final int EAN_MAX = 20;
-   private static final int ISBN_MAX = 20;
-   private static final int TITLE_MIN = 1;
-   private static final int TITLE_MAX = 50;
 
    // Media information
    @Id
-   @Column(name = "ean", length = EAN_MAX)
+   @Column(name = "ean", length = Parameters.EAN_MAX)
    private String ean;
 
    @NotNull
    @NotBlank
-   @Size(min = TITLE_MIN, max = TITLE_MAX)
-   @Column(name = "title", length = TITLE_MAX)
+   @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX)
+   @Column(name = "title", length = Parameters.TITLE_MAX)
    private String title;
 
    @NotNull

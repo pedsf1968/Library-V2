@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.Parameters;
 import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,9 +26,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "media")
 public class Media implements Serializable {
-   private static final int EAN_MAX = 20;
-   private static final int MEDIA_TYPE_MAX = 10;
-   private static final int STATUS_MAX = 10;
 
    @Id
    @Column(name = "id")
@@ -35,11 +33,11 @@ public class Media implements Serializable {
    private Integer id;
 
    @NotNull
-   @Column(name = "ean", length = EAN_MAX)
+   @Column(name = "ean", length = Parameters.EAN_MAX)
    private String ean;
 
    @NotNull
-   @Column(name = "media_type", length = MEDIA_TYPE_MAX)
+   @Column(name = "media_type", length = Parameters.MEDIA_TYPE_MAX)
    @Enumerated(EnumType.STRING)
    protected MediaType mediaType;
 
@@ -47,7 +45,7 @@ public class Media implements Serializable {
    @Column(name = "return_date")
    private Date returnDate;
 
-   @Column(name = "status", length = STATUS_MAX)
+   @Column(name = "status", length = Parameters.STATUS_MAX)
    @Enumerated(EnumType.STRING)
    private MediaStatus status;
 }

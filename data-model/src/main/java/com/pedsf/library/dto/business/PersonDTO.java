@@ -1,5 +1,6 @@
 package com.pedsf.library.dto.business;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,37 +21,26 @@ import java.sql.Date;
  */
 @Data
 public class PersonDTO implements Serializable {
-   private static final int FIRSTNAME_MIN = 2;
-   private static final int FIRSTNAME_MAX = 50;
-   private static final int LASTNAME_MIN = 2;
-   private static final int LASTNAME_MAX = 50;
-   private static final int URL_MAX = 255; // default length
-
-   private static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
-   private static final String ERROR_MESSAGE_LESS = "Length should less than : ";
-
-   public PersonDTO() {
-   }
 
    @NotNull
    private Integer id;
 
    @NotNull
    @NotBlank
-   @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX,
-         message = ERROR_MESSAGE_BETWEEN + FIRSTNAME_MIN + " and " + FIRSTNAME_MAX)
+   @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX)
    private String firstName;
 
    @NotNull
    @NotBlank
-   @Size(min = LASTNAME_MIN, max = LASTNAME_MAX,
-         message = ERROR_MESSAGE_BETWEEN + LASTNAME_MIN + " and " + LASTNAME_MAX)
+   @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX)
    private String lastName;
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date birthDate;
-   @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
-   @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String photoUrl;
 }

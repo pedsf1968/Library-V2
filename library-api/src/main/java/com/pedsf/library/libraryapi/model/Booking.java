@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,15 +23,13 @@ import java.sql.Date;
 @Entity
 @Table(name = "booking")
 public class Booking {
-   private static final int EAN_MAX = 20;
-
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy =  GenerationType.IDENTITY)
    private Integer id;
 
    @NotNull
-   @Column(name = "ean", length = EAN_MAX)
+   @Column(name = "ean", length = Parameters.EAN_MAX)
    private String ean;
 
    @NotNull

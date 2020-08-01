@@ -22,9 +22,6 @@ import java.util.Date;
 @Data
 public class BorrowingDTO implements Serializable {
 
-   public BorrowingDTO() {
-   }
-
    protected Integer id;
    @NotNull
    protected UserDTO user;

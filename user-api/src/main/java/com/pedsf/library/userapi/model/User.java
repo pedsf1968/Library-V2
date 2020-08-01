@@ -1,5 +1,7 @@
 package com.pedsf.library.userapi.model;
 
+import com.pedsf.library.Parameters;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -15,61 +17,42 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements Serializable {
 
-   static final int FIRSTNAME_MIN = 2;
-   static final int FIRSTNAME_MAX = 50;
-   static final int LASTNAME_MIN = 2;
-   static final int LASTNAME_MAX = 50;
-   static final int PASSWORD_MIN = 4;
-   static final int PASSWORD_MAX = 255;
-   static final int EMAIL_MIN = 4;
-   static final int EMAIL_MAX = 50;
-   static final String EMAIL_REGEXP = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-   static final String EMAIL_MESSAGE = "\"Not a valid email address !\"";
-   static final int PHONE_MAX = 14;
-   static final String PHONE_REGEXP = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2}|)$";
-   static final String PHONE_MESSAGE = "Not a valid phone number !";
-   static final int PHOTO_MAX = 255;
-   static final int STATUS_MAX = 10;
-   static final int STREET_MAX = 50;
-   static final int ZIPCODE_MAX = 6;
-   static final int CITY_MAX = 50;
-   static final int COUNTRY_MAX = 50;
-
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy =  GenerationType.IDENTITY)
    private Integer id;
 
    @NotNull
-   @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX)
-   @Column(name = "firstname", length = FIRSTNAME_MAX)
+   @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !")
+   @Column(name = "firstname", length = Parameters.FIRSTNAME_MAX)
    private String firstName;
 
    @NotNull
-   @Size(min = LASTNAME_MIN, max = LASTNAME_MAX)
-   @Column(name = "lastname", length = LASTNAME_MAX)
+   @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !")
+   @Column(name = "lastname", length = Parameters.LASTNAME_MAX)
    private String lastName;
 
    @NotNull
-   @Size(min = PASSWORD_MIN, max = PASSWORD_MAX)
-   @Column(name = "password", length = PASSWORD_MAX)
+   @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
+   @Column(name = "password", length = Parameters.PASSWORD_MAX)
    private String password;
 
    @NotNull
-   @Size(min = EMAIL_MIN, max = EMAIL_MAX)
-   @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_MESSAGE)
-   @Column(name = "email", unique = true, length = EMAIL_MAX)
+   @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
+   @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
+   @Column(name = "email", unique = true, length = Parameters.EMAIL_MAX)
    private String email;
 
-   @Size(max = PHONE_MAX)
-   @Pattern(regexp = PHONE_REGEXP, message = PHONE_MESSAGE)
-   @Column(name = "phone", length = EMAIL_MAX)
+   @Size(max = Parameters.PHONE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PHONE_MAX)
+   @Pattern(regexp = Parameters.PHONE_REGEXP, message = Parameters.ERROR_PHONE_FORMAT)
+   @Column(name = "phone", length = Parameters.EMAIL_MAX)
    private String phone;
 
-   @Column(name = "photo_url", length = PHOTO_MAX)
+   @Size(max = Parameters.PHOTO_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PHOTO_MAX)
    private String photoLink;
 
-   @Column(name = "status", length = STATUS_MAX)
+   @Size(max = Parameters.STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STATUS_MAX)
+   @Column(name = "status", length = Parameters.STATUS_MAX)
    private String status;
 
    @Column(name = "counter")
@@ -83,24 +66,30 @@ public class User implements Serializable {
    private Set<Role> roles;
 
    @NotNull
-   @Column(name = "street1", length = STREET_MAX)
+   @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
+   @Column(name = "street1", length = Parameters.STREET_MAX)
    private String street1;
 
-   @Column(name = "street2", length = STREET_MAX)
+   @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
+   @Column(name = "street2", length = Parameters.STREET_MAX)
    private String street2;
 
-   @Column(name = "street3", length = STREET_MAX)
+   @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
+   @Column(name = "street3", length = Parameters.STREET_MAX)
    private String street3;
 
    @NotNull
-   @Column(name = "zip_code", length = ZIPCODE_MAX)
+   @Size(max = Parameters.ZIP_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ZIP_MAX + " !")
+   @Column(name = "zip_code", length = Parameters.ZIP_MAX)
    private String zipCode;
 
    @NotNull
-   @Column(name = "city", length = CITY_MAX)
+   @Size(max = Parameters.CITY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.CITY_MAX + " !")
+   @Column(name = "city", length = Parameters.CITY_MAX)
    private String city;
 
-   @Column(name = "country", length = COUNTRY_MAX)
+   @Size(max = Parameters.COUNTRY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.COUNTRY_MAX + " !")
+   @Column(name = "country", length = Parameters.COUNTRY_MAX)
    private String country = "FRANCE";
 
    public User() {

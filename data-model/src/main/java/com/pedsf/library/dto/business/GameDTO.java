@@ -1,5 +1,6 @@
 package com.pedsf.library.dto.business;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,23 +29,19 @@ import java.sql.Date;
  */
 @Data
 public class GameDTO extends MediaCommonDTO implements Serializable {
-   private static final int PEGI_MAX = 4;
-
-   public GameDTO() {
-   }
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
    private PersonDTO editor;
-   @Size(max = TYPE_MAX, message = ERROR_MESSAGE_LESS + TYPE_MAX)
+   @Size(max = Parameters.TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.TYPE_MAX)
    private String type;
-   @Size(max = FORMAT_MAX, message = ERROR_MESSAGE_LESS + FORMAT_MAX)
+   @Size(max = Parameters.FORMAT_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.FORMAT_MAX)
    private String format;
-   @Size(max = PEGI_MAX, message = ERROR_MESSAGE_LESS + PEGI_MAX)
+   @Size(max = Parameters.PEGI_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PEGI_MAX)
    private String pegi;
-   @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
-   @Size(max = SUMMARY_MAX, message = ERROR_MESSAGE_LESS + SUMMARY_MAX)
+   @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
 }

@@ -12,7 +12,6 @@ import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BookingSpecification;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

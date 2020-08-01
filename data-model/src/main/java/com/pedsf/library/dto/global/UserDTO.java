@@ -1,5 +1,6 @@
 package com.pedsf.library.dto.global;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -11,82 +12,62 @@ import java.util.List;
 
 @Data
 public class UserDTO implements Serializable {
-    static final int FIRSTNAME_MIN = 2;
-    static final int FIRSTNAME_MAX = 50;
-    static final int LASTNAME_MIN = 2;
-    static final int LASTNAME_MAX = 50;
-    static final int PASSWORD_MIN = 4;
-    static final int PASSWORD_MAX = 255;
-    static final int EMAIL_MIN = 4;
-    static final int EMAIL_MAX = 255;
-    static final String EMAIL_REGEXP = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-    static final String EMAIL_MESSAGE = "\"Not a valid email address !\"";
-    static final int PHONE_MAX = 14;
-    static final String PHONE_REGEXP = "^(?:(?:\\+|00)33[\\s.-]{0,3}(?:\\(0\\)[\\s.-]{0,3})?|0)[1-9](?:(?:[\\s.-]?\\d{2}){4}|\\d{2}(?:[\\s.-]?\\d{3}){2}|)$";
-    static final String PHONE_MESSAGE = "Not a valid phone number !";
-    static final int PHOTO_MAX = 255;
-    private static final int STREET_MAX = 50;
-    private static final int ZIP_MIN = 5;
-    private static final int ZIP_MAX = 6;
-    private static final int CITY_MAX = 50;
-    private static final int COUNTRY_MAX = 50;
-    static final String ERROR_MESSAGE_BETWEEN = "Length should be between : ";
-    static final String ERROR_MESSAGE_LESS = "Length should less than : ";
 
 
     private Integer id;
 
     @NotNull
-    @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX, message = ERROR_MESSAGE_BETWEEN + FIRSTNAME_MIN + " AND " + FIRSTNAME_MAX + " !")
+    @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !")
     private String firstName;
 
     @NotNull
-    @Size(min = LASTNAME_MIN, max = LASTNAME_MAX, message = ERROR_MESSAGE_BETWEEN + LASTNAME_MIN + " AND " + LASTNAME_MAX + " !")
+    @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !")
     private String lastName;
 
     @NotNull
-    @Size(min = PASSWORD_MIN, max = PASSWORD_MAX, message = ERROR_MESSAGE_BETWEEN + PASSWORD_MIN + " AND " + PASSWORD_MAX + " !")
+    @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
     private String password;
 
     @NotNull
-    @Size(min = PASSWORD_MIN, max = PASSWORD_MAX, message = ERROR_MESSAGE_BETWEEN + PASSWORD_MIN + " AND " + PASSWORD_MAX + " !")
+    @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
     private String matchingPassword;
 
     @NotNull
-    @Size(min = EMAIL_MIN, max = EMAIL_MAX, message = ERROR_MESSAGE_BETWEEN + EMAIL_MIN + " AND " + EMAIL_MAX + " !")
-    @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_MESSAGE)
+    @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
+    @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
     private String email;
 
-    @Size(max = PHONE_MAX)
-    @Pattern(regexp = PHONE_REGEXP, message = PHONE_MESSAGE)
+    @Size(max = Parameters.PHONE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PHONE_MAX)
+    @Pattern(regexp = Parameters.PHONE_REGEXP, message = Parameters.ERROR_PHONE_FORMAT)
     private String phone;
 
-    @Size(max = PHOTO_MAX)
+    @Size(max = Parameters.PHOTO_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PHOTO_MAX)
     private String photoLink;
 
+    @Size(max = Parameters.STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STATUS_MAX)
     private String status;
     private Integer counter;
     private List<String> roles;
 
     @NotNull
-    @Size(max = STREET_MAX, message = ERROR_MESSAGE_LESS + STREET_MAX + " !")
+    @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
     private String street1;
 
-    @Size(max = STREET_MAX, message = ERROR_MESSAGE_LESS + STREET_MAX + " !")
+    @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
     private String street2;
 
-    @Size(max = STREET_MAX, message = ERROR_MESSAGE_LESS + STREET_MAX + " !")
+    @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
     private String street3;
 
     @NotNull
-    @Size(min = ZIP_MIN, max = ZIP_MAX, message = ERROR_MESSAGE_BETWEEN + ZIP_MIN + " AND " + ZIP_MAX + " !")
+    @Size(min = Parameters.ZIP_MIN, max = Parameters.ZIP_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.ZIP_MIN + " AND " + Parameters.ZIP_MAX + " !")
     private String zipCode;
 
     @NotNull
-    @Size(max = CITY_MAX, message = ERROR_MESSAGE_LESS + CITY_MAX + " !")
+    @Size(max = Parameters.CITY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.CITY_MAX + " !")
     private String city;
 
-    @Size(max = COUNTRY_MAX, message = ERROR_MESSAGE_LESS + COUNTRY_MAX + " !")
+    @Size(max = Parameters.COUNTRY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.COUNTRY_MAX + " !")
     private String country;
 
     public void initRole(){

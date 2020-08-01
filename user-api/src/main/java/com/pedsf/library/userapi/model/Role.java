@@ -1,5 +1,6 @@
 package com.pedsf.library.userapi.model;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +14,6 @@ import java.util.Set;
 @Entity(name = "Role")
 @Table(name = "role")
 public class Role implements Serializable {
-   static final int NAME_MAX = 20;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class Role implements Serializable {
 
    @NotNull
    @NotEmpty
-   @Size(max = NAME_MAX)
-   @Column(name = "name", length = NAME_MAX)
+   @Size(max = Parameters.ROLE_MAX)
+   @Column(name = "name", length = Parameters.ROLE_MAX)
    private String name;
 
    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)

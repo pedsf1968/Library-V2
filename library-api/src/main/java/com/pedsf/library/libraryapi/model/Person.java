@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.model;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,13 +24,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "person")
 public class Person implements Serializable {
-   static final int FIRSTNAME_MIN = 2;
-   static final int FIRSTNAME_MAX = 50;
-   static final int LASTNAME_MIN = 2;
-   static final int LASTNAME_MAX = 50;
-   static final int URL_MAX = 255;
-   static final String ERROR_FORMAT_MESSAGE_BETWEEN = "Length should be between : ";
-   static final String ERROR_FORMAT_MESSAGE_MAX = "Length should less than : ";
 
    @Id
    @Column(name = "id")
@@ -37,26 +31,26 @@ public class Person implements Serializable {
    private Integer id;
 
    @NotNull
-   @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX,
-         message = ERROR_FORMAT_MESSAGE_BETWEEN + FIRSTNAME_MIN + " and " + FIRSTNAME_MAX)
-   @Column(name = "firstname", length = FIRSTNAME_MAX)
+   @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX)
+   @Column(name = "firstname", length = Parameters.FIRSTNAME_MAX)
    private String firstName;
 
    @NotNull
-   @Size(min = LASTNAME_MIN, max = LASTNAME_MAX,
-         message = ERROR_FORMAT_MESSAGE_BETWEEN + LASTNAME_MIN + " and " + LASTNAME_MAX)
-   @Column(name = "lastname", length = LASTNAME_MAX)
+   @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX)
+   @Column(name = "lastname", length = Parameters.LASTNAME_MAX)
    private String lastName;
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "birth_date")
    private Date birthDate;
 
-   @Size(max = URL_MAX, message = ERROR_FORMAT_MESSAGE_MAX + URL_MAX)
-   @Column(name = "url", length = URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
+   @Column(name = "url", length = Parameters.URL_MAX)
    private String url;
 
-   @Size(max = URL_MAX, message = ERROR_FORMAT_MESSAGE_MAX + URL_MAX)
-   @Column(name = "photo_url", length = URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
+   @Column(name = "photo_url", length = Parameters.URL_MAX)
    private String photoUrl;
 }

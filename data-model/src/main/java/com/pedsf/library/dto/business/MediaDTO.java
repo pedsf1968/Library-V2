@@ -1,5 +1,6 @@
 package com.pedsf.library.dto.business;
 
+import com.pedsf.library.Parameters;
 import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,20 +30,15 @@ import java.util.Date;
  */
 @Data
 public class MediaDTO extends MediaCommonDTO implements Serializable {
-   private static final int MEDIA_STATUS_MAX = 10;
-   private static final int MEDIA_TYPE_MAX = 10;
-
-   public MediaDTO() {
-   }
 
    @NotNull
    protected Integer id;
 
    @NotNull
-   @Size(max = MEDIA_TYPE_MAX, message = ERROR_MESSAGE_LESS + MEDIA_TYPE_MAX)
+   @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)
    protected String mediaType;
 
-   @Size(max = MEDIA_STATUS_MAX, message = ERROR_MESSAGE_LESS + MEDIA_STATUS_MAX)
+   @Size(max = Parameters.MEDIA_STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_STATUS_MAX)
    private String status;
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

@@ -2,6 +2,7 @@ package com.pedsf.library.dto.global;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pedsf.library.Parameters;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -11,31 +12,22 @@ import java.io.Serializable;
 
 @Data
 public class MessageDTO implements Serializable {
-   static final int FIRSTNAME_MIN = 2;
-   static final int FIRSTNAME_MAX = 50;
-   static final int LASTNAME_MIN = 2;
-   static final int LASTNAME_MAX = 50;
-   static final int EMAIL_MIN = 4;
-   static final int EMAIL_MAX = 255;
-   static final String EMAIL_ERROR_MESSAGE = "Not a valid email address !";
-   static final String EMAIL_REGEXP = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-   static final String ERROR_MESSAGE = "Length should be between : ";
 
    @NotNull
-   @Size(min = FIRSTNAME_MIN, max = FIRSTNAME_MAX, message = ERROR_MESSAGE + FIRSTNAME_MIN + " AND " + FIRSTNAME_MAX + " !")
+   @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !")
    private String firstName;
 
    @NotNull
-   @Size(min = LASTNAME_MIN, max = LASTNAME_MAX, message = ERROR_MESSAGE + LASTNAME_MIN + " AND " + LASTNAME_MAX + " !")
+   @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !")
    private String lastName;
 
    @NotNull
-   @Size(min = EMAIL_MIN, max = EMAIL_MAX, message = ERROR_MESSAGE + EMAIL_MIN + " AND " + EMAIL_MAX + " !")
-   @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_ERROR_MESSAGE)
+   @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
+   @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
    private String from;
    @NotNull
-   @Size(min = EMAIL_MIN, max = EMAIL_MAX, message = ERROR_MESSAGE + EMAIL_MIN + " AND " + EMAIL_MAX + " !")
-   @Pattern(regexp = EMAIL_REGEXP, message = EMAIL_ERROR_MESSAGE)
+   @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
+   @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
    private String to;
    @NotNull
    private String subject;

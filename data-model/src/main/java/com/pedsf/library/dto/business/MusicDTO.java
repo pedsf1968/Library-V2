@@ -1,5 +1,6 @@
 package com.pedsf.library.dto.business;
 
+import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.Size;
@@ -30,10 +31,6 @@ import java.sql.Date;
  */
 @Data
 public class MusicDTO extends MediaCommonDTO implements Serializable {
-   private static final int PEGI_MAX = 4;
-
-   public MusicDTO() {
-   }
 
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -42,10 +39,10 @@ public class MusicDTO extends MediaCommonDTO implements Serializable {
    private PersonDTO composer;
    private PersonDTO interpreter;
    private Integer duration;
-   @Size(max = TYPE_MAX, message = ERROR_MESSAGE_LESS + TYPE_MAX)
+   @Size(max = Parameters.TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.TYPE_MAX)
    private String type;
-   @Size(max = FORMAT_MAX, message = ERROR_MESSAGE_LESS + FORMAT_MAX)
+   @Size(max = Parameters.FORMAT_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.FORMAT_MAX)
    private String format;
-   @Size(max = URL_MAX, message = ERROR_MESSAGE_LESS + URL_MAX)
+   @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
 }
