@@ -28,6 +28,18 @@ import java.sql.Date;
 @MappedSuperclass
 public class MediaCommon implements Serializable {
 
+   public MediaCommon(String ean, @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+                      @NotNull Integer quantity,
+                      @NotNull Integer stock) {
+      this.ean = ean;
+      this.title = title;
+      this.quantity = quantity;
+      this.stock = stock;
+   }
+
+   public MediaCommon() {
+   }
+
    // Media information
    @Id
    @Column(name = "ean", length = Parameters.EAN_MAX)

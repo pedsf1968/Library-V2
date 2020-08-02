@@ -24,6 +24,20 @@ import java.sql.Date;
 @Data
 public class MediaCommonDTO implements Serializable {
 
+   public MediaCommonDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                         @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                         @NotNull Integer quantity,
+                         @NotNull Integer stock) {
+      this.ean = ean;
+      this.title = title;
+      this.quantity = quantity;
+      this.stock = stock;
+   }
+
+   protected MediaCommonDTO() {
+
+   }
+
    // Media information
    @NotNull
    @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX)

@@ -13,9 +13,9 @@ import java.sql.Date;
  * Data Transfert Object to manage Book
  *
  * isbn : ISBN number of the Book
- * publicationDate : is the date when the Media is published
  * author : writer of the Book
  * editor : editor of the Book
+ * publicationDate : is the date when the Media is published
  * type : Book type
  * format : Book format
  * pages : number of pages in the book
@@ -23,6 +23,20 @@ import java.sql.Date;
  */
 @Data
 public class BookDTO extends MediaCommonDTO implements Serializable {
+
+   public BookDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                  @NotNull Integer quantity,
+                  @NotNull Integer stock,
+                  @NotNull @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX) String isbn,
+                  @NotNull PersonDTO author) {
+      super(ean, title, quantity, stock);
+      this.isbn = isbn;
+      this.author = author;
+   }
+
+   public BookDTO() {
+   }
 
    // Book attributes
    @NotNull

@@ -4,6 +4,7 @@ import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
@@ -29,6 +30,18 @@ import java.sql.Date;
  */
 @Data
 public class GameDTO extends MediaCommonDTO implements Serializable {
+
+   public GameDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                  @NotNull Integer quantity,
+                  @NotNull Integer stock,
+                  PersonDTO editor) {
+      super(ean, title, quantity, stock);
+      this.editor = editor;
+   }
+
+   public GameDTO() {
+   }
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

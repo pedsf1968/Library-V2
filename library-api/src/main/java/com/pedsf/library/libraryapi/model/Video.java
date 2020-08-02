@@ -5,7 +5,9 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
@@ -28,6 +30,18 @@ import java.util.Set;
 @Entity
 @Table(name = "video")
 public class Video extends MediaCommon implements Serializable {
+
+   public Video(String ean,
+                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+                @NotNull Integer quantity,
+                @NotNull Integer stock,
+                @NotNull Integer directorId) {
+      super(ean, title, quantity, stock);
+      this.directorId = directorId;
+   }
+
+   public Video() {
+   }
 
    // Video information
    @NotNull

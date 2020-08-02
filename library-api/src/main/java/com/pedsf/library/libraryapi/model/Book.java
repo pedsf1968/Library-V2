@@ -4,7 +4,9 @@ import com.pedsf.library.Parameters;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -24,6 +26,20 @@ import java.sql.Date;
 @Entity
 @Table(name = "book")
 public class Book extends MediaCommon implements Serializable {
+
+   public Book(String ean,
+               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock,
+               @NotNull String isbn,
+               @NotNull Integer authorId) {
+      super(ean, title, quantity, stock);
+      this.isbn = isbn;
+      this.authorId = authorId;
+   }
+
+   public Book() {
+   }
 
    // Book information
    @NotNull

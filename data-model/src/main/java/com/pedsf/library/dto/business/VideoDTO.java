@@ -26,6 +26,18 @@ import java.util.List;
 @Data
 public class VideoDTO extends MediaCommonDTO implements Serializable {
 
+   public VideoDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                   @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                   @NotNull Integer quantity,
+                   @NotNull Integer stock,
+                   @NotNull PersonDTO director) {
+      super(ean, title, quantity, stock);
+      this.director = director;
+   }
+
+   public VideoDTO() {
+   }
+
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;

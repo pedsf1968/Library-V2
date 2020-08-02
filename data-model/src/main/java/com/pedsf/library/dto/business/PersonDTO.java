@@ -22,6 +22,18 @@ import java.sql.Date;
 @Data
 public class PersonDTO implements Serializable {
 
+   public PersonDTO(@NotNull Integer id, @NotNull @NotBlank @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX) String firstName, @NotNull @NotBlank @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
+         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX) String lastName, Date birthDate) {
+      this.id = id;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.birthDate = birthDate;
+   }
+
+   public PersonDTO() {
+   }
+
    @NotNull
    private Integer id;
 

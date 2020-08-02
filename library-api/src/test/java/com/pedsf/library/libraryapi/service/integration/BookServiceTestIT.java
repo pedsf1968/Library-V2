@@ -40,12 +40,7 @@ class BookServiceTestIT {
 
    @BeforeEach
    void beforeEach() {
-      newBook = new Book();
-      newBook.setTitle("The green tomato");
-      newBook.setAuthorId(1);
-      newBook.setEditorId(1);
-      newBook.setEan("954-8789797");
-      newBook.setIsbn("9548789797");
+      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);
@@ -53,8 +48,6 @@ class BookServiceTestIT {
       newBook.setLength(11);
       newBook.setWidth(11);
       newBook.setWeight(220);
-      newBook.setStock(1);
-      newBook.setQuantity(1);
       newBook.setSummary("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
             "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin " +
             "professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur," +

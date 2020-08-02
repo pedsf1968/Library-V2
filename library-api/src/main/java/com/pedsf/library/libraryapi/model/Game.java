@@ -5,7 +5,9 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 
@@ -24,6 +26,17 @@ import java.sql.Date;
 @Entity
 @Table(name = "game")
 public class Game extends MediaCommon implements Serializable {
+
+   public Game(String ean, @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock,
+               @NotNull Integer editorId) {
+      super(ean, title, quantity, stock);
+      this.editorId = editorId;
+   }
+
+   public Game() {
+   }
 
    // Game information
    @NotNull
