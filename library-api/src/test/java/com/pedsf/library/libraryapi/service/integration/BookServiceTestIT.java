@@ -28,7 +28,7 @@ class BookServiceTestIT {
 
    private static BookService bookService;
    private static Book newBook;
-   private static BookDTO newBookDTO;
+   private static BookDTO newBookDTO = new BookDTO();
    private static List<BookDTO> allBookDTOS;
 
 
@@ -41,6 +41,7 @@ class BookServiceTestIT {
    @BeforeEach
    void beforeEach() {
       newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
+      newBook.setEditorId(16);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);

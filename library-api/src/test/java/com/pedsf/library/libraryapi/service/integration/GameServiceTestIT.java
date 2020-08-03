@@ -32,7 +32,6 @@ class GameServiceTestIT {
 
    @BeforeAll
    static void beforeAll(@Autowired GameRepository gameRepository, @Autowired PersonRepository personRepository) {
-
       PersonService personService = new PersonService(personRepository);
       gameService =  new GameService(gameRepository,personService);
    }
