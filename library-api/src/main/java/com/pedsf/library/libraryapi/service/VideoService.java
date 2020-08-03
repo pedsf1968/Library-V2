@@ -104,7 +104,6 @@ public class VideoService implements GenericMediaService<VideoDTO, Video,String>
       return findAllFiltered(filter).get(0).getEan();
    }
 
-
    @Override
    public VideoDTO save(VideoDTO videoDTO) {
       if (   !StringUtils.isEmpty(videoDTO.getEan()) &&

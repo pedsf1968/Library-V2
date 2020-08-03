@@ -28,7 +28,7 @@ class GameServiceTestIT {
    private static GameService gameService;
    private static PersonService personService;
    private static Game newGame;
-   private static GameDTO newGameDTO = new GameDTO();
+   private static GameDTO newGameDTO;
    private static List<GameDTO> allGameDTOS;
 
 
@@ -92,7 +92,7 @@ class GameServiceTestIT {
    @Tag("existsById")
    @DisplayName("Verify that return FALSE if the Game doesn't exist")
    void existsById_returnFalse_OfAnInexistingGameId() {
-      assertThat(gameService.existsById("5lkjh5")).isFalse();
+      assertThat(gameService.existsById("44lk65465")).isFalse();
    }
 
    @Test
@@ -122,14 +122,14 @@ class GameServiceTestIT {
    @Test
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Games")
-   @Disabled
-   void findAll_returnAllGamesUser() {
+      void findAll_returnAllGames() {
+      GameDTO newGameDTO = gameService.entityToDTO(newGame);
       assertThat(allGameDTOS.size()).isEqualTo(2);
 
       // add new Game to increase the list
       newGameDTO = gameService.save(newGameDTO);
       List<GameDTO> gameDTOS = gameService.findAll();
-      assertThat(gameDTOS.size()).isEqualTo(2);
+      assertThat(gameDTOS.size()).isEqualTo(3);
       assertThat(gameDTOS.contains(newGameDTO)).isTrue();
 
       gameService.deleteById(newGameDTO.getEan());
@@ -140,9 +140,11 @@ class GameServiceTestIT {
    @DisplayName("Verify that we got the list of Games that can be booked")
    void findAllAllowed_returnBookableGames_ofAllGames() {
       newGame.setStock(-2);
-      GameDTO newGameDTO = gameService.entityToDTO(newGame);
-      newGameDTO = gameService.save(newGameDTO);
+      GameDTO dto = gameService.entityToDTO(newGame);
+      dto = gameService.save(dto);
       List<GameDTO> alloweds = gameService.findAllAllowed();
+
+      assertThat(alloweds.contains(dto)).isFalse();
 
       for(GameDTO gameDTO: allGameDTOS) {
          if (alloweds.contains(gameDTO)) {
@@ -155,7 +157,7 @@ class GameServiceTestIT {
       }
 
       newGame.setStock(1);
-      gameService.deleteById(newGameDTO.getEan());
+      gameService.deleteById(dto.getEan());
 
    }
 
@@ -229,13 +231,23 @@ class GameServiceTestIT {
       assertThat(gameService.existsById(ean)).isTrue();
       gameService.deleteById(ean);
 
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         gameService.findById(ean);
+      });
+
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Games")
    void count_returnTheNumberOfGames() {
+      GameDTO gameDTO = gameService.entityToDTO(newGame);
       assertThat(gameService.count()).isEqualTo(2);
+
+      // add an other game
+      gameDTO = gameService.save(gameDTO);
+      assertThat(gameService.count()).isEqualTo(3);
+      gameService.deleteById(gameDTO.getEan());
    }
 
 

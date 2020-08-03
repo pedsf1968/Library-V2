@@ -27,10 +27,11 @@ import java.sql.Date;
 @Table(name = "media")
 public class Media implements Serializable {
 
-   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType) {
+   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType, MediaStatus status) {
       this.id = id;
       this.ean = ean;
       this.mediaType = mediaType;
+      this.status = status;
    }
 
    public Media() {
@@ -48,13 +49,13 @@ public class Media implements Serializable {
    @NotNull
    @Column(name = "media_type", length = Parameters.MEDIA_TYPE_MAX)
    @Enumerated(EnumType.STRING)
-   protected MediaType mediaType;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   @Column(name = "return_date")
-   private Date returnDate;
+   private MediaType mediaType;
 
    @Column(name = "status", length = Parameters.STATUS_MAX)
    @Enumerated(EnumType.STRING)
    private MediaStatus status;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   private Date returnDate;
 }

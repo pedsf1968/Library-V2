@@ -28,9 +28,8 @@ class BookServiceTestIT {
 
    private static BookService bookService;
    private static PersonService personService;
-
    private static Book newBook;
-   private static BookDTO newBookDTO = new BookDTO();
+   private static BookDTO newBookDTO;
    private static List<BookDTO> allBookDTOS;
 
 
@@ -144,9 +143,11 @@ class BookServiceTestIT {
    @DisplayName("Verify that we got the list of Books that can be booked")
    void findAllAllowed_returnBookableBooks_ofAllBooks() {
       newBook.setStock(-2);
-      BookDTO newBookDTO = bookService.entityToDTO(newBook);
-      newBookDTO = bookService.save(newBookDTO);
+      BookDTO dto = bookService.entityToDTO(newBook);
+      dto = bookService.save(dto);
       List<BookDTO> alloweds = bookService.findAllAllowed();
+
+      assertThat(alloweds.contains(dto)).isFalse();
 
       for(BookDTO bookDTO: allBookDTOS) {
          if (alloweds.contains(bookDTO)) {
@@ -159,7 +160,7 @@ class BookServiceTestIT {
       }
 
       newBook.setStock(1);
-      bookService.deleteById(newBookDTO.getEan());
+      bookService.deleteById(dto.getEan());
    }
 
    @Test
@@ -205,7 +206,7 @@ class BookServiceTestIT {
 
    @Test
    @Tag("update")
-   @DisplayName("Verify that we can update an Book")
+   @DisplayName("Verify that we can update a Book")
    void update_returnUpdatedBook_ofBookAndNewTitle() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       String oldTitle = bookDTO.getTitle();
@@ -223,7 +224,7 @@ class BookServiceTestIT {
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
-   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+   void deleteById_returnExceptionWhenGetBookById_ofDeletedUserById() {
       BookDTO bookDTO = bookService.entityToDTO(newBook);
 
       bookDTO = bookService.save(bookDTO);
@@ -247,6 +248,7 @@ class BookServiceTestIT {
       // add an other book
       bookDTO = bookService.save(bookDTO);
       assertThat(bookService.count()).isEqualTo(8);
+
       bookService.deleteById(bookDTO.getEan());
    }
 
@@ -333,18 +335,18 @@ class BookServiceTestIT {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
-      BookDTO newBookDTO = bookService.entityToDTO(newBook);
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
       List<String> titles = bookService.findAllTitles();
       assertThat(titles.size()).isEqualTo(7);
 
       // add an other book
-      newBookDTO.setTitle(BOOK_TITLE_TEST);
-      newBookDTO = bookService.save(newBookDTO);
+      bookDTO.setTitle(BOOK_TITLE_TEST);
+      bookDTO = bookService.save(bookDTO);
       titles = bookService.findAllTitles();
       assertThat(titles.size()).isEqualTo(8);
       assertThat(titles.contains(BOOK_TITLE_TEST)).isTrue();
 
-      bookService.deleteById(newBookDTO.getEan());
+      bookService.deleteById(bookDTO.getEan());
    }
 
    @Test
@@ -353,9 +355,11 @@ class BookServiceTestIT {
    void increaseStock_returnBookWithIncrementedStock_ofOneBook() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       Integer oldStock = bookDTO.getStock();
+
       bookService.increaseStock(BOOK_EAN_TEST);
       bookDTO = bookService.findById(BOOK_EAN_TEST);
       assertThat(bookDTO.getStock()).isEqualTo(oldStock+1);
+
       bookDTO.setStock(oldStock);
       bookService.update(bookDTO);
    }
@@ -366,9 +370,11 @@ class BookServiceTestIT {
    void decreaseStock_returnBookWithDecrementedStock_ofOneBook() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       Integer oldStock = bookDTO.getStock();
+
       bookService.decreaseStock(BOOK_EAN_TEST);
       bookDTO = bookService.findById(BOOK_EAN_TEST);
       assertThat(bookDTO.getStock()).isEqualTo(oldStock-1);
+
       bookDTO.setStock(oldStock);
       bookService.update(bookDTO);
    }

@@ -1,6 +1,5 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.model.Music;
@@ -14,8 +13,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -27,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 class MusicServiceTestIT {
    private static final String MUSIC_EAN_TEST = "4988064587100";
+   private static final String MUSIC_TITLE_TEST = "New Music Title";
 
    private static MusicService musicService;
    private static PersonService personService;
-
    private static Music newMusic;
-   private static MusicDTO newMusicDTO = new MusicDTO();
+   private static MusicDTO newMusicDTO;
    private static List<MusicDTO> allMusicDTOS;
 
    @BeforeAll
@@ -81,7 +78,7 @@ class MusicServiceTestIT {
    @Tag("existsById")
    @DisplayName("Verify that return FALSE if the Music doesn't exist")
    void existsById_returnFalse_OfAnInexistingMusicId() {
-      assertThat(musicService.existsById("5lkjh5")).isFalse();
+      assertThat(musicService.existsById("5ldssdqkjh5")).isFalse();
    }
 
    @Test
@@ -102,7 +99,6 @@ class MusicServiceTestIT {
    @Tag("findById")
    @DisplayName("Verify that we can't find Music with wrong ID")
    void findById_returnException_ofInexistingMusicId() {
-
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
          MusicDTO found = musicService.findById("liuzae");
       });
@@ -128,10 +124,14 @@ class MusicServiceTestIT {
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Musics that can be booked")
    void findAllAllowed_returnBookableMusics_ofAllMusics() {
-      List<MusicDTO> musicDTOS = musicService.findAll();
+      newMusic.setStock(-2);
+      MusicDTO dto = musicService.entityToDTO(newMusic);
+      dto = musicService.save(dto);
       List<MusicDTO> alloweds = musicService.findAllAllowed();
 
-      for(MusicDTO musicDTO: musicDTOS) {
+      assertThat(alloweds.contains(dto)).isFalse();
+
+      for(MusicDTO musicDTO: allMusicDTOS) {
          if (alloweds.contains(musicDTO)) {
             // allowed
             assertThat(musicDTO.getStock()).isGreaterThan(-musicDTO.getQuantity()*2);
@@ -140,6 +140,9 @@ class MusicServiceTestIT {
             assertThat(musicDTO.getStock()).isLessThanOrEqualTo(-musicDTO.getQuantity()*2);
          }
       }
+
+      newMusic.setStock(1);
+      musicService.deleteById(dto.getEan());
    }
 
 
@@ -161,20 +164,23 @@ class MusicServiceTestIT {
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Music by Author")
+   void getFirstId_returnFirstId_ofFilteredMusicByAuthor() {
+      MusicDTO filter = new MusicDTO();
+      filter.setAuthor(personService.findById(14));
+
+      String ean = musicService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("8809634380036");
    }
 
    @Test
+   @Tag("save")
    @DisplayName("Verify that we can create a new Music")
    void save_returnCreatedMusic_ofNewMusic() {
-      MusicDTO musicDTO = musicService.findById(MUSIC_EAN_TEST);
-      String newEan = "newMusicEAN";
-      String newTitle = "NewMusicTitle";
+      MusicDTO musicDTO = musicService.entityToDTO(newMusic);
 
-      musicDTO.setEan(newEan);
-      musicDTO.setTitle(newTitle);
-      musicDTO.setReturnDate(null);
-      musicDTO.setPublicationDate(null);
       musicDTO = musicService.save(musicDTO);
       String ean = musicDTO.getEan();
 
@@ -183,28 +189,59 @@ class MusicServiceTestIT {
    }
 
    @Test
-   void update() {
+   @Tag("update")
+   @DisplayName("Verify that we can update an Music")
+   void update_returnUpdatedMusic_ofMusicAndNewTitle() {
+      MusicDTO musicDTO = musicService.findById(MUSIC_EAN_TEST);
+      String oldTitle = musicDTO.getTitle();
+      musicDTO.setTitle(MUSIC_TITLE_TEST);
+
+      MusicDTO musicSaved = musicService.update(musicDTO);
+      assertThat(musicSaved).isEqualTo(musicDTO);
+      MusicDTO musicFound = musicService.findById(musicDTO.getEan());
+      assertThat(musicFound).isEqualTo(musicDTO);
+
+      musicDTO.setTitle(oldTitle);
+      musicService.update(musicDTO);
    }
 
    @Test
-   void deleteById() {
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Book by his EAN")
+   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+      MusicDTO musicDTO = musicService.entityToDTO(newMusic);
+
+      musicDTO = musicService.save(musicDTO);
+      String ean = musicDTO.getEan();
+
+      assertThat(musicService.existsById(ean)).isTrue();
+      musicService.deleteById(ean);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
+         musicService.findById(ean);
+      });
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Musics")
    void count_returnTheNumberOfMusics() {
+      MusicDTO musicDTO = musicService.entityToDTO(newMusic);
       assertThat(musicService.count()).isEqualTo(4);
+
+      // add an other music
+      musicDTO = musicService.save(musicDTO);
+      assertThat(musicService.count()).isEqualTo(5);
+      musicService.deleteById(musicDTO.getEan());
    }
 
    @Test
    @Tag("dtoToEntity")
    @DisplayName("Verify that Music DTO is converted in right Music Entity")
    void dtoToEntity_returnRightMusicEntity_ofMusicDTO() {
-      List<MusicDTO> musicDTOS = musicService.findAll();
       Music entity;
 
-      for (MusicDTO dto: musicDTOS) {
+      for (MusicDTO dto: allMusicDTOS) {
          entity = musicService.dtoToEntity(dto);
          assertThat(entity.getEan()).isEqualTo(dto.getEan());
          assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
@@ -231,11 +268,10 @@ class MusicServiceTestIT {
    @Tag("entityToDTO")
    @DisplayName("Verify that Music Entity is converted in right Music DTO")
    void dtoToEntity_returnRightMusicDTO_ofMusicEntity() {
-      List<MusicDTO> musicDTOS = musicService.findAll();
       List<Music> music = new ArrayList<>();
       MusicDTO dto;
 
-      for (MusicDTO m: musicDTOS) {
+      for (MusicDTO m: allMusicDTOS) {
          music.add(musicService.dtoToEntity(m));
       }
 
@@ -290,8 +326,18 @@ class MusicServiceTestIT {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
+      MusicDTO musicDTO = musicService.entityToDTO(newMusic);
       List<String> titles = musicService.findAllTitles();
       assertThat(titles.size()).isEqualTo(4);
+
+      // add an other book
+      musicDTO.setTitle(MUSIC_TITLE_TEST);
+      musicDTO = musicService.save(musicDTO);
+      titles = musicService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(5);
+      assertThat(titles.contains(MUSIC_TITLE_TEST)).isTrue();
+
+      musicService.deleteById(musicDTO.getEan());
    }
 
    @Test
@@ -300,9 +346,11 @@ class MusicServiceTestIT {
    void increaseStock_returnMusicsWithIncrementedStock_ofOneMusics() {
       MusicDTO musicDTO = musicService.findById(MUSIC_EAN_TEST);
       Integer oldStock = musicDTO.getStock();
+
       musicService.increaseStock(MUSIC_EAN_TEST);
       musicDTO = musicService.findById(MUSIC_EAN_TEST);
       assertThat(musicDTO.getStock()).isEqualTo(oldStock+1);
+
       musicDTO.setStock(oldStock);
       musicService.update(musicDTO);
    }
@@ -313,9 +361,11 @@ class MusicServiceTestIT {
    void decreaseStock_returnMusicsWithDecrementedStock_ofOneMusics() {
       MusicDTO musicDTO = musicService.findById(MUSIC_EAN_TEST);
       Integer oldStock = musicDTO.getStock();
+
       musicService.decreaseStock(MUSIC_EAN_TEST);
       musicDTO = musicService.findById(MUSIC_EAN_TEST);
       assertThat(musicDTO.getStock()).isEqualTo(oldStock-1);
+
       musicDTO.setStock(oldStock);
       musicService.update(musicDTO);
    }
