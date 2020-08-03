@@ -41,6 +41,9 @@ public class Music extends MediaCommon implements Serializable {
       this.interpreterId = interpreterId;
    }
 
+   public Music() {
+   }
+
    // Music information
    @Column(name = "author_id")
    private Integer authorId;

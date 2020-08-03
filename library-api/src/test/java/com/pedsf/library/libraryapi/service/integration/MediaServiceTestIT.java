@@ -17,48 +17,32 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 class MediaServiceTestIT {
    private static final String MEDIA_EAN_TEST = "978-2253002864";
    private static final Integer MEDIA_EAN_ID = 5;
 
    private static Media newMedia = new Media();
 
-   @TestConfiguration
-   static class mediaServiceTestConfiguration {
-      @Autowired
-      private MediaRepository mediaRepository;
-      @Autowired
-      private BookRepository bookRepository;
-      @Autowired
-      private GameRepository gameRepository;
-      @Autowired
-      private MusicRepository musicRepository;
-      @Autowired
-      private VideoRepository videoRepository;
-      @Autowired
-      private PersonRepository personRepository;
-
-
-      @Bean
-      public MediaService mediaService() {
-
-         PersonService personService = new PersonService(personRepository);
-         BookService bookService = new BookService(bookRepository,personService);
-         GameService gameService = new GameService(gameRepository,personService);
-         MusicService musicService = new MusicService(musicRepository,personService);
-         VideoService videoService = new VideoService(videoRepository,personService);
-
-         return new MediaService(mediaRepository,bookService,gameService,musicService,videoService);
-      }
-   }
-
-   @Autowired
-   private MediaService mediaService;
+   static private MediaService mediaService;
 
    @BeforeAll
-   static void beforeAll() {
+   static void beforeAll( @Autowired MediaRepository mediaRepository,
+                          @Autowired BookRepository bookRepository,
+                          @Autowired GameRepository gameRepository,
+                          @Autowired MusicRepository musicRepository,
+                          @Autowired VideoRepository videoRepository,
+                          @Autowired PersonRepository personRepository) {
+
+      PersonService personService = new PersonService(personRepository);
+      BookService bookService = new BookService(bookRepository,personService);
+      GameService gameService = new GameService(gameRepository,personService);
+      MusicService musicService = new MusicService(musicRepository,personService);
+      VideoService videoService = new VideoService(videoRepository,personService);
+
+      mediaService = new MediaService(mediaRepository,bookService,gameService,musicService,videoService);
+
       newMedia.setId(44);
       newMedia.setEan("954-8789797");
       newMedia.setMediaType(MediaType.BOOK);
