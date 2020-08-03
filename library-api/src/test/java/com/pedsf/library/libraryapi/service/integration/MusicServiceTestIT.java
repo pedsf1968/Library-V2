@@ -1,16 +1,16 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.model.Music;
+import com.pedsf.library.libraryapi.model.MusicFormat;
+import com.pedsf.library.libraryapi.model.MusicType;
 import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import com.pedsf.library.libraryapi.service.MusicService;
 import com.pedsf.library.libraryapi.service.PersonService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,36 +23,55 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 class MusicServiceTestIT {
    private static final String MUSIC_EAN_TEST = "4988064587100";
 
-   @TestConfiguration
-   static class musicServiceTestConfiguration {
-      @Autowired
-      private MusicRepository musicRepository;
-      @Autowired
-      private PersonRepository personRepository;
+   private static MusicService musicService;
+   private static PersonService personService;
 
+   private static Music newMusic;
+   private static MusicDTO newMusicDTO = new MusicDTO();
+   private static List<MusicDTO> allMusicDTOS;
 
-      @Bean
-      public MusicService musicService() {
-         PersonService personService = new PersonService(personRepository);
-
-         return new MusicService(musicRepository,personService);
-      }
+   @BeforeAll
+   static void beforeAll(@Autowired MusicRepository musicRepository,
+                         @Autowired PersonRepository personRepository) {
+      personService = new PersonService(personRepository);
+      musicService = new MusicService(musicRepository,personService);
    }
 
-   @Autowired
-   private MusicService musicService;
+   @BeforeEach
+   void beforeEach() {
+      newMusic = new Music("9876546546","Le petite musique du matin", 1,1,15,15,15);
+      newMusic.setDuration(123);
+      newMusic.setFormat(MusicFormat.SACD);
+      newMusic.setType(MusicType.ELECTRO);
+      newMusic.setUrl("http://www.google.co.kr");
+      newMusic.setHeight(11);
+      newMusic.setLength(11);
+      newMusic.setWidth(11);
+      newMusic.setWeight(220);
+
+      newMusicDTO = new MusicDTO("9876546546","Le petite musique du matin", 1,1,personService.findById(15),personService.findById(15),personService.findById(15));
+      newMusicDTO.setDuration(123);
+      newMusicDTO.setFormat("SACD");
+      newMusicDTO.setType("ELECTRO");
+      newMusicDTO.setUrl("http://www.google.co.kr");
+      newMusicDTO.setHeight(11);
+      newMusicDTO.setLength(11);
+      newMusicDTO.setWidth(11);
+      newMusicDTO.setWeight(220);
+
+      allMusicDTOS = musicService.findAll();
+   }
 
    @Test
+   @Tag("existsById")
    @DisplayName("Verify that return TRUE if the Music exist")
    void existsById_returnTrue_OfAnExistingMusicId() {
-      List<MusicDTO> musicDTOS = musicService.findAll();
-
-      for(MusicDTO musicDTO : musicDTOS) {
+      for(MusicDTO musicDTO : allMusicDTOS) {
          String ean = musicDTO.getEan();
          assertThat(musicService.existsById(ean)).isTrue();
       }
@@ -69,10 +88,9 @@ class MusicServiceTestIT {
    @Tag("findById")
    @DisplayName("Verify that we can find Music by is ID")
    void findById_returnUser_ofExistingMusicId() {
-      List<MusicDTO> musicDTOS = musicService.findAll();
       MusicDTO found;
 
-      for(MusicDTO musicDTO : musicDTOS) {
+      for(MusicDTO musicDTO : allMusicDTOS) {
          String ean = musicDTO.getEan();
          found = musicService.findById(ean);
 
@@ -95,8 +113,15 @@ class MusicServiceTestIT {
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Musics")
    void findAll_returnAllMusics() {
+      assertThat(allMusicDTOS.size()).isEqualTo(4);
+
+      // add new Music to increase the list
+      newMusicDTO = musicService.save(newMusicDTO);
       List<MusicDTO> musicDTOS = musicService.findAll();
-      assertThat(musicDTOS.size()).isEqualTo(4);
+      assertThat(musicDTOS.size()).isEqualTo(5);
+      assertThat(musicDTOS.contains(newMusicDTO)).isTrue();
+
+      musicService.deleteById(newMusicDTO.getEan());
    }
 
    @Test

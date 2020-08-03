@@ -84,7 +84,6 @@ class BookServiceTest {
       allAllowedBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1));
       allAllowedBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2));
       allAllowedBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3));
-
    }
 
 
@@ -138,9 +137,6 @@ class BookServiceTest {
       Mockito.lenient().when(bookRepository.findByEan("978-2253096337")).thenReturn(java.util.Optional.ofNullable(allBooks.get(5)));
       Mockito.lenient().when(bookRepository.findByEan("978-2253096344")).thenReturn(java.util.Optional.ofNullable(allBooks.get(6)));
       Mockito.lenient().when(bookRepository.findByEan("954-8789797")).thenReturn(java.util.Optional.ofNullable(newBook));
-
-      //Mockito.lenient().when(personService.findById(2)).thenReturn(allPersons.get(1));
-      //Mockito.lenient().when(personService.findById(16)).thenReturn(allPersons.get(15));
 
       ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
@@ -224,7 +220,6 @@ class BookServiceTest {
    @Test
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Book by his title and author")
-   @Disabled
    void findAllFiltered_returnOnlyOneBook_ofExistingFirstTitleAndAuthor() {
 
       List<BookDTO> found;
@@ -233,19 +228,30 @@ class BookServiceTest {
          filter.setTitle(book.getTitle());
          filter.setAuthorId(book.getAuthorId());
 
-         BookSpecification bookSpecification = new BookSpecification(filter);
-         Mockito.lenient().when(bookRepository.findAll(bookSpecification)).thenReturn(Arrays.asList(book));
+         Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Arrays.asList(book));
 
          BookDTO filterDTO = bookService.entityToDTO(filter);
          found = bookService.findAllFiltered(filterDTO);
+
          assertThat(found.size()).isEqualTo(1);
-         assertThat(found.get(0)).isEqualTo(book);
+         assertThat(found.get(0)).isEqualTo(bookService.entityToDTO(book));
       }
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Book by Author")
+   void getFirstId_returnFirstId_ofFilteredBookByAuthor() {
+      BookDTO filter = new BookDTO();
+      filter.setAuthor(personService.findById(1));
+
+      Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Arrays.asList(allBooks.get(0),allBooks.get(1),allBooks.get(2)));
+
+      String ean = bookService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("978-2253004226");
    }
+
 
    @Test
    @Tag("save")
