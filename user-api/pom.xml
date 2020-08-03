@@ -7,13 +7,14 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>user-api</artifactId>
+	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	<description>Library multi module User managment REST controller</description>
 
@@ -42,12 +43,19 @@
 	<!-- ==================================================================== -->
 	<properties>
 		<java.version>1.8</java.version>
+		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
 	</properties>
 
 	<!-- ==================================================================== -->
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -238,6 +246,22 @@
 				<configServer>http://10.5.0.1:2000</configServer>
 			</properties>
 		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+				<configServer>http://localhost:2000</configServer>
+			</properties>
+			<dependencies>
+				<!-- ================================================ H2DATABASE -->
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<!-- ==================================================================== -->
@@ -248,7 +272,7 @@
 
 		<resources>
 			<resource>
-				<directory>src/main/resources/com.user.userapi</directory>
+				<directory>src/main/resources/com.pedsf.library.userapi</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

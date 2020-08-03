@@ -7,8 +7,8 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>..</relativePath>
 	</parent>
@@ -52,8 +52,12 @@
 		<!-- ========================================================= MODULES -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>user-api</artifactId>
-			<version>1.0.0.RELEASE</version>
 		</dependency>
 
 
@@ -188,12 +192,6 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-      <dependency>
-         <groupId>com.pedsf</groupId>
-         <artifactId>user-api</artifactId>
-         <version>1.0.0.RELEASE</version>
-         <scope>compile</scope>
-      </dependency>
 
    </dependencies>
 
@@ -251,6 +249,25 @@
 				</dependency>
 			</dependencies>
 		</profile>
+
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+				<configServer>http://localhost:2000</configServer>
+			</properties>
+			<dependencies>
+				<!-- ================================================ H2DATABASE -->
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<!-- ==================================================================== -->
@@ -261,15 +278,66 @@
 
 		<resources>
 			<resource>
-				<directory>src/main/resources/com.library.libraryapi</directory>
+				<directory>src/main/resources/com.pedsf.library.libraryapi</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+
 
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId> <!-- surefire plugin version managed by Spring Boot -->
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+				<executions>
+					<execution>
+						<id>unitary-tests</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skipTests>false</skipTests>
+							<includes>
+								<include>**/*Test.java</include>
+							</includes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>integration-tests</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skipTests>false</skipTests>
+							<includes>
+								<include>**/*IT.*</include>
+								<include>**/*Test.*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
