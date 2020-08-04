@@ -146,19 +146,10 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
    @Override
    public MediaDTO save(MediaDTO mediaDTO) {
-      if (  !StringUtils.isEmpty(mediaDTO.getId()) &&
-            !StringUtils.isEmpty(mediaDTO.getEan()) &&
+      if (  !StringUtils.isEmpty(mediaDTO.getEan()) &&
             !StringUtils.isEmpty(mediaDTO.getMediaType())) {
-
-         try {
-            Integer mediaId = getFirstId(mediaDTO);
-            return findById(mediaId);
-
-         } catch (ResourceNotFoundException ex) {
-            mediaDTO.setId(null);
-            return entityToDTO(mediaRepository.save(dtoToEntity(mediaDTO)));
-         }
-
+         mediaDTO.setId(null);
+         return entityToDTO(mediaRepository.save(dtoToEntity(mediaDTO)));
       } else {
          throw new BadRequestException(CANNOT_SAVE);
       }

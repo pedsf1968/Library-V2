@@ -5,6 +5,7 @@ import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -50,6 +51,10 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    protected Integer id;
 
    @NotNull
+   @Column(name = "ean", length = Parameters.EAN_MAX)
+   private String ean;
+
+   @NotNull
    @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)
    protected String mediaType;
 
@@ -60,6 +65,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    private Date publicationDate;
 
    public void initialise( BookDTO bookDTO) {
+      this.ean = bookDTO.getEan();
       this.mediaType = MediaType.BOOK.name();
       this.returnDate = bookDTO.getReturnDate();
       this.title = bookDTO.getTitle();
@@ -73,6 +79,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( GameDTO gameDTO) {
+      this.ean = gameDTO.getEan();
       this.mediaType = MediaType.GAME.name();
       this.returnDate = gameDTO.getReturnDate();
       this.title = gameDTO.getTitle();
@@ -86,6 +93,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( MusicDTO musicDTO) {
+      this.ean = musicDTO.getEan();
       this.mediaType = MediaType.MUSIC.name();
       this.returnDate = musicDTO.getReturnDate();
       this.title = musicDTO.getTitle();
@@ -99,6 +107,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( VideoDTO videoDTO) {
+      this.ean = videoDTO.getEan();
       this.mediaType = MediaType.VIDEO.name();
       this.returnDate = videoDTO.getReturnDate();
       this.title = videoDTO.getTitle();

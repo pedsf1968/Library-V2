@@ -117,11 +117,13 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("initialise")
+   @DisplayName("Verify that we can initialise MediaDTO with BookDTO")
    void initialise_returnMedia_ofBook() {
       MediaDTO mediaDTO = new MediaDTO();
       BookDTO bookDTO = bookService.findById("978-2253010692");
       mediaDTO.initialise(bookDTO);
 
+      assertThat(mediaDTO.getEan()).isEqualTo(bookDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.BOOK.name());
       assertThat(mediaDTO.getReturnDate()).isEqualTo(bookDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(bookDTO.getTitle());
@@ -136,11 +138,13 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("initialise")
+   @DisplayName("Verify that we can initialise MediaDTO with GameDTO")
    void initialise_returnMedia_ofGame() {
       MediaDTO mediaDTO = new MediaDTO();
       GameDTO gameDTO = gameService.findById("0805529340299");
       mediaDTO.initialise(gameDTO);
 
+      assertThat(mediaDTO.getEan()).isEqualTo(gameDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.GAME.name());
       assertThat(mediaDTO.getReturnDate()).isEqualTo(gameDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(gameDTO.getTitle());
@@ -155,11 +159,13 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("initialise")
+   @DisplayName("Verify that we can initialise MediaDTO with MusicDTO")
    void initialise_returnMedia_ofMusic() {
       MediaDTO mediaDTO = new MediaDTO();
       MusicDTO musicDTO = musicService.findById("4988064585816");
       mediaDTO.initialise(musicDTO);
 
+      assertThat(mediaDTO.getEan()).isEqualTo(musicDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.MUSIC.name());
       assertThat(mediaDTO.getReturnDate()).isEqualTo(musicDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(musicDTO.getTitle());
@@ -174,11 +180,13 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("initialise")
+   @DisplayName("Verify that we can initialise MediaDTO with VideoDTO")
    void initialise_returnMedia_ofVideo() {
       MediaDTO mediaDTO = new MediaDTO();
       VideoDTO videoDTO = videoService.findById("3475001058980");
       mediaDTO.initialise(videoDTO);
 
+      assertThat(mediaDTO.getEan()).isEqualTo(videoDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.VIDEO.name());
       assertThat(mediaDTO.getReturnDate()).isEqualTo(videoDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(videoDTO.getTitle());
@@ -226,6 +234,7 @@ class MediaServiceTestIT {
 
          found = mediaService.findAllFiltered(filter);
          for(MediaDTO mediaFound : found) {
+            assertThat(mediaFound.getEan()).isEqualTo(m.getEan());
             assertThat(mediaFound.getMediaType()).isEqualTo(m.getMediaType());
             assertThat(mediaFound.getTitle()).isEqualTo(m.getTitle());
             assertThat(mediaFound.getPublicationDate()).isEqualTo(m.getPublicationDate());
@@ -256,12 +265,11 @@ class MediaServiceTestIT {
    @Test
    @Tag("save")
    @DisplayName("Verify that we can create a new Media")
-   @Disabled
    void save_returnCreatedMedia_ofNewMedia() {
-      MediaDTO MediaDTO = mediaService.entityToDTO(newMedia);
-
-      MediaDTO = mediaService.save(MediaDTO);
-      Integer newId = MediaDTO.getId();
+      MediaDTO mediaDTO = new MediaDTO();
+      mediaDTO.initialise(bookService.findById("978-2253010692"));
+      mediaDTO = mediaService.save(mediaDTO);
+      Integer newId = mediaDTO.getId();
 
       assertThat(mediaService.existsById(newId)).isTrue();
       mediaService.deleteById(newId);
@@ -287,7 +295,6 @@ class MediaServiceTestIT {
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Media by his ID")
-   @Disabled
    void deleteById_returnExceptionWhenGetMediaById_ofDeletedMediaById() {
       MediaDTO mediaDTO = new MediaDTO();
       mediaDTO.initialise(bookService.findById("978-2253003656"));
@@ -305,9 +312,10 @@ class MediaServiceTestIT {
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Medias")
-   @Disabled
    void count_returnTheNumberOfMedias() {
-      MediaDTO mediaDTO = mediaService.entityToDTO(newMedia);
+      MediaDTO mediaDTO = new MediaDTO();
+      mediaDTO.initialise(bookService.findById("978-2253003656"));
+
       assertThat(mediaService.count()).isEqualTo(31);
 
       // add an other media
