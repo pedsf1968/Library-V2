@@ -106,8 +106,7 @@ public class VideoService implements GenericMediaService<VideoDTO, Video,String>
 
    @Override
    public VideoDTO save(VideoDTO videoDTO) {
-      if (   !StringUtils.isEmpty(videoDTO.getEan()) &&
-            !StringUtils.isEmpty(videoDTO.getTitle()) &&
+      if (  !StringUtils.isEmpty(videoDTO.getTitle()) &&
             !StringUtils.isEmpty(videoDTO.getAudience()) &&
             !StringUtils.isEmpty(videoDTO.getDirector()) &&
             !StringUtils.isEmpty(videoDTO.getDuration()) &&

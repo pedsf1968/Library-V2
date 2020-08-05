@@ -34,7 +34,7 @@ public class MediaCommonDTO implements Serializable {
       this.stock = stock;
    }
 
-   protected MediaCommonDTO() {
+   public MediaCommonDTO() {
 
    }
 

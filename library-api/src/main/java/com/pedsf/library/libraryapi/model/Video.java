@@ -84,5 +84,4 @@ public class Video extends MediaCommon implements Serializable {
    @Column(name = "summary", length = Parameters.SUMMARY_MAX)
    private String summary;
 
-
 }
