@@ -32,10 +32,12 @@ public class Book extends MediaCommon implements Serializable {
                @NotNull Integer quantity,
                @NotNull Integer stock,
                @NotNull String isbn,
-               @NotNull Integer authorId) {
+               @NotNull Integer authorId,
+               @NotNull Integer edithorId) {
       super(ean, title, quantity, stock);
       this.isbn = isbn;
       this.authorId = authorId;
+      this.editorId = edithorId;
    }
 
    public Book() {

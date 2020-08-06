@@ -58,10 +58,10 @@ class VideoServiceTestIT {
       newVideo.setDuration(310);
       newVideo.setAudio("5.1");
 
-      newVideoDTO = new VideoDTO("sdfsdfds","Video of the Day", 1,1,personService.findById(15));
+      newVideoDTO = new VideoDTO("sdfsdfds","Video of the Day", 1,1,personService.findById(14));
       newVideoDTO.setDuration(123);
-      newVideoDTO.setFormat("SACD");
-      newVideoDTO.setType("ELECTRO");
+      newVideoDTO.setFormat(VideoFormat.DVD.name());
+      newVideoDTO.setType(VideoType.DOCUMENT.name());
       newVideoDTO.setUrl("http://www.google.co.kr");
       newVideoDTO.setHeight(11);
       newVideoDTO.setLength(11);

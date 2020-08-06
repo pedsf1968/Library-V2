@@ -3,9 +3,7 @@ package com.pedsf.library.libraryapi.service.unitary;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.ResourceNotFoundException;
-import com.pedsf.library.libraryapi.model.Book;
-import com.pedsf.library.libraryapi.model.BookFormat;
-import com.pedsf.library.libraryapi.model.BookType;
+import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.BookRepository;
 import com.pedsf.library.libraryapi.repository.BookSpecification;
 import com.pedsf.library.libraryapi.service.BookService;
@@ -64,19 +62,30 @@ class BookServiceTest {
       allPersons.add( new PersonDTO(15,"EA","Electronic Arts",Date.valueOf("1982-05-28")));
       allPersons.add( new PersonDTO(16,"Microsoft","Microsoft",null));
 
-      allBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1));
-      allBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1));
-      allBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1));
-      allBooks.add( new Book("978-2253010692","L'éducation sentimentale",2,-4,"9782253010692",2));
-      allBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2));
-      allBooks.add( new Book("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",3));
-      allBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3));
+      allBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1,11));
+      allBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1,11));
+      allBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1,11));
+      allBooks.add( new Book("978-2253010692","L'éducation sentimentale",2,-4,"9782253010692",2,11));
+      allBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2,11));
+      allBooks.add( new Book("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",3,11));
+      allBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3,11));
 
-      allAllowedBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1));
-      allAllowedBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1));
-      allAllowedBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1));
-      allAllowedBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2));
-      allAllowedBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3));
+      allAllowedBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1,11));
+      allAllowedBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1,11));
+      allAllowedBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1,11));
+      allAllowedBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2,11));
+      allAllowedBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3,11));
+
+      for(Book book:allBooks) {
+         book.setFormat(BookFormat.POCKET);
+         book.setType(BookType.NOVEL);
+      }
+
+      for(Book book:allAllowedBooks) {
+         book.setFormat(BookFormat.POCKET);
+         book.setType(BookType.NOVEL);
+      }
+
    }
 
 
@@ -84,8 +93,7 @@ class BookServiceTest {
    void beforeEach() {
       bookService = new BookService(bookRepository,personService);
 
-      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
-      newBook.setEditorId(16);
+      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2,10);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);
@@ -102,8 +110,7 @@ class BookServiceTest {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",allPersons.get(1));
-      newBookDTO.setEditor(allPersons.get(15));
+      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",allPersons.get(1),allPersons.get(9));
       newBookDTO.setPages(125);
       newBookDTO.setFormat(BookFormat.COMICS.name());
       newBookDTO.setType(BookType.HUMOR.name());
@@ -203,10 +210,10 @@ class BookServiceTest {
 
          if (alloweds.contains(bookDTO)) {
             // allowed
-            assertThat(bookDTO.getStock()).isGreaterThan(-bookDTO.getQuantity()*2);
+            assertThat(bookDTO.getQuantity()*2).isGreaterThan(-bookDTO.getStock());
          } else {
             // not allowed
-            assertThat(bookDTO.getStock()).isLessThanOrEqualTo(-bookDTO.getQuantity()*2);
+            assertThat(bookDTO.getQuantity()*2).isEqualTo(-bookDTO.getStock());
          }
       }
    }

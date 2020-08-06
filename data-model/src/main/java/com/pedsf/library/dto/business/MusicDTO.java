@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Music
@@ -62,4 +63,25 @@ public class MusicDTO extends MediaCommonDTO implements Serializable {
    private String format;
    @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof MusicDTO)) return false;
+      if (!super.equals(o)) return false;
+      MusicDTO musicDTO = (MusicDTO) o;
+      return Objects.equals(getPublicationDate(), musicDTO.getPublicationDate()) &&
+              getAuthor().equals(musicDTO.getAuthor()) &&
+              getComposer().equals(musicDTO.getComposer()) &&
+              getInterpreter().equals(musicDTO.getInterpreter()) &&
+              Objects.equals(getDuration(), musicDTO.getDuration()) &&
+              getType().equals(musicDTO.getType()) &&
+              getFormat().equals(musicDTO.getFormat()) &&
+              Objects.equals(getUrl(), musicDTO.getUrl());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getAuthor(), getComposer(), getInterpreter(), getDuration(), getType(), getFormat(), getUrl());
+   }
 }

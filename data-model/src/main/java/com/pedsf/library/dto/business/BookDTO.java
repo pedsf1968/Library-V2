@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Book
@@ -29,10 +30,12 @@ public class BookDTO extends MediaCommonDTO implements Serializable {
                   @NotNull Integer quantity,
                   @NotNull Integer stock,
                   @NotNull @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX) String isbn,
-                  @NotNull PersonDTO author) {
+                  @NotNull PersonDTO author,
+                  @NotNull PersonDTO editor) {
       super(ean, title, quantity, stock);
       this.isbn = isbn;
       this.author = author;
+      this.editor = editor;
    }
 
    public BookDTO() {
@@ -55,4 +58,22 @@ public class BookDTO extends MediaCommonDTO implements Serializable {
    private Integer pages;
    @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof BookDTO)) return false;
+      if (!super.equals(o)) return false;
+      BookDTO bookDTO = (BookDTO) o;
+      return getIsbn().equals(bookDTO.getIsbn()) &&
+              getAuthor().equals(bookDTO.getAuthor()) &&
+              getEditor().equals(bookDTO.getEditor()) &&
+              getType().equals(bookDTO.getType()) &&
+              getFormat().equals(bookDTO.getFormat());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getIsbn(), getAuthor(), getEditor(), getPublicationDate(), getType(), getFormat(), getPages(), getSummary());
+   }
 }

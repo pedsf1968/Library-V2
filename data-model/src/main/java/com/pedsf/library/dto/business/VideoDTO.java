@@ -60,4 +60,21 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
    @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
    private List<PersonDTO> actors;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof VideoDTO)) return false;
+      if (!super.equals(o)) return false;
+      VideoDTO videoDTO = (VideoDTO) o;
+      return  getDirector().equals(videoDTO.getDirector()) &&
+              Objects.equals(getDuration(), videoDTO.getDuration()) &&
+              getType().equals(videoDTO.getType()) &&
+              getFormat().equals(videoDTO.getFormat());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getDirector(), getDuration(), getType(), getFormat(), getImage(), getAudio(), getAudience(), getSummary(), getUrl(), getActors());
+   }
 }

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Media
@@ -61,4 +62,24 @@ public class MediaCommonDTO implements Serializable {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    protected Date returnDate;
 
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof MediaCommonDTO)) return false;
+      MediaCommonDTO that = (MediaCommonDTO) o;
+      return getEan().equals(that.getEan()) &&
+              getTitle().equals(that.getTitle()) &&
+              getQuantity().equals(that.getQuantity()) &&
+              getStock().equals(that.getStock()) &&
+              Objects.equals(getWeight(), that.getWeight()) &&
+              Objects.equals(getLength(), that.getLength()) &&
+              Objects.equals(getWidth(), that.getWidth()) &&
+              Objects.equals(getHeight(), that.getHeight()) &&
+              Objects.equals(getReturnDate(), that.getReturnDate());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(getEan(), getTitle(), getQuantity(), getStock(), getWeight(), getLength(), getWidth(), getHeight(), getReturnDate());
+   }
 }

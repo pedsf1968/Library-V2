@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Game
@@ -57,4 +58,21 @@ public class GameDTO extends MediaCommonDTO implements Serializable {
    private String url;
    @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof GameDTO)) return false;
+      if (!super.equals(o)) return false;
+      GameDTO gameDTO = (GameDTO) o;
+      return getEditor().equals(gameDTO.getEditor()) &&
+              getType().equals(gameDTO.getType()) &&
+              getFormat().equals(gameDTO.getFormat()) &&
+              Objects.equals(getPegi(), gameDTO.getPegi());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getEditor(), getType(), getFormat(), getPegi(), getUrl(), getSummary());
+   }
 }

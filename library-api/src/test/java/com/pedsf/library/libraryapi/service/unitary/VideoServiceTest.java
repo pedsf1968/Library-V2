@@ -3,10 +3,7 @@ package com.pedsf.library.libraryapi.service.unitary;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.exception.ResourceNotFoundException;
-import com.pedsf.library.libraryapi.model.Person;
-import com.pedsf.library.libraryapi.model.Video;
-import com.pedsf.library.libraryapi.model.VideoFormat;
-import com.pedsf.library.libraryapi.model.VideoType;
+import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.VideoRepository;
 import com.pedsf.library.libraryapi.repository.VideoSpecification;
 import com.pedsf.library.libraryapi.service.PersonService;
@@ -77,6 +74,15 @@ class VideoServiceTest {
       allAllowedVideos.add(new Video("3472089898980","Mort aux Trousses",1,1,3));
       allAllowedVideos.add(new Video("3476546046540","Le secret",3,-2,4));
 
+      for(Video video:allVideos) {
+         video.setFormat(VideoFormat.DVD);
+         video.setType(VideoType.DOCUMENT);
+      }
+
+      for(Video video:allAllowedVideos) {
+         video.setFormat(VideoFormat.DVD);
+         video.setType(VideoType.DOCUMENT);
+      }
    }
 
    @BeforeEach
@@ -124,7 +130,6 @@ class VideoServiceTest {
       ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
-
    }
 
    @Test
@@ -186,7 +191,6 @@ class VideoServiceTest {
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Videos that can be booked")
-   @Disabled
    void findAllAllowed_returnBookableVideos_ofAllVideos() {
       List<VideoDTO> alloweds = videoService.findAllAllowed();
       assertThat(alloweds.size()).isEqualTo(4);
@@ -194,26 +198,17 @@ class VideoServiceTest {
       for(Video video: allVideos) {
          VideoDTO videoDTO = videoService.entityToDTO(video);
 
-         if (containVideo(alloweds,videoDTO)) {
+         if (alloweds.contains(videoDTO)) {
             // allowed
-            assertThat(videoDTO.getStock()).isGreaterThan(-videoDTO.getQuantity()*2);
+            assertThat(videoDTO.getQuantity()*2).isGreaterThan(-videoDTO.getStock());
          } else {
             // not allowed
-            assertThat(videoDTO.getStock()).isLessThanOrEqualTo(-videoDTO.getQuantity()*2);
+            assertThat(videoDTO.getQuantity()*2).isLessThanOrEqualTo(-videoDTO.getStock());
          }
       }
    }
 
-   boolean containVideo(List<VideoDTO> videoDTOList, VideoDTO videoDTO) {
-      boolean result = false;
 
-      for (VideoDTO v : videoDTOList) {
-         if(v.equals(videoDTO)) {
-            return true;
-         }
-      }
-      return result;
-   }
 
    @Test
    @Tag("findAllFiltered")

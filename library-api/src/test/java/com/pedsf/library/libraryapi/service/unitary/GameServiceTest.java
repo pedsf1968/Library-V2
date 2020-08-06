@@ -3,9 +3,7 @@ package com.pedsf.library.libraryapi.service.unitary;
 import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.ResourceNotFoundException;
-import com.pedsf.library.libraryapi.model.Game;
-import com.pedsf.library.libraryapi.model.GameFormat;
-import com.pedsf.library.libraryapi.model.GameType;
+import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.GameRepository;
 import com.pedsf.library.libraryapi.repository.GameSpecification;
 import com.pedsf.library.libraryapi.service.GameService;
@@ -73,6 +71,16 @@ class GameServiceTest {
       allAllowedGames.add( new Game("9879876513246","NFS Need for Speed™ Paybak",2,-2,15));
       allAllowedGames.add( new Game("3526579879836","NFS Need for Speed™ No limit",2,-1,15));
       allAllowedGames.add( new Game("0805529340299","Flight Simulator 2004 : Un Siècle d'Aviation",1,1,16));
+
+      for(Game game:allGames) {
+         game.setFormat(GameFormat.SONY_PS3);
+         game.setType(GameType.SIMULATION);
+      }
+
+      for(Game game:allAllowedGames) {
+         game.setFormat(GameFormat.SONY_PS3);
+         game.setType(GameType.SIMULATION);
+      }
    }
 
    @BeforeEach
@@ -186,7 +194,6 @@ class GameServiceTest {
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Games that can be booked")
-   @Disabled
    void findAllAllowed_returnBookableGames_ofAllGames() {
       List<GameDTO> alloweds = gameService.findAllAllowed();
       assertThat(alloweds.size()).isEqualTo(3);
@@ -196,10 +203,10 @@ class GameServiceTest {
 
          if (alloweds.contains(gameDTO)) {
             // allowed
-            assertThat(gameDTO.getStock()).isGreaterThan(-gameDTO.getQuantity()*2);
+            assertThat(gameDTO.getQuantity()*2).isGreaterThan(gameDTO.getStock());
          } else {
             // not allowed
-            assertThat(gameDTO.getStock()).isLessThanOrEqualTo(-gameDTO.getQuantity()*2);
+            assertThat(gameDTO.getQuantity()*2).isEqualTo(-gameDTO.getStock());
          }
       }
    }

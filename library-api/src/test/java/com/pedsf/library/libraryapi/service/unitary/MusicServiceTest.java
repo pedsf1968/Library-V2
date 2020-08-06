@@ -75,6 +75,14 @@ class MusicServiceTest {
       allAllowedMusics.add(new Music("4988064585816","RE BLACKPINK",1,1,14,14,14));
       allAllowedMusics.add(new Music("8809265654654","Remember",1,0,15,15,15));
 
+      for(Music music:allMusics) {
+         music.setFormat(MusicFormat.CD);
+         music.setType(MusicType.POP);
+      }
+      for(Music music:allAllowedMusics) {
+         music.setFormat(MusicFormat.CD);
+         music.setType(MusicType.POP);
+      }
    }
 
    @BeforeEach
@@ -173,7 +181,6 @@ class MusicServiceTest {
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Musics that can be booked")
-   @Disabled
    void findAllAllowed_returnBookableMusics_ofAllMusics() {
       List<MusicDTO> alloweds = musicService.findAllAllowed();
       assertThat(alloweds.size()).isEqualTo(3);
@@ -183,10 +190,10 @@ class MusicServiceTest {
 
          if (alloweds.contains(musicDTO)) {
             // allowed
-            assertThat(musicDTO.getStock()).isGreaterThan(-musicDTO.getQuantity()*2);
+            assertThat(musicDTO.getQuantity()*2).isGreaterThan(-musicDTO.getStock());
          } else {
             // not allowed
-            assertThat(musicDTO.getStock()).isLessThanOrEqualTo(-musicDTO.getQuantity()*2);
+            assertThat(musicDTO.getQuantity()*2).isEqualTo(-musicDTO.getStock());
          }
       }
    }

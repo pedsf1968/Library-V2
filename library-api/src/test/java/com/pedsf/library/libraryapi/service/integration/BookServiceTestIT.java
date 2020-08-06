@@ -42,8 +42,7 @@ class BookServiceTestIT {
 
    @BeforeEach
    void beforeEach() {
-      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
-      newBook.setEditorId(16);
+      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2,16);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);
@@ -60,8 +59,7 @@ class BookServiceTestIT {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",personService.findById(2));
-      newBookDTO.setEditor(personService.findById(16));
+      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",personService.findById(2),personService.findById(16));
       newBookDTO.setPages(125);
       newBookDTO.setFormat("COMICS");
       newBookDTO.setType("HUMOR");
