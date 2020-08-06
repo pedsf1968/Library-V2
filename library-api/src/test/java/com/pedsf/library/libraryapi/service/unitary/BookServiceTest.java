@@ -32,25 +32,18 @@ import static org.mockito.ArgumentMatchers.anyInt;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 class BookServiceTest {
-   private static final String BOOK_EAN_TEST = "978-2253002864";
    private static final String BOOK_TITLE_TEST = "Le Horla";
-
+   private static final List<PersonDTO> allPersons = new ArrayList<>();
+   private static final List<Book> allBooks = new ArrayList<>();
+   private static final List<Book> allAllowedBooks = new ArrayList<>();
 
    @Mock
    private PersonService personService;
    @Mock
    private BookRepository bookRepository;
-
    private BookService bookService;
-
-
-   private static final List<PersonDTO> allPersons = new ArrayList<>();
-   private static final List<Book> allBooks = new ArrayList<>();
-   private static final List<Book> allAllowedBooks = new ArrayList<>();
-
    private Book newBook;
    private BookDTO newBookDTO;
-
 
    @BeforeAll
    static void beforeAll() {
@@ -112,8 +105,8 @@ class BookServiceTest {
       newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",allPersons.get(1));
       newBookDTO.setEditor(allPersons.get(15));
       newBookDTO.setPages(125);
-      newBookDTO.setFormat("COMICS");
-      newBookDTO.setType("HUMOR");
+      newBookDTO.setFormat(BookFormat.COMICS.name());
+      newBookDTO.setType(BookType.HUMOR.name());
       newBookDTO.setHeight(11);
       newBookDTO.setLength(11);
       newBookDTO.setWidth(11);
@@ -141,10 +134,10 @@ class BookServiceTest {
       ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
-
    }
 
    @Test
+   @Tag("existsById")
    @DisplayName("Verify that return TRUE if the Book exist")
    void existsById_returnTrue_OfAnExistingBookId() {
       for(Book book : allBooks) {
@@ -189,6 +182,7 @@ class BookServiceTest {
    @DisplayName("Verify that we have the list of all Books")
    void findAll_returnAllBooks() {
       List<BookDTO> bookDTOS = bookService.findAll();
+
       assertThat(bookDTOS.size()).isEqualTo(7);
 
       for(Book book: allBooks) {
@@ -221,8 +215,8 @@ class BookServiceTest {
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Book by his title and author")
    void findAllFiltered_returnOnlyOneBook_ofExistingFirstTitleAndAuthor() {
-
       List<BookDTO> found;
+
       for(Book book:allBooks) {
          Book filter = new Book();
          filter.setTitle(book.getTitle());
@@ -274,7 +268,6 @@ class BookServiceTest {
       newBookDTO.setTitle(BOOK_TITLE_TEST);
       Mockito.lenient().when(bookRepository.save(any(Book.class))).thenReturn(newBook);
 
-
       BookDTO bookSaved = bookService.update(newBookDTO);
       assertThat(bookSaved).isEqualTo(newBookDTO);
 
@@ -286,7 +279,6 @@ class BookServiceTest {
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
    void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
-
       String ean = newBookDTO.getEan();
 
       assertThat(bookService.existsById(ean)).isTrue();

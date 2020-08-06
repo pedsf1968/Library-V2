@@ -119,7 +119,6 @@ public class BookService implements GenericMediaService<BookDTO,Book,String> {
          } catch (ResourceNotFoundException ex) {
             return entityToDTO(bookRepository.save(dtoToEntity(bookDTO)));
          }
-
       } else {
          throw new BadRequestException(CANNOT_SAVE);
       }

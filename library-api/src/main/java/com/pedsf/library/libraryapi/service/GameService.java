@@ -21,7 +21,6 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
 
    private final GameRepository gameRepository;
    private final PersonService personService;
-
    private final ModelMapper modelMapper = new ModelMapper();
 
    public GameService(GameRepository gameRepository, PersonService personService) {
@@ -104,8 +103,7 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
 
    @Override
    public GameDTO save(GameDTO gameDTO) {
-      if (  !StringUtils.isEmpty(gameDTO.getEan()) &&
-            !StringUtils.isEmpty(gameDTO.getTitle()) &&
+      if (  !StringUtils.isEmpty(gameDTO.getTitle()) &&
             !StringUtils.isEmpty(gameDTO.getType()) &&
             !StringUtils.isEmpty(gameDTO.getFormat())) {
 
@@ -161,6 +159,7 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
       PersonDTO editor = personService.findById(game.getEditorId());
 
       gameDTO.setEditor(editor);
+      gameDTO.setPublicationDate(game.getPublicationDate());
 
       return gameDTO;
    }
@@ -172,6 +171,8 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
       if(gameDTO.getEditor()!=null) {
          game.setEditorId(gameDTO.getEditor().getId());
       }
+
+      game.setPublicationDate(gameDTO.getPublicationDate());
       return game;
    }
 

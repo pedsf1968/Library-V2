@@ -104,8 +104,7 @@ public class MusicService implements GenericMediaService<MusicDTO,Music,String>{
 
    @Override
    public MusicDTO save(MusicDTO musicDTO) {
-      if (   !StringUtils.isEmpty(musicDTO.getEan()) &&
-            !StringUtils.isEmpty(musicDTO.getTitle()) &&
+      if (  !StringUtils.isEmpty(musicDTO.getTitle()) &&
             !StringUtils.isEmpty(musicDTO.getAuthor()) &&
             !StringUtils.isEmpty(musicDTO.getComposer()) &&
             !StringUtils.isEmpty(musicDTO.getInterpreter()) &&
