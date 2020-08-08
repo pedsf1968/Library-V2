@@ -11,7 +11,6 @@ import com.pedsf.library.libraryapi.service.PersonService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -138,7 +137,6 @@ class BookServiceTest {
       Mockito.lenient().when(bookRepository.findByEan("978-2253096344")).thenReturn(java.util.Optional.ofNullable(allBooks.get(6)));
       Mockito.lenient().when(bookRepository.findByEan("954-8789797")).thenReturn(java.util.Optional.ofNullable(newBook));
 
-      ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
    }
@@ -163,7 +161,7 @@ class BookServiceTest {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Book by is ID")
-   void findById_returnUser_ofExistingBookId() {
+   void findById_returnBook_ofExistingBookId() {
       BookDTO found;
 
       for(Book book : allBooks) {
@@ -310,6 +308,7 @@ class BookServiceTest {
    @DisplayName("Verify that Book DTO is converted in right Book Entity")
    void dtoToEntity_returnRightBookEntity_ofBookDTO() {
       Book entity = bookService.dtoToEntity(newBookDTO);
+
       assertThat(entity.getEan()).isEqualTo(newBookDTO.getEan());
       assertThat(entity.getTitle()).isEqualTo(newBookDTO.getTitle());
       assertThat(entity.getQuantity()).isEqualTo(newBookDTO.getQuantity());
@@ -336,6 +335,7 @@ class BookServiceTest {
    void dtoToEntity_returnRightBookDTO_ofBookEntity() {
 
       BookDTO dto = bookService.entityToDTO(newBook);
+
       assertThat(dto.getEan()).isEqualTo(newBook.getEan());
       assertThat(dto.getTitle()).isEqualTo(newBook.getTitle());
       assertThat(dto.getQuantity()).isEqualTo(newBook.getQuantity());

@@ -27,11 +27,12 @@ import java.sql.Date;
 @Table(name = "media")
 public class Media implements Serializable {
 
-   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType, MediaStatus status) {
+   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType, MediaStatus status, Date returnDate) {
       this.id = id;
       this.ean = ean;
       this.mediaType = mediaType;
       this.status = status;
+      this.returnDate = returnDate;
    }
 
    public Media() {

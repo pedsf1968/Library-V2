@@ -42,7 +42,6 @@ public class BookingController {
          model.addAttribute(PathTable.ATTRIBUTE_BOOKINGS, bookingDTOS);
       } catch (ResourceNotFoundException exception) {
          log.info(exception.getMessage());
-         bookingDTOS = null;
       }
 
       return PathTable.BOOKINGS;

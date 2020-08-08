@@ -99,7 +99,7 @@ class BookServiceTestIT {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Book by is ID")
-   void findById_returnUser_ofExistingBookId() {
+   void findById_returnBook_ofExistingBookId() {
       BookDTO found;
 
       for(BookDTO bookDTO : allBookDTOS) {
@@ -127,7 +127,7 @@ class BookServiceTestIT {
       BookDTO newBookDTO = bookService.entityToDTO(newBook);
       assertThat(allBookDTOS.size()).isEqualTo(7);
 
-      // add one book to increasee the list
+      // add one book to increase the list
       newBookDTO = bookService.save(newBookDTO);
       List<BookDTO> bookDTOS = bookService.findAll();
       assertThat(bookDTOS.size()).isEqualTo(8);
@@ -166,6 +166,7 @@ class BookServiceTestIT {
    @DisplayName("Verify that we can find one Book by his title and author")
    void findAllFiltered_returnOnlyOneBook_ofExistingFirstTitleAndAuthor() {
       List<BookDTO> found;
+
       for(BookDTO b:allBookDTOS) {
          BookDTO filter = new BookDTO();
          filter.setTitle(b.getTitle());

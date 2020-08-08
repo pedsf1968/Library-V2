@@ -152,7 +152,7 @@ class VideoServiceTest {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Video by is ID")
-   void findById_returnUser_ofExistingVideoId() {
+   void findById_returnVideo_ofExistingVideoId() {
       VideoDTO found;
 
       for(Video video : allVideos) {

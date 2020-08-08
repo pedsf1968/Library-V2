@@ -1,6 +1,5 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.Parameters;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
@@ -10,15 +9,11 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 class MediaServiceTestIT {
-   private static final String MEDIA_EAN_TEST = "978-2253002864";
    private static final Integer MEDIA_ID_TEST = 5;
    private static final Integer BOOK_ID_TEST = 5;
    private static final Integer GAME_ID_TEST = 30;
@@ -41,8 +35,9 @@ class MediaServiceTestIT {
    static private MusicService musicService;
    static private VideoService videoService;
    private static Media newMedia;
-   private static MediaDTO newMediaDto;
+   private static MediaDTO newMediaDTO;
    private static List<MediaDTO> allMediaDTOS;
+   private static List<MediaDTO> allMediaFree = new ArrayList<>();
 
    @BeforeAll
    static void beforeAll( @Autowired MediaRepository mediaRepository,
@@ -59,20 +54,27 @@ class MediaServiceTestIT {
       videoService = new VideoService(videoRepository, personService);
 
       mediaService = new MediaService(mediaRepository, bookService, gameService, musicService, videoService);
+
+
+
    }
 
    @BeforeEach
    void beforeEach() {
-      newMedia = new Media(44,"954-8789797",MediaType.BOOK,MediaStatus.BOOKED);
-      newMediaDto = new MediaDTO();
+      BookDTO bookDTO = bookService.findById("978-2070413119");
+      newMedia = new Media(44,bookDTO.getEan(),MediaType.BOOK,MediaStatus.BOOKED,Date.valueOf("1999-07-11"));
+      newMediaDTO = new MediaDTO();
+      newMediaDTO.initialise(bookDTO);
+      newMediaDTO.setId(44);
+      newMediaDTO.setReturnDate(null);
 
-      newMediaDto.setId(44);
-      newMediaDto.setEan("954-8789797");
-      newMediaDto.setMediaType("BOOK");
-      newMediaDto.setStatus("BOOKED");
-      newMediaDto.setReturnDate(null);
 
       allMediaDTOS = mediaService.findAll();
+      for(MediaDTO dto: allMediaDTOS) {
+         if(dto.getStatus().equals(MediaStatus.FREE.name())) {
+            allMediaFree.add(dto);
+         }
+      }
    }
 
    @Test
@@ -109,9 +111,7 @@ class MediaServiceTestIT {
    @Tag("findById")
    @DisplayName("Verify that we can't find Media with wrong ID")
    void findById_returnException_ofInexistingMediaId() {
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         MediaDTO found = mediaService.findById(555);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> mediaService.findById(555));
    }
 
 
@@ -201,32 +201,64 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("findOneByEan")
+   @DisplayName("Verify that we can find Media by his EAN")
    void findOneByEan_returnMedia_ofMediaEAN() {
       for(MediaDTO mediaDTO:allMediaDTOS) {
          MediaDTO found = mediaService.findOneByEan(mediaDTO.getEan());
+         assertThat(found.getEan()).isEqualTo(mediaDTO.getEan());
          assertThat(found.getMediaType()).isEqualTo(mediaDTO.getMediaType());
-         assertThat(found.getPublicationDate()).isEqualTo(mediaDTO.getPublicationDate());
+         assertThat(found.getReturnDate()).isEqualTo(mediaDTO.getReturnDate());
       }
    }
 
    @Test
-   void findFreeByEan() {
+   @Tag("findOneByEan")
+   @DisplayName("Verify that we get ResourceNotFoundException finding Media by wrong EAN")
+   void findOneByEan_throwResourceNotFoundException_ofWrongEAN() {
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> mediaService.findOneByEan("WRONGEAN)"));
+   }
+
+   @Test
+   @Tag("findFreeByEan")
+   void findFreeByEan_returnMediaFreeList_ofEANCodeMedia() {
+
+      for(MediaDTO dto: allMediaDTOS) {
+         if(dto.getStatus().equals(MediaStatus.FREE.name())) {
+            MediaDTO found = mediaService.findFreeByEan(dto.getEan());
+            assertThat(allMediaFree.contains(found)).isTrue();
+         }
+      }
+   }
+
+   @Test
+   @Tag("findFreeByEan")
+   @DisplayName("Verify that we get ResourceNotFoundException finding Media FREE by wrong EAN")
+   void findFreeByEan_throwResourceNotFoundException_ofWrongEAN() {
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> mediaService.findFreeByEan("WRONGEAN)"));
    }
 
    @Test
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Medias")
    void findAll_returnAllMedias() {
+      assertThat(allMediaDTOS.size()).isEqualTo(31);
+
+      // add one Media to increase the list
+      newMediaDTO = mediaService.save(newMediaDTO);
       List<MediaDTO> mediaDTOS = mediaService.findAll();
-      assertThat(mediaDTOS.size()).isEqualTo(31);
+      assertThat(mediaDTOS.size()).isEqualTo(32);
+      assertThat(mediaDTOS.contains(newMediaDTO)).isTrue();
+
+      mediaService.deleteById(newMediaDTO.getId());
    }
+
    @Test
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Media by his title, media type and ean")
    void findAllFiltered_returnOnlySameMedia_ofExistingTitleAndMediaTypeAndEAN() {
-      List<MediaDTO> mediaDTOS = mediaService.findAll();
       List<MediaDTO> found;
-      for(MediaDTO m:mediaDTOS) {
+
+      for(MediaDTO m:allMediaDTOS) {
          MediaDTO filter = new MediaDTO();
          filter.setTitle(m.getTitle());
          filter.setMediaType(m.getMediaType());
@@ -238,12 +270,14 @@ class MediaServiceTestIT {
             assertThat(mediaFound.getMediaType()).isEqualTo(m.getMediaType());
             assertThat(mediaFound.getTitle()).isEqualTo(m.getTitle());
             assertThat(mediaFound.getPublicationDate()).isEqualTo(m.getPublicationDate());
+            assertThat(mediaFound.getReturnDate()).isEqualTo(m.getReturnDate());
             assertThat(mediaFound.getEan()).isEqualTo(m.getEan());
             assertThat(mediaFound.getHeight()).isEqualTo(m.getHeight());
             assertThat(mediaFound.getLength()).isEqualTo(m.getLength());
             assertThat(mediaFound.getWidth()).isEqualTo(m.getWidth());
             assertThat(mediaFound.getWeight()).isEqualTo(m.getWeight());
             assertThat(mediaFound.getQuantity()).isEqualTo(m.getQuantity());
+            assertThat(mediaFound.getStock()).isEqualTo(m.getStock());
          }
       }
    }
@@ -304,9 +338,8 @@ class MediaServiceTestIT {
       assertThat(mediaService.existsById(id)).isTrue();
       mediaService.deleteById(id);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         mediaService.findById(id);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> mediaService.findById(id));
    }
 
    @Test
@@ -529,42 +562,203 @@ class MediaServiceTestIT {
    }
 
    @Test
-   void findBlockedByEan() {
+   @Tag("findBlockedByEan")
+   @DisplayName("Verify that we can find the Media BLOCKED with his EAN")
+   void findBlockedByEan_returnBlockedMedia_ofMediaEANBlocked() {
+      String oldStatus;
+      MediaDTO found;
+
+      for(MediaDTO mediaDTO: allMediaDTOS) {
+         oldStatus = mediaDTO.getStatus();
+         mediaDTO.setStatus(MediaStatus.BLOCKED.name());
+         mediaService.setStatus(mediaDTO.getId(),MediaStatus.BLOCKED);
+         found = mediaService.findBlockedByEan(mediaDTO.getEan());
+         assertThat(found).isEqualTo(mediaDTO);
+         mediaService.setStatus(mediaDTO.getId(),MediaStatus.valueOf(oldStatus));
+      }
    }
 
    @Test
-   void findBoockedByEan() {
+   @Tag("findBoockedByEan")
+   @DisplayName("Verify that we can find the Media BOOKED with his EAN")
+   void findBoockedByEan_returnBookedMedia_ofMediaEANBooked() {
+      String oldStatus;
+      MediaDTO found;
+
+      for(MediaDTO mediaDTO: allMediaDTOS) {
+         oldStatus = mediaDTO.getStatus();
+         mediaDTO.setStatus(MediaStatus.BOOKED.name());
+         mediaService.setStatus(mediaDTO.getId(),MediaStatus.BOOKED);
+         found = mediaService.findBoockedByEan(mediaDTO.getEan());
+         assertThat(found).isEqualTo(mediaDTO);
+         mediaService.setStatus(mediaDTO.getId(),MediaStatus.valueOf(oldStatus));
+      }
    }
 
    @Test
-   void blockFreeByEan() {
+   @Tag("blockFreeByEan")
+   @DisplayName("Verify tha we can BLOCK a FREE Media among FREE Media with the same ID")
+   void blockFreeByEan_setBLOCKED_ofFREEMedia() {
+      String ean;
+      MediaDTO found;
+
+      for(MediaDTO mediaDTO:allMediaFree) {
+         ean = mediaDTO.getEan();
+         mediaService.blockFreeByEan(ean);
+         found = mediaService.findBlockedByEan(ean);
+         found.setStatus(MediaStatus.FREE.name());
+         assertThat(found.getEan()).isEqualTo(mediaDTO.getEan());
+         assertThat(allMediaFree.contains(found)).isTrue();
+         // reset status of media
+         mediaService.setStatus(found.getId(),MediaStatus.FREE);
+      }
    }
 
    @Test
-   void bookedFreeByEan() {
+   @Tag("blockFreeByEan")
+   @DisplayName("Verify tha we don't BLOCK a not FREE Media")
+   void blockFreeByEan_statusNotChanged_ofNotFREEMedia() {
+      mediaService.blockFreeByEan("978-2253002864");
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()->mediaService.findBlockedByEan("978-2253002864"));
+   }
+
+
+
+   @Test
+   @Tag("bookedFreeByEan")
+   @DisplayName("Verify tha we can BOOK a FREE Media among FREE Media with the same ID")
+   void bookedFreeByEan_setBOOKED_ofFREEMedia() {
+      String ean;
+      MediaDTO found;
+
+      for(MediaDTO mediaDTO:allMediaFree) {
+         ean = mediaDTO.getEan();
+         mediaService.bookedFreeByEan(ean);
+         found = mediaService.findBoockedByEan(ean);
+         found.setStatus(MediaStatus.FREE.name());
+         assertThat(found.getEan()).isEqualTo(mediaDTO.getEan());
+         assertThat(allMediaFree.contains(found)).isTrue();
+         // reset status of media
+         mediaService.setStatus(found.getId(),MediaStatus.FREE);
+      }
    }
 
    @Test
+   @Tag("bookedFreeByEan")
+   @DisplayName("Verify tha we don't BOOK a not FREE Media")
+   void bookedFreeByEan_statusNotChanged_ofNotFREEMedia() {
+      mediaService.bookedFreeByEan("978-2253002864");
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()->{
+         mediaService.findBlockedByEan("978-2253002864");
+      });
+   }
+   @Test
+   @Tag("borrow")
    void borrow() {
    }
 
+   @Disabled
    @Test
-   void release() {
+   @Tag("release")
+   @DisplayName("Verify hat we can reinitialise the status and the returnDate of a Media")
+   void release_setFREEAndReturnDateNull_ofMediaByID() {
+      MediaDTO found;
+      MediaStatus oldStatus;
+      Date oldDate;
+      Integer mediaId;
+
+      for (MediaDTO mediaDTO:allMediaDTOS) {
+         if (!mediaDTO.getStatus().equals(MediaStatus.FREE.name())) {
+            mediaId = mediaDTO.getId();
+            oldStatus = MediaStatus.valueOf(mediaDTO.getStatus());
+            oldDate = mediaDTO.getReturnDate();
+
+            mediaService.release(mediaId);
+            found = mediaService.findById(mediaId);
+            assertThat(found.getStatus()).isEqualTo(MediaStatus.FREE.name());
+            assertThat(found.getReturnDate()).isNull();
+            mediaService.setStatus(mediaId,oldStatus);
+            mediaService.updateReturnDate(mediaId,oldDate);
+         }
+      }
+   }
+
+   @Disabled
+   @Test
+   @Tag("updateReturnDate")
+   @DisplayName("Verify tha we can set the new returnDate")
+   void updateReturnDate_returnMediaWithNewDate_ofMediaAndDate() {
+      MediaDTO found;
+      Date oldDate;
+      Date newDate = Date.valueOf("1999-07-11");
+      Integer mediaId;
+
+      for (MediaDTO mediaDTO:allMediaDTOS) {
+         oldDate = mediaDTO.getReturnDate();
+         mediaId = mediaDTO.getId();
+         mediaService.updateReturnDate(mediaId, newDate);
+         found = mediaService.findById(mediaId);
+         assertThat(found.getReturnDate()).isEqualTo(newDate);
+         mediaService.updateReturnDate(mediaId, oldDate);
+         found = mediaService.findById(mediaId);
+         assertThat(found.getReturnDate()).isEqualTo(oldDate);
+      }
    }
 
    @Test
-   void updateReturnDate() {
-   }
-
-   @Test
-   void getNextReturnDateByEan() {
-   }
-
-   @Test
+   @Tag("getNextReturnByEan")
+   @DisplayName("Verify that we can get the next return Media by EAN")
    void getNextReturnByEan() {
+      MediaDTO found;
+
+      found = mediaService.getNextReturnByEan("978-2253004226");
+      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
+      found = mediaService.getNextReturnByEan("978-2253002864");
+      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
    }
 
    @Test
-   void setStatus() {
+   @Tag("getNextReturnByEan")
+   @DisplayName("Verify that we return null returnDate if a Media of this AEN is available")
+   void getNextReturnByEan_returnNull_ofAvailableMediaEAN() {
+      MediaDTO found = mediaService.getNextReturnByEan("978-2253010692");
+      assertThat(found.getReturnDate()).isNull();
+
+   }
+
+
+   @Test
+   @Tag("setStatus")
+   @DisplayName("Verify that we can change the MediaStatus")
+   void setStatus_setStatus_ofMediaAndMediaStatus() {
+      MediaDTO found;
+      MediaStatus oldStatus;
+      MediaStatus newStatus;
+      Integer mediaId;
+
+      for (MediaDTO mediaDTO:allMediaDTOS) {
+         mediaId = mediaDTO.getId();
+         oldStatus = MediaStatus.valueOf(mediaDTO.getStatus());
+
+         if (oldStatus.equals(MediaStatus.FREE)) {
+            newStatus = MediaStatus.BLOCKED;
+         } else if (oldStatus.equals(MediaStatus.BLOCKED)) {
+            newStatus = MediaStatus.BOOKED;
+         }  else if (oldStatus.equals(MediaStatus.BOOKED)) {
+            newStatus = MediaStatus.BORROWED;
+         }  else {
+            newStatus = MediaStatus.FREE;
+         }
+
+         mediaService.setStatus(mediaId,newStatus);
+         found = mediaService.findById(mediaId);
+         assertThat(found.getStatus()).isEqualTo(newStatus.name());
+         mediaService.setStatus(mediaId,oldStatus);
+         found = mediaService.findById(mediaId);
+         assertThat(found.getStatus()).isEqualTo(oldStatus.name());
+      }
    }
 }

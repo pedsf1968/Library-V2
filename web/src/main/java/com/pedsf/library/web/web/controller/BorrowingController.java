@@ -47,8 +47,8 @@ public class BorrowingController {
       try {
          borrowingDTOS = libraryApiProxy.findByUserIdNotReturn(userDTO.getId());
          model.addAttribute(PathTable.ATTRIBUTE_BORROWINGS, borrowingDTOS);
-      } catch (ResourceNotFoundException ex) {
-         borrowingDTOS = null;
+      } catch (ResourceNotFoundException exception) {
+         log.info(exception.getMessage());
       }
 
       model.addAttribute(PathTable.ATTRIBUTE_RESTITUTION_DATE, restitutionDate);

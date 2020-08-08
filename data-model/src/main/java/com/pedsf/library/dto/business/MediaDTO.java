@@ -5,7 +5,6 @@ import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -31,13 +30,13 @@ import java.util.Date;
  */
 @Data
 public class MediaDTO extends MediaCommonDTO implements Serializable {
-   public MediaDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+   public MediaDTO(@NotNull Integer id,
+                   @NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
                    @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                   @NotNull Integer quantity,
-                   @NotNull Integer stock,
-                   @NotNull Integer id,
                    @NotNull @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX) String mediaType,
-                   @Size(max = Parameters.MEDIA_STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_STATUS_MAX) String status) {
+                   @Size(max = Parameters.MEDIA_STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_STATUS_MAX) String status,
+                   @NotNull Integer quantity,
+                   @NotNull Integer stock) {
       super(ean, title, quantity, stock);
       this.id = id;
       this.mediaType = mediaType;
@@ -49,10 +48,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
 
    @NotNull
    protected Integer id;
-
-   @NotNull
-   @Column(name = "ean", length = Parameters.EAN_MAX)
-   private String ean;
 
    @NotNull
    @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)

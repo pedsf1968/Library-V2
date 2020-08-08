@@ -143,7 +143,7 @@ class MusicServiceTest {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Music by is ID")
-   void findById_returnUser_ofExistingMusicId() {
+   void findById_returnMusic_ofExistingMusicId() {
       MusicDTO found;
 
       for(Music music : allMusics) {

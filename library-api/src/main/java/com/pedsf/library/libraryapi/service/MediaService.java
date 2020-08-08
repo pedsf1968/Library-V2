@@ -309,12 +309,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
 
    public void updateReturnDate(Integer mediaId, Date date) {
-      java.sql.Date sDate = new java.sql.Date(date.getTime());
-      mediaRepository.updateReturnDate(sDate, mediaId);
-   }
-
-   public Date getNextReturnDateByEan(String ean) {
-      return mediaRepository.getNextReturnDateByEan(ean);
+      mediaRepository.updateReturnDate(mediaId,new java.sql.Date(date.getTime()));
    }
 
    public MediaDTO getNextReturnByEan(String ean) {

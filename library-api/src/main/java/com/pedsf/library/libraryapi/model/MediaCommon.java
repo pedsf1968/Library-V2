@@ -29,9 +29,9 @@ import java.sql.Date;
 public class MediaCommon implements Serializable {
 
    MediaCommon(String ean,
-                      @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-                      @NotNull Integer quantity,
-                      @NotNull Integer stock) {
+               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock) {
       this.ean = ean;
       this.title = title;
       this.quantity = quantity;

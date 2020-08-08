@@ -156,7 +156,7 @@ class GameServiceTest {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Game by is ID")
-   void findById_returnUser_ofExistingGameId() {
+   void findById_returnGame_ofExistingGameId() {
       GameDTO found;
 
       for(Game game : allGames) {
