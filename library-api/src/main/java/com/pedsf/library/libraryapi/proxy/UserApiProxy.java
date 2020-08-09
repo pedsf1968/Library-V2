@@ -31,6 +31,6 @@ public interface UserApiProxy {
    @PutMapping(value = "/users/{userId}/counter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    UserDTO updateUserCounter(@PathVariable("userId") Integer userId,@RequestBody Integer counter);
 
-   @PutMapping(value = "/users/{userId}/status/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+   @PutMapping(value = "/users/{userId}/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    UserDTO updateUserStatus(@PathVariable("userId") Integer userId, @RequestBody String status);
 }

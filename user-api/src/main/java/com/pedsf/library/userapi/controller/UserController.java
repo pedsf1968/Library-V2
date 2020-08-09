@@ -128,7 +128,7 @@ public class UserController {
    }
 
 
-   @PutMapping(value = "/{userId}/status/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+   @PutMapping(value = "/{userId}/status", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<UserDTO> updateUserStatus(@PathVariable("userId") Integer userId,
                                                     @RequestBody String status) {
 

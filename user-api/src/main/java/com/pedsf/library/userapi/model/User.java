@@ -1,6 +1,7 @@
 package com.pedsf.library.userapi.model;
 
 import com.pedsf.library.Parameters;
+import org.bouncycastle.util.Arrays;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,6 +17,8 @@ import java.util.Set;
 @Entity(name = "User")
 @Table(name = "users")
 public class User implements Serializable {
+   private static final String USER_COUNTRY = "FRANCE";
+   private static final Integer USER_COUNTER = 0;
 
    @Id
    @Column(name = "id")
@@ -33,15 +36,15 @@ public class User implements Serializable {
    private String lastName;
 
    @NotNull
-   @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
-   @Column(name = "password", length = Parameters.PASSWORD_MAX)
-   private String password;
-
-   @NotNull
    @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
    @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
    @Column(name = "email", unique = true, length = Parameters.EMAIL_MAX)
    private String email;
+
+   @NotNull
+   @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
+   @Column(name = "password", length = Parameters.PASSWORD_MAX)
+   private String password;
 
    @Size(max = Parameters.PHONE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.PHONE_MAX)
    @Pattern(regexp = Parameters.PHONE_REGEXP, message = Parameters.ERROR_PHONE_FORMAT)
@@ -90,7 +93,29 @@ public class User implements Serializable {
 
    @Size(max = Parameters.COUNTRY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.COUNTRY_MAX + " !")
    @Column(name = "country", length = Parameters.COUNTRY_MAX)
-   private String country = "FRANCE";
+   private String country = USER_COUNTRY;
+
+   public User(Integer id,
+               @NotNull @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !") String firstName,
+               @NotNull @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !") String lastName,
+               @NotNull @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !") @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT) String email,
+               @NotNull @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !") String password,
+               @NotNull @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !") String street1,
+               @NotNull @Size(max = Parameters.ZIP_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ZIP_MAX + " !") String zipCode,
+               @NotNull @Size(max = Parameters.CITY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.CITY_MAX + " !") String city) {
+      this.id = id;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.email = email;
+      this.password = password;
+      this.street1 = street1;
+      this.street2 = "";
+      this.street3 = "";
+      this.zipCode = zipCode;
+      this.city = city;
+      this.country = USER_COUNTRY;
+      this.counter = USER_COUNTER;
+   }
 
    public User() {
       // empty constructor for creating empty user and add attribute after
