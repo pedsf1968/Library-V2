@@ -13,7 +13,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +36,7 @@ class MediaServiceTestIT {
    private static Media newMedia;
    private static MediaDTO newMediaDTO;
    private static List<MediaDTO> allMediaDTOS;
-   private static List<MediaDTO> allMediaFree = new ArrayList<>();
+   private static final List<MediaDTO> allMediaFree = new ArrayList<>();
 
    @BeforeAll
    static void beforeAll( @Autowired MediaRepository mediaRepository,
@@ -651,9 +650,8 @@ class MediaServiceTestIT {
    void bookedFreeByEan_statusNotChanged_ofNotFREEMedia() {
       mediaService.bookedFreeByEan("978-2253002864");
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()->{
-         mediaService.findBlockedByEan("978-2253002864");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> mediaService.findBlockedByEan("978-2253002864"));
    }
    @Test
    @Tag("borrow")

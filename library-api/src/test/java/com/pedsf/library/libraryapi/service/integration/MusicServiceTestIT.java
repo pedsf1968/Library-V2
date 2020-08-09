@@ -99,9 +99,8 @@ class MusicServiceTestIT {
    @Tag("findById")
    @DisplayName("Verify that we can't find Music with wrong ID")
    void findById_returnException_ofInexistingMusicId() {
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         MusicDTO found = musicService.findById("liuzae");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> musicService.findById("liuzae"));
    }
 
 
@@ -217,9 +216,8 @@ class MusicServiceTestIT {
       assertThat(musicService.existsById(ean)).isTrue();
       musicService.deleteById(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         musicService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> musicService.findById(ean));
    }
 
    @Test

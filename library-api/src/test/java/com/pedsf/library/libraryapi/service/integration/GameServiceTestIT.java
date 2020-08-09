@@ -1,6 +1,5 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.GameRepository;
@@ -114,9 +113,8 @@ class GameServiceTestIT {
    @DisplayName("Verify that we can't find Game with wrong ID")
    void findById_returnException_ofInexistingGameId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         GameDTO found = gameService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById("klgqsdf"));
    }
 
    @Test
@@ -231,9 +229,8 @@ class GameServiceTestIT {
       assertThat(gameService.existsById(ean)).isTrue();
       gameService.deleteById(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         gameService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById(ean));
 
    }
 

@@ -26,11 +26,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 class MediaServiceTest {
-   private static final Integer MEDIA_ID_TEST = 5;
-   private static final Integer BOOK_ID_TEST = 5;
-   private static final Integer GAME_ID_TEST = 30;
-   private static final Integer MUSIC_ID_TEST = 24;
-   private static final Integer VIDEO_ID_TEST = 22;
    private static final String MEDIA_TITLE_TEST = "Nouveau titre";
    private static final List<PersonDTO> allPersons = new ArrayList<>();
    private static final List<Media> allMedias = new ArrayList<>();
@@ -340,7 +335,6 @@ class MediaServiceTest {
    @Tag("findOneByEan")
    @DisplayName("Verify that we can find Media by his EAN")
    void findOneByEan_returnMedia_ofMediaEAN() {
-      Integer mediaId = newMedia.getId();
       String ean = newMedia.getEan();
 
       Mockito.lenient().when(bookService.findById(anyString())).thenReturn(bookDTO);
@@ -401,7 +395,7 @@ class MediaServiceTest {
          filter.setMediaType(mediaDTO.getMediaType());
          filter.setEan(mediaDTO.getEan());
 
-         Mockito.lenient().when(mediaRepository.findAll(any(MediaSpecification.class))).thenReturn(Arrays.asList(media));
+         Mockito.lenient().when(mediaRepository.findAll(any(MediaSpecification.class))).thenReturn(Collections.singletonList(media));
 
          found = mediaService.findAllFiltered(filter);
 
@@ -431,7 +425,7 @@ class MediaServiceTest {
    @DisplayName("Verify that we can create a new Media")
    void save_returnCreatedMedia_ofNewMedia() {
       Mockito.lenient().when(mediaRepository.save(any(Media.class))).thenReturn(newMedia);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(Optional.ofNullable(newMedia));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(Optional.of(newMedia));
 
       MediaDTO mediaDTO = mediaDTO = mediaService.save(newMediaDTO);
       Integer newId = mediaDTO.getId();
@@ -543,7 +537,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(musicService.findById(anyString())).thenReturn(musicDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.increaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -569,7 +563,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(gameService.findById(anyString())).thenReturn(gameDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.increaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -595,7 +589,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(videoService.findById(anyString())).thenReturn(videoDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.increaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -640,7 +634,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(gameService.findById(anyString())).thenReturn(gameDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.decreaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -666,7 +660,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(musicService.findById(anyString())).thenReturn(musicDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.decreaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -692,7 +686,7 @@ class MediaServiceTest {
       media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(videoService.findById(anyString())).thenReturn(videoDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.ofNullable(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
 
       mediaService.decreaseStock(mediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
@@ -801,9 +795,8 @@ class MediaServiceTest {
 
       mediaService.bookedFreeByEan(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()->{
-         mediaService.findBlockedByEan(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()->mediaService.findBlockedByEan(ean));
    }
 
    @Test

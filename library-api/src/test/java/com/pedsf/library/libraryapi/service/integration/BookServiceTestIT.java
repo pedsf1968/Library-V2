@@ -115,9 +115,8 @@ class BookServiceTestIT {
    @DisplayName("Verify that we can't find Book with wrong ID")
    void findById_returnException_ofInexistingBookId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         BookDTO found = bookService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById("klgqsdf"));
    }
 
    @Test
@@ -232,9 +231,8 @@ class BookServiceTestIT {
       assertThat(bookService.existsById(ean)).isTrue();
       bookService.deleteById(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         bookService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById(ean));
    }
 
    @Test

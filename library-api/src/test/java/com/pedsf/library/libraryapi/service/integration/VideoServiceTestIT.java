@@ -1,23 +1,17 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.libraryapi.model.*;
-import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.PersonRepository;
 import com.pedsf.library.libraryapi.repository.VideoRepository;
-import com.pedsf.library.libraryapi.service.MusicService;
 import com.pedsf.library.libraryapi.service.PersonService;
 import com.pedsf.library.libraryapi.service.VideoService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,9 +104,8 @@ class VideoServiceTestIT {
    @DisplayName("Verify that we can't find user Video wrong ID")
    void findById_returnException_ofInexistingVideoId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         VideoDTO found = videoService.findById("klsdjfh");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById("klsdjfh"));
    }
 
 
@@ -229,9 +222,8 @@ class VideoServiceTestIT {
       assertThat(videoService.existsById(ean)).isTrue();
       videoService.deleteById(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         videoService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById(ean));
    }
 
    @Test

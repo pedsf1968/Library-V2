@@ -11,7 +11,6 @@ import com.pedsf.library.libraryapi.service.VideoService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -127,7 +126,6 @@ class VideoServiceTest {
       Mockito.lenient().when(videoRepository.findByEan("3476546046540")).thenReturn(java.util.Optional.ofNullable(allVideos.get(5)));
       Mockito.lenient().when(videoRepository.findByEan("sdfsdfds")).thenReturn(java.util.Optional.ofNullable(newVideo));
 
-      ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
    }
@@ -168,9 +166,8 @@ class VideoServiceTest {
    @DisplayName("Verify that we can't find user Video wrong ID")
    void findById_returnException_ofInexistingVideoId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         VideoDTO found = videoService.findById("klsdjfh");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById("klsdjfh"));
    }
 
 
@@ -221,7 +218,7 @@ class VideoServiceTest {
          filter.setTitle(video.getTitle());
          filter.setDirectorId(video.getDirectorId());
 
-         Mockito.lenient().when(videoRepository.findAll(any(VideoSpecification.class))).thenReturn(Arrays.asList(video));
+         Mockito.lenient().when(videoRepository.findAll(any(VideoSpecification.class))).thenReturn(Collections.singletonList(video));
 
          VideoDTO filterDTO = videoService.entityToDTO(filter);
          found = videoService.findAllFiltered(filterDTO);
@@ -283,16 +280,15 @@ class VideoServiceTest {
       videoService.deleteById(ean);
       Mockito.lenient().when(videoRepository.findByEan(ean)).thenThrow(ResourceNotFoundException.class);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         videoService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById(ean));
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Videos")
    void count_returnTheNumberOfVideos() {
-      Mockito.lenient().when(videoRepository.count()).thenReturn(5l);
+      Mockito.lenient().when(videoRepository.count()).thenReturn(5L);
       assertThat(videoService.count()).isEqualTo(5);
    }
 

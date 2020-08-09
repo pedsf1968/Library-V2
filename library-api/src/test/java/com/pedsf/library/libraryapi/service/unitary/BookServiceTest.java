@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -177,9 +178,8 @@ class BookServiceTest {
    @DisplayName("Verify that we can't find Book with wrong ID")
    void findById_returnException_ofInexistingBookId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         BookDTO found = bookService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById("klgqsdf"));
    }
 
    @Test
@@ -227,7 +227,7 @@ class BookServiceTest {
          filter.setTitle(book.getTitle());
          filter.setAuthorId(book.getAuthorId());
 
-         Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Arrays.asList(book));
+         Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Collections.singletonList(book));
 
          BookDTO filterDTO = bookService.entityToDTO(filter);
          found = bookService.findAllFiltered(filterDTO);
@@ -290,16 +290,15 @@ class BookServiceTest {
       bookService.deleteById(ean);
       Mockito.lenient().when(bookRepository.findByEan(ean)).thenThrow(ResourceNotFoundException.class);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         bookService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById(ean));
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Books")
    void count_returnTheNumberOfBooks() {
-      Mockito.lenient().when(bookRepository.count()).thenReturn(7l);
+      Mockito.lenient().when(bookRepository.count()).thenReturn(7L);
       assertThat(bookService.count()).isEqualTo(7);
    }
 

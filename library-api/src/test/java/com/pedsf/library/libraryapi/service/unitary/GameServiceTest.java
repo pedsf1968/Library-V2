@@ -11,7 +11,6 @@ import com.pedsf.library.libraryapi.service.PersonService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -21,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -130,7 +130,6 @@ class GameServiceTest {
       Mockito.lenient().when(gameRepository.findByEan("0805kuyiuo299")).thenReturn(java.util.Optional.ofNullable(allGames.get(4)));
       Mockito.lenient().when(gameRepository.findByEan("954-87sdf797")).thenReturn(java.util.Optional.ofNullable(newGame));
 
-      ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
    }
@@ -172,9 +171,8 @@ class GameServiceTest {
    @DisplayName("Verify that we can't find Game with wrong ID")
    void findById_returnException_ofInexistingGameId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         GameDTO found = gameService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById("klgqsdf"));
    }
 
    @Test
@@ -222,7 +220,7 @@ class GameServiceTest {
          filter.setTitle(game.getTitle());
          filter.setEditorId(game.getEditorId());
 
-         Mockito.lenient().when(gameRepository.findAll(any(GameSpecification.class))).thenReturn(Arrays.asList(game));
+         Mockito.lenient().when(gameRepository.findAll(any(GameSpecification.class))).thenReturn(Collections.singletonList(game));
 
          GameDTO filterDTO = gameService.entityToDTO(filter);
          found = gameService.findAllFiltered(filterDTO);
@@ -285,9 +283,8 @@ class GameServiceTest {
 
       Mockito.lenient().when(gameRepository.findByEan(ean)).thenThrow(ResourceNotFoundException.class);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         gameService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById(ean));
 
    }
 
@@ -295,7 +292,7 @@ class GameServiceTest {
    @Tag("count")
    @DisplayName("Verify that we have the right number of Games")
    void count_returnTheNumberOfGames() {
-      Mockito.lenient().when(gameRepository.count()).thenReturn(3l);
+      Mockito.lenient().when(gameRepository.count()).thenReturn(3L);
       assertThat(gameService.count()).isEqualTo(3);
    }
 

@@ -13,7 +13,6 @@ import com.pedsf.library.libraryapi.service.PersonService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -23,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 class MusicServiceTest {
-   private static final String MUSIC_EAN_TEST = "4988064587100";
    private static final String MUSIC_TITLE_TEST = "New Music Title";
    private static final List<PersonDTO> allPersons = new ArrayList<>();
    private static final List<Music> allMusics = new ArrayList<>();
@@ -118,7 +117,6 @@ class MusicServiceTest {
       Mockito.lenient().when(musicRepository.findByEan("8809265654654")).thenReturn(java.util.Optional.ofNullable(allMusics.get(4)));
       Mockito.lenient().when(musicRepository.findByEan("9876546546")).thenReturn(java.util.Optional.ofNullable(newMusic));
 
-      ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
    }
@@ -158,9 +156,8 @@ class MusicServiceTest {
    @Tag("findById")
    @DisplayName("Verify that we can't find Music with wrong ID")
    void findById_returnException_ofInexistingMusicId() {
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         MusicDTO found = musicService.findById("liuzae");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> musicService.findById("liuzae"));
    }
 
 
@@ -209,7 +206,7 @@ class MusicServiceTest {
          filter.setTitle(music.getTitle());
          filter.setInterpreterId(music.getInterpreterId());
 
-         Mockito.lenient().when(musicRepository.findAll(any(MusicSpecification.class))).thenReturn(Arrays.asList(music));
+         Mockito.lenient().when(musicRepository.findAll(any(MusicSpecification.class))).thenReturn(Collections.singletonList(music));
 
          MusicDTO filterDTO = musicService.entityToDTO(filter);
          found = musicService.findAllFiltered(filterDTO);
@@ -272,16 +269,15 @@ class MusicServiceTest {
 
       Mockito.lenient().when(musicRepository.findByEan(ean)).thenThrow(ResourceNotFoundException.class);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         musicService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> musicService.findById(ean));
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Musics")
    void count_returnTheNumberOfMusics() {
-      Mockito.lenient().when(musicRepository.count()).thenReturn(5l);
+      Mockito.lenient().when(musicRepository.count()).thenReturn(5L);
       assertThat(musicService.count()).isEqualTo(5);
    }
 
