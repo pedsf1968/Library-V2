@@ -1,7 +1,6 @@
 package com.pedsf.library.userapi.model;
 
 import com.pedsf.library.Parameters;
-import org.bouncycastle.util.Arrays;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

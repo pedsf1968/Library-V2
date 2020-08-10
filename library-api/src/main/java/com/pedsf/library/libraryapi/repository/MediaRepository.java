@@ -1,9 +1,6 @@
 package com.pedsf.library.libraryapi.repository;
 
 import com.pedsf.library.libraryapi.model.Media;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,10 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.PostUpdate;
-import javax.persistence.PreUpdate;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
