@@ -30,6 +30,20 @@ import java.util.Date;
  */
 @Data
 public class MediaDTO extends MediaCommonDTO implements Serializable {
+
+   @NotNull
+   protected Integer id;
+
+   @NotNull
+   @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)
+   protected String mediaType;
+
+   @Size(max = Parameters.MEDIA_STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_STATUS_MAX)
+   private String status;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   private Date publicationDate;
+
    public MediaDTO(@NotNull Integer id,
                    @NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
                    @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
@@ -45,19 +59,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
 
    public MediaDTO() {
    }
-
-   @NotNull
-   protected Integer id;
-
-   @NotNull
-   @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)
-   protected String mediaType;
-
-   @Size(max = Parameters.MEDIA_STATUS_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_STATUS_MAX)
-   private String status;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   private Date publicationDate;
 
    public void initialise( BookDTO bookDTO) {
       this.ean = bookDTO.getEan();

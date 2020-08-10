@@ -31,18 +31,6 @@ import java.util.Set;
 @Table(name = "video")
 public class Video extends MediaCommon implements Serializable {
 
-   public Video(String ean,
-                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-                @NotNull Integer quantity,
-                @NotNull Integer stock,
-                @NotNull Integer directorId) {
-      super(ean, title, quantity, stock);
-      this.directorId = directorId;
-   }
-
-   public Video() {
-   }
-
    // Video information
    @NotNull
    @Column(name = "director_id")
@@ -84,4 +72,15 @@ public class Video extends MediaCommon implements Serializable {
    @Column(name = "summary", length = Parameters.SUMMARY_MAX)
    private String summary;
 
+   public Video(String ean,
+                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+                @NotNull Integer quantity,
+                @NotNull Integer stock,
+                @NotNull Integer directorId) {
+      super(ean, title, quantity, stock);
+      this.directorId = directorId;
+   }
+
+   public Video() {
+   }
 }

@@ -32,4 +32,16 @@ public class BorrowingDTO implements Serializable {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date returnDate;
    private Integer extended;
+
+   public BorrowingDTO(Integer id, @NotNull UserDTO user, @NotNull MediaDTO media, Date borrowingDate, Date returnDate) {
+      this.id = id;
+      this.user = user;
+      this.media = media;
+      this.borrowingDate = borrowingDate;
+      this.returnDate = returnDate;
+      this.extended = 0;
+   }
+
+   public BorrowingDTO() {
+   }
 }

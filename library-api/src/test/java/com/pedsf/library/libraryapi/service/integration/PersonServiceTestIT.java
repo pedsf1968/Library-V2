@@ -75,7 +75,6 @@ class PersonServiceTestIT {
                 ()->personService.findById(333));
     }
 
-    @Disabled
     @Test
     @Tag("findAll")
     @DisplayName("Verify that we have the list of all Persons")
@@ -86,12 +85,11 @@ class PersonServiceTestIT {
         PersonDTO savedPerson = personService.save(newPersonDTO);
         List<PersonDTO> personDTOS = personService.findAll();
         assertThat(personDTOS.size()).isEqualTo(17);
-        assertThat(personDTOS.contains(newPersonDTO)).isTrue();
+        assertThat(personDTOS.contains(savedPerson)).isTrue();
 
         personService.deleteById(savedPerson.getId());
     }
 
-    @Disabled
     @Test
     @Tag("save")
     @DisplayName("Verify that we can create a new Person")
@@ -120,7 +118,6 @@ class PersonServiceTestIT {
         personService.update(personDTO);
     }
 
-    @Disabled
     @Test
     @Tag("deleteById")
     @DisplayName("Verify that we can delete a Person by his ID")
@@ -135,8 +132,7 @@ class PersonServiceTestIT {
                 ()-> personService.findById(personId));
     }
 
-    @Disabled
-    @Test
+       @Test
     @Tag("count")
     @DisplayName("Verify that we have the right number of Persons")
     void count_returnTheNumberOfPersons() {

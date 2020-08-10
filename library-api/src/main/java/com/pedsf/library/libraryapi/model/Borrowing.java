@@ -22,6 +22,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "borrowing")
 public class Borrowing implements Serializable {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
@@ -43,4 +44,16 @@ public class Borrowing implements Serializable {
 
    @Column(name = "extended")
    private Integer extended;
+
+   public Borrowing(Integer id, Integer userId, Integer mediaId, Date borrowingDate, Date returnDate) {
+      this.id = id;
+      this.userId = userId;
+      this.mediaId = mediaId;
+      this.borrowingDate = borrowingDate;
+      this.returnDate = returnDate;
+      this.extended = 0;
+   }
+
+   public Borrowing() {
+   }
 }

@@ -24,11 +24,11 @@ public class PersonSpecification implements Specification<Person> {
       List<Predicate> predicates = new ArrayList<>();
 
       if (filter.getFirstName() != null) {
-         predicates.add(criteriaBuilder.like(root.get("firstname"), "%" + filter.getFirstName() + "%"));
+         predicates.add(criteriaBuilder.like(root.get("firstName"), "%" + filter.getFirstName() + "%"));
       }
 
       if (filter.getLastName() != null) {
-         predicates.add(criteriaBuilder.like(root.get("lastname"), "%" + filter.getLastName() + "%"));
+         predicates.add(criteriaBuilder.like(root.get("lastName"), "%" + filter.getLastName() + "%"));
       }
 
       return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

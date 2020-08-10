@@ -9,6 +9,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
@@ -691,7 +693,7 @@ class MediaServiceTestIT {
    void updateReturnDate_returnMediaWithNewDate_ofMediaAndDate() {
       MediaDTO found;
       Date oldDate;
-      Date newDate = Date.valueOf("1999-07-11");
+      Date newDate = Date.valueOf("2000-07-11");
       Integer mediaId;
 
       for (MediaDTO mediaDTO:allMediaDTOS) {
