@@ -426,6 +426,4 @@ class BookServiceTest {
       newBook.setStock(oldStock);
    }
 
-
-
 }
