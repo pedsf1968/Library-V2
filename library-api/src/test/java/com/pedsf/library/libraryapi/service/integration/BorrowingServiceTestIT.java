@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -9,9 +10,7 @@ import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.repository.MediaRepository;
 import com.pedsf.library.libraryapi.service.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -106,16 +105,57 @@ class BorrowingServiceTestIT {
    }
 
    @Test
-   void existsById() {
-      assertThat(borrowingService.existsById(3)).isTrue();
+   @Tag("existsById")
+   @DisplayName("Verify that return TRUE if the Borrowing exist")
+   void existsById_returnTrue_OfExistingBorrowing() {
+      for(BorrowingDTO borrowingDTO : allBorrowingDTOS) {
+         assertThat(borrowingService.existsById(borrowingDTO.getId())).isTrue();
+      }
    }
 
    @Test
-   void findById() {
+   @Tag("existsById")
+   @DisplayName("Verify that return FALSE if the Borrowing doesn't exist")
+   void existsById_returnFalse_ofInexistingBorrowing() {
+      assertThat(borrowingService.existsById(55)).isFalse();
    }
 
    @Test
+   @Tag("findById")
+   @DisplayName("Verify that we can find Borrowing by is ID")
+   void findById_returnBorrowing_ofExistingBorrowingId() {
+      BorrowingDTO found;
+
+      for(BorrowingDTO borrowingDTO : allBorrowingDTOS) {
+         Integer id = borrowingDTO.getId();
+         found = borrowingService.findById(id);
+
+         assertThat(found).isEqualTo(borrowingDTO);
+      }
+   }
+
+   @Test
+   @Tag("findById")
+   @DisplayName("Verify that we can't find Borrowing with wrong ID")
+   void findById_returnException_ofInexistingBorrowingId() {
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+              ()-> borrowingService.findById(55));
+   }
+
+   @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have the list of all Borrowing")
    void findAll() {
+      assertThat(allBorrowingDTOS.size()).isEqualTo(9);
+
+      // add one borrowing to increase the list
+      BorrowingDTO added = borrowingService.save(newBorrowingDTO);
+      List<BorrowingDTO> listFound = borrowingService.findAll();
+      assertThat(listFound.size()).isEqualTo(10);
+      assertThat(listFound.contains(added)).isTrue();
+
+      borrowingService.deleteById(added.getId());
    }
 
    @Test
@@ -127,27 +167,85 @@ class BorrowingServiceTestIT {
    }
 
    @Test
-   void save() {
+   @Tag("save")
+   @DisplayName("Verify that we can create a new Borrowing")
+   void save_returnCreatedBorrowing_ofNewBorrowing() {
+
+      BorrowingDTO saved = borrowingService.save(newBorrowingDTO);
+      Integer id = saved.getId();
+
+      assertThat(borrowingService.existsById(id)).isTrue();
+      borrowingService.deleteById(id);
    }
 
    @Test
-   void update() {
+   @Tag("update")
+   @DisplayName("Verify that we can update a Borrowing")
+   void update_returnUpdatedBorrowing_ofBorrowingAndNewTitle() {
+      BorrowingDTO borrowingDTO = borrowingService.findById(3);
+      Date oldDate = (Date) borrowingDTO.getBorrowingDate();
+
+      BorrowingDTO saved = borrowingService.update(borrowingDTO);
+      assertThat(saved).isEqualTo(borrowingDTO);
+      BorrowingDTO found = borrowingService.findById(3);
+      assertThat(found).isEqualTo(borrowingDTO);
+
+      borrowingDTO.setBorrowingDate(oldDate);
+      borrowingService.update(borrowingDTO);
    }
 
    @Test
-   void deleteById() {
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Borrowing by his ID")
+   void deleteById_returnExceptionWhenGetBorrowingById_ofDeletedBorrowingById() {
+      BorrowingDTO saved = borrowingService.save(newBorrowingDTO);
+      Integer id = saved.getId();
+
+      assertThat(borrowingService.existsById(id)).isTrue();
+      borrowingService.deleteById(id);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+              ()-> borrowingService.findById(id));
    }
 
    @Test
-   void count() {
+   @Tag("count")
+   @DisplayName("Verify that we have the right number of Borrowings")
+   void count_returnTheNumberOfBorrowings() {
+      assertThat(borrowingService.count()).isEqualTo(9);
+
+      // add one borrowing to increase the list
+      BorrowingDTO added = borrowingService.save(newBorrowingDTO);
+      assertThat(borrowingService.count()).isEqualTo(10);
+
+      borrowingService.deleteById(added.getId());
    }
 
    @Test
-   void entityToDTO() {
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Borrowing Entity is converted in right Borrowing DTO")
+   void entityToDTO_returnBorrowingDTO_ofBorrowingEntity() {
+      BorrowingDTO dto;
+
+
+
    }
 
    @Test
-   void dtoToEntity() {
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Book Borrowing is converted in right Borrowing Entity")
+   void dtoToEntity_returnBorrowingEntity_ofBorrowingDTO() {
+      Borrowing entity;
+
+      for(BorrowingDTO dto : allBorrowingDTOS) {
+         entity = borrowingService.dtoToEntity(dto);
+         assertThat(entity.getId()).isEqualTo(dto.getId());
+         assertThat(entity.getUserId()).isEqualTo(dto.getUser().getId());
+         assertThat(entity.getMediaId()).isEqualTo(dto.getMedia().getId());
+         assertThat(entity.getBorrowingDate()).isEqualTo(dto.getBorrowingDate());
+         assertThat(entity.getReturnDate()).isEqualTo(dto.getReturnDate());
+         assertThat(entity.getExtended()).isEqualTo(dto.getExtended());
+      }
    }
 
    @Test

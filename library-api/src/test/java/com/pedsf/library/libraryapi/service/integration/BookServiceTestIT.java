@@ -222,7 +222,7 @@ class BookServiceTestIT {
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
-   void deleteById_returnExceptionWhenGetBookById_ofDeletedUserById() {
+   void deleteById_returnExceptionWhenGetBookById_ofDeletedBookById() {
       BookDTO bookDTO = bookService.entityToDTO(newBook);
 
       bookDTO = bookService.save(bookDTO);
