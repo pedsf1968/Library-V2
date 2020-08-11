@@ -4,7 +4,10 @@ import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.ForbiddenException;
 import com.pedsf.library.libraryapi.model.Borrowing;
+import com.pedsf.library.libraryapi.model.MediaStatus;
+import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
@@ -19,6 +22,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -34,7 +38,18 @@ import static org.mockito.ArgumentMatchers.anyInt;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 class BorrowingServiceTestIT {
+
+   @Value("${library.borrowing.delay}")
+   private int daysOfDelay;
+   @Value("${library.borrowing.extention.max}")
+   private int maxExtention;
+   @Value("${library.borrowing.quantity.max}")
+   private int quantityMax;
+
+
    private static BorrowingService borrowingService;
+   BorrowingRepository borrowingRepository;
+
    @Mock
    private static MediaService mediaService;
    @Mock
@@ -225,9 +240,22 @@ class BorrowingServiceTestIT {
    @Tag("entityToDTO")
    @DisplayName("Verify that Borrowing Entity is converted in right Borrowing DTO")
    void entityToDTO_returnBorrowingDTO_ofBorrowingEntity() {
+      List<Borrowing> borrowings = new ArrayList<>();
       BorrowingDTO dto;
 
+      for(BorrowingDTO b : allBorrowingDTOS) {
+         borrowings.add(borrowingService.dtoToEntity(b));
+      }
 
+      for(Borrowing entity : borrowings){
+         dto = borrowingService.entityToDTO(entity);
+         assertThat(dto.getId()).isEqualTo(entity.getId());
+         assertThat(dto.getUser().getId()).isEqualTo(entity.getUserId());
+         assertThat(dto.getMedia().getId()).isEqualTo(entity.getMediaId());
+         assertThat(dto.getBorrowingDate()).isEqualTo(entity.getBorrowingDate());
+         assertThat(dto.getReturnDate()).isEqualTo(entity.getReturnDate());
+         assertThat(dto.getExtended()).isEqualTo(entity.getExtended());
+      }
 
    }
 
@@ -249,19 +277,121 @@ class BorrowingServiceTestIT {
    }
 
    @Test
-   void userHadBorrowed() {
+   @Tag("userHadBorrowed")
+   @DisplayName("Verify that return TRUE when User has borrowed a media")
+   void userHadBorrowed_returnTrue_ofUserAndBorrowedMedia() {
+      for(BorrowingDTO borrowingDTO : allBorrowingDTOS) {
+         assertThat(borrowingService.userHadBorrowed(borrowingDTO.getUser().getId(),borrowingDTO.getMedia().getEan())).isTrue();
+      }
    }
 
    @Test
-   void borrow() {
+   @Tag("userHadBorrowed")
+   @DisplayName("Verify that return FALSE when User has not borrowed a media")
+   void userHadBorrowed_returnFalse_ofUserAndNotBorrowedMedia() {
+      assertThat(borrowingService.userHadBorrowed(2,"MediaEAN")).isFalse();
+   }
+
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that a user can't borrow more than QuantityMax")
+   void borrow_throwForbiddenException_ofUserCounterGreaterThanQuantityMax() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      Integer userId = userDTO.getId();
+      Integer oldCounter = userDTO.getCounter();
+      userDTO.setCounter(quantityMax+1);
+
+      Assertions.assertThrows(ForbiddenException.class,
+            ()->borrowingService.borrow(userId,"lkjhlkjh"));
+
+      userDTO.setCounter(oldCounter);
    }
 
    @Test
+   @Tag("borrow")
+   @DisplayName("Verify that a FORBIDDEN user can't borrow")
+   void borrow_throwForbiddenException_ofUserFORBIDDEN() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      Integer userId = userDTO.getId();
+      String oldStatus = userDTO.getStatus();
+      userDTO.setStatus(UserStatus.FORBIDDEN.name());
+
+      Assertions.assertThrows(ForbiddenException.class,
+            ()->borrowingService.borrow(userId,"8809269506764"));
+
+      userDTO.setStatus(oldStatus);
+   }
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that a BAN user can't borrow")
+   void borrow_throwForbiddenException_ofUserBAN() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      Integer userId = userDTO.getId();
+      String oldStatus = userDTO.getStatus();
+      userDTO.setStatus(UserStatus.BAN.name());
+
+      Assertions.assertThrows(ForbiddenException.class,
+            ()->borrowingService.borrow(userId,"8809269506764"));
+
+      userDTO.setStatus(oldStatus);
+   }
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that we can't borrow an Media not FREE")
+   void borrow_throwForbiddenException_ofNotFreeMedia() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      Integer userId = userDTO.getId();
+
+      Assertions.assertThrows(ForbiddenException.class,
+            ()->borrowingService.borrow(userId,"978-2253002864"));
+   }
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that we can't borrow a media with a not positive stock")
+   void borrow_throwForbiddenException_ofNotPositiveStock() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      Integer userId = userDTO.getId();
+      MediaDTO mediaDTO = allMediaDTOS.get(27);
+      String ean = mediaDTO.getEan();
+      Integer oldStock = mediaDTO.getStock();
+      mediaDTO.setStock(0);
+
+
+      Assertions.assertThrows(ForbiddenException.class,
+            ()->borrowingService.borrow(userId,ean));
+
+      mediaDTO.setStock(oldStock);
+   }
+
+
+   @Disabled
+   @Test
+   @Tag("restitute")
    void restitute() {
+      UserDTO userDTO = allUserDTOS.get(3);
+      Integer userId = userDTO.getId();
+      MediaDTO mediaDTO = allMediaDTOS.get(0);
+      String ean = mediaDTO.getEan();
+      Integer mediaId = mediaDTO.getId();
+
+      assertThat(mediaDTO.getStatus()).isEqualTo(MediaStatus.BORROWED.name());
+
+      borrowingService.restitute(userId,mediaId);
+
+      assertThat(mediaDTO.getStatus()).isEqualTo(MediaStatus.FREE.name());
+
    }
 
    @Test
+   @Tag("findDelayed")
+   @DisplayName("Get the list of delayed Borrowing")
    void findDelayed() {
+
+
    }
 
    @Test

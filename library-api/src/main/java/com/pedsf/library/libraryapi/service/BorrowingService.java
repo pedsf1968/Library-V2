@@ -183,7 +183,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
     * @param ean identification of the media
     * @return true if the user has already borrowed this media
     */
-   Boolean userHadBorrowed(Integer userId, String ean) {
+   public Boolean userHadBorrowed(Integer userId, String ean) {
       return borrowingRepository.userHadBorrowed( userId, ean);
    }
 
@@ -212,7 +212,9 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       }
 
       String userStatus = userDTO.getStatus();
-      if(userStatus.equals(UserStatus.FORBIDDEN.name()) ){
+      if(userStatus == null) {
+         userDTO.setStatus(UserStatus.MEMBER.name());
+      } else if (userStatus.equals(UserStatus.FORBIDDEN.name()) ){
          throw new ForbiddenException(EXCEPTION_FORBIDDEN);
       } else if (userStatus.equals(UserStatus.BAN.name())){
          throw new ForbiddenException(EXCEPTION_BAN);
@@ -230,6 +232,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       if(mediaDTO.getStock() > 0) {
          mediaService.decreaseStock(mediaDTO);
       } else {
+         // stock problem
          throw new ForbiddenException(EXCEPTION_NO_MEDIA);
       }
 
@@ -279,19 +282,22 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
       // release the media
       mediaService.release(mediaId);
+
+      // search if it's booked
       Booking booking = bookingRepository.findNextBookingByMediaId(mediaDTO.getEan());
 
-      // set this media booked to borrow only by the user
-      mediaService.setStatus(mediaId, MediaStatus.BOOKED);
+      if(booking!=null) {
+         // set this media booked to borrow only by the user
+         mediaService.setStatus(mediaId, MediaStatus.BOOKED);
 
-      // calculate the restitution date adding 2 days
-      java.util.Date today = new java.util.Date();
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(today);
-      calendar.add(Calendar.DATE, daysOfDelay);
+         // calculate the restitution date adding 2 days
+         java.util.Date today = new java.util.Date();
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(today);
+         calendar.add(Calendar.DATE, daysOfDelay);
 
-      bookingRepository.updatePickUpDate(booking.getId(),new java.sql.Date(calendar.getTimeInMillis()));
-
+         bookingRepository.updatePickUpDate(booking.getId(), new java.sql.Date(calendar.getTimeInMillis()));
+      }
 
       return entityToDTO(borrowing);
    }
