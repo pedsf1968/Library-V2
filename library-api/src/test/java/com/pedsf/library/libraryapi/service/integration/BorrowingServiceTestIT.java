@@ -31,7 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doAnswer;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -367,11 +369,10 @@ class BorrowingServiceTestIT {
       mediaDTO.setStock(oldStock);
    }
 
-
-   @Disabled
    @Test
    @Tag("restitute")
-   void restitute() {
+   @DisplayName("Verify that the media is release when we restitute")
+   void restitute_setMediaFree_ofMediaBorrowed() {
       UserDTO userDTO = allUserDTOS.get(3);
       Integer userId = userDTO.getId();
       MediaDTO mediaDTO = allMediaDTOS.get(0);
@@ -380,6 +381,12 @@ class BorrowingServiceTestIT {
 
       assertThat(mediaDTO.getStatus()).isEqualTo(MediaStatus.BORROWED.name());
 
+      doAnswer(invocation -> {
+         Integer id = invocation.getArgument(0);
+         assertThat(id).isEqualTo(mediaId);
+         mediaDTO.setStatus(MediaStatus.FREE.name());
+         return null;
+      }).when(mediaService).release(any(Integer.class));
       borrowingService.restitute(userId,mediaId);
 
       assertThat(mediaDTO.getStatus()).isEqualTo(MediaStatus.FREE.name());
