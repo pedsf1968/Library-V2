@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.userapi.controller.UserController;
 import com.pedsf.library.userapi.model.Role;
-
 import com.pedsf.library.userapi.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

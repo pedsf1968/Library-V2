@@ -1,6 +1,5 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -28,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -187,11 +187,33 @@ class BorrowingServiceTestIT {
    }
 
    @Test
-   void findAllFiltered() {
+   @Tag("findAllFiltered")
+   @DisplayName("Verify that we can find one Borrowing by his User and Media")
+   void findAllFiltered_returnOnlyOneBorrowing_ofExistingUserAndMedia() {
+      List<BorrowingDTO> found;
+
+      for(BorrowingDTO b:allBorrowingDTOS) {
+         BorrowingDTO filter = new BorrowingDTO();
+         filter.setUser(b.getUser());
+         filter.setMedia(b.getMedia());
+
+         found = borrowingService.findAllFiltered(filter);
+         assertThat(found.size()).isEqualTo(1);
+         assertThat(found.get(0)).isEqualTo(b);
+      }
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Borrowings by User")
+   void getFirstId_returnFirstId_ofFilteredBorrowingByUser() {
+      BorrowingDTO filter = new BorrowingDTO();
+
+      filter.setUser(allUserDTOS.get(4));
+
+      Integer id = borrowingService.getFirstId(filter);
+
+      assertThat(id).isEqualTo(5);
    }
 
    @Test
@@ -435,7 +457,6 @@ class BorrowingServiceTestIT {
       }
    }
 
-   @Disabled
    @Test
    @Tag("extend")
    @DisplayName("Verify that extended counter is incremented")
@@ -444,11 +465,19 @@ class BorrowingServiceTestIT {
       Integer userId = expected.getUser().getId();
       Integer mediaId = expected.getMedia().getId();
       Integer oldExtended = expected.getExtended();
+      Date oldDate = (Date) expected.getBorrowingDate();
+      Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+      expected.setBorrowingDate(today);
 
+      borrowingService.update(expected);
       borrowingService.extend(userId,mediaId);
-
       BorrowingDTO found = borrowingService.findById(6);
+
       assertThat(found.getExtended()).isEqualTo(oldExtended+1);
 
+      found.setBorrowingDate(oldDate);
+      found.setExtended(oldExtended);
+
+      borrowingService.update(found);
    }
 }

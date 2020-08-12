@@ -107,7 +107,10 @@
          eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java,
          zuul-server/src/main/java/com/pedsf/library/zuulserver/*.java,
          data-model/src/mail/java/com/pedsf/library/*.java,
-         user-api/src/main/java/com/pedsf/library/userapi/UserApiApplication.java,
+         **/*Application.java,
+         **/*ApiProxy.java,
+         data-model/src/main/java/com/pedsf/library/Parameters.java,
+         web/src/main/java/com/pedsf/library/web/web/PathTable.java
       </sonar.coverage.exclusions>
    </properties>
 
