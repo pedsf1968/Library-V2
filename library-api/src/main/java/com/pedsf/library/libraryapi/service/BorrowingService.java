@@ -12,6 +12,7 @@ import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingSpecification;
+import lombok.Data;
 import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
+@Data
 @Service("BorrowingService")
 public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,Integer> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Borrowing with the id : ";
@@ -55,6 +56,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       this.mediaService = mediaService;
       this.userApiProxy = userApiProxy;
    }
+
 
 
    @Override

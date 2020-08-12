@@ -58,7 +58,7 @@ class BorrowingServiceTestIT {
    private UserApiProxy userApiProxy;
    private static Borrowing newBorrowing;
    private static BorrowingDTO newBorrowingDTO;
-   private static List<BorrowingDTO> allBorrowingDTOS;
+   private static List<BorrowingDTO> allBorrowingDTOS = new ArrayList<>();
    private static List<UserDTO> allUserDTOS = new ArrayList<>();
    private static List<MediaDTO> allMediaDTOS = new ArrayList<>();
 
@@ -101,11 +101,22 @@ class BorrowingServiceTestIT {
       allMediaDTOS.add(new MediaDTO(27,"4988064585816","RE BLACKPINK","MUSIC","BORROWED",1,0));
       allMediaDTOS.add(new MediaDTO(28,"8809269506764","MADE","MUSIC","FREE",1,1));
 
+      allBorrowingDTOS.add(new BorrowingDTO( 1, allUserDTOS.get(3), allMediaDTOS.get(0), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 2, allUserDTOS.get(3), allMediaDTOS.get(4), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 3, allUserDTOS.get(3), allMediaDTOS.get(6), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 4, allUserDTOS.get(3), allMediaDTOS.get(19), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 5, allUserDTOS.get(4), allMediaDTOS.get(1), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 6, allUserDTOS.get(4), allMediaDTOS.get(10), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 7, allUserDTOS.get(4), allMediaDTOS.get(16), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 8, allUserDTOS.get(4), allMediaDTOS.get(26), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 9, allUserDTOS.get(2), allMediaDTOS.get(5), Date.valueOf("2020-07-15"),null));
    }
 
    @BeforeEach
    void beforeEach(@Autowired BorrowingRepository borrowingRepository, @Autowired BookingRepository bookingRepository) {
       borrowingService = new BorrowingService(borrowingRepository, bookingRepository,mediaService, userApiProxy);
+      borrowingService.setDaysOfDelay(daysOfDelay);
+      borrowingService.setMaxExtention(maxExtention);
 
       Mockito.lenient().when(userApiProxy.findUserById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]-1));
@@ -402,10 +413,42 @@ class BorrowingServiceTestIT {
    }
 
    @Test
-   void findByUserIdNotReturn() {
+   @Tag("findByUserIdNotReturn")
+   @DisplayName("Verify thawe get all media borrow by user 4")
+   void findByUserIdNotReturn_returnBoorowingList_ofUser4() {
+      List<BorrowingDTO> found;
+      List<BorrowingDTO> expected = new ArrayList<>();
+      Integer userId = 4;
+
+      for(BorrowingDTO b: allBorrowingDTOS) {
+         if(b.getUser().getId().equals(userId)) {
+            expected.add(b);
+         }
+      }
+
+      found = borrowingService.findByUserIdNotReturn(userId);
+
+      assertThat(found.size()).isEqualTo(expected.size());
+
+      for(BorrowingDTO b: found) {
+         assertThat(expected.contains(b)).isTrue();
+      }
    }
 
+   @Disabled
    @Test
+   @Tag("extend")
+   @DisplayName("Verify that extended counter is incremented")
    void extend() {
+      BorrowingDTO expected = borrowingService.findById(6);
+      Integer userId = expected.getUser().getId();
+      Integer mediaId = expected.getMedia().getId();
+      Integer oldExtended = expected.getExtended();
+
+      borrowingService.extend(userId,mediaId);
+
+      BorrowingDTO found = borrowingService.findById(6);
+      assertThat(found.getExtended()).isEqualTo(oldExtended+1);
+
    }
 }
