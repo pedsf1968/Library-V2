@@ -25,22 +25,6 @@ import java.util.Objects;
 @Data
 public class BookDTO extends MediaCommonDTO implements Serializable {
 
-   public BookDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
-                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                  @NotNull Integer quantity,
-                  @NotNull Integer stock,
-                  @NotNull @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX) String isbn,
-                  @NotNull PersonDTO author,
-                  @NotNull PersonDTO editor) {
-      super(ean, title, quantity, stock);
-      this.isbn = isbn;
-      this.author = author;
-      this.editor = editor;
-   }
-
-   public BookDTO() {
-   }
-
    // Book attributes
    @NotNull
    @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX)
@@ -59,6 +43,22 @@ public class BookDTO extends MediaCommonDTO implements Serializable {
    @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
 
+   public BookDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                  @NotNull Integer quantity,
+                  @NotNull Integer stock,
+                  @NotNull @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX) String isbn,
+                  @NotNull PersonDTO author,
+                  @NotNull PersonDTO editor) {
+      super(ean, title, quantity, stock);
+      this.isbn = isbn;
+      this.author = author;
+      this.editor = editor;
+   }
+
+   public BookDTO() {
+   }
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -68,8 +68,11 @@ public class BookDTO extends MediaCommonDTO implements Serializable {
       return getIsbn().equals(bookDTO.getIsbn()) &&
               getAuthor().equals(bookDTO.getAuthor()) &&
               getEditor().equals(bookDTO.getEditor()) &&
-              getType().equals(bookDTO.getType()) &&
-              getFormat().equals(bookDTO.getFormat());
+              Objects.equals(getPublicationDate(), bookDTO.getPublicationDate()) &&
+              Objects.equals(getType(), bookDTO.getType()) &&
+              Objects.equals(getFormat(), bookDTO.getFormat()) &&
+              Objects.equals(getPages(), bookDTO.getPages()) &&
+              Objects.equals(getSummary(), bookDTO.getSummary());
    }
 
    @Override

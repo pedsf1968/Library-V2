@@ -32,18 +32,6 @@ import java.util.Objects;
 @Data
 public class GameDTO extends MediaCommonDTO implements Serializable {
 
-   public GameDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
-                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                  @NotNull Integer quantity,
-                  @NotNull Integer stock,
-                  PersonDTO editor) {
-      super(ean, title, quantity, stock);
-      this.editor = editor;
-   }
-
-   public GameDTO() {
-   }
-
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
@@ -58,6 +46,18 @@ public class GameDTO extends MediaCommonDTO implements Serializable {
    private String url;
    @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
+
+   public GameDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                  @NotNull Integer quantity,
+                  @NotNull Integer stock,
+                  PersonDTO editor) {
+      super(ean, title, quantity, stock);
+      this.editor = editor;
+   }
+
+   public GameDTO() {
+   }
 
    @Override
    public boolean equals(Object o) {

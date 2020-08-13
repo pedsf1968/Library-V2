@@ -57,6 +57,62 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.status = status;
    }
 
+   public MediaDTO( BookDTO bookDTO) {
+      this.ean = bookDTO.getEan();
+      this.mediaType = MediaType.BOOK.name();
+      this.returnDate = bookDTO.getReturnDate();
+      this.title = bookDTO.getTitle();
+      this.publicationDate = bookDTO.getPublicationDate();
+      this.weight = bookDTO.getWeight();
+      this.length = bookDTO.getLength();
+      this.width = bookDTO.getWidth();
+      this.height = bookDTO.getHeight();
+      this.quantity = bookDTO.getQuantity();
+      this.stock = bookDTO.getStock();
+   }
+
+   public MediaDTO( GameDTO gameDTO) {
+      this.ean = gameDTO.getEan();
+      this.mediaType = MediaType.GAME.name();
+      this.returnDate = gameDTO.getReturnDate();
+      this.title = gameDTO.getTitle();
+      this.publicationDate = gameDTO.getPublicationDate();
+      this.weight = gameDTO.getWeight();
+      this.length = gameDTO.getLength();
+      this.width = gameDTO.getWidth();
+      this.height = gameDTO.getHeight();
+      this.quantity = gameDTO.getQuantity();
+      this.stock = gameDTO.getStock();
+   }
+
+   public MediaDTO( MusicDTO musicDTO) {
+      this.ean = musicDTO.getEan();
+      this.mediaType = MediaType.MUSIC.name();
+      this.returnDate = musicDTO.getReturnDate();
+      this.title = musicDTO.getTitle();
+      this.publicationDate = musicDTO.getPublicationDate();
+      this.weight = musicDTO.getWeight();
+      this.length = musicDTO.getLength();
+      this.width = musicDTO.getWidth();
+      this.height = musicDTO.getHeight();
+      this.quantity = musicDTO.getQuantity();
+      this.stock = musicDTO.getStock();
+   }
+
+   public MediaDTO( VideoDTO videoDTO) {
+      this.ean = videoDTO.getEan();
+      this.mediaType = MediaType.VIDEO.name();
+      this.returnDate = videoDTO.getReturnDate();
+      this.title = videoDTO.getTitle();
+      this.publicationDate = videoDTO.getPublicationDate();
+      this.weight = videoDTO.getWeight();
+      this.length = videoDTO.getLength();
+      this.width = videoDTO.getWidth();
+      this.height = videoDTO.getHeight();
+      this.quantity = videoDTO.getQuantity();
+      this.stock = videoDTO.getStock();
+   }
+
    public MediaDTO() {
    }
 
