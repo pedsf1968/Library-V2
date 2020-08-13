@@ -65,10 +65,13 @@ public class GameDTO extends MediaCommonDTO implements Serializable {
       if (!(o instanceof GameDTO)) return false;
       if (!super.equals(o)) return false;
       GameDTO gameDTO = (GameDTO) o;
-      return getEditor().equals(gameDTO.getEditor()) &&
-              getType().equals(gameDTO.getType()) &&
-              getFormat().equals(gameDTO.getFormat()) &&
-              Objects.equals(getPegi(), gameDTO.getPegi());
+      return Objects.equals(getPublicationDate(), gameDTO.getPublicationDate()) &&
+            getEditor().equals(gameDTO.getEditor()) &&
+            Objects.equals(getType(), gameDTO.getType()) &&
+            Objects.equals(getFormat(), gameDTO.getFormat()) &&
+            Objects.equals(getPegi(), gameDTO.getPegi()) &&
+            Objects.equals(getUrl(), gameDTO.getUrl()) &&
+            Objects.equals(getSummary(), gameDTO.getSummary());
    }
 
    @Override

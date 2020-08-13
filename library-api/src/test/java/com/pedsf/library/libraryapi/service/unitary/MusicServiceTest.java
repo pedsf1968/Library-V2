@@ -1,11 +1,11 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
+import com.pedsf.library.dto.MusicFormat;
+import com.pedsf.library.dto.MusicType;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.model.Music;
-import com.pedsf.library.libraryapi.model.MusicFormat;
-import com.pedsf.library.libraryapi.model.MusicType;
 import com.pedsf.library.libraryapi.repository.MusicRepository;
 import com.pedsf.library.libraryapi.repository.MusicSpecification;
 import com.pedsf.library.libraryapi.service.MusicService;

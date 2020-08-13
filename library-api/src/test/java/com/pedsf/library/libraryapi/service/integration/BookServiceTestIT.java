@@ -1,14 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.libraryapi.model.Book;
-import com.pedsf.library.libraryapi.model.BookFormat;
-import com.pedsf.library.libraryapi.model.BookType;
-import com.pedsf.library.libraryapi.repository.BookRepository;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.service.BookService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.libraryapi.model.*;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,16 +1,12 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BorrowingDTO;
-import com.pedsf.library.dto.business.MediaDTO;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.ForbiddenException;
 import com.pedsf.library.libraryapi.model.Borrowing;
-import com.pedsf.library.libraryapi.model.MediaStatus;
-import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
-import com.pedsf.library.libraryapi.repository.BookingRepository;
-import com.pedsf.library.libraryapi.repository.BorrowingRepository;
-import com.pedsf.library.libraryapi.repository.MediaRepository;
+import com.pedsf.library.libraryapi.repository.*;
 import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Person
@@ -57,4 +59,20 @@ public class PersonDTO implements Serializable {
    public PersonDTO() {
    }
 
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof PersonDTO)) return false;
+      PersonDTO personDTO = (PersonDTO) o;
+      return getId().equals(personDTO.getId()) &&
+            getFirstName().equals(personDTO.getFirstName()) &&
+            getLastName().equals(personDTO.getLastName()) &&
+            Objects.equals(getUrl(), personDTO.getUrl()) &&
+            Objects.equals(getPhotoUrl(), personDTO.getPhotoUrl());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(getId(), getFirstName(), getLastName(), getBirthDate());
+   }
 }

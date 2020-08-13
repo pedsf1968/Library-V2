@@ -18,19 +18,23 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
-import java.lang.reflect.MalformedParameterizedTypeException;
+import javax.ws.rs.core.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
 @WebMvcTest(controllers = {BookController.class})
 @ExtendWith(SpringExtension.class)
 class BookControllerTestIT {
+   private static final String BOOK_TITLE_TEST = "Le Horla";
+
    private static final List<BookDTO> allBookDTOS = new ArrayList<>();
    private static final Map<Integer,PersonDTO> allPersonDTOS = new HashMap<>();
 
@@ -68,12 +72,10 @@ class BookControllerTestIT {
       allBookDTOS.add( new BookDTO("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",allPersonDTOS.get(3),allPersonDTOS.get(13)));
    }
 
-   @Disabled
    @Test
    @Tag("findAllBooks")
    @DisplayName("Verify that we get the list of all Books")
    void findAllBooks_returnAllBooks() throws Exception {
-      int i = 1;
       // GIVEN
       when(bookService.findAll()).thenReturn(allBookDTOS);
 
@@ -92,8 +94,72 @@ class BookControllerTestIT {
       assertThat(founds.size()).isEqualTo(7);
       for(BookDTO dto: founds) {
          for(BookDTO expected:allBookDTOS) {
-            log.info(dto.toString());
-            log.info(allBookDTOS.get(i).toString());
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("findAllAllowedBooks")
+   @DisplayName("Verify that we get the right list of allowed Books")
+   void findAllAllowedBooks()  throws Exception {
+      // GIVEN
+      when(bookService.findAllAllowed()).thenReturn(allBookDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/books/allowed"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<BookDTO> founds = Arrays.asList(mapper.readValue(json, BookDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(7);
+      for(BookDTO dto: founds) {
+         for(BookDTO expected:allBookDTOS) {
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("findAllFilteredBooks")
+   @DisplayName("Verify that we get Book list from first author")
+   void findAllFilteredBooks() throws Exception {
+      List<BookDTO> filtered = allBookDTOS.subList(0,3);
+      BookDTO filter = new BookDTO();
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      filter.setAuthor(filtered.get(0).getAuthor());
+      when(bookService.findAllFiltered(any(BookDTO.class))).thenReturn(filtered);
+
+      // WHEN
+      String json = mapper.writeValueAsString(filter);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/books/searches")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<BookDTO> founds = Arrays.asList(mapper.readValue(json, BookDTO[].class));
+      List<BookDTO> found;
+
+      assertThat(founds.size()).isEqualTo(3);
+      for(BookDTO dto: founds) {
+         for(BookDTO expected:filtered) {
             if(dto.getEan().equals(expected.getEan())) {
                assertThat(dto).isEqualTo(expected);
             }
@@ -103,38 +169,200 @@ class BookControllerTestIT {
    }
 
    @Test
-   void findAllAllowedBooks() {
+   @Tag("findBookById")
+   @DisplayName("Verify that we can get Book by his EAN")
+   void findBookById()  throws Exception {
+      BookDTO expected = allBookDTOS.get(3);
+      String ean = expected.getEan();
+
+      // GIVEN
+      when(bookService.findById(ean)).thenReturn(expected);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/books/"+ean))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      BookDTO found = mapper.readValue(json, BookDTO.class);
+
+      assertThat(found).isEqualTo(expected);
    }
 
    @Test
-   void findAllFilteredBooks() {
+   @Tag("addBook")
+   @DisplayName("Verify that we can add Book")
+   void addBook() throws Exception {
+      BookDTO expected = allBookDTOS.get(4);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(bookService.save(any(BookDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/books")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BookDTO found = mapper.readValue(json, BookDTO.class);
+
+      assertThat(found).isEqualTo(expected);
    }
 
    @Test
-   void findBookById() {
+   @Tag("updateBook")
+   @DisplayName("Verify that we can update a Book")
+   void updateBook() throws Exception {
+      BookDTO expected = allBookDTOS.get(4);
+      expected.setTitle(BOOK_TITLE_TEST);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(bookService.update(any(BookDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.put("/books/"+ expected.getEan())
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BookDTO found = mapper.readValue(json, BookDTO.class);
+
+      assertThat(found).isEqualTo(expected);
    }
 
    @Test
-   void addBook() {
+   @Tag("deleteBook")
+   @DisplayName("Verify that we can delate a Book")
+   void deleteBook() throws Exception {
+      BookDTO expected = allBookDTOS.get(2);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      doNothing().when(bookService).deleteById(expected.getEan());
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.delete("/books/"+ expected.getEan())
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
    }
 
    @Test
-   void updateBook() {
+   @Tag("getAllBooksAuthors")
+   @DisplayName("Verify that we get all authors list")
+   void getAllBooksAuthors() throws Exception {
+      List<PersonDTO> authors = new ArrayList<>();
+      authors.add(allPersonDTOS.get(1));
+      authors.add(allPersonDTOS.get(2));
+      authors.add(allPersonDTOS.get(3));
+
+      // GIVEN
+      when(bookService.findAllAuthors()).thenReturn(authors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/books/authors"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(3);
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:authors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
    }
 
    @Test
-   void deleteBook() {
+   @Tag("getAllBooksEditors")
+   @DisplayName("Verify that we get all editors list")
+   void getAllBooksEditors() throws Exception {
+      List<PersonDTO> editors = new ArrayList<>();
+      editors.add(allPersonDTOS.get(10));
+      editors.add(allPersonDTOS.get(11));
+      editors.add(allPersonDTOS.get(12));
+
+      // GIVEN
+      when(bookService.findAllEditors()).thenReturn(editors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/books/editors"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(3);
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:editors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
    }
 
    @Test
-   void getAllBooksAuthors() {
-   }
+   @Tag("getAllBooksTitles")
+   @DisplayName("Verify that we get all titles list")
+   void getAllBooksTitles() throws Exception {
+      List<String> titles = new ArrayList<>();
+      for(BookDTO bookDTO : allBookDTOS) {
+         titles.add(bookDTO.getTitle());
+      }
 
-   @Test
-   void getAllBooksEditors() {
-   }
+      // GIVEN
+      when(bookService.findAllTitles()).thenReturn(titles);
 
-   @Test
-   void getAllBooksTitles() {
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/books/titles"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(titles.size());
+      for(String title: founds) {
+         assertThat(titles.contains(title)).isTrue();
+      }
    }
 }

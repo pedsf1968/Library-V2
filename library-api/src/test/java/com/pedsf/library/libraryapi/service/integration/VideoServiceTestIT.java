@@ -1,12 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.dto.business.VideoDTO;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
 import com.pedsf.library.libraryapi.model.*;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.repository.VideoRepository;
-import com.pedsf.library.libraryapi.service.PersonService;
-import com.pedsf.library.libraryapi.service.VideoService;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

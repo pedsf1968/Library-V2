@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.MediaStatus;
 import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

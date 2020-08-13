@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.BookFormat;
+import com.pedsf.library.dto.BookType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;

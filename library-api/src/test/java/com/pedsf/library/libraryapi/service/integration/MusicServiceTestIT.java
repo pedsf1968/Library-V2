@@ -1,14 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.MusicDTO;
-import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
 import com.pedsf.library.libraryapi.model.Music;
-import com.pedsf.library.libraryapi.model.MusicFormat;
-import com.pedsf.library.libraryapi.model.MusicType;
-import com.pedsf.library.libraryapi.repository.MusicRepository;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.service.MusicService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

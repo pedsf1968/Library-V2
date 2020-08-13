@@ -1,12 +1,10 @@
 package com.pedsf.library.web.web.controller;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.dto.filter.BookFilter;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
-import com.pedsf.library.web.dto.BookFormat;
-import com.pedsf.library.web.dto.BookType;
-import com.pedsf.library.web.dto.business.BookFilter;
 import com.pedsf.library.web.proxy.LibraryApiProxy;
 import com.pedsf.library.web.proxy.UserApiProxy;
 import com.pedsf.library.web.web.PathTable;

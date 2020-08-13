@@ -1,9 +1,9 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.MediaStatus;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Media;
-import com.pedsf.library.libraryapi.model.MediaStatus;
 import com.pedsf.library.libraryapi.repository.MediaRepository;
 import com.pedsf.library.libraryapi.repository.MediaSpecification;
 import com.pedsf.library.model.MediaType;

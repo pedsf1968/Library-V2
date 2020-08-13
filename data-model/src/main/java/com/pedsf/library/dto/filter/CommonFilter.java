@@ -1,4 +1,4 @@
-package com.pedsf.library.web.dto.business;
+package com.pedsf.library.dto.filter;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

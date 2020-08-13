@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
@@ -63,7 +64,7 @@ class MediaServiceTestIT {
    @BeforeEach
    void beforeEach() {
       BookDTO bookDTO = bookService.findById("978-2070413119");
-      newMedia = new Media(44,bookDTO.getEan(),MediaType.BOOK,MediaStatus.BOOKED,Date.valueOf("1999-07-11"));
+      newMedia = new Media(44,bookDTO.getEan(),MediaType.BOOK, MediaStatus.BOOKED,Date.valueOf("1999-07-11"));
       newMediaDTO = new MediaDTO();
       newMediaDTO.initialise(bookDTO);
       newMediaDTO.setId(44);

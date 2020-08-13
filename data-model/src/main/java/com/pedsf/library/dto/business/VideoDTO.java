@@ -67,10 +67,17 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
       if (!(o instanceof VideoDTO)) return false;
       if (!super.equals(o)) return false;
       VideoDTO videoDTO = (VideoDTO) o;
-      return  getDirector().equals(videoDTO.getDirector()) &&
-              Objects.equals(getDuration(), videoDTO.getDuration()) &&
-              getType().equals(videoDTO.getType()) &&
-              getFormat().equals(videoDTO.getFormat());
+      return Objects.equals(getPublicationDate(), videoDTO.getPublicationDate()) &&
+            getDirector().equals(videoDTO.getDirector()) &&
+            Objects.equals(getDuration(), videoDTO.getDuration()) &&
+            Objects.equals(getType(), videoDTO.getType()) &&
+            Objects.equals(getFormat(), videoDTO.getFormat()) &&
+            Objects.equals(getImage(), videoDTO.getImage()) &&
+            Objects.equals(getAudio(), videoDTO.getAudio()) &&
+            Objects.equals(getAudience(), videoDTO.getAudience()) &&
+            Objects.equals(getSummary(), videoDTO.getSummary()) &&
+            Objects.equals(getUrl(), videoDTO.getUrl()) &&
+            Objects.equals(getActors(), videoDTO.getActors());
    }
 
    @Override

@@ -1,4 +1,4 @@
-package com.pedsf.library.libraryapi.model;
+package com.pedsf.library.dto;
 
 /**
  * Format of Video used in Video Entity
@@ -6,5 +6,5 @@ package com.pedsf.library.libraryapi.model;
 public enum  VideoFormat {
    TAPE,
    DVD,
-   BLU_RAY;
+   BLU_RAY
 }

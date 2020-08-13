@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedsf.library.dto.business.GameDTO;
+import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.libraryapi.controller.VideoController;
@@ -30,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {VideoController.class})
 @ExtendWith(SpringExtension.class)
-public class VideoControllerTestIT {
+class VideoControllerTestIT {
    private static final List<VideoDTO> allVideoDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
 
@@ -88,10 +90,67 @@ public class VideoControllerTestIT {
 
       // THEN
       assertThat(founds.size()).isEqualTo(6);
-      for(VideoDTO videoDTO: allVideoDTOS) {
-         assertThat(videoDTO).isEqualToComparingFieldByField(founds.get(i++));
+      for(VideoDTO dto: founds) {
+         for(VideoDTO expected:allVideoDTOS) {
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
       }
+   }
 
+   @Test
+   @Tag("findAllAllowedVideos")
+   @DisplayName("Verify that we get the right list of allowed Videos")
+   void findAllAllowedVideos()  throws Exception {
+      int i = 1;
+      // GIVEN
+      when(videoService.findAllAllowed()).thenReturn(allVideoDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/videos/allowed"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<VideoDTO> founds = Arrays.asList(mapper.readValue(json, VideoDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(6);
+      for (VideoDTO dto : founds) {
+         for (VideoDTO expected : allVideoDTOS) {
+            if (dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("findVideoById")
+   @DisplayName("Verify that we can get Video by his EAN")
+   void findVideoById()  throws Exception {
+      VideoDTO expected = allVideoDTOS.get(3);
+      String ean = expected.getEan();
+
+      // GIVEN
+      when(videoService.findById(ean)).thenReturn(expected);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/videos/"+ean))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      VideoDTO found = mapper.readValue(json, VideoDTO.class);
+
+      assertThat(found).isEqualTo(expected);
    }
 
 

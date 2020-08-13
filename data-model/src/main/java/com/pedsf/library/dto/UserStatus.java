@@ -1,4 +1,4 @@
-package com.pedsf.library.libraryapi.model;
+package com.pedsf.library.dto;
 
 /**
  * status of the user

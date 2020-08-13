@@ -1,4 +1,4 @@
-package com.pedsf.library.libraryapi.model;
+package com.pedsf.library.dto;
 
 /**
  * Format of Music used in Music Entity
@@ -8,5 +8,5 @@ public enum MusicFormat {
    BLURAY,
    SACD,
    TAPE,
-   VINYL;
+   VINYL
 }

@@ -1,4 +1,4 @@
-package com.pedsf.library.web.dto;
+package com.pedsf.library.dto;
 
 /**
  * Type of Video used in Video Entity

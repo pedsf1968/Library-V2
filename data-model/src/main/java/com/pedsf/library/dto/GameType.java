@@ -1,4 +1,4 @@
-package com.pedsf.library.libraryapi.model;
+package com.pedsf.library.dto;
 
 /**
  * Type of Game used in Game Entity
@@ -10,5 +10,5 @@ public enum GameType {
    ARCADE,
    FIGHT,
    MMORPG,
-   SIMULATION;
+   SIMULATION
 }

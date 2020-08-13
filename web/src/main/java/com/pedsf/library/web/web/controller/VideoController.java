@@ -1,15 +1,13 @@
 package com.pedsf.library.web.web.controller;
 
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.dto.business.VideoDTO;
-import com.pedsf.library.web.dto.VideoFormat;
-import com.pedsf.library.web.dto.VideoType;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.dto.filter.VideoFilter;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.web.proxy.LibraryApiProxy;
 import com.pedsf.library.web.proxy.UserApiProxy;
 import com.pedsf.library.web.web.PathTable;
-import com.pedsf.library.web.dto.business.VideoFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

@@ -1,4 +1,4 @@
-package com.pedsf.library.web.dto.business;
+package com.pedsf.library.dto.filter;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +16,7 @@ import java.sql.Date;
  * actors : lists of the actors of the Video
  */
 @Data
-public class VideoFilter extends CommonFilter{
+public class VideoFilter extends CommonFilter {
 
    // Video attributes
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

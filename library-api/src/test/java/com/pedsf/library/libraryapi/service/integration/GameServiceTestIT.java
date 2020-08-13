@@ -1,11 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.libraryapi.model.*;
-import com.pedsf.library.libraryapi.repository.GameRepository;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.service.GameService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

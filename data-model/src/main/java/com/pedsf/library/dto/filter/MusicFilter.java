@@ -1,7 +1,8 @@
-package com.pedsf.library.web.dto.business;
+package com.pedsf.library.dto.filter;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.sql.Date;
  * url : link to the video clip
  */
 @Data
-public class MusicFilter extends CommonFilter{
+public class MusicFilter extends CommonFilter {
 
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

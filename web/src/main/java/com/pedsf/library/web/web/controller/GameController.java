@@ -1,9 +1,8 @@
 package com.pedsf.library.web.web.controller;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.GameDTO;
-import com.pedsf.library.web.dto.GameFormat;
-import com.pedsf.library.web.dto.GameType;
-import com.pedsf.library.web.dto.business.GameFilter;
+import com.pedsf.library.dto.filter.GameFilter;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.web.proxy.LibraryApiProxy;

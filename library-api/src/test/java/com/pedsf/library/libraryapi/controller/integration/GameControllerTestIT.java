@@ -1,8 +1,11 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
+import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.libraryapi.controller.GameController;
 import com.pedsf.library.libraryapi.controller.VideoController;
 import com.pedsf.library.libraryapi.service.GameService;
 import org.junit.jupiter.api.*;
@@ -25,9 +28,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(controllers = {VideoController.class})
+@WebMvcTest(controllers = {GameController.class})
 @ExtendWith(SpringExtension.class)
-public class GameControllerTestIT {
+class GameControllerTestIT {
    private static final List<GameDTO> allGameDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
 
@@ -85,8 +88,67 @@ public class GameControllerTestIT {
 
       // THEN
       assertThat(founds.size()).isEqualTo(5);
-      for (GameDTO gameDTO : allGameDTOS) {
-         assertThat(gameDTO).isEqualTo(founds.get(i++));
+      for(GameDTO dto: founds) {
+         for(GameDTO expected:allGameDTOS) {
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
       }
    }
+
+   @Test
+   @Tag("findAllAllowedGames")
+   @DisplayName("Verify that we get the right list of allowed Games")
+   void findAllAllowedGames()  throws Exception {
+      int i = 1;
+      // GIVEN
+      when(gameService.findAllAllowed()).thenReturn(allGameDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/games/allowed"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<GameDTO> founds = Arrays.asList(mapper.readValue(json, GameDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(5);
+      for (GameDTO dto : founds) {
+         for (GameDTO expected : allGameDTOS) {
+            if (dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("findGameById")
+   @DisplayName("Verify that we can get Game by his EAN")
+   void findGameById()  throws Exception {
+      GameDTO expected = allGameDTOS.get(3);
+      String ean = expected.getEan();
+
+      // GIVEN
+      when(gameService.findById(ean)).thenReturn(expected);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/games/"+ean))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      GameDTO found = mapper.readValue(json, GameDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
 }

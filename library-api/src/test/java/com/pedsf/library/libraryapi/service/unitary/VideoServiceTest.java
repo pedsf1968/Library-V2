@@ -1,5 +1,7 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
+import com.pedsf.library.dto.VideoFormat;
+import com.pedsf.library.dto.VideoType;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.business.VideoDTO;
 import com.pedsf.library.exception.ResourceNotFoundException;

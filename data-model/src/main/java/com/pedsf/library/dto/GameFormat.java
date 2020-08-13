@@ -1,4 +1,4 @@
-package com.pedsf.library.libraryapi.model;
+package com.pedsf.library.dto;
 
 /**
  * Format of Game used in Game Entity
@@ -16,5 +16,5 @@ public enum GameFormat {
    SONY_PS5,
    MICROSOFT_XBOX,
    MICROSOFT_XBOX_ONE,
-   PC;
+   PC
 }

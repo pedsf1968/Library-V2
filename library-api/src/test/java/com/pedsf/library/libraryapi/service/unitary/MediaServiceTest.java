@@ -1,5 +1,6 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.model.*;
@@ -74,7 +75,7 @@ class MediaServiceTest {
       allMedias.add(new Media( 1,"978-2253004226",MediaType.BOOK,MediaStatus.BORROWED, Date.valueOf("2020-08-10")));
       allMedias.add(new Media(2,"978-2253004226",MediaType.BOOK,MediaStatus.BORROWED,Date.valueOf("2020-08-17")));
       allMedias.add(new Media(3,"978-2253004226",MediaType.BOOK,MediaStatus.FREE,null));
-      allMedias.add(new Media(4,"978-2253004226",MediaType.BOOK,MediaStatus.FREE,null));
+      allMedias.add(new Media(4,"978-2253004226",MediaType.BOOK, MediaStatus.FREE,null));
       allMedias.add(new Media(5,"978-2253002864",MediaType.BOOK,MediaStatus.BORROWED,Date.valueOf("2020-08-10")));
       allMedias.add(new Media(6,"978-2253002864",MediaType.BOOK,MediaStatus.BORROWED,Date.valueOf("2020-08-12")));
       allMedias.add(new Media(7,"978-2253003656",MediaType.BOOK,MediaStatus.BORROWED,Date.valueOf("2020-08-17")));

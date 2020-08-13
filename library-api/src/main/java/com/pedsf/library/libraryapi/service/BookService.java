@@ -1,7 +1,6 @@
 package com.pedsf.library.libraryapi.service;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.dto.business.*;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Book;
 import com.pedsf.library.libraryapi.repository.BookRepository;

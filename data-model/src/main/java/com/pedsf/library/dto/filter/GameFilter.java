@@ -1,4 +1,4 @@
-package com.pedsf.library.web.dto.business;
+package com.pedsf.library.dto.filter;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +16,7 @@ import java.sql.Date;
  * url : link to the Game trailer
  */
 @Data
-public class GameFilter extends CommonFilter{
+public class GameFilter extends CommonFilter {
 
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

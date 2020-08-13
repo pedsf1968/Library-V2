@@ -1,4 +1,4 @@
-package com.pedsf.library.web.dto.business;
+package com.pedsf.library.dto.filter;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,7 +16,7 @@ import java.sql.Date;
  * summary : Book summary
  */
 @Data
-public class BookFilter extends CommonFilter{
+public class BookFilter extends CommonFilter {
 
    // Book attributes
    private String isbn;

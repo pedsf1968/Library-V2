@@ -71,13 +71,13 @@ public class MusicDTO extends MediaCommonDTO implements Serializable {
       if (!super.equals(o)) return false;
       MusicDTO musicDTO = (MusicDTO) o;
       return Objects.equals(getPublicationDate(), musicDTO.getPublicationDate()) &&
-              getAuthor().equals(musicDTO.getAuthor()) &&
-              getComposer().equals(musicDTO.getComposer()) &&
-              getInterpreter().equals(musicDTO.getInterpreter()) &&
-              Objects.equals(getDuration(), musicDTO.getDuration()) &&
-              getType().equals(musicDTO.getType()) &&
-              getFormat().equals(musicDTO.getFormat()) &&
-              Objects.equals(getUrl(), musicDTO.getUrl());
+            getAuthor().equals(musicDTO.getAuthor()) &&
+            getComposer().equals(musicDTO.getComposer()) &&
+            getInterpreter().equals(musicDTO.getInterpreter()) &&
+            Objects.equals(getDuration(), musicDTO.getDuration()) &&
+            Objects.equals(getType(), musicDTO.getType()) &&
+            Objects.equals(getFormat(), musicDTO.getFormat()) &&
+            Objects.equals(getUrl(), musicDTO.getUrl());
    }
 
    @Override
