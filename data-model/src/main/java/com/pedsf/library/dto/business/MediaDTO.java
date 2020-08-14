@@ -58,9 +58,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO( BookDTO bookDTO) {
-      this.ean = bookDTO.getEan();
       this.mediaType = MediaType.BOOK.name();
-      this.returnDate = bookDTO.getReturnDate();
       this.title = bookDTO.getTitle();
       this.publicationDate = bookDTO.getPublicationDate();
       this.weight = bookDTO.getWeight();
@@ -72,9 +70,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO( GameDTO gameDTO) {
-      this.ean = gameDTO.getEan();
       this.mediaType = MediaType.GAME.name();
-      this.returnDate = gameDTO.getReturnDate();
       this.title = gameDTO.getTitle();
       this.publicationDate = gameDTO.getPublicationDate();
       this.weight = gameDTO.getWeight();
@@ -86,9 +82,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO( MusicDTO musicDTO) {
-      this.ean = musicDTO.getEan();
       this.mediaType = MediaType.MUSIC.name();
-      this.returnDate = musicDTO.getReturnDate();
       this.title = musicDTO.getTitle();
       this.publicationDate = musicDTO.getPublicationDate();
       this.weight = musicDTO.getWeight();
@@ -100,9 +94,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO( VideoDTO videoDTO) {
-      this.ean = videoDTO.getEan();
       this.mediaType = MediaType.VIDEO.name();
-      this.returnDate = videoDTO.getReturnDate();
       this.title = videoDTO.getTitle();
       this.publicationDate = videoDTO.getPublicationDate();
       this.weight = videoDTO.getWeight();
@@ -117,9 +109,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( BookDTO bookDTO) {
-      this.ean = bookDTO.getEan();
       this.mediaType = MediaType.BOOK.name();
-      this.returnDate = bookDTO.getReturnDate();
       this.title = bookDTO.getTitle();
       this.publicationDate = bookDTO.getPublicationDate();
       this.weight = bookDTO.getWeight();
@@ -131,9 +121,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( GameDTO gameDTO) {
-      this.ean = gameDTO.getEan();
       this.mediaType = MediaType.GAME.name();
-      this.returnDate = gameDTO.getReturnDate();
       this.title = gameDTO.getTitle();
       this.publicationDate = gameDTO.getPublicationDate();
       this.weight = gameDTO.getWeight();
@@ -145,9 +133,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( MusicDTO musicDTO) {
-      this.ean = musicDTO.getEan();
       this.mediaType = MediaType.MUSIC.name();
-      this.returnDate = musicDTO.getReturnDate();
       this.title = musicDTO.getTitle();
       this.publicationDate = musicDTO.getPublicationDate();
       this.weight = musicDTO.getWeight();
@@ -159,9 +145,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public void initialise( VideoDTO videoDTO) {
-      this.ean = videoDTO.getEan();
       this.mediaType = MediaType.VIDEO.name();
-      this.returnDate = videoDTO.getReturnDate();
       this.title = videoDTO.getTitle();
       this.publicationDate = videoDTO.getPublicationDate();
       this.weight = videoDTO.getWeight();

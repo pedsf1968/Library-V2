@@ -661,7 +661,6 @@ class MediaServiceTestIT {
    void borrow() {
    }
 
-   @Disabled
    @Test
    @Tag("release")
    @DisplayName("Verify hat we can reinitialise the status and the returnDate of a Media")
@@ -687,7 +686,6 @@ class MediaServiceTestIT {
       }
    }
 
-   @Disabled
    @Test
    @Tag("updateReturnDate")
    @DisplayName("Verify tha we can set the new returnDate")

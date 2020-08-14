@@ -192,7 +192,10 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
    public MediaDTO entityToDTO(Media media) {
       MediaDTO mediaDTO=  modelMapper.map(media, MediaDTO.class);
 
-      return initialise(mediaDTO);
+      if(mediaDTO.getTitle()==null) {
+         mediaDTO = initialise(mediaDTO);
+      }
+      return mediaDTO;
    }
 
    @Override
@@ -309,7 +312,11 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
 
    public void updateReturnDate(Integer mediaId, Date date) {
-      mediaRepository.updateReturnDate(mediaId,new java.sql.Date(date.getTime()));
+      if(date!=null) {
+         mediaRepository.updateReturnDate(mediaId, new java.sql.Date(date.getTime()));
+      } else {
+         mediaRepository.updateReturnDate(mediaId, null);
+      }
    }
 
    public MediaDTO getNextReturnByEan(String ean) {
