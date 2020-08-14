@@ -1,16 +1,10 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.business.GameDTO;
-import com.pedsf.library.dto.business.MusicDTO;
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.dto.business.VideoDTO;
+import com.pedsf.library.dto.business.*;
 import com.pedsf.library.libraryapi.controller.VideoController;
 import com.pedsf.library.libraryapi.service.VideoService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -28,11 +23,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {VideoController.class})
 @ExtendWith(SpringExtension.class)
 class VideoControllerTestIT {
+   private static final String VIDEO_TITLE_TEST = "All about my wife";
+
    private static final List<VideoDTO> allVideoDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
 
@@ -153,5 +152,144 @@ class VideoControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
+   @Test
+   @Tag("addVideo")
+   @DisplayName("Verify that we can add Video")
+   void addVideo() throws Exception {
+      VideoDTO expected = allVideoDTOS.get(4);
+      ObjectMapper mapper = new ObjectMapper();
 
+      // GIVEN
+      when(videoService.save(any(VideoDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.post("/videos")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      VideoDTO found = mapper.readValue(json, VideoDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Disabled
+   @Test
+   @Tag("updateVideo")
+   @DisplayName("Verify that we can update a Video")
+   void updateVideo() throws Exception {
+      VideoDTO expected = allVideoDTOS.get(4);
+      expected.setTitle(VIDEO_TITLE_TEST);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(videoService.update(any(VideoDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.put("/videos/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      VideoDTO found = mapper.readValue(json, VideoDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Test
+   @Tag("deleteVideo")
+   @DisplayName("Verify that we can delate a Video")
+   void deleteVideo() throws Exception {
+      VideoDTO expected = allVideoDTOS.get(2);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      doNothing().when(videoService).deleteById(expected.getEan());
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.delete("/videos/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+   }
+
+   @Test
+   @Tag("getAllVideosDirectors")
+   @DisplayName("Verify that we get all directors list")
+   void getAllVideosDirectors() throws Exception {
+      List<PersonDTO> directors = new ArrayList<>();
+      for(VideoDTO videoDTO : allVideoDTOS) {
+         directors.add(videoDTO.getDirector());
+      }
+
+      // GIVEN
+      when(videoService.findAllDirectors()).thenReturn(directors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/videos/directors"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(directors.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:directors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("getAllVideosTitles")
+   @DisplayName("Verify that we get all titles list")
+   void getAllVideosTitles() throws Exception {
+      List<String> titles = new ArrayList<>();
+      for(VideoDTO videoDTO : allVideoDTOS) {
+         titles.add(videoDTO.getTitle());
+      }
+
+      // GIVEN
+      when(videoService.findAllTitles()).thenReturn(titles);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/videos/titles"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(titles.size());
+      for(String title: founds) {
+         assertThat(titles.contains(title)).isTrue();
+      }
+   }
 }

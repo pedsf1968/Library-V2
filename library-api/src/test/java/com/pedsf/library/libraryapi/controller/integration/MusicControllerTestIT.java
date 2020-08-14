@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.controller.MusicController;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -23,11 +25,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {MusicController.class})
 @ExtendWith(SpringExtension.class)
 class MusicControllerTestIT {
+   private static final String MUSIC_TITLE_TEST = "Les 4 saisons";
+
    private static final List<MusicDTO> allMusicDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
 
@@ -148,4 +154,212 @@ class MusicControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
+   @Test
+   @Tag("addMusic")
+   @DisplayName("Verify that we can add Music")
+   void addMusic() throws Exception {
+      MusicDTO expected = allMusicDTOS.get(4);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(musicService.save(any(MusicDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.post("/musics")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      MusicDTO found = mapper.readValue(json, MusicDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Disabled
+   @Test
+   @Tag("updateMusic")
+   @DisplayName("Verify that we can update a Music")
+   void updateMusic() throws Exception {
+      MusicDTO expected = allMusicDTOS.get(4);
+      expected.setTitle(MUSIC_TITLE_TEST);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(musicService.update(any(MusicDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.put("/musics/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      MusicDTO found = mapper.readValue(json, MusicDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Test
+   @Tag("deleteMusic")
+   @DisplayName("Verify that we can delate a Music")
+   void deleteMusic() throws Exception {
+      MusicDTO expected = allMusicDTOS.get(2);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      doNothing().when(musicService).deleteById(expected.getEan());
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.delete("/musics/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+   }
+
+   @Test
+   @Tag("getAllMusicsAuthors")
+   @DisplayName("Verify that we get all authors list")
+   void getAllMusicsAuthors() throws Exception {
+      List<PersonDTO> authors = new ArrayList<>();
+      for(MusicDTO musicDTO : allMusicDTOS) {
+         authors.add(musicDTO.getAuthor());
+      }
+
+      // GIVEN
+      when(musicService.findAllAuthors()).thenReturn(authors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/musics/authors"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(authors.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:authors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("getAllMusicsComposers")
+   @DisplayName("Verify that we get all composers list")
+   void getAllMusicsComposers() throws Exception {
+      List<PersonDTO> composers = new ArrayList<>();
+      for(MusicDTO musicDTO : allMusicDTOS) {
+         composers.add(musicDTO.getComposer());
+      }
+
+      // GIVEN
+      when(musicService.findAllComposers()).thenReturn(composers);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/musics/composers"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(composers.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:composers) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("getAllMusicsInterpreters")
+   @DisplayName("Verify that we get all interpreters list")
+   void getAllMusicsInterpreters() throws Exception {
+      List<PersonDTO> interpreters = new ArrayList<>();
+      for(MusicDTO musicDTO : allMusicDTOS) {
+         interpreters.add(musicDTO.getInterpreter());
+      }
+
+      // GIVEN
+      when(musicService.findAllInterpreters()).thenReturn(interpreters);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/musics/interpreters"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(interpreters.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:interpreters) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("getAllMusicsTitles")
+   @DisplayName("Verify that we get all titles list")
+   void getAllMusicsTitles() throws Exception {
+      List<String> titles = new ArrayList<>();
+      for(MusicDTO musicDTO : allMusicDTOS) {
+         titles.add(musicDTO.getTitle());
+      }
+
+      // GIVEN
+      when(musicService.findAllTitles()).thenReturn(titles);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/musics/titles"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(titles.size());
+      for(String title: founds) {
+         assertThat(titles.contains(title)).isTrue();
+      }
+   }
 }

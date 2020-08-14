@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -26,11 +27,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {GameController.class})
 @ExtendWith(SpringExtension.class)
 class GameControllerTestIT {
+   private static final String GAME_TITLE_TEST = "Le Mans";
+
    private static final List<GameDTO> allGameDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
 
@@ -151,4 +156,112 @@ class GameControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
+   @Test
+   @Tag("addGame")
+   @DisplayName("Verify that we can add Game")
+   void addGame() throws Exception {
+      GameDTO expected = allGameDTOS.get(4);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(gameService.save(any(GameDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.post("/games")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      GameDTO found = mapper.readValue(json, GameDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Disabled
+   @Test
+   @Tag("updateGame")
+   @DisplayName("Verify that we can update a Game")
+   void updateGame() throws Exception {
+      GameDTO expected = allGameDTOS.get(2);
+      expected.setTitle(GAME_TITLE_TEST);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      when(gameService.update(any(GameDTO.class))).thenReturn(expected);
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.put("/games/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      GameDTO found = mapper.readValue(json, GameDTO.class);
+
+      assertThat(found).isEqualTo(expected);
+   }
+
+   @Test
+   @Tag("deleteGame")
+   @DisplayName("Verify that we can delate a Game")
+   void deleteGame() throws Exception {
+      GameDTO expected = allGameDTOS.get(2);
+      ObjectMapper mapper = new ObjectMapper();
+
+      // GIVEN
+      doNothing().when(gameService).deleteById(expected.getEan());
+
+      // WHEN
+      String json = mapper.writeValueAsString(expected);
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.delete("/games/"+ expected.getEan())
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                      .content(json))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+   }
+
+
+   @Test
+   @Tag("getAllGamesTitles")
+   @DisplayName("Verify that we get all titles list")
+   void getAllGamesTitles() throws Exception {
+      List<String> titles = new ArrayList<>();
+      for(GameDTO gameDTO : allGameDTOS) {
+         titles.add(gameDTO.getTitle());
+      }
+
+      // GIVEN
+      when(gameService.findAllTitles()).thenReturn(titles);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+              MockMvcRequestBuilders.get("/games/titles"))
+              .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+              .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      ObjectMapper mapper = new ObjectMapper();
+      List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(titles.size());
+      for(String title: founds) {
+         assertThat(titles.contains(title)).isTrue();
+      }
+   }
 }
+

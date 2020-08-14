@@ -273,9 +273,9 @@ class BookControllerTestIT {
    @DisplayName("Verify that we get all authors list")
    void getAllBooksAuthors() throws Exception {
       List<PersonDTO> authors = new ArrayList<>();
-      authors.add(allPersonDTOS.get(1));
-      authors.add(allPersonDTOS.get(2));
-      authors.add(allPersonDTOS.get(3));
+      for(BookDTO bookDTO : allBookDTOS) {
+         authors.add(bookDTO.getAuthor());
+      }
 
       // GIVEN
       when(bookService.findAllAuthors()).thenReturn(authors);
@@ -292,7 +292,7 @@ class BookControllerTestIT {
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
-      assertThat(founds.size()).isEqualTo(3);
+      assertThat(founds.size()).isEqualTo(authors.size());
       for(PersonDTO dto: founds) {
          for(PersonDTO expected:authors) {
             if(dto.getId().equals(expected.getId())) {
@@ -307,9 +307,9 @@ class BookControllerTestIT {
    @DisplayName("Verify that we get all editors list")
    void getAllBooksEditors() throws Exception {
       List<PersonDTO> editors = new ArrayList<>();
-      editors.add(allPersonDTOS.get(10));
-      editors.add(allPersonDTOS.get(11));
-      editors.add(allPersonDTOS.get(12));
+      for(BookDTO bookDTO : allBookDTOS) {
+         editors.add(bookDTO.getEditor());
+      }
 
       // GIVEN
       when(bookService.findAllEditors()).thenReturn(editors);
@@ -326,7 +326,7 @@ class BookControllerTestIT {
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
-      assertThat(founds.size()).isEqualTo(3);
+      assertThat(founds.size()).isEqualTo(editors.size());
       for(PersonDTO dto: founds) {
          for(PersonDTO expected:editors) {
             if(dto.getId().equals(expected.getId())) {
