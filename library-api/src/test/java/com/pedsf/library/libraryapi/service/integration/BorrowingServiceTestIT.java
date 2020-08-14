@@ -22,9 +22,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,9 +42,8 @@ class BorrowingServiceTestIT {
    @Value("${library.borrowing.quantity.max}")
    private int quantityMax;
 
-
    private static BorrowingService borrowingService;
-   BorrowingRepository borrowingRepository;
+   private BorrowingRepository borrowingRepository;
 
    @Mock
    private static MediaService mediaService;
@@ -55,18 +52,17 @@ class BorrowingServiceTestIT {
    private static Borrowing newBorrowing;
    private static BorrowingDTO newBorrowingDTO;
    private static List<BorrowingDTO> allBorrowingDTOS = new ArrayList<>();
-   private static List<UserDTO> allUserDTOS = new ArrayList<>();
+   private static Map<Integer,UserDTO> allUserDTOS = new HashMap<>();
    private static List<MediaDTO> allMediaDTOS = new ArrayList<>();
 
 
    @BeforeAll
-   static void beforeAll(@Autowired MediaRepository mediaRepository) {
-
-      allUserDTOS.add( new UserDTO(1,"Admin","ADMIN","admin@library.org","$2a$10$iyH.Uiv1Rx67gBdEXIabqOHPzxBsfpjmC0zM9JMs6i4tU0ymvZZie","22, rue de la Paix","75111","Paris"));
-      allUserDTOS.add( new UserDTO(2,"Staff","STAFF","staff@library.org","$2a$10$F14GUY0VFEuF0JepK/vQc.6w3vWGDbMJh0/Ji/hU2ujKLjvQzkGGG","1, rue verte","68121","Strasbourg"));
-      allUserDTOS.add( new UserDTO(3,"Martin","DUPONT","martin.dupont@gmail.com","$2a$10$PPVu0M.IdSTD.GwxbV6xZ.cP3EqlZRozxwrXkSF.fFUeweCaCQaSS","3, chemin de l’Escale","25000","Besançon"));
-      allUserDTOS.add( new UserDTO(4,"Emile","ZOLA","emile.zola@free.fr","$2a$10$316lg6qiCcEo5RmZASxS.uKGM8nQ2u16yoh8IJnWX3k7FW25fFWc.", "1, Rue de la Paix","75001","Paris"));
-      allUserDTOS.add( new UserDTO(5,"Victor","HUGO","victor.hugo@gmail.com","$2a$10$vEUHdcii.3Q/wRA/CxRpk.bJ8m5VA8qS0TQcMWVros.wSaggG32Vi","24, Rue des cannut","69003","Lyon"));
+   static void beforeAll() {
+      allUserDTOS.put(1, new UserDTO(1,"Admin","ADMIN","admin@library.org","$2a$10$iyH.Uiv1Rx67gBdEXIabqOHPzxBsfpjmC0zM9JMs6i4tU0ymvZZie","22, rue de la Paix","75111","Paris"));
+      allUserDTOS.put(2, new UserDTO(2,"Staff","STAFF","staff@library.org","$2a$10$F14GUY0VFEuF0JepK/vQc.6w3vWGDbMJh0/Ji/hU2ujKLjvQzkGGG","1, rue verte","68121","Strasbourg"));
+      allUserDTOS.put(3, new UserDTO(3,"Martin","DUPONT","martin.dupont@gmail.com","$2a$10$PPVu0M.IdSTD.GwxbV6xZ.cP3EqlZRozxwrXkSF.fFUeweCaCQaSS","3, chemin de l’Escale","25000","Besançon"));
+      allUserDTOS.put(4, new UserDTO(4,"Emile","ZOLA","emile.zola@free.fr","$2a$10$316lg6qiCcEo5RmZASxS.uKGM8nQ2u16yoh8IJnWX3k7FW25fFWc.", "1, Rue de la Paix","75001","Paris"));
+      allUserDTOS.put(5, new UserDTO(5,"Victor","HUGO","victor.hugo@gmail.com","$2a$10$vEUHdcii.3Q/wRA/CxRpk.bJ8m5VA8qS0TQcMWVros.wSaggG32Vi","24, Rue des cannut","69003","Lyon"));
 
       allMediaDTOS.add(new MediaDTO( 1,"978-2253004226", "Germinal","BOOK", "BORROWED", 4,2));
       allMediaDTOS.add(new MediaDTO(2,"978-2253004226", "Germinal","BOOK","BORROWED",4,2));
@@ -97,15 +93,15 @@ class BorrowingServiceTestIT {
       allMediaDTOS.add(new MediaDTO(27,"4988064585816","RE BLACKPINK","MUSIC","BORROWED",1,0));
       allMediaDTOS.add(new MediaDTO(28,"8809269506764","MADE","MUSIC","FREE",1,1));
 
-      allBorrowingDTOS.add(new BorrowingDTO( 1, allUserDTOS.get(3), allMediaDTOS.get(0), Date.valueOf("2020-07-13"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 2, allUserDTOS.get(3), allMediaDTOS.get(4), Date.valueOf("2020-07-20"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 3, allUserDTOS.get(3), allMediaDTOS.get(6), Date.valueOf("2020-07-20"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 4, allUserDTOS.get(3), allMediaDTOS.get(19), Date.valueOf("2020-07-20"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 5, allUserDTOS.get(4), allMediaDTOS.get(1), Date.valueOf("2020-07-13"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 6, allUserDTOS.get(4), allMediaDTOS.get(10), Date.valueOf("2020-07-20"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 7, allUserDTOS.get(4), allMediaDTOS.get(16), Date.valueOf("2020-07-20"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 8, allUserDTOS.get(4), allMediaDTOS.get(26), Date.valueOf("2020-07-13"),null));
-      allBorrowingDTOS.add(new BorrowingDTO( 9, allUserDTOS.get(2), allMediaDTOS.get(5), Date.valueOf("2020-07-15"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 1, allUserDTOS.get(4), allMediaDTOS.get(0), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 2, allUserDTOS.get(4), allMediaDTOS.get(4), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 3, allUserDTOS.get(4), allMediaDTOS.get(6), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 4, allUserDTOS.get(4), allMediaDTOS.get(19), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 5, allUserDTOS.get(3), allMediaDTOS.get(1), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 6, allUserDTOS.get(5), allMediaDTOS.get(10), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 7, allUserDTOS.get(5), allMediaDTOS.get(16), Date.valueOf("2020-07-20"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 8, allUserDTOS.get(5), allMediaDTOS.get(26), Date.valueOf("2020-07-13"),null));
+      allBorrowingDTOS.add(new BorrowingDTO( 9, allUserDTOS.get(3), allMediaDTOS.get(5), Date.valueOf("2020-07-15"),null));
    }
 
    @BeforeEach
@@ -115,7 +111,7 @@ class BorrowingServiceTestIT {
       borrowingService.setMaxExtention(maxExtention);
 
       Mockito.lenient().when(userApiProxy.findUserById(anyInt())).thenAnswer(
-            (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]-1));
+            (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]));
 
       Mockito.lenient().when(mediaService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allMediaDTOS.get((Integer) invocation.getArguments()[0]-1));
@@ -209,7 +205,7 @@ class BorrowingServiceTestIT {
 
       Integer id = borrowingService.getFirstId(filter);
 
-      assertThat(id).isEqualTo(5);
+      assertThat(id).isEqualTo(1);
    }
 
    @Test
@@ -402,9 +398,9 @@ class BorrowingServiceTestIT {
    @Tag("restitute")
    @DisplayName("Verify that the media is release when we restitute")
    void restitute_setMediaFree_ofMediaBorrowed() {
-      UserDTO userDTO = allUserDTOS.get(3);
+      UserDTO userDTO = allBorrowingDTOS.get(4).getUser();
       Integer userId = userDTO.getId();
-      MediaDTO mediaDTO = allMediaDTOS.get(0);
+      MediaDTO mediaDTO = allBorrowingDTOS.get(4).getMedia();
       String ean = mediaDTO.getEan();
       Integer mediaId = mediaDTO.getId();
 

@@ -67,6 +67,7 @@ public class PersonDTO implements Serializable {
       return getId().equals(personDTO.getId()) &&
             getFirstName().equals(personDTO.getFirstName()) &&
             getLastName().equals(personDTO.getLastName()) &&
+            Objects.equals(getBirthDate(),personDTO.getBirthDate()) &&
             Objects.equals(getUrl(), personDTO.getUrl()) &&
             Objects.equals(getPhotoUrl(), personDTO.getPhotoUrl());
    }

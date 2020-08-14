@@ -39,4 +39,15 @@ public class BookingDTO implements Serializable {
 
    @NotNull
    private Integer rank;
+
+   public BookingDTO(Integer id,  @NotNull UserDTO user, @NotNull MediaDTO media, Date bookingDate, Integer rank) {
+      this.id = id;
+      this.user = user;
+      this.media = media;
+      this.bookingDate = bookingDate;
+      this.rank = rank;
+   }
+
+   public BookingDTO() {
+   }
 }
