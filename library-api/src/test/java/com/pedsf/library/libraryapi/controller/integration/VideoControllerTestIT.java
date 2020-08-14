@@ -179,7 +179,6 @@ class VideoControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
-   @Disabled
    @Test
    @Tag("updateVideo")
    @DisplayName("Verify that we can update a Video")

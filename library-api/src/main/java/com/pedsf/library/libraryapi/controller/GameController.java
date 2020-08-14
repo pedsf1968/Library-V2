@@ -105,7 +105,7 @@ public class GameController {
    }
 
    @PutMapping(value = "/{gameId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<GameDTO> updateGame(@PathVariable( "gameId" ) Integer gameId, @Valid @RequestBody GameDTO gameDTO) {
+   public ResponseEntity<GameDTO> updateGame(@PathVariable( "gameId" ) String gameId, @Valid @RequestBody GameDTO gameDTO) {
 
       try {
          gameDTO = gameService.update(gameDTO);

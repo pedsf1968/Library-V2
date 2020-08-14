@@ -2,6 +2,8 @@ package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.pedsf.library.dto.BookFormat;
+import com.pedsf.library.dto.BookType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.controller.BookController;
@@ -197,6 +199,8 @@ class BookControllerTestIT {
    @DisplayName("Verify that we can add Book")
    void addBook() throws Exception {
       BookDTO expected = allBookDTOS.get(4);
+      expected.setFormat(BookFormat.POCKET.name());
+      expected.setType(BookType.HUMOR.name());
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
@@ -225,6 +229,8 @@ class BookControllerTestIT {
    void updateBook() throws Exception {
       BookDTO expected = allBookDTOS.get(4);
       expected.setTitle(BOOK_TITLE_TEST);
+      expected.setFormat(BookFormat.POCKET.name());
+      expected.setType(BookType.HUMOR.name());
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN

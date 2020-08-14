@@ -1,6 +1,10 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedsf.library.dto.BookFormat;
+import com.pedsf.library.dto.BookType;
+import com.pedsf.library.dto.GameFormat;
+import com.pedsf.library.dto.GameType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.dto.business.MusicDTO;
@@ -71,12 +75,10 @@ class GameControllerTestIT {
       allGameDTOS.add( new GameDTO("0805kuyiuo299","Age of Empire",1,-2,allPersonDTOS.get(15)));
    }
 
-   @Disabled
    @Test
    @Tag("findAllGames")
    @DisplayName("Verify that we get the list of all Games")
    void findAllGames_returnAllGames() throws Exception {
-      int i = 0;
       // GIVEN
       when(gameService.findAll()).thenReturn(allGameDTOS);
 
@@ -161,6 +163,9 @@ class GameControllerTestIT {
    @DisplayName("Verify that we can add Game")
    void addGame() throws Exception {
       GameDTO expected = allGameDTOS.get(4);
+      expected.setFormat(GameFormat.MICROSOFT_XBOX.name());
+      expected.setType(GameType.ADVENTURE.name());
+
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
@@ -183,13 +188,14 @@ class GameControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
-   @Disabled
    @Test
    @Tag("updateGame")
    @DisplayName("Verify that we can update a Game")
    void updateGame() throws Exception {
       GameDTO expected = allGameDTOS.get(2);
       expected.setTitle(GAME_TITLE_TEST);
+      expected.setFormat(GameFormat.MICROSOFT_XBOX.name());
+      expected.setType(GameType.ADVENTURE.name());
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN

@@ -125,6 +125,7 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
    public GameDTO update(GameDTO gameDTO) {
       if (  !StringUtils.isEmpty(gameDTO.getEan()) &&
             !StringUtils.isEmpty(gameDTO.getTitle()) &&
+            !StringUtils.isEmpty(gameDTO.getEditor()) &&
             !StringUtils.isEmpty(gameDTO.getType()) &&
             !StringUtils.isEmpty(gameDTO.getFormat())) {
          if (!existsById(gameDTO.getEan())) {

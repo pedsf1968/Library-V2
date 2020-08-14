@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pedsf.library.dto.MusicFormat;
+import com.pedsf.library.dto.MusicType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
@@ -69,7 +71,6 @@ class MusicControllerTestIT {
       allMusicDTOS.add(new MusicDTO("8809265654654","Remember",1,0,allPersonDTOS.get(14),allPersonDTOS.get(14),allPersonDTOS.get(14)));
    }
 
-   @Disabled
    @Test
    @Tag("findAllMusics")
    @DisplayName("Verify that we get the list of all Musics")
@@ -159,6 +160,8 @@ class MusicControllerTestIT {
    @DisplayName("Verify that we can add Music")
    void addMusic() throws Exception {
       MusicDTO expected = allMusicDTOS.get(4);
+      expected.setFormat(MusicFormat.CD.name());
+      expected.setType(MusicType.BLUES.name());
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
@@ -181,13 +184,14 @@ class MusicControllerTestIT {
       assertThat(found).isEqualTo(expected);
    }
 
-   @Disabled
    @Test
    @Tag("updateMusic")
    @DisplayName("Verify that we can update a Music")
    void updateMusic() throws Exception {
       MusicDTO expected = allMusicDTOS.get(4);
       expected.setTitle(MUSIC_TITLE_TEST);
+      expected.setFormat(MusicFormat.CD.name());
+      expected.setType(MusicType.BLUES.name());
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
