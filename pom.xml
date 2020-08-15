@@ -127,7 +127,7 @@
       <module>mail-api</module>
       <module>user-api</module>
       <module>library-api</module>
-      <module>web</module>
+      <module>web-api</module>
       <module>batch</module>
    </modules>
 
@@ -261,7 +261,7 @@
          <!-- ========================================================== WEB -->
          <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>web-api</artifactId>
             <version>${project.version}</version>
          </dependency>
          <!-- ======================================================== BATCH -->

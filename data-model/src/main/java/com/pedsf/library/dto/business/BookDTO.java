@@ -2,6 +2,7 @@ package com.pedsf.library.dto.business;
 
 import com.pedsf.library.Parameters;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;

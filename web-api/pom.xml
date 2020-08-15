@@ -8,14 +8,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.pedsf.library</groupId>
-		<artifactId>library</artifactId>
+		<artifactId>Library</artifactId>
 		<version>1.0.0.RELEASE</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>media-api</artifactId>
+	<artifactId>web-api</artifactId>
+	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
-	<description>Library multi module Media REST controller</description>
+	<description>Library multi module Web application for users</description>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -34,7 +35,6 @@
 	<!-- ==================================================================== -->
 	<properties>
 		<java.version>1.8</java.version>
-		<org-jetbrains-annotations.version>16.0.1</org-jetbrains-annotations.version>
 	</properties>
 
 	<!-- ==================================================================== -->
@@ -47,6 +47,15 @@
 			<artifactId>data-model</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>user-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>library-api</artifactId>
+		</dependency>
 
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
@@ -60,12 +69,6 @@
 			<artifactId>spring-boot-admin-starter-client</artifactId>
 		</dependency>
 
-		<!-- ====================================================== COMMONS-IO -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-
 		<!-- ========================================================== CONFIG -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -76,6 +79,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+
+		<!-- ======================================================== DEVTOOLS -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- ========================================================== EUREKA -->
@@ -105,8 +115,21 @@
 
 		<!-- ===================================================== MODELMAPPER -->
 		<dependency>
-			<groupId>org.modelmapper.extensions</groupId>
-			<artifactId>modelmapper-spring</artifactId>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- ========================================================= OPENAPI -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+		</dependency>
+
+		<!-- ======================================================= OPENFEIGN -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 
 		<!-- =========================================================== RIBON -->
@@ -115,6 +138,36 @@
 			<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
 		</dependency>
 
+		<!-- ======================================================== SECURITY -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- ========================================================= SWAGGER -->
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- ======================================================= THYMELEAF -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
+		</dependency>
+
+		<!-- ========================================================== TOMCAT -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- ============================================================= WEB -->
 		<dependency>
@@ -122,16 +175,13 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+
 		<!-- ============================================================ TEST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 			<exclusions>
-			    <exclusion>
-                <groupId>org.springframework.cloud</groupId>
-					 <artifactId>spring-cloud-config-client</artifactId>
-				 </exclusion>
 				<exclusion>
 					<groupId>org.junit.vintage</groupId>
 					<artifactId>junit-vintage-engine</artifactId>
@@ -139,11 +189,26 @@
 			</exclusions>
 		</dependency>
 
+		<!-- =================================================== SECURITY TEST -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- =========================================================== JUNIT -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+		</dependency>
+      <dependency>
+         <groupId>org.springframework.data</groupId>
+         <artifactId>spring-data-commons</artifactId>
+      </dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
 		</dependency>
    </dependencies>
 
@@ -178,13 +243,24 @@
 				<configServer>http://10.5.0.1:2000</configServer>
 			</properties>
 		</profile>
+
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+				<configServer>http://localhost:2000</configServer>
+			</properties>
+		</profile>
 	</profiles>
 
 	<!-- ==================================================================== -->
 	<!--                                                                BUILD -->
 	<!-- ==================================================================== -->
 	<build>
-		<finalName>media-api</finalName>
+		<finalName>web-api</finalName>
 
 		<resources>
 			<resource>
