@@ -1,6 +1,7 @@
 package com.pedsf.library.dto.business;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.MediaStatus;
 import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -57,103 +58,87 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.status = status;
    }
 
-   public MediaDTO( BookDTO bookDTO) {
-      this.mediaType = MediaType.BOOK.name();
-      this.title = bookDTO.getTitle();
-      this.publicationDate = bookDTO.getPublicationDate();
-      this.weight = bookDTO.getWeight();
-      this.length = bookDTO.getLength();
-      this.width = bookDTO.getWidth();
-      this.height = bookDTO.getHeight();
-      this.quantity = bookDTO.getQuantity();
-      this.stock = bookDTO.getStock();
+   public MediaDTO( BookDTO dto) {
+      initialise(dto);
    }
 
-   public MediaDTO( GameDTO gameDTO) {
-      this.mediaType = MediaType.GAME.name();
-      this.title = gameDTO.getTitle();
-      this.publicationDate = gameDTO.getPublicationDate();
-      this.weight = gameDTO.getWeight();
-      this.length = gameDTO.getLength();
-      this.width = gameDTO.getWidth();
-      this.height = gameDTO.getHeight();
-      this.quantity = gameDTO.getQuantity();
-      this.stock = gameDTO.getStock();
+   public MediaDTO( GameDTO dto) {
+      initialise(dto);
    }
 
-   public MediaDTO( MusicDTO musicDTO) {
-      this.mediaType = MediaType.MUSIC.name();
-      this.title = musicDTO.getTitle();
-      this.publicationDate = musicDTO.getPublicationDate();
-      this.weight = musicDTO.getWeight();
-      this.length = musicDTO.getLength();
-      this.width = musicDTO.getWidth();
-      this.height = musicDTO.getHeight();
-      this.quantity = musicDTO.getQuantity();
-      this.stock = musicDTO.getStock();
+   public MediaDTO( MusicDTO dto) {
+      initialise(dto);
    }
 
-   public MediaDTO( VideoDTO videoDTO) {
-      this.mediaType = MediaType.VIDEO.name();
-      this.title = videoDTO.getTitle();
-      this.publicationDate = videoDTO.getPublicationDate();
-      this.weight = videoDTO.getWeight();
-      this.length = videoDTO.getLength();
-      this.width = videoDTO.getWidth();
-      this.height = videoDTO.getHeight();
-      this.quantity = videoDTO.getQuantity();
-      this.stock = videoDTO.getStock();
+   public MediaDTO( VideoDTO dto) {
+      initialise(dto);
    }
 
    public MediaDTO() {
    }
 
-   public void initialise( BookDTO bookDTO) {
+   public void initialise( BookDTO dto) {
+      this.ean = dto.getEan();
       this.mediaType = MediaType.BOOK.name();
-      this.title = bookDTO.getTitle();
-      this.publicationDate = bookDTO.getPublicationDate();
-      this.weight = bookDTO.getWeight();
-      this.length = bookDTO.getLength();
-      this.width = bookDTO.getWidth();
-      this.height = bookDTO.getHeight();
-      this.quantity = bookDTO.getQuantity();
-      this.stock = bookDTO.getStock();
+      this.title = dto.getTitle();
+      this.publicationDate = dto.getPublicationDate();
+      this.weight = dto.getWeight();
+      this.length = dto.getLength();
+      this.width = dto.getWidth();
+      this.height = dto.getHeight();
+      this.quantity = dto.getQuantity();
+      this.stock = dto.getStock();
+      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+         this.returnDate = dto.getReturnDate();
+      }
    }
 
-   public void initialise( GameDTO gameDTO) {
+   public void initialise( GameDTO dto) {
+      this.ean = dto.getEan();
       this.mediaType = MediaType.GAME.name();
-      this.title = gameDTO.getTitle();
-      this.publicationDate = gameDTO.getPublicationDate();
-      this.weight = gameDTO.getWeight();
-      this.length = gameDTO.getLength();
-      this.width = gameDTO.getWidth();
-      this.height = gameDTO.getHeight();
-      this.quantity = gameDTO.getQuantity();
-      this.stock = gameDTO.getStock();
+      this.title = dto.getTitle();
+      this.publicationDate = dto.getPublicationDate();
+      this.weight = dto.getWeight();
+      this.length = dto.getLength();
+      this.width = dto.getWidth();
+      this.height = dto.getHeight();
+      this.quantity = dto.getQuantity();
+      this.stock = dto.getStock();
+      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+         this.returnDate = dto.getReturnDate();
+      }
    }
 
-   public void initialise( MusicDTO musicDTO) {
+   public void initialise( MusicDTO dto) {
+      this.ean = dto.getEan();
       this.mediaType = MediaType.MUSIC.name();
-      this.title = musicDTO.getTitle();
-      this.publicationDate = musicDTO.getPublicationDate();
-      this.weight = musicDTO.getWeight();
-      this.length = musicDTO.getLength();
-      this.width = musicDTO.getWidth();
-      this.height = musicDTO.getHeight();
-      this.quantity = musicDTO.getQuantity();
-      this.stock = musicDTO.getStock();
+      this.title = dto.getTitle();
+      this.publicationDate = dto.getPublicationDate();
+      this.weight = dto.getWeight();
+      this.length = dto.getLength();
+      this.width = dto.getWidth();
+      this.height = dto.getHeight();
+      this.quantity = dto.getQuantity();
+      this.stock = dto.getStock();
+      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+         this.returnDate = dto.getReturnDate();
+      }
    }
 
-   public void initialise( VideoDTO videoDTO) {
+   public void initialise( VideoDTO dto) {
+      this.ean = dto.getEan();
       this.mediaType = MediaType.VIDEO.name();
-      this.title = videoDTO.getTitle();
-      this.publicationDate = videoDTO.getPublicationDate();
-      this.weight = videoDTO.getWeight();
-      this.length = videoDTO.getLength();
-      this.width = videoDTO.getWidth();
-      this.height = videoDTO.getHeight();
-      this.quantity = videoDTO.getQuantity();
-      this.stock = videoDTO.getStock();
+      this.title = dto.getTitle();
+      this.publicationDate = dto.getPublicationDate();
+      this.weight = dto.getWeight();
+      this.length = dto.getLength();
+      this.width = dto.getWidth();
+      this.height = dto.getHeight();
+      this.quantity = dto.getQuantity();
+      this.stock = dto.getStock();
+      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+         this.returnDate = dto.getReturnDate();
+      }
    }
 
 }

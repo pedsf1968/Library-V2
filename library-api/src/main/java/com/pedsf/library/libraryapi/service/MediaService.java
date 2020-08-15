@@ -54,13 +54,11 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
       MediaDTO mediaDTO;
       Optional<Media> media = mediaRepository.findById(id);
 
-      if (media.isPresent()) {
-         mediaDTO = entityToDTO(media.get());
-      } else {
+      if (!media.isPresent()) {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
       }
 
-      return initialise(mediaDTO);
+      return entityToDTO(media.get());
    }
 
    public MediaDTO initialise(MediaDTO mediaDTO) {

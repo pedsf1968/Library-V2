@@ -261,7 +261,6 @@ class MediaServiceTest {
 
       assertThat(mediaDTO.getEan()).isEqualTo(bookDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.BOOK.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(bookDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(bookDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(bookDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(bookDTO.getWeight());
@@ -281,7 +280,6 @@ class MediaServiceTest {
 
       assertThat(mediaDTO.getEan()).isEqualTo(gameDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.GAME.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(gameDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(gameDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(gameDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(gameDTO.getWeight());
@@ -301,7 +299,6 @@ class MediaServiceTest {
 
       assertThat(mediaDTO.getEan()).isEqualTo(musicDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.MUSIC.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(musicDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(musicDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(musicDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(musicDTO.getWeight());
@@ -321,7 +318,6 @@ class MediaServiceTest {
 
       assertThat(mediaDTO.getEan()).isEqualTo(videoDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.VIDEO.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(videoDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(videoDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(videoDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(videoDTO.getWeight());
@@ -436,7 +432,7 @@ class MediaServiceTest {
 
    @Test
    @Tag("update")
-   @DisplayName("Verify that we can update a Madia")
+   @DisplayName("Verify that we can update a Media")
    void update_returnUpdatedMedia_ofMediaAndNewTitle() {
       String oldTitle = bookDTO.getTitle();
       bookDTO.setTitle(MEDIA_TITLE_TEST);
@@ -528,24 +524,20 @@ class MediaServiceTest {
    void increaseStock_returnMusicWithIncrementedStock_ofOneMusic() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.MUSIC);
+
       musicDTO.setStock(oldStock+1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(musicDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
-
       Mockito.lenient().when(musicService.findById(anyString())).thenReturn(musicDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.increaseStock(mediaDTO);
+      mediaService.increaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock+1);
 
       musicDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -554,24 +546,20 @@ class MediaServiceTest {
    void increaseStock_returnGameWithIncrementedStock_ofOneGame() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.GAME);
+
       gameDTO.setStock(oldStock+1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(gameDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
-
       Mockito.lenient().when(gameService.findById(anyString())).thenReturn(gameDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.increaseStock(mediaDTO);
+      mediaService.increaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock+1);
 
       gameDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -580,24 +568,21 @@ class MediaServiceTest {
    void increaseStock_returnVideoWithIncrementedStock_ofOneVideo() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.VIDEO);
+
       videoDTO.setStock(oldStock+1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(videoDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
 
       Mockito.lenient().when(videoService.findById(anyString())).thenReturn(videoDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.increaseStock(mediaDTO);
+      mediaService.increaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock+1);
 
       videoDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -625,24 +610,20 @@ class MediaServiceTest {
    void decreaseStock_returnGameWithDecrementedStock_ofOneGame() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.GAME);
+
       gameDTO.setStock(oldStock-1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(gameDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
-
       Mockito.lenient().when(gameService.findById(anyString())).thenReturn(gameDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.decreaseStock(mediaDTO);
+      mediaService.decreaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock-1);
 
       gameDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -651,24 +632,20 @@ class MediaServiceTest {
    void decreaseStock_returnMusicWithDecrementedStock_ofOneMusic() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.MUSIC);
+
       musicDTO.setStock(oldStock-1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(musicDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
-
       Mockito.lenient().when(musicService.findById(anyString())).thenReturn(musicDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.decreaseStock(mediaDTO);
+      mediaService.decreaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock-1);
 
       musicDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -677,24 +654,20 @@ class MediaServiceTest {
    void decreaseStock_returnMusicVideoDecrementedStock_ofOneVideo() {
       Integer mediaId = newMediaDTO.getId();
       Integer oldStock = newMediaDTO.getStock();
+      MediaType oldMediaType = newMedia.getMediaType();
+      newMedia.setMediaType(MediaType.VIDEO);
+
       videoDTO.setStock(oldStock-1);
-      MediaDTO mediaDTO = new MediaDTO();
-      mediaDTO.initialise(videoDTO);
-      Media media = new Media();
-      media.setId(mediaDTO.getId());
-      media.setMediaType(MediaType.valueOf(mediaDTO.getMediaType()));
-      media.setEan(mediaDTO.getEan());
-      media.setReturnDate(mediaDTO.getReturnDate());
-
       Mockito.lenient().when(videoService.findById(anyString())).thenReturn(videoDTO);
-      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(media));
+      Mockito.lenient().when(mediaRepository.findById(anyInt())).thenReturn(java.util.Optional.of(newMedia));
 
-      mediaService.decreaseStock(mediaDTO);
+      mediaService.decreaseStock(newMediaDTO);
       MediaDTO found = mediaService.findById(mediaId);
 
       assertThat(found.getStock()).isEqualTo(oldStock-1);
 
       videoDTO.setStock(oldStock);
+      newMedia.setMediaType(oldMediaType);
    }
 
    @Test
@@ -851,7 +824,9 @@ class MediaServiceTest {
    @DisplayName("Verify that we return null if a Media of this AEN is available")
    void getNextReturnByEan_returnNull_ofAvailableMediaEAN() {
       Date oldDate = newMedia.getReturnDate();
-      bookDTO.setReturnDate(null);
+      MediaStatus oldMediaStatus = newMedia.getStatus();
+      newMedia.setReturnDate(null);
+      newMedia.setStatus(MediaStatus.FREE);
 
       Mockito.lenient().when(bookService.findById(anyString())).thenReturn(bookDTO);
       Mockito.lenient().when(mediaRepository.getNextReturnByEan(anyString())).thenReturn(newMedia);
@@ -860,8 +835,7 @@ class MediaServiceTest {
 
       assertThat(found.getReturnDate()).isNull();
       newMedia.setReturnDate(oldDate);
-      bookDTO.setReturnDate(oldDate);
-
+      newMedia.setStatus(oldMediaStatus);
    }
 
 

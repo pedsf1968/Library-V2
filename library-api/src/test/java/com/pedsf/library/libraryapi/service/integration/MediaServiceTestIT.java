@@ -209,7 +209,6 @@ class MediaServiceTestIT {
          MediaDTO found = mediaService.findOneByEan(mediaDTO.getEan());
          assertThat(found.getEan()).isEqualTo(mediaDTO.getEan());
          assertThat(found.getMediaType()).isEqualTo(mediaDTO.getMediaType());
-         assertThat(found.getReturnDate()).isEqualTo(mediaDTO.getReturnDate());
       }
    }
 
@@ -272,7 +271,6 @@ class MediaServiceTestIT {
             assertThat(mediaFound.getMediaType()).isEqualTo(m.getMediaType());
             assertThat(mediaFound.getTitle()).isEqualTo(m.getTitle());
             assertThat(mediaFound.getPublicationDate()).isEqualTo(m.getPublicationDate());
-            assertThat(mediaFound.getReturnDate()).isEqualTo(m.getReturnDate());
             assertThat(mediaFound.getEan()).isEqualTo(m.getEan());
             assertThat(mediaFound.getHeight()).isEqualTo(m.getHeight());
             assertThat(mediaFound.getLength()).isEqualTo(m.getLength());
@@ -713,9 +711,9 @@ class MediaServiceTestIT {
    void getNextReturnByEan() {
       MediaDTO found;
 
-      found = mediaService.getNextReturnByEan("978-2253004226");
-      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
       found = mediaService.getNextReturnByEan("978-2253002864");
+      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
+      found = mediaService.getNextReturnByEan("4988064585816");
       assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
    }
 
