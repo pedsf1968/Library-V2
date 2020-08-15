@@ -148,7 +148,6 @@ class MediaServiceTestIT {
 
       assertThat(mediaDTO.getEan()).isEqualTo(gameDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.GAME.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(gameDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(gameDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(gameDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(gameDTO.getWeight());
@@ -169,7 +168,6 @@ class MediaServiceTestIT {
 
       assertThat(mediaDTO.getEan()).isEqualTo(musicDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.MUSIC.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(musicDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(musicDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(musicDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(musicDTO.getWeight());
@@ -190,7 +188,6 @@ class MediaServiceTestIT {
 
       assertThat(mediaDTO.getEan()).isEqualTo(videoDTO.getEan());
       assertThat(mediaDTO.getMediaType()).isEqualTo(MediaType.VIDEO.name());
-      assertThat(mediaDTO.getReturnDate()).isEqualTo(videoDTO.getReturnDate());
       assertThat(mediaDTO.getTitle()).isEqualTo(videoDTO.getTitle());
       assertThat(mediaDTO.getPublicationDate()).isEqualTo(videoDTO.getPublicationDate());
       assertThat(mediaDTO.getWeight()).isEqualTo(videoDTO.getWeight());

@@ -76,10 +76,8 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO() {
+      this.status = MediaStatus.FREE.name();
    }
-
-
-
 
    public void initialise( BookDTO dto) {
       this.ean = dto.getEan();
@@ -92,9 +90,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
-         this.returnDate = dto.getReturnDate();
-      }
    }
 
    public void initialise( GameDTO dto) {
@@ -108,9 +103,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
-         this.returnDate = dto.getReturnDate();
-      }
    }
 
    public void initialise( MusicDTO dto) {
@@ -124,9 +116,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
-         this.returnDate = dto.getReturnDate();
-      }
    }
 
    public void initialise( VideoDTO dto) {
@@ -140,9 +129,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
-         this.returnDate = dto.getReturnDate();
-      }
    }
 
 }
