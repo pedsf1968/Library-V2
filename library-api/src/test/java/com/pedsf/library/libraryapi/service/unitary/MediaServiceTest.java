@@ -2,6 +2,8 @@ package com.pedsf.library.libraryapi.service.unitary;
 
 import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.*;
+import com.pedsf.library.exception.BadRequestException;
+import com.pedsf.library.exception.ConflictException;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
@@ -193,9 +195,9 @@ class MediaServiceTest {
 
       newMedia = new Media(44,bookDTO.getEan(),MediaType.BOOK,MediaStatus.BOOKED,Date.valueOf("1999-07-11"));
       newMediaDTO = new MediaDTO();
-      newMediaDTO.initialise(bookDTO);
       newMediaDTO.setId(44);
       newMediaDTO.setStatus(MediaStatus.BOOKED.name());
+      newMediaDTO.initialise(bookDTO);
 
       Mockito.lenient().when(mediaRepository.findAll()).thenReturn(allMedias);
       Mockito.lenient().when(bookService.findById(any())).thenReturn(bookDTO);
@@ -380,6 +382,16 @@ class MediaServiceTest {
    }
 
    @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Media")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Media> emptyList = new ArrayList<>();
+      Mockito.lenient().when(mediaRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> mediaService.findAll());
+   }
+
+   @Test
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Media by his title, media type and ean")
    void findAllFiltered_returnOnlySameMedia_ofExistingTitleAndMediaTypeAndEAN() {
@@ -431,6 +443,22 @@ class MediaServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Media with has no EAN")
+   void save_throwBadRequestException_ofNewMediaWithNoEAN() {
+      newMediaDTO.setEan(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> mediaService.save(newMediaDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Media with has no MediaType")
+   void save_throwBadRequestException_ofNewMediaWithNoMediaType() {
+      newMediaDTO.setMediaType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> mediaService.save(newMediaDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update a Media")
    void update_returnUpdatedMedia_ofMediaAndNewTitle() {
@@ -448,6 +476,31 @@ class MediaServiceTest {
       bookDTO.setTitle(oldTitle);
       newMediaDTO.setTitle(oldTitle);
    }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Media with has no EAN")
+   void update_throwConflictException_ofNewMediaWithNoEAN() {
+      newMediaDTO.setEan(null);
+      Assertions.assertThrows(ConflictException.class, ()-> mediaService.update(newMediaDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Media with has no MediaType")
+   void update_throwConflictException_ofNewMediaWithNoMediaType() {
+      newMediaDTO.setMediaType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> mediaService.update(newMediaDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Media with wrong ID")
+   void update_throwResourceNotFoundException_ofNewMediaWithWrongId() {
+      newMediaDTO.setId(654);
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> mediaService.update(newMediaDTO));
+   }
+
 
    @Test
    @Tag("deleteById")
@@ -823,10 +876,12 @@ class MediaServiceTest {
    @Tag("getNextReturnByEan")
    @DisplayName("Verify that we return null if a Media of this AEN is available")
    void getNextReturnByEan_returnNull_ofAvailableMediaEAN() {
-      Date oldDate = newMedia.getReturnDate();
+      Date oldMediaDate = newMedia.getReturnDate();
+      Date oldBookDate = newMedia.getReturnDate();
       MediaStatus oldMediaStatus = newMedia.getStatus();
       newMedia.setReturnDate(null);
       newMedia.setStatus(MediaStatus.FREE);
+      bookDTO.setReturnDate(null);
 
       Mockito.lenient().when(bookService.findById(anyString())).thenReturn(bookDTO);
       Mockito.lenient().when(mediaRepository.getNextReturnByEan(anyString())).thenReturn(newMedia);
@@ -834,8 +889,9 @@ class MediaServiceTest {
       MediaDTO found = mediaService.getNextReturnByEan("978-2253010692");
 
       assertThat(found.getReturnDate()).isNull();
-      newMedia.setReturnDate(oldDate);
+      newMedia.setReturnDate(oldMediaDate);
       newMedia.setStatus(oldMediaStatus);
+      bookDTO.setReturnDate(oldBookDate);
    }
 
 

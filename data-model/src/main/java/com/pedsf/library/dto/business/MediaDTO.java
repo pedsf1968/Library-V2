@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Media
@@ -77,6 +78,9 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    public MediaDTO() {
    }
 
+
+
+
    public void initialise( BookDTO dto) {
       this.ean = dto.getEan();
       this.mediaType = MediaType.BOOK.name();
@@ -88,7 +92,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
          this.returnDate = dto.getReturnDate();
       }
    }
@@ -104,7 +108,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
          this.returnDate = dto.getReturnDate();
       }
    }
@@ -120,7 +124,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
          this.returnDate = dto.getReturnDate();
       }
    }
@@ -136,7 +140,7 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
       this.height = dto.getHeight();
       this.quantity = dto.getQuantity();
       this.stock = dto.getStock();
-      if (this.returnDate==null && this.status!= MediaStatus.FREE.name()) {
+      if (this.returnDate==null && Objects.equals(this.status,MediaStatus.FREE.name())) {
          this.returnDate = dto.getReturnDate();
       }
    }

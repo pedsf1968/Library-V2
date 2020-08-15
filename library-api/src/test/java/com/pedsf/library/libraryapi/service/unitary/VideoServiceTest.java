@@ -1,15 +1,11 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
-import com.pedsf.library.dto.VideoFormat;
-import com.pedsf.library.dto.VideoType;
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.dto.business.VideoDTO;
-import com.pedsf.library.exception.ResourceNotFoundException;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.*;
-import com.pedsf.library.libraryapi.repository.VideoRepository;
-import com.pedsf.library.libraryapi.repository.VideoSpecification;
-import com.pedsf.library.libraryapi.service.PersonService;
-import com.pedsf.library.libraryapi.service.VideoService;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -188,6 +184,16 @@ class VideoServiceTest {
    }
 
    @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Video")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Video> emptyList = new ArrayList<>();
+      Mockito.lenient().when(videoRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> videoService.findAll());
+   }
+
+   @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Videos that can be booked")
    void findAllAllowed_returnBookableVideos_ofAllVideos() {
@@ -257,6 +263,38 @@ class VideoServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Video with has no title")
+   void save_throwBadRequestException_ofNewVideoWithNoTitle() {
+      newVideoDTO.setTitle("");
+      Assertions.assertThrows(BadRequestException.class, ()-> videoService.save(newVideoDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Video with has no Interpreter")
+   void save_throwBadRequestException_ofNewVideoWithNoInterpreter() {
+      newVideoDTO.setDirector(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> videoService.save(newVideoDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Video with has no Format")
+   void save_throwBadRequestException_ofNewVideoWithNoFormat() {
+      newVideoDTO.setFormat(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> videoService.save(newVideoDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Video with has no Type")
+   void save_throwBadRequestException_ofNewVideoWithNoType() {
+      newVideoDTO.setType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> videoService.save(newVideoDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update an Video")
    void update_returnUpdatedVideo_ofVideoAndNewTitle() {
@@ -271,6 +309,47 @@ class VideoServiceTest {
       newVideo.setTitle(oldTitle);
       newVideoDTO.setTitle(oldTitle);
    }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when saving a Video with has no title")
+   void update_throwConflictException_ofNewVideoWithNoTitle() {
+      newVideoDTO.setTitle("");
+      Assertions.assertThrows(ConflictException.class, ()-> videoService.update(newVideoDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Video with has no Director")
+   void update_throwConflictException_ofNewVideoWithNoInterpreter() {
+      newVideoDTO.setDirector(null);
+      Assertions.assertThrows(ConflictException.class, ()-> videoService.update(newVideoDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Video with has no Format")
+   void update_throwConflictException_ofNewVideoWithNoFormat() {
+      newVideoDTO.setFormat(null);
+      Assertions.assertThrows(ConflictException.class, ()-> videoService.update(newVideoDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Video with has no Type")
+   void update_throwConflictException_ofNewVideoWithNoType() {
+      newVideoDTO.setType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> videoService.update(newVideoDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Video with bad ID")
+   void update_throwResourceNotFoundException_ofNewVideoWithWrongId() {
+      newVideoDTO.setEan("mlkhmlkjmlk");
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> videoService.update(newVideoDTO));
+   }
+
 
    @Test
    @Tag("deleteById")

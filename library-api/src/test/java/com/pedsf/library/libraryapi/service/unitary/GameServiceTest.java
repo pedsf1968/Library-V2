@@ -2,7 +2,7 @@ package com.pedsf.library.libraryapi.service.unitary;
 
 import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.*;
-import com.pedsf.library.exception.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
 import com.pedsf.library.libraryapi.service.*;
@@ -188,6 +188,16 @@ class GameServiceTest {
    }
 
    @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Game")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Game> emptyList = new ArrayList<>();
+      Mockito.lenient().when(gameRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> gameService.findAll());
+   }
+
+   @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Games that can be booked")
    void findAllAllowed_returnBookableGames_ofAllGames() {
@@ -255,6 +265,38 @@ class GameServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Game with has no title")
+   void save_throwBadRequestException_ofNewGameWithNoTitle() {
+      newGameDTO.setTitle("");
+      Assertions.assertThrows(BadRequestException.class, ()-> gameService.save(newGameDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Game with has no Editor")
+   void save_throwBadRequestException_ofNewGameWithNoEditor() {
+      newGameDTO.setEditor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> gameService.save(newGameDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Game with has no Format")
+   void save_throwBadRequestException_ofNewGameWithNoFormat() {
+      newGameDTO.setFormat(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> gameService.save(newGameDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Game with has no Type")
+   void save_throwBadRequestException_ofNewGameWithNoType() {
+      newGameDTO.setType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> gameService.save(newGameDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update an Game")
    void update_returnUpdatedGame_ofGameAndNewTitle() {
@@ -268,6 +310,47 @@ class GameServiceTest {
 
       newGame.setTitle(oldTitle);
       newGameDTO.setTitle(oldTitle);
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when saving a Game with has no title")
+   void update_throwConflictException_ofNewGameWithNoTitle() {
+      newGameDTO.setTitle("");
+      Assertions.assertThrows(ConflictException.class, ()-> gameService.update(newGameDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when saving a Game with has no Editor")
+   void update_throwConflictException_ofNewGameWithNoEditor() {
+      newGameDTO.setEditor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> gameService.update(newGameDTO));
+   }
+
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Game with has no Format")
+   void update_throwConflictException_ofNewGameWithNoFormat() {
+      newGameDTO.setFormat(null);
+      Assertions.assertThrows(ConflictException.class, ()-> gameService.update(newGameDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Game with has no Type")
+   void update_throwConflictException_ofNewGameWithNoType() {
+      newGameDTO.setType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> gameService.update(newGameDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Game with bad ID")
+   void update_throwResourceNotFoundException_ofNewGameWithWrongId() {
+      newGameDTO.setEan("mlkhmlkjmlk");
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> gameService.update(newGameDTO));
    }
 
    @Test

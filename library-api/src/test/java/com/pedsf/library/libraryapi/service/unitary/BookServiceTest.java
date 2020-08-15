@@ -2,7 +2,7 @@ package com.pedsf.library.libraryapi.service.unitary;
 
 import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.*;
-import com.pedsf.library.exception.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.*;
 import com.pedsf.library.libraryapi.repository.*;
 import com.pedsf.library.libraryapi.service.*;
@@ -194,6 +194,17 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Book")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Book> emptyList = new ArrayList<>();
+      Mockito.lenient().when(bookRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.findAll());
+   }
+
+
+   @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Books that can be booked")
    void findAllAllowed_returnBookableBooks_ofAllBooks() {
@@ -262,6 +273,46 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no title")
+   void save_throwBadRequestException_ofNewBookWithNoTitle() {
+      newBookDTO.setTitle("");
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Author")
+   void save_throwBadRequestException_ofNewBookWithNoAuthor() {
+      newBookDTO.setAuthor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Editor")
+   void save_throwBadRequestException_ofNewBookWithNoEditor() {
+      newBookDTO.setEditor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Format")
+   void save_throwBadRequestException_ofNewBookWithNoFormat() {
+      newBookDTO.setFormat(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Type")
+   void save_throwBadRequestException_ofNewBookWithNoType() {
+      newBookDTO.setType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update an Book")
    void update_returnUpdatedBook_ofBookAndNewTitle() {
@@ -275,6 +326,54 @@ class BookServiceTest {
 
       newBook.setTitle(oldTitle);
       newBookDTO.setTitle(oldTitle);
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no title")
+   void update_throwConflictException_ofNewBookWithNoTitle() {
+      newBookDTO.setTitle("");
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Author")
+   void update_throwConflictException_ofNewBookWithNoAuthor() {
+      newBookDTO.setAuthor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Editor")
+   void update_throwConflictException_ofNewBookWithNoEditor() {
+      newBookDTO.setEditor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Format")
+   void update_throwConflictException_ofNewBookWithNoFormat() {
+      newBookDTO.setFormat(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Type")
+   void update_throwConflictException_ofNewBookWithNoType() {
+      newBookDTO.setType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Book with bad ID")
+   void update_throwResourceNotFoundException_ofNewBookWithWrongId() {
+      newBookDTO.setEan("mlkhmlkjmlk");
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.update(newBookDTO));
    }
 
    @Test

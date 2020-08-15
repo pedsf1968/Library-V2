@@ -1,15 +1,12 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
-import com.pedsf.library.dto.MusicFormat;
-import com.pedsf.library.dto.MusicType;
-import com.pedsf.library.dto.business.MusicDTO;
-import com.pedsf.library.dto.business.PersonDTO;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.exception.ResourceNotFoundException;
-import com.pedsf.library.libraryapi.model.Music;
-import com.pedsf.library.libraryapi.repository.MusicRepository;
-import com.pedsf.library.libraryapi.repository.MusicSpecification;
-import com.pedsf.library.libraryapi.service.MusicService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.libraryapi.model.*;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -176,6 +173,16 @@ class MusicServiceTest {
    }
 
    @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Music")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Music> emptyList = new ArrayList<>();
+      Mockito.lenient().when(musicRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> musicService.findAll());
+   }
+
+   @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Musics that can be booked")
    void findAllAllowed_returnBookableMusics_ofAllMusics() {
@@ -243,6 +250,54 @@ class MusicServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no title")
+   void save_throwBadRequestException_ofNewMusicWithNoTitle() {
+      newMusicDTO.setTitle("");
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no Interpreter")
+   void save_throwBadRequestException_ofNewMusicWithNoInterpreter() {
+      newMusicDTO.setInterpreter(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no Composer")
+   void save_throwBadRequestException_ofNewMusicWithNoComposer() {
+      newMusicDTO.setComposer(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no Author")
+   void save_throwBadRequestException_ofNewMusicWithNoAuthor() {
+      newMusicDTO.setAuthor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no Format")
+   void save_throwBadRequestException_ofNewMusicWithNoFormat() {
+      newMusicDTO.setFormat(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Music with has no Type")
+   void save_throwBadRequestException_ofNewMusicWithNoType() {
+      newMusicDTO.setType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> musicService.save(newMusicDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update an Music")
    void update_returnUpdatedMusic_ofMusicAndNewTitle() {
@@ -256,6 +311,62 @@ class MusicServiceTest {
 
       newMusic.setTitle(oldTitle);
       newMusicDTO.setTitle(oldTitle);
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when saving a Music with has no title")
+   void update_throwConflictException_ofNewMusicWithNoTitle() {
+      newMusicDTO.setTitle("");
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Music with has no Interpreter")
+   void update_throwConflictException_ofNewMusicWithNoInterpreter() {
+      newMusicDTO.setInterpreter(null);
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Music with has no Composer")
+   void update_throwConflictException_ofNewMusicWithNoComposer() {
+      newMusicDTO.setComposer(null);
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have BadRequestException when update a Music with has no Author")
+   void update_throwConflictException_ofNewMusicWithNoAuthor() {
+      newMusicDTO.setAuthor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Music with has no Format")
+   void update_throwConflictException_ofNewMusicWithNoFormat() {
+      newMusicDTO.setFormat(null);
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Music with has no Type")
+   void update_throwConflictException_ofNewMusicWithNoType() {
+      newMusicDTO.setType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> musicService.update(newMusicDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Music with bad ID")
+   void update_throwResourceNotFoundException_ofNewMusicWithWrongId() {
+      newMusicDTO.setEan("mlkhmlkjmlk");
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> musicService.update(newMusicDTO));
    }
 
    @Test
