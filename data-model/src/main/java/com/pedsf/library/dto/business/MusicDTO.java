@@ -62,6 +62,7 @@ public class MusicDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MusicDTO() {
+      // nothing to do
    }
 
    @Override

@@ -43,5 +43,6 @@ public class BorrowingDTO implements Serializable {
    }
 
    public BorrowingDTO() {
+      // nothing to do
    }
 }

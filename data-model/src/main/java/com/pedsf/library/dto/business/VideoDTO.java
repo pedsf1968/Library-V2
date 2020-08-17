@@ -59,6 +59,7 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
    }
 
    public VideoDTO() {
+      // nothing to do
    }
 
    @Override

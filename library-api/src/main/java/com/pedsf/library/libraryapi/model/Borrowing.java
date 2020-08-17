@@ -55,5 +55,6 @@ public class Borrowing implements Serializable {
    }
 
    public Borrowing() {
+      // nothing to do
    }
 }

@@ -56,6 +56,7 @@ public class PersonDTO implements Serializable {
    }
 
    public PersonDTO() {
+      // nothing to do
    }
 
    @Override

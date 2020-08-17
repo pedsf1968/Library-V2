@@ -29,22 +29,6 @@ import java.sql.Date;
 @Table(name = "book")
 public class Book extends MediaCommon implements Serializable {
 
-   public Book(String ean,
-               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-               @NotNull Integer quantity,
-               @NotNull Integer stock,
-               @NotNull String isbn,
-               @NotNull Integer authorId,
-               @NotNull Integer edithorId) {
-      super(ean, title, quantity, stock);
-      this.isbn = isbn;
-      this.authorId = authorId;
-      this.editorId = edithorId;
-   }
-
-   public Book() {
-   }
-
    // Book information
    @NotNull
    @Column(name = "isbn", length = Parameters.ISBN_MAX)
@@ -75,4 +59,21 @@ public class Book extends MediaCommon implements Serializable {
 
    @Column(name = "summary", length = Parameters.SUMMARY_MAX)
    private String summary;
+
+   public Book(String ean,
+               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock,
+               @NotNull String isbn,
+               @NotNull Integer authorId,
+               @NotNull Integer edithorId) {
+      super(ean, title, quantity, stock);
+      this.isbn = isbn;
+      this.authorId = authorId;
+      this.editorId = edithorId;
+   }
+
+   public Book() {
+      // nothing to do
+   }
 }

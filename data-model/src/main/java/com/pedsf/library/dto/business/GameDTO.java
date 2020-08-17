@@ -57,6 +57,7 @@ public class GameDTO extends MediaCommonDTO implements Serializable {
    }
 
    public GameDTO() {
+      // nothing to do
    }
 
    @Override

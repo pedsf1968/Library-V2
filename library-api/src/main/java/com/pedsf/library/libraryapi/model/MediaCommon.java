@@ -28,19 +28,6 @@ import java.sql.Date;
 @MappedSuperclass
 public class MediaCommon implements Serializable {
 
-   MediaCommon(String ean,
-               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-               @NotNull Integer quantity,
-               @NotNull Integer stock) {
-      this.ean = ean;
-      this.title = title;
-      this.quantity = quantity;
-      this.stock = stock;
-   }
-
-   MediaCommon() {
-   }
-
    // Media information
    @Id
    @Column(name = "ean", length = Parameters.EAN_MAX)
@@ -73,5 +60,19 @@ public class MediaCommon implements Serializable {
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "return_date")
    protected Date returnDate;
+
+   MediaCommon(String ean,
+               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock) {
+      this.ean = ean;
+      this.title = title;
+      this.quantity = quantity;
+      this.stock = stock;
+   }
+
+   MediaCommon() {
+      // nothing to do
+   }
 
 }

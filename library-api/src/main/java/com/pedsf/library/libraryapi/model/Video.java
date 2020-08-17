@@ -84,5 +84,6 @@ public class Video extends MediaCommon implements Serializable {
    }
 
    public Video() {
+      // nothing to do
    }
 }

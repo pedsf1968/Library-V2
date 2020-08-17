@@ -58,6 +58,7 @@ public class BookDTO extends MediaCommonDTO implements Serializable {
    }
 
    public BookDTO() {
+      // nothing to do
    }
 
    @Override

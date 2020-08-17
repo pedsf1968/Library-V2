@@ -67,5 +67,6 @@ public class Person implements Serializable {
    }
 
    public Person() {
+      // nothing to do
    }
 }

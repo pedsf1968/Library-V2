@@ -49,5 +49,6 @@ public class BookingDTO implements Serializable {
    }
 
    public BookingDTO() {
+      // nothing to do
    }
 }

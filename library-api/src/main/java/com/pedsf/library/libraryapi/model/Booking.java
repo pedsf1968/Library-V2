@@ -60,5 +60,6 @@ public class Booking {
    }
 
    public Booking() {
+      // nothing to do
    }
 }

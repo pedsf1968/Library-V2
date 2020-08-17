@@ -59,6 +59,7 @@ public class MediaCommonDTO implements Serializable {
    }
 
    public MediaCommonDTO() {
+      // nothing to do
    }
 
    @Override

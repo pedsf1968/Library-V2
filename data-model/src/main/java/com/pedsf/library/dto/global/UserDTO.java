@@ -94,6 +94,7 @@ public class UserDTO implements Serializable {
     }
 
     public UserDTO() {
+        // nothing to do
     }
 
     public void initRole(){
