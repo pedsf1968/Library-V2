@@ -100,7 +100,7 @@
       <sonar.coverage.exclusions>
          **/configuration/**/*.java,
          **/dto/**/*.java,
-         **/exception/**/*.java,
+         **/exception/*Exception.java,
          **/model/**/*.java,
          **/repository/**/*.java,
          config-server/src/main/java/com/pedsf/library/configserver/*.java,

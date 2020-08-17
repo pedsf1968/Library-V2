@@ -354,7 +354,7 @@ class VideoServiceTest {
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Video by his EAN")
-   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+   void deleteById_returnExceptionWhenGetVideoById_ofDeletedVideoById() {
       String ean = newVideoDTO.getEan();
 
       assertThat(videoService.existsById(ean)).isTrue();
@@ -363,6 +363,14 @@ class VideoServiceTest {
 
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
             ()-> videoService.findById(ean));
+   }
+
+   @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Video with bad EAN")
+void deleteById_throwResourceNotFoundException_ofVideoWithBadId() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> videoService.deleteById("WRONG EAN"));
    }
 
    @Test

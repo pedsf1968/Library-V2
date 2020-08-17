@@ -233,6 +233,10 @@
 
 		<profile>
 			<id>docker</id>
+			<properties>
+				<activatedProperties>docker</activatedProperties>
+				<configServer>http://10.5.0.1:2000</configServer>
+			</properties>
 			<dependencies>
 				<!-- ================================================ POSTGRESQL -->
 				<dependency>
@@ -241,10 +245,6 @@
 					<scope>runtime</scope>
 				</dependency>
 			</dependencies>
-			<properties>
-				<activatedProperties>docker</activatedProperties>
-				<configServer>http://10.5.0.1:2000</configServer>
-			</properties>
 		</profile>
 
 		<profile>

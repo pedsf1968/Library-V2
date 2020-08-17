@@ -518,6 +518,14 @@ class MediaServiceTest {
    }
 
    @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Media with bad ID")
+   void deleteById_throwResourceNotFoundException_ofMediaWithBadId() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> mediaService.deleteById(123465));
+   }
+
+   @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Medias")
    void count_returnTheNumberOfMedias() {

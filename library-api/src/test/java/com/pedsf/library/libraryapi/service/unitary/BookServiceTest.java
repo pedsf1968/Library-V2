@@ -391,6 +391,14 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Book with bad EAN")
+   void deleteById_throwResourceNotFoundException_ofBookWithBadEAN() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.deleteById("WRONG EAN"));
+   }
+
+   @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Books")
    void count_returnTheNumberOfBooks() {

@@ -370,6 +370,14 @@ class GameServiceTest {
    }
 
    @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Game with bad EAN")
+   void deleteById_throwResourceNotFoundException_ofGameWithBadId() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> gameService.deleteById("WRONG EAN"));
+   }
+
+   @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Games")
    void count_returnTheNumberOfGames() {

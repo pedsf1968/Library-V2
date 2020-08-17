@@ -371,8 +371,8 @@ class MusicServiceTest {
 
    @Test
    @Tag("deleteById")
-   @DisplayName("Verify that we can delete a Book by his EAN")
-   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+   @DisplayName("Verify that we can delete a Music by his EAN")
+   void deleteById_returnExceptionWhenGetMusicById_ofDeletedMusicById() {
       String ean = newMusicDTO.getEan();
 
       assertThat(musicService.existsById(ean)).isTrue();
@@ -382,6 +382,14 @@ class MusicServiceTest {
 
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
             ()-> musicService.findById(ean));
+   }
+
+   @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Music with bad EAN")
+   void deleteById_throwResourceNotFoundException_ofMusicWithBadEAN() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> musicService.deleteById("WRONG EAN"));
    }
 
    @Test
