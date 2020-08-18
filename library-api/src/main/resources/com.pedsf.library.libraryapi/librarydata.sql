@@ -80,6 +80,7 @@ VALUES (4,1,'2020-07-13',0), (4,5,'2020-07-20',0), (4,7,'2020-07-20',0),  (4,20,
 
 INSERT INTO booking (ean,user_id,booking_date, rank)
 VALUES ('4988064585816',4,'2020-07-20',1),
+    ('4988064585816',5,'2020-08-10',2),
     ('978-2253002864',5,'2020-07-20', 1);
 
 -- ALTER SEQUENCE booking_id_seq RESTART WITH 3;

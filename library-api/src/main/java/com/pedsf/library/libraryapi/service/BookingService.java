@@ -158,6 +158,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
 
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
+//      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
       MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
 
       bookingDTO.setUser(userDTO);
@@ -177,11 +178,11 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       return booking;
    }
 
-   BookingDTO findByEanAndUserId(String ean, Integer userId) {
+   public BookingDTO findByEanAndUserId(String ean, Integer userId) {
       return entityToDTO(bookingRepository.findByEanAndUserId(ean,userId));
    }
 
-   BookingDTO findNextBookingByMediaId(String ean) {
+   public BookingDTO findNextBookingByMediaId(String ean) {
       return entityToDTO(bookingRepository.findNextBookingByMediaId(ean));
    }
 

@@ -1,10 +1,13 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.UserStatus;
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.ForbiddenException;
 import com.pedsf.library.libraryapi.model.Booking;
+import com.pedsf.library.libraryapi.model.Borrowing;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
@@ -31,6 +34,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
@@ -91,12 +95,14 @@ class BookingServiceTestIT {
       allMediaDTOS.add(new MediaDTO(27,"4988064585816","RE BLACKPINK","MUSIC","BORROWED",1,0));
       allMediaDTOS.add(new MediaDTO(28,"8809269506764","MADE","MUSIC","FREE",1,1));
 
-      /* allBookingDTOS.add(new BookingDTO(1, allUserDTOS.get(4), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),1));
+   /*   allBookingDTOS.add(new BookingDTO(1, allUserDTOS.get(4), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),1));
       allBookingDTOS.add(new BookingDTO(2, allUserDTOS.get(5), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),2));
       allBookingDTOS.add(new BookingDTO(3, allUserDTOS.get(3), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),3));
       allBookingDTOS.add(new BookingDTO(4, allUserDTOS.get(5), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 1));
       allBookingDTOS.add(new BookingDTO(5, allUserDTOS.get(4), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 2));
-      allBookingDTOS.add(new BookingDTO(6, allUserDTOS.get(3), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 3)); */
+      allBookingDTOS.add(new BookingDTO(6, allUserDTOS.get(3), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 3));
+
+    */
    }
 
    @BeforeEach
@@ -114,6 +120,17 @@ class BookingServiceTestIT {
       UserDTO userDTO = userApiProxy.findUserById(4);
       MediaDTO mediaDTO = mediaService.findById(5);
       newBookingDTO = new BookingDTO(44,userDTO,mediaDTO,Date.valueOf("2020-08-12"),1);
+
+      Mockito.lenient().when(mediaService.findOneByEan(anyString())).thenAnswer(
+              (InvocationOnMock invocation) -> {
+                 for(MediaDTO m : allMediaDTOS) {
+                    if(m.getEan().equals((String) invocation.getArguments()[0])) {
+                       return m;
+                    }
+                 }
+                 return null;
+              });
+
 
       allBookingDTOS =bookingService.findAll();
    }
@@ -172,7 +189,6 @@ class BookingServiceTestIT {
       bookingService.deleteById(added.getId());
    }
 
-   @Disabled
    @Test
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Booking by his User")
@@ -180,6 +196,8 @@ class BookingServiceTestIT {
       List<BookingDTO> found;
 
       for(BookingDTO dto:allBookingDTOS) {
+         Mockito.lenient().when(mediaService.findFreeByEan(anyString())).thenReturn(dto.getMedia());
+
          BookingDTO filter = new BookingDTO();
          filter.setUser(dto.getUser());
          filter.setMedia(dto.getMedia());
@@ -190,7 +208,6 @@ class BookingServiceTestIT {
       }
    }
 
-   @Disabled
    @Test
    @Tag("getFirstId")
    @DisplayName("Verify that we get the first ID of a list of filtered Booking by User")
@@ -203,6 +220,161 @@ class BookingServiceTestIT {
 
       Integer id = bookingService.getFirstId(filter);
 
-      assertThat(id).isEqualTo(1);
+      assertThat(id).isEqualTo(2);
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we can create a new Booking")
+   void save_returnCreatedBooking_ofNewBooking() {
+
+      BookingDTO saved = bookingService.save(newBookingDTO);
+      Integer id = saved.getId();
+
+      assertThat(bookingService.existsById(id)).isTrue();
+      bookingService.deleteById(id);
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we can update a Booking")
+   void update_returnUpdatedBooking_ofBookingAndNewPickDate() {
+      BookingDTO bookingDTO = bookingService.findById(2);
+      Date oldDate = (Date) bookingDTO.getPickUpDate();
+
+      BookingDTO saved = bookingService.update(bookingDTO);
+      assertThat(saved).isEqualTo(bookingDTO);
+      BookingDTO found = bookingService.findById(2);
+      assertThat(found).isEqualTo(bookingDTO);
+
+      bookingDTO.setPickUpDate(oldDate);
+      bookingService.update(bookingDTO);
+   }
+
+   @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Booking by his ID")
+   void deleteById_returnExceptionWhenGetBookingById_ofDeletedBookingById() {
+      BookingDTO saved = bookingService.save(newBookingDTO);
+      Integer id = saved.getId();
+
+      assertThat(bookingService.existsById(id)).isTrue();
+      bookingService.deleteById(id);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+              ()-> bookingService.findById(id));
+   }
+
+   @Test
+   @Tag("count")
+   @DisplayName("Verify that we have the right number of Bookings")
+   void count_returnTheNumberOfBookings() {
+      assertThat(bookingService.count()).isEqualTo(2);
+
+      // add one borrowing to increase the list
+      BookingDTO added = bookingService.save(newBookingDTO);
+      assertThat(bookingService.count()).isEqualTo(3);
+
+      bookingService.deleteById(added.getId());
+   }
+
+   @Test
+   @Tag("entityToDTO")
+   @DisplayName("Verify that Booking Entity is converted in right Booking DTO")
+   void entityToDTO_returnBookingDTO_ofBookingEntity() {
+      List<Booking> bookings = new ArrayList<>();
+      BookingDTO dto;
+
+      for(BookingDTO b : allBookingDTOS) {
+         bookings.add(bookingService.dtoToEntity(b));
+      }
+
+      for(Booking entity : bookings){
+         dto = bookingService.entityToDTO(entity);
+         assertThat(dto.getId()).isEqualTo(entity.getId());
+         assertThat(dto.getUser().getId()).isEqualTo(entity.getUserId());
+         assertThat(dto.getMedia().getId()).isEqualTo(entity.getMediaId());
+         assertThat(dto.getBookingDate()).isEqualTo(entity.getBookingDate());
+         assertThat(dto.getPickUpDate()).isEqualTo(entity.getPickUpDate());
+         assertThat(dto.getMediaId()).isEqualTo(entity.getMediaId());
+         assertThat(dto.getRank()).isEqualTo(entity.getRank());
+      }
+
+   }
+
+   @Test
+   @Tag("dtoToEntity")
+   @DisplayName("Verify that Book Booking is converted in right Booking Entity")
+   void dtoToEntity_returnBookingEntity_ofBookingDTO() {
+      Booking entity;
+
+      for(BookingDTO dto : allBookingDTOS) {
+         entity = bookingService.dtoToEntity(dto);
+         assertThat(entity.getId()).isEqualTo(dto.getId());
+         assertThat(entity.getUserId()).isEqualTo(dto.getUser().getId());
+         assertThat(entity.getMediaId()).isEqualTo(dto.getMedia().getId());
+         assertThat(entity.getBookingDate()).isEqualTo(dto.getBookingDate());
+         assertThat(entity.getPickUpDate()).isEqualTo(dto.getPickUpDate());
+         assertThat(entity.getMediaId()).isEqualTo(dto.getMediaId());
+         assertThat(entity.getRank()).isEqualTo(dto.getRank());
+      }
+   }
+
+   @Test
+   @Tag("findByEanAndUserId")
+   @DisplayName("Verify that we can found a Booking by User Id and Media EAN")
+   void findByEanAndUserId_returnBooking_ofUserIdAndMediaEAN() {
+      for (BookingDTO dto : allBookingDTOS) {
+         BookingDTO found = bookingService.findByEanAndUserId(dto.getMedia().getEan(),dto.getUser().getId());
+         assertThat(found).isEqualTo(dto);
+      }
+   }
+
+   @Test
+   @Tag("findNextBookingByMediaId")
+   @DisplayName("Verify that we can found the next Booking for a Media EAN")
+   void findNextBookingByMediaId_returnNextBooking_forMediaEAN() {
+      String ean = "4988064585816";
+      BookingDTO toBeRemoved = bookingService.findNextBookingByMediaId(ean);
+
+      assertThat(toBeRemoved).isEqualTo(bookingService.findById(1));
+
+      bookingService.deleteById(1);
+
+      BookingDTO found = bookingService.findNextBookingByMediaId(ean);
+
+      assertThat(found).isEqualTo(bookingService.findById(2));
+
+      bookingService.save(toBeRemoved);
+   }
+
+   @Test
+   @Tag("booking")
+   @DisplayName("Verify that a FORBIDDEN User can't Book")
+   void booking_throwForbiddenException_ofForbidenUser() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      String oldStatus = userDTO.getStatus();
+      userDTO.setStatus(UserStatus.FORBIDDEN.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(9);
+
+      Assertions.assertThrows(ForbiddenException.class,
+              () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+
+      userDTO.setStatus(oldStatus);
+   }
+
+   @Test
+   @Tag("findBookingsByUserId")
+   @DisplayName("Verify that we can found the Booking list of a User")
+   void findBookingsByUserId_returnBookingList_ofOneUser() {
+      List<BookingDTO> founds = bookingService.findBookingsByUserId(5);
+      List<BookingDTO> expected = new ArrayList<>();
+      expected.add(allBookingDTOS.get(1));
+      expected.add(allBookingDTOS.get(2));
+
+      assertThat(founds.size()).isEqualTo(expected.size());
+      for(BookingDTO b : founds) {
+         assertThat(expected.contains(b)).isTrue();
+      }
    }
 }
