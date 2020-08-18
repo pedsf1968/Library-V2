@@ -21,6 +21,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +35,7 @@ class VideoControllerTestIT {
 
    private static final List<VideoDTO> allVideoDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
+   private static ObjectMapper mapper = new ObjectMapper();
 
    @Inject
    private MockMvc mockMvc;
@@ -66,6 +68,8 @@ class VideoControllerTestIT {
       allVideoDTOS.add(new VideoDTO("3472089898980","Mort aux Trousses",1,1,allPersonDTOS.get(2)));
       allVideoDTOS.add(new VideoDTO("8885466546580","Banzai",2,-4,allPersonDTOS.get(2)));
       allVideoDTOS.add(new VideoDTO("3476546046540","Le secret",3,-2,allPersonDTOS.get(3)));
+
+      mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 
    @Test
@@ -84,7 +88,6 @@ class VideoControllerTestIT {
 
       // convert result in VideoDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<VideoDTO> founds = Arrays.asList(mapper.readValue(json, VideoDTO[].class));
 
       // THEN
@@ -114,7 +117,6 @@ class VideoControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<VideoDTO> founds = Arrays.asList(mapper.readValue(json, VideoDTO[].class));
 
       // THEN
@@ -146,7 +148,6 @@ class VideoControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       VideoDTO found = mapper.readValue(json, VideoDTO.class);
 
       assertThat(found).isEqualTo(expected);
@@ -157,7 +158,6 @@ class VideoControllerTestIT {
    @DisplayName("Verify that we can add Video")
    void addVideo() throws Exception {
       VideoDTO expected = allVideoDTOS.get(4);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(videoService.save(any(VideoDTO.class))).thenReturn(expected);
@@ -185,7 +185,6 @@ class VideoControllerTestIT {
    void updateVideo() throws Exception {
       VideoDTO expected = allVideoDTOS.get(4);
       expected.setTitle(VIDEO_TITLE_TEST);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(videoService.update(any(VideoDTO.class))).thenReturn(expected);
@@ -212,7 +211,6 @@ class VideoControllerTestIT {
    @DisplayName("Verify that we can delate a Video")
    void deleteVideo() throws Exception {
       VideoDTO expected = allVideoDTOS.get(2);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       doNothing().when(videoService).deleteById(expected.getEan());
@@ -248,7 +246,6 @@ class VideoControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -282,7 +279,6 @@ class VideoControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
 
       // THEN

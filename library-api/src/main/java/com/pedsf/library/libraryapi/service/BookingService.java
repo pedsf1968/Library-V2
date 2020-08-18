@@ -363,6 +363,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     * @param date new date
     */
    public void updatePickUpDate(Integer id, Date date) {
-      bookingRepository.updatePickUpDate( id, new java.sql.Date(date.getTime()));
+      if(date!=null) {
+         bookingRepository.updatePickUpDate(id, new java.sql.Date(date.getTime()));
+      } else {
+         bookingRepository.updatePickUpDate(id, null);
+      }
    }
 }

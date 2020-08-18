@@ -27,10 +27,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -350,6 +347,26 @@ class BookingServiceTestIT {
 
    @Test
    @Tag("booking")
+   @DisplayName("Verify that a Booking is recorded")
+   void booking_returnBooking_ofUserAndMedia() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(9);
+
+      BookingDTO bookingDTO = bookingService.booking(userDTO.getId(),mediaDTO.getEan());
+      assertThat(bookingDTO).isNotNull();
+      assertThat(bookingDTO.getUser()).isEqualTo(userDTO);
+      // compare only EAN not Media
+      assertThat(bookingDTO.getMedia().getEan()).isEqualTo(mediaDTO.getEan());
+      assertThat(bookingDTO.getBookingDate()).isEqualToIgnoringHours(Calendar.getInstance().getTime());
+
+      bookingService.cancelBooking(bookingDTO.getId());
+
+   }
+
+
+   @Test
+   @Tag("booking")
    @DisplayName("Verify that a FORBIDDEN User can't Book")
    void booking_throwForbiddenException_ofForbidenUser() {
       UserDTO userDTO = allUserDTOS.get(2);
@@ -361,6 +378,47 @@ class BookingServiceTestIT {
               () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
 
       userDTO.setStatus(oldStatus);
+   }
+
+   @Test
+   @Tag("booking")
+   @DisplayName("Verify that a BAN User can't Book")
+   void booking_throwForbiddenException_ofBannedUser() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      String oldStatus = userDTO.getStatus();
+      userDTO.setStatus(UserStatus.BAN.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(9);
+
+      Assertions.assertThrows(ForbiddenException.class,
+            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+
+      userDTO.setStatus(oldStatus);
+   }
+
+   @Test
+   @Tag("booking")
+   @DisplayName("Verify that a User can't Book a Media Borrowed by himself")
+   void booking_throwForbiddenException_ofMediaBorrowedBySameUser() {
+      UserDTO userDTO = allUserDTOS.get(5);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(10);
+
+      Assertions.assertThrows(ForbiddenException.class,
+            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+
+   }
+
+   @Test
+   @Tag("booking")
+   @DisplayName("Verify that a User can't Book a Media Booked by himself")
+   void booking_throwForbiddenException_ofMediaBookedBySameUser() {
+      UserDTO userDTO = allUserDTOS.get(5);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(1);
+
+      Assertions.assertThrows(ForbiddenException.class,
+            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+
    }
 
    @Test
@@ -377,4 +435,62 @@ class BookingServiceTestIT {
          assertThat(expected.contains(b)).isTrue();
       }
    }
+
+   @Test
+   @Tag("cancelBooking")
+   @DisplayName("Verify that we can cancel a Booking")
+   void cancelBooking_throwResourceNotFoundException_ofCancelledBooking() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(9);
+
+      BookingDTO bookingDTO = bookingService.booking(userDTO.getId(),mediaDTO.getEan());
+      Integer bookingId = bookingDTO.getId();
+
+      bookingDTO = bookingService.cancelBooking(bookingId);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookingService.findById(bookingId));
+   }
+
+   @Disabled
+   @Test
+   @Tag("findReadyToPickUp")
+   @DisplayName("Verify that we have the list of Media to be PickUp")
+   void findReadyToPickUp() {
+      UserDTO userDTO = allUserDTOS.get(2);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(9);
+      BookingDTO bookingDTO = bookingService.booking(userDTO.getId(),mediaDTO.getEan());
+      Integer bookingId = bookingDTO.getId();
+      Calendar calendar= Calendar.getInstance();
+      calendar.add(Calendar.DATE,2);
+           // ;;
+      bookingService.updatePickUpDate(bookingId,calendar.getTime());
+
+      bookingDTO = bookingService.findById(bookingId);
+      List<BookingDTO> founds = bookingService.findReadyToPickUp();
+
+      assertThat(founds.size()).isEqualTo(1);
+      assertThat(founds.get(0)).isEqualTo(bookingDTO);
+      bookingDTO = bookingService.cancelBooking(bookingId);
+
+   }
+
+   @Test
+   @Tag("updatePickUpDate")
+   @DisplayName("Verify that we have the list of Media to be PickUp")
+   void updatePickUpDate() {
+      BookingDTO bookingDTO = bookingService.findById(1);
+      Date oldPickUpDate = (Date) bookingDTO.getPickUpDate();
+      Date newDate = Date.valueOf("2020-08-11");
+
+      bookingService.updatePickUpDate(bookingDTO.getId(),newDate);
+
+      bookingDTO = bookingService.findById(1);
+      assertThat(bookingDTO.getPickUpDate()).isEqualToIgnoringHours(newDate);
+      bookingService.updatePickUpDate(bookingDTO.getId(),oldPickUpDate);
+      bookingDTO = bookingService.findById(1);
+   }
+
 }

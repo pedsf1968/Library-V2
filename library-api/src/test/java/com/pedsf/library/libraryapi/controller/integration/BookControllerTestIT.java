@@ -39,6 +39,9 @@ class BookControllerTestIT {
 
    private static final List<BookDTO> allBookDTOS = new ArrayList<>();
    private static final Map<Integer,PersonDTO> allPersonDTOS = new HashMap<>();
+   private static ObjectMapper mapper = new ObjectMapper();
+
+
 
    @Inject
    private MockMvc mockMvc;
@@ -72,6 +75,8 @@ class BookControllerTestIT {
       allBookDTOS.add( new BookDTO("978-2070413119","Madame Bovary",2,-1,"9782070413119",allPersonDTOS.get(2),allPersonDTOS.get(12)));
       allBookDTOS.add( new BookDTO("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",allPersonDTOS.get(3),allPersonDTOS.get(13)));
       allBookDTOS.add( new BookDTO("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",allPersonDTOS.get(3),allPersonDTOS.get(13)));
+
+      mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 
    @Test
@@ -89,7 +94,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<BookDTO> founds = Arrays.asList(mapper.readValue(json, BookDTO[].class));
 
       // THEN
@@ -118,7 +122,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<BookDTO> founds = Arrays.asList(mapper.readValue(json, BookDTO[].class));
 
       // THEN
@@ -138,7 +141,6 @@ class BookControllerTestIT {
    void findAllFilteredBooks() throws Exception {
       List<BookDTO> filtered = allBookDTOS.subList(0,3);
       BookDTO filter = new BookDTO();
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       filter.setAuthor(filtered.get(0).getAuthor());
@@ -188,7 +190,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       BookDTO found = mapper.readValue(json, BookDTO.class);
 
       assertThat(found).isEqualTo(expected);
@@ -201,7 +202,6 @@ class BookControllerTestIT {
       BookDTO expected = allBookDTOS.get(4);
       expected.setFormat(BookFormat.POCKET.name());
       expected.setType(BookType.HUMOR.name());
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(bookService.save(any(BookDTO.class))).thenReturn(expected);
@@ -231,7 +231,6 @@ class BookControllerTestIT {
       expected.setTitle(BOOK_TITLE_TEST);
       expected.setFormat(BookFormat.POCKET.name());
       expected.setType(BookType.HUMOR.name());
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(bookService.update(any(BookDTO.class))).thenReturn(expected);
@@ -258,7 +257,6 @@ class BookControllerTestIT {
    @DisplayName("Verify that we can delate a Book")
    void deleteBook() throws Exception {
       BookDTO expected = allBookDTOS.get(2);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       doNothing().when(bookService).deleteById(expected.getEan());
@@ -294,7 +292,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -328,7 +325,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -362,7 +358,6 @@ class BookControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
 
       // THEN

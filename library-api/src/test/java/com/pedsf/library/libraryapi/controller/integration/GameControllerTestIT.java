@@ -29,6 +29,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,6 +43,7 @@ class GameControllerTestIT {
 
    private static final List<GameDTO> allGameDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
+   private static ObjectMapper mapper = new ObjectMapper();
 
    @Inject
    private MockMvc mockMvc;
@@ -73,6 +75,8 @@ class GameControllerTestIT {
       allGameDTOS.add( new GameDTO("3526579879836","NFS Need for Speed™ No limit",2,-1,allPersonDTOS.get(14)));
       allGameDTOS.add( new GameDTO("0805529340299","Flight Simulator 2004 : Un Siècle d'Aviation",1,1,allPersonDTOS.get(15)));
       allGameDTOS.add( new GameDTO("0805kuyiuo299","Age of Empire",1,-2,allPersonDTOS.get(15)));
+
+      mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 
    @Test
@@ -90,7 +94,6 @@ class GameControllerTestIT {
 
       // convert result in MusicDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<GameDTO> founds = Arrays.asList(mapper.readValue(json, GameDTO[].class));
 
       // THEN
@@ -120,7 +123,6 @@ class GameControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<GameDTO> founds = Arrays.asList(mapper.readValue(json, GameDTO[].class));
 
       // THEN
@@ -152,7 +154,6 @@ class GameControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       GameDTO found = mapper.readValue(json, GameDTO.class);
 
       assertThat(found).isEqualTo(expected);
@@ -165,8 +166,6 @@ class GameControllerTestIT {
       GameDTO expected = allGameDTOS.get(4);
       expected.setFormat(GameFormat.MICROSOFT_XBOX.name());
       expected.setType(GameType.ADVENTURE.name());
-
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(gameService.save(any(GameDTO.class))).thenReturn(expected);
@@ -196,7 +195,6 @@ class GameControllerTestIT {
       expected.setTitle(GAME_TITLE_TEST);
       expected.setFormat(GameFormat.MICROSOFT_XBOX.name());
       expected.setType(GameType.ADVENTURE.name());
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(gameService.update(any(GameDTO.class))).thenReturn(expected);
@@ -223,7 +221,6 @@ class GameControllerTestIT {
    @DisplayName("Verify that we can delate a Game")
    void deleteGame() throws Exception {
       GameDTO expected = allGameDTOS.get(2);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       doNothing().when(gameService).deleteById(expected.getEan());
@@ -260,7 +257,6 @@ class GameControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
 
       // THEN

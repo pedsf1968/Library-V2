@@ -25,6 +25,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,6 +39,7 @@ class MusicControllerTestIT {
 
    private static final List<MusicDTO> allMusicDTOS = new ArrayList<>();
    private static final List<PersonDTO> allPersonDTOS = new ArrayList<>();
+   private static ObjectMapper mapper = new ObjectMapper();
 
    @Inject
    private MockMvc mockMvc;
@@ -69,6 +71,8 @@ class MusicControllerTestIT {
       allMusicDTOS.add(new MusicDTO("4988064585816","RE BLACKPINK",1,1,allPersonDTOS.get(13),allPersonDTOS.get(13),allPersonDTOS.get(13)));
       allMusicDTOS.add(new MusicDTO("8809269506764","MADE",1,-2,allPersonDTOS.get(14),allPersonDTOS.get(14),allPersonDTOS.get(14)));
       allMusicDTOS.add(new MusicDTO("8809265654654","Remember",1,0,allPersonDTOS.get(14),allPersonDTOS.get(14),allPersonDTOS.get(14)));
+
+      mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 
    @Test
@@ -87,7 +91,6 @@ class MusicControllerTestIT {
 
       // convert result in MusicDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<MusicDTO> founds = Arrays.asList(mapper.readValue(json, MusicDTO[].class));
 
       // THEN
@@ -117,7 +120,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<MusicDTO> founds = Arrays.asList(mapper.readValue(json, MusicDTO[].class));
 
       // THEN
@@ -149,7 +151,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       MusicDTO found = mapper.readValue(json, MusicDTO.class);
 
       assertThat(found).isEqualTo(expected);
@@ -162,7 +163,6 @@ class MusicControllerTestIT {
       MusicDTO expected = allMusicDTOS.get(4);
       expected.setFormat(MusicFormat.CD.name());
       expected.setType(MusicType.BLUES.name());
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(musicService.save(any(MusicDTO.class))).thenReturn(expected);
@@ -192,7 +192,6 @@ class MusicControllerTestIT {
       expected.setTitle(MUSIC_TITLE_TEST);
       expected.setFormat(MusicFormat.CD.name());
       expected.setType(MusicType.BLUES.name());
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(musicService.update(any(MusicDTO.class))).thenReturn(expected);
@@ -219,7 +218,6 @@ class MusicControllerTestIT {
    @DisplayName("Verify that we can delate a Music")
    void deleteMusic() throws Exception {
       MusicDTO expected = allMusicDTOS.get(2);
-      ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       doNothing().when(musicService).deleteById(expected.getEan());
@@ -255,7 +253,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -289,7 +286,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -323,7 +319,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
 
       // THEN
@@ -357,7 +352,6 @@ class MusicControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       List<String> founds = Arrays.asList(mapper.readValue(json, String[].class));
 
       // THEN
