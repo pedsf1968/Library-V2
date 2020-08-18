@@ -178,12 +178,12 @@ class BookingServiceTestIT {
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Booking")
    void findAll() {
-      assertThat(allBookingDTOS.size()).isEqualTo(2);
+      assertThat(allBookingDTOS.size()).isEqualTo(3);
 
       // add one Booking to increase the list
       BookingDTO added = bookingService.save(newBookingDTO);
       List<BookingDTO> listFound = bookingService.findAll();
-      assertThat(listFound.size()).isEqualTo(3);
+      assertThat(listFound.size()).isEqualTo(4);
       assertThat(listFound.contains(added)).isTrue();
 
       bookingService.deleteById(added.getId());
@@ -269,11 +269,11 @@ class BookingServiceTestIT {
    @Tag("count")
    @DisplayName("Verify that we have the right number of Bookings")
    void count_returnTheNumberOfBookings() {
-      assertThat(bookingService.count()).isEqualTo(2);
+      assertThat(bookingService.count()).isEqualTo(3);
 
       // add one borrowing to increase the list
       BookingDTO added = bookingService.save(newBookingDTO);
-      assertThat(bookingService.count()).isEqualTo(3);
+      assertThat(bookingService.count()).isEqualTo(4);
 
       bookingService.deleteById(added.getId());
    }
@@ -293,7 +293,7 @@ class BookingServiceTestIT {
          dto = bookingService.entityToDTO(entity);
          assertThat(dto.getId()).isEqualTo(entity.getId());
          assertThat(dto.getUser().getId()).isEqualTo(entity.getUserId());
-         assertThat(dto.getMedia().getId()).isEqualTo(entity.getMediaId());
+         assertThat(dto.getMedia().getEan()).isEqualTo(entity.getEan());
          assertThat(dto.getBookingDate()).isEqualTo(entity.getBookingDate());
          assertThat(dto.getPickUpDate()).isEqualTo(entity.getPickUpDate());
          assertThat(dto.getMediaId()).isEqualTo(entity.getMediaId());
@@ -312,7 +312,7 @@ class BookingServiceTestIT {
          entity = bookingService.dtoToEntity(dto);
          assertThat(entity.getId()).isEqualTo(dto.getId());
          assertThat(entity.getUserId()).isEqualTo(dto.getUser().getId());
-         assertThat(entity.getMediaId()).isEqualTo(dto.getMedia().getId());
+         assertThat(entity.getEan()).isEqualTo(dto.getMedia().getEan());
          assertThat(entity.getBookingDate()).isEqualTo(dto.getBookingDate());
          assertThat(entity.getPickUpDate()).isEqualTo(dto.getPickUpDate());
          assertThat(entity.getMediaId()).isEqualTo(dto.getMediaId());
