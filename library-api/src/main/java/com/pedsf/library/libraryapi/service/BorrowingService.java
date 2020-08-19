@@ -135,7 +135,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
          return entityToDTO(borrowing);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -198,7 +198,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    public BorrowingDTO borrow(Integer userId, String mediaEan) {
       Borrowing borrowing = new Borrowing();
       UserDTO userDTO = userApiProxy.findUserById(userId);
-      MediaDTO mediaDTO = null;
+      MediaDTO mediaDTO;
       // calculate the restitution date adding 4 weeks 28 days
       java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
       Calendar calendar = Calendar.getInstance();

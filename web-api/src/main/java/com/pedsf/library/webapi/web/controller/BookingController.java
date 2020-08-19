@@ -4,7 +4,7 @@ import com.pedsf.library.dto.business.*;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.webapi.proxy.LibraryApiProxy;
 import com.pedsf.library.webapi.proxy.UserApiProxy;
-import com.pedsf.library.webapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.webapi.web.PathTable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -42,7 +42,6 @@ public class BookingController {
          model.addAttribute(PathTable.ATTRIBUTE_BOOKINGS, bookingDTOS);
       } catch (ResourceNotFoundException exception) {
          log.info(exception.getMessage());
-         bookingDTOS = null;
       }
 
       return PathTable.BOOKINGS;

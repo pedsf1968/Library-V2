@@ -1,16 +1,19 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
+import com.pedsf.library.dto.UserStatus;
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.dto.global.UserDTO;
+import com.pedsf.library.exception.BadRequestException;
+import com.pedsf.library.exception.ConflictException;
+import com.pedsf.library.exception.ForbiddenException;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.model.Booking;
 import com.pedsf.library.libraryapi.model.Borrowing;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
-import com.pedsf.library.libraryapi.repository.BookingRepository;
-import com.pedsf.library.libraryapi.repository.BorrowingRepository;
+import com.pedsf.library.libraryapi.repository.*;
 import com.pedsf.library.libraryapi.service.BookingService;
 import com.pedsf.library.libraryapi.service.BorrowingService;
 import com.pedsf.library.libraryapi.service.MediaService;
@@ -27,13 +30,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -126,13 +126,13 @@ class BookingServiceTest {
       bookingService.setDaysOfDelay(daysOfDelay);
 
       Mockito.lenient().when(userApiProxy.findUserById(anyInt())).thenAnswer(
-            (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]));
+            (InvocationOnMock invocation) -> allUserDTOS.get((Integer)invocation.getArguments()[0]));
 
       Mockito.lenient().when(mediaService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allMediaDTOS.get((Integer) invocation.getArguments()[0]-1));
 
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
-            (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]));
+            (InvocationOnMock invocation) -> allPersons.get((Integer)invocation.getArguments()[0]));
 
       newBooking = new Booking(44,"978-2253002864",4,Date.valueOf("2020-08-12"),1);
       UserDTO userDTO = userApiProxy.findUserById(4);
@@ -162,5 +162,99 @@ class BookingServiceTest {
       Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookingService.findAll());
    }
 
+   @Test
+   @Tag("findAllFiltered")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Booking")
+   void findAllFiltered_throwResourceNotFoundException_ofEmptyList() {
+      List<Booking> emptyList = new ArrayList<>();
+
+      Mockito.lenient().when(bookingRepository.findAll(any(BookingSpecification.class))).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookingService.findAllFiltered(newBookingDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Booking with has no User")
+   void save_throwBadRequestException_ofNewBookingWithNoUser() {
+      newBookingDTO.setUser(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookingService.save(newBookingDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Booking with has no Media")
+   void save_throwBadRequestException_ofNewBookingWithNoMedia() {
+      newBookingDTO.setMedia(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookingService.save(newBookingDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have BadRequestException when update a Booking with no ID")
+   void update_throwBadRequestException_ofBookingWithNoID() {
+      newBookingDTO.setId(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookingService.update(newBookingDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have BadRequestException when update a Booking with has no User")
+   void update_throwBadRequestException_ofBookingWithNoUser() {
+      newBookingDTO.setUser(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookingService.update(newBookingDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have BadRequestException when update a Booking with has no Media")
+   void update_throwBadRequestException_ofBookingWithNoMedia() {
+      newBookingDTO.setMedia(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookingService.update(newBookingDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Booking with bad ID")
+   void update_throwResourceNotFoundException_ofNewBookingWithWrongId() {
+      newBookingDTO.setId(654);
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookingService.update(newBookingDTO));
+   }
+
+   @Test
+   @Tag("booking")
+   @DisplayName("Verify that a User can't Book a Media Booked by himself")
+   void booking_throwForbiddenException_ofMediaBookedBySameUser() {
+      UserDTO userDTO = allUserDTOS.get(5);
+      userDTO.setStatus(UserStatus.BORROWER.name());
+      MediaDTO mediaDTO = allMediaDTOS.get(1);
+      Integer userId = userDTO.getId();
+      String mediaEan = mediaDTO.getEan();
+
+      Mockito.lenient().when(bookingRepository.userHadBooked(anyInt(),anyString())).thenReturn(true);
+
+      Assertions.assertThrows(ForbiddenException.class,
+            () -> bookingService.booking(userId,mediaEan));
+
+   }
+
+   @Test
+   @Tag("findBookingsByUserId")
+   @DisplayName("Verify that we have ResourceNotFoundException when there is no booking for the user")
+   void findBookingsByUserId_throwResourceNotFoundException_ofUserWithoutBooking() {
+      List<Booking> emptyList = new ArrayList<>();
+      Mockito.lenient().when(bookingRepository.findByUserId(anyInt())).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookingService.findBookingsByUserId(654));
+   }
+
+   @Test
+   @Tag("cancelBooking")
+   @DisplayName("Verify that we have ResourceNotFoundException when we cancel Booking with wrong Id")
+   void cancelBooking_throwResourceNotFoundException_ofCancelBookingWithWrongId() {
+      Mockito.lenient().when(bookingRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookingService.cancelBooking(654));
+   }
 
 }

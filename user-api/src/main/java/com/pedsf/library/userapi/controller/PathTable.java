@@ -14,4 +14,7 @@ public final class PathTable {
 
    public static final    String ATTRIBUTE_ADDRESS = "addressDto";
    public static final String ATTRIBUTE_USER = "userDto";
+
+   private PathTable() {
+   }
 }

@@ -1,7 +1,7 @@
 package com.pedsf.library.webapi.web.controller;
 
 import com.google.common.collect.Lists;
-import com.pedsf.library.webapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.webapi.proxy.UserApiProxy;
 import com.pedsf.library.webapi.service.global.SecurityServiceImpl;
 import com.pedsf.library.webapi.web.PathTable;

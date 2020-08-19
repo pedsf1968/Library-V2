@@ -1,13 +1,14 @@
-package com.pedsf.library.userapi.service;
+package com.pedsf.library.userapi.service.integration;
 
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.userapi.model.User;
 import com.pedsf.library.userapi.repository.RoleRepository;
 import com.pedsf.library.userapi.repository.UserRepository;
-import org.junit.jupiter.api.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.pedsf.library.userapi.service.UserService;
+import com.pedsf.library.userapi.service.UserServiceImpl;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class UserServiceImplTest {
+class UserServiceImplTestIT {
    private static final Integer USER_ID_TEST = 1;
    private static final String EMAIL_TEST = "user.test@gmail.com";
 
@@ -312,9 +315,8 @@ class UserServiceImplTest {
       assertThat(userService.existsById(id)).isTrue();
       userService.deleteById(id);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         userService.findById(id);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> userService.findById(id));
    }
 
    @Test

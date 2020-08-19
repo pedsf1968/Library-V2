@@ -1,8 +1,9 @@
 package com.pedsf.library.webapi.web.controller;
 
 import com.pedsf.library.dto.*;
-import com.pedsf.library.webapi.dto.business.BookFilter;
-import com.pedsf.library.webapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.filter.BookFilter;
+import com.pedsf.library.exception.*;
+
 import com.pedsf.library.webapi.proxy.LibraryApiProxy;
 import com.pedsf.library.webapi.proxy.UserApiProxy;
 import com.pedsf.library.webapi.web.PathTable;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.net.URISyntaxException;
 import java.util.*;
 
 @Slf4j
@@ -67,7 +67,7 @@ public class BookController {
    }
 
    @PostMapping("/books")
-   public String booksFilteredList(@ModelAttribute("filter") BookFilter filter, Model model, Locale locale) throws URISyntaxException {
+   public String booksFilteredList(@ModelAttribute("filter") BookFilter filter, Model model, Locale locale) {
       List<BookDTO> bookDTOS;
       BookDTO bookDTO = new BookDTO();
       bookDTO.setTitle(filter.getTitle());

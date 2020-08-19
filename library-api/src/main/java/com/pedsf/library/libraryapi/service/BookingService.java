@@ -117,7 +117,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
          return entityToDTO(booking);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -133,7 +133,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
          return entityToDTO(booking);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -198,8 +198,8 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       Booking booking = new Booking();
       UserDTO userDTO = userApiProxy.findUserById(userId);
       MediaDTO mediaDTO = mediaService.findOneByEan(mediaEan);
-      Integer quantity = 0;
-      Integer stock = 0;
+      Integer quantity;
+      Integer stock;
 
       String userStatus = userDTO.getStatus();
       if(userStatus.equals(UserStatus.FORBIDDEN.name()) ){

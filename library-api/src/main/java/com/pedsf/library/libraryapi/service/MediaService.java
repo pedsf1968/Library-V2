@@ -51,7 +51,6 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
    @Override
    public MediaDTO findById(Integer id) {
-      MediaDTO mediaDTO;
       Optional<Media> media = mediaRepository.findById(id);
 
       if (!media.isPresent()) {

@@ -124,7 +124,7 @@ class BorrowingServiceTest {
         borrowingService.setMaxExtention(maxExtention);
 
         Mockito.lenient().when(userApiProxy.findUserById(anyInt())).thenAnswer(
-              (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]));
+              (InvocationOnMock invocation) -> allUserDTOS.get((Integer)invocation.getArguments()[0]));
 
         Mockito.lenient().when(mediaService.findById(anyInt())).thenAnswer(
               (InvocationOnMock invocation) -> allMediaDTOS.get((Integer) invocation.getArguments()[0]-1));
@@ -167,11 +167,11 @@ class BorrowingServiceTest {
     @DisplayName("Verify that we have ResourceNotFoundException if there is no Borrowing")
     void findAllFiltered_throwResourceNotFoundException_ofEmptyList() {
         List<Borrowing> emptyList = new ArrayList<>();
+
         Mockito.lenient().when(borrowingRepository.findAll(any(BorrowingSpecification.class))).thenReturn(emptyList);
 
-        Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findAllFiltered(new BorrowingDTO()));
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findAllFiltered(newBorrowingDTO));
     }
-
 
     @Test
     @Tag("save")
@@ -191,26 +191,26 @@ class BorrowingServiceTest {
 
     @Test
     @Tag("update")
-    @DisplayName("Verify that we have ConflictException when update a Borrowing with no ID")
-    void update_throwConflictException_ofBorrowingWithNoID() {
+    @DisplayName("Verify that we have BadRequestException when update a Borrowing with no ID")
+    void update_throwBadRequestException_ofBorrowingWithNoID() {
         newBorrowingDTO.setId(null);
-        Assertions.assertThrows(ConflictException.class, ()-> borrowingService.update(newBorrowingDTO));
+        Assertions.assertThrows(BadRequestException.class, ()-> borrowingService.update(newBorrowingDTO));
     }
 
     @Test
     @Tag("update")
-    @DisplayName("Verify that we have ConflictException when update a Borrowing with has no User")
-    void update_throwConflictException_ofBorrowingWithNoUser() {
+    @DisplayName("Verify that we have BadRequestException when update a Borrowing with has no User")
+    void update_throwBadRequestException_ofBorrowingWithNoUser() {
         newBorrowingDTO.setUser(null);
-        Assertions.assertThrows(ConflictException.class, ()-> borrowingService.update(newBorrowingDTO));
+        Assertions.assertThrows(BadRequestException.class, ()-> borrowingService.update(newBorrowingDTO));
     }
 
     @Test
     @Tag("update")
-    @DisplayName("Verify that we have ConflictException when update a Borrowing with has no Media")
-    void update_throwConflictException_ofBorrowingWithNoMedia() {
+    @DisplayName("Verify that we have BadRequestException when update a Borrowing with has no Media")
+    void update_throwBadRequestException_ofBorrowingWithNoMedia() {
         newBorrowingDTO.setMedia(null);
-        Assertions.assertThrows(ConflictException.class, ()-> borrowingService.update(newBorrowingDTO));
+        Assertions.assertThrows(BadRequestException.class, ()-> borrowingService.update(newBorrowingDTO));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.pedsf.library.webapi.exceptions;
 
+import com.pedsf.library.exception.ResourceNotFoundException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 

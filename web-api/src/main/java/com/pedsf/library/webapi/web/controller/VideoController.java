@@ -3,8 +3,8 @@ package com.pedsf.library.webapi.web.controller;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.dto.*;
-import com.pedsf.library.webapi.dto.business.VideoFilter;
-import com.pedsf.library.webapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.dto.filter.VideoFilter;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.webapi.proxy.LibraryApiProxy;
 import com.pedsf.library.webapi.proxy.UserApiProxy;
 import com.pedsf.library.webapi.web.PathTable;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.net.URISyntaxException;
 import java.util.*;
 
 @Slf4j
@@ -67,7 +66,7 @@ public class VideoController {
    }
 
    @PostMapping("/videos")
-   public String booksFilteredList(@ModelAttribute("filter") VideoFilter filter, Model model, Locale locale) throws URISyntaxException {
+   public String booksFilteredList(@ModelAttribute("filter") VideoFilter filter, Model model, Locale locale) {
       List<VideoDTO> videoDTOS;
       VideoDTO videoDTO = new VideoDTO();
       videoDTO.setTitle(filter.getTitle());

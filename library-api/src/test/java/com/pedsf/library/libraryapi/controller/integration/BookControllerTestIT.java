@@ -41,8 +41,6 @@ class BookControllerTestIT {
    private static final Map<Integer,PersonDTO> allPersonDTOS = new HashMap<>();
    private static ObjectMapper mapper = new ObjectMapper();
 
-
-
    @Inject
    private MockMvc mockMvc;
 

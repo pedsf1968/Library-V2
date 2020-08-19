@@ -27,4 +27,13 @@ public class Role implements Serializable {
 
    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
    private Set<User> users;
+
+   public Role(Integer id, @NotNull @NotEmpty @Size(max = Parameters.ROLE_MAX) String name) {
+      this.id = id;
+      this.name = name;
+   }
+
+   public Role() {
+      // empty constructor for creating empty role and add attribute after
+   }
 }

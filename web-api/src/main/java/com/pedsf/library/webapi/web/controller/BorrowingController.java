@@ -2,7 +2,7 @@ package com.pedsf.library.webapi.web.controller;
 
 
 import com.pedsf.library.webapi.proxy.LibraryApiProxy;
-import com.pedsf.library.webapi.exceptions.ResourceNotFoundException;
+import com.pedsf.library.exception.*;
 import com.pedsf.library.webapi.proxy.UserApiProxy;
 import com.pedsf.library.webapi.web.PathTable;
 import com.pedsf.library.dto.business.BorrowingDTO;
@@ -48,8 +48,8 @@ public class BorrowingController {
       try {
          borrowingDTOS = libraryApiProxy.findByUserIdNotReturn(userDTO.getId());
          model.addAttribute(PathTable.ATTRIBUTE_BORROWINGS, borrowingDTOS);
-      } catch (ResourceNotFoundException ex) {
-         borrowingDTOS = null;
+      } catch (ResourceNotFoundException exception) {
+         log.info(exception.getMessage());
       }
 
       model.addAttribute(PathTable.ATTRIBUTE_RESTITUTION_DATE, restitutionDate);
