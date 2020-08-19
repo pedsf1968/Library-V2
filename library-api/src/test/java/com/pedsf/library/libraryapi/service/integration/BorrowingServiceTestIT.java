@@ -25,8 +25,7 @@ import java.sql.Date;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doAnswer;
 
 @DataJpaTest
@@ -422,15 +421,30 @@ class BorrowingServiceTestIT {
    @Tag("findDelayed")
    @DisplayName("Get the list of delayed Borrowing")
    void findDelayed() {
+      Integer userId = allUserDTOS.get(2).getId();
+      String mediaEan = allMediaDTOS.get(23).getEan();
+      Calendar calendar= Calendar.getInstance();
 
+      Mockito.lenient().when(mediaService.findBlockedByEan(anyString())).thenReturn(allMediaDTOS.get(23));
 
+      BorrowingDTO savedBorrowing = borrowingService.borrow(userId,mediaEan);
+      calendar.add(Calendar.DATE,-30);
+      savedBorrowing.setBorrowingDate(calendar.getTime());
+      savedBorrowing = borrowingService.update(savedBorrowing);
+
+      calendar.add(Calendar.DATE,30);
+      List<BorrowingDTO> founds = borrowingService.findDelayed(calendar.getTime());
+
+      assertThat(founds.contains(savedBorrowing)).isTrue();
+
+      borrowingService.deleteById(savedBorrowing.getId());
    }
 
    @Test
    @Tag("findByUserIdNotReturn")
    @DisplayName("Verify thawe get all media borrow by user 4")
-   void findByUserIdNotReturn_returnBoorowingList_ofUser4() {
-      List<BorrowingDTO> found;
+   void findByUserIdNotReturn_returnBorrowingList_ofUser4() {
+      List<BorrowingDTO> founds;
       List<BorrowingDTO> expected = new ArrayList<>();
       Integer userId = 4;
 
@@ -440,11 +454,11 @@ class BorrowingServiceTestIT {
          }
       }
 
-      found = borrowingService.findByUserIdNotReturn(userId);
+      founds = borrowingService.findByUserIdNotReturn(userId);
 
-      assertThat(found.size()).isEqualTo(expected.size());
+      assertThat(founds.size()).isEqualTo(expected.size());
 
-      for(BorrowingDTO b: found) {
+      for(BorrowingDTO b: founds) {
          assertThat(expected.contains(b)).isTrue();
       }
    }

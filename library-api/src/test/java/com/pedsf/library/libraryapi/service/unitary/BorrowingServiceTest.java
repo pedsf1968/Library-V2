@@ -248,6 +248,7 @@ class BorrowingServiceTest {
         Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findDelayed(newDate));
     }
 
+
     @Test
     @Tag("findByUserIdNotReturn")
     @DisplayName("Verify that we have ResourceNotFoundException if there is no Borrowing for the user")
