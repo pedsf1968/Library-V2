@@ -72,6 +72,7 @@ class MusicControllerTestIT {
       allMusicDTOS.add(new MusicDTO("8809269506764","MADE",1,-2,allPersonDTOS.get(14),allPersonDTOS.get(14),allPersonDTOS.get(14)));
       allMusicDTOS.add(new MusicDTO("8809265654654","Remember",1,0,allPersonDTOS.get(14),allPersonDTOS.get(14),allPersonDTOS.get(14)));
 
+      TimeZone.setDefault(TimeZone.getTimeZone("CET"));
       mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 

@@ -69,6 +69,7 @@ class VideoControllerTestIT {
       allVideoDTOS.add(new VideoDTO("8885466546580","Banzai",2,-4,allPersonDTOS.get(2)));
       allVideoDTOS.add(new VideoDTO("3476546046540","Le secret",3,-2,allPersonDTOS.get(3)));
 
+      TimeZone.setDefault(TimeZone.getTimeZone("CET"));
       mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 

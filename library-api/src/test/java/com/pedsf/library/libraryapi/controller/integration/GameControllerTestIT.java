@@ -76,6 +76,7 @@ class GameControllerTestIT {
       allGameDTOS.add( new GameDTO("0805529340299","Flight Simulator 2004 : Un Siècle d'Aviation",1,1,allPersonDTOS.get(15)));
       allGameDTOS.add( new GameDTO("0805kuyiuo299","Age of Empire",1,-2,allPersonDTOS.get(15)));
 
+      TimeZone.setDefault(TimeZone.getTimeZone("CET"));
       mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
 
