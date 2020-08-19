@@ -685,6 +685,9 @@
                   </goals>
                   <configuration>
                      <skipTests>false</skipTests>
+                     <systemPropertyVariables>
+                        <user.timezone>CET</user.timezone>
+                     </systemPropertyVariables>
                      <includes>
                         <include>**/*Test.java</include>
                      </includes>
@@ -698,6 +701,9 @@
                   </goals>
                   <configuration>
                      <skipTests>false</skipTests>
+                     <systemPropertyVariables>
+                        <user.timezone>CET</user.timezone>
+                     </systemPropertyVariables>
                      <includes>
                         <include>**/*IT.*</include>
                         <include>**/*Test.*</include>

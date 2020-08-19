@@ -75,6 +75,7 @@ class BookControllerTestIT {
       allBookDTOS.add( new BookDTO("978-2070413119","Madame Bovary",2,-1,"9782070413119",allPersonDTOS.get(2),allPersonDTOS.get(12)));
       allBookDTOS.add( new BookDTO("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",allPersonDTOS.get(3),allPersonDTOS.get(13)));
       allBookDTOS.add( new BookDTO("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",allPersonDTOS.get(3),allPersonDTOS.get(13)));
+
       TimeZone.setDefault(TimeZone.getTimeZone("CET"));
       mapper.setTimeZone(TimeZone.getTimeZone("CET"));
    }
