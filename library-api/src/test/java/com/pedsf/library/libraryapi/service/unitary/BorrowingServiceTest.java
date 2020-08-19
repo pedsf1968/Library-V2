@@ -232,8 +232,9 @@ class BorrowingServiceTest {
     void findDelayed_throwResourceNotFoundException_ofEmptyList() {
         List<Borrowing> emptyList = new ArrayList<>();
         Mockito.lenient().when(borrowingRepository.findDelayed(any(Date.class),anyInt(),anyInt())).thenReturn(emptyList);
+        Date newDate = Date.valueOf("1900-01-01");
 
-        Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findDelayed(Date.valueOf("1900-01-01")));
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findDelayed(newDate));
     }
 
     @Test

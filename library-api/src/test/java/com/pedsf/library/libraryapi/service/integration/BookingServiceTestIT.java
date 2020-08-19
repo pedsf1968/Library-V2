@@ -373,9 +373,11 @@ class BookingServiceTestIT {
       String oldStatus = userDTO.getStatus();
       userDTO.setStatus(UserStatus.FORBIDDEN.name());
       MediaDTO mediaDTO = allMediaDTOS.get(9);
+      Integer userId = userDTO.getId();
+      String mediaEan = mediaDTO.getEan();
 
       Assertions.assertThrows(ForbiddenException.class,
-              () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+              () -> bookingService.booking(userId,mediaEan));
 
       userDTO.setStatus(oldStatus);
    }
@@ -388,9 +390,12 @@ class BookingServiceTestIT {
       String oldStatus = userDTO.getStatus();
       userDTO.setStatus(UserStatus.BAN.name());
       MediaDTO mediaDTO = allMediaDTOS.get(9);
+      Integer userId = userDTO.getId();
+      String mediaEan = mediaDTO.getEan();
+
 
       Assertions.assertThrows(ForbiddenException.class,
-            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+            () -> bookingService.booking(userId,mediaEan));
 
       userDTO.setStatus(oldStatus);
    }
@@ -402,9 +407,11 @@ class BookingServiceTestIT {
       UserDTO userDTO = allUserDTOS.get(5);
       userDTO.setStatus(UserStatus.BORROWER.name());
       MediaDTO mediaDTO = allMediaDTOS.get(10);
+      Integer userId = userDTO.getId();
+      String mediaEan = mediaDTO.getEan();
 
       Assertions.assertThrows(ForbiddenException.class,
-            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+            () -> bookingService.booking(userId,mediaEan));
 
    }
 
@@ -415,9 +422,11 @@ class BookingServiceTestIT {
       UserDTO userDTO = allUserDTOS.get(5);
       userDTO.setStatus(UserStatus.BORROWER.name());
       MediaDTO mediaDTO = allMediaDTOS.get(1);
+      Integer userId = userDTO.getId();
+      String mediaEan = mediaDTO.getEan();
 
       Assertions.assertThrows(ForbiddenException.class,
-            () -> bookingService.booking(userDTO.getId(),mediaDTO.getEan()));
+            () -> bookingService.booking(userId,mediaEan));
 
    }
 
@@ -453,7 +462,6 @@ class BookingServiceTestIT {
             ()-> bookingService.findById(bookingId));
    }
 
-   @Disabled
    @Test
    @Tag("findReadyToPickUp")
    @DisplayName("Verify that we have the list of Media to be PickUp")
