@@ -163,6 +163,17 @@ class BorrowingServiceTest {
     }
 
     @Test
+    @Tag("findAllFiltered")
+    @DisplayName("Verify that we have ResourceNotFoundException if there is no Borrowing")
+    void findAllFiltered_throwResourceNotFoundException_ofEmptyList() {
+        List<Borrowing> emptyList = new ArrayList<>();
+        Mockito.lenient().when(borrowingRepository.findAll(any(BorrowingSpecification.class))).thenReturn(emptyList);
+
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> borrowingService.findAllFiltered(new BorrowingDTO()));
+    }
+
+
+    @Test
     @Tag("save")
     @DisplayName("Verify that we have BadRequestException when saving a Borrowing with has no User")
     void save_throwBadRequestException_ofNewBorrowingWithNoUser() {

@@ -11,9 +11,9 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: ./mvnw clean test -P test > ./mvn-test.log
+      script: ./mvnw clean test -P test
     - stage: sonar
-      script: ./mvnw verify sonar:sonar -P test > ./mvn-verify.log
+      script: ./mvnw verify sonar:sonar -P test
 
 cache:
   directories:
