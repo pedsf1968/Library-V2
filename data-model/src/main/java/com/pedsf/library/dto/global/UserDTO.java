@@ -12,7 +12,8 @@ import java.util.List;
 
 @Data
 public class UserDTO implements Serializable {
-
+    private static final String USER_COUNTRY = "FRANCE";
+    private static final Integer USER_COUNTER = 0;
 
     private Integer id;
 
@@ -69,6 +70,32 @@ public class UserDTO implements Serializable {
 
     @Size(max = Parameters.COUNTRY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.COUNTRY_MAX + " !")
     private String country;
+
+    public UserDTO(Integer id,
+                @NotNull @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !") String firstName,
+                @NotNull @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !") String lastName,
+                @NotNull @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !") @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT) String email,
+                @NotNull @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !") String password,
+                @NotNull @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !") String street1,
+                @NotNull @Size(max = Parameters.ZIP_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ZIP_MAX + " !") String zipCode,
+                @NotNull @Size(max = Parameters.CITY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.CITY_MAX + " !") String city) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.street1 = street1;
+        this.street2 = "";
+        this.street3 = "";
+        this.zipCode = zipCode;
+        this.city = city;
+        this.country = USER_COUNTRY;
+        this.counter = USER_COUNTER;
+    }
+
+    public UserDTO() {
+        // nothing to do
+    }
 
     public void initRole(){
         this.roles = new ArrayList<>();

@@ -28,49 +28,51 @@ import java.sql.Date;
 @MappedSuperclass
 public class MediaCommon implements Serializable {
 
-   public MediaCommon(String ean, @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-                      @NotNull Integer quantity,
-                      @NotNull Integer stock) {
+   // Media information
+   @Id
+   @Column(name = "ean", length = Parameters.EAN_MAX)
+   protected String ean;
+
+   @NotNull
+   @NotBlank
+   @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX)
+   @Column(name = "title", length = Parameters.TITLE_MAX)
+   protected String title;
+
+   @NotNull
+   protected Integer quantity;
+   @NotNull
+   protected Integer stock;
+
+   // weight and dimensions for transport informations
+   @Column(name = "weight")
+   protected Integer weight;
+
+   @Column(name = "length")
+   protected Integer length;
+
+   @Column(name = "width")
+   protected Integer width;
+
+   @Column(name = "height")
+   protected Integer height;
+
+   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+   @Column(name = "return_date")
+   protected Date returnDate;
+
+   MediaCommon(String ean,
+               @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock) {
       this.ean = ean;
       this.title = title;
       this.quantity = quantity;
       this.stock = stock;
    }
 
-   public MediaCommon() {
+   MediaCommon() {
+      // nothing to do
    }
-
-   // Media information
-   @Id
-   @Column(name = "ean", length = Parameters.EAN_MAX)
-   private String ean;
-
-   @NotNull
-   @NotBlank
-   @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX)
-   @Column(name = "title", length = Parameters.TITLE_MAX)
-   private String title;
-
-   @NotNull
-   private Integer quantity;
-   @NotNull
-   private Integer stock;
-
-   // weight and dimensions for transport informations
-   @Column(name = "weight")
-   private Integer weight;
-
-   @Column(name = "length")
-   private Integer length;
-
-   @Column(name = "width")
-   private Integer width;
-
-   @Column(name = "height")
-   private Integer height;
-
-   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-   @Column(name = "return_date")
-   private Date returnDate;
 
 }

@@ -1,16 +1,16 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Booking;
-import com.pedsf.library.libraryapi.model.MediaStatus;
-import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BookingSpecification;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
+import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 
+@Data
 @Service("BookingService")
 public class BookingService implements GenericService<BookingDTO, Booking,Integer> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Booking with the id : ";
@@ -116,7 +117,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
          return entityToDTO(booking);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -132,7 +133,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
          return entityToDTO(booking);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -152,9 +153,13 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
    @Override
    public BookingDTO entityToDTO(Booking booking) {
+
+      modelMapper.getConfiguration().setAmbiguityIgnored(true);
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
+
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
-      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
+//      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
+      MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
@@ -164,6 +169,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
    @Override
    public Booking dtoToEntity(BookingDTO bookingDTO) {
+      modelMapper.getConfiguration().setAmbiguityIgnored(true);
       Booking booking = modelMapper.map(bookingDTO, Booking.class);
 
       booking.setUserId(bookingDTO.getUser().getId());
@@ -172,11 +178,11 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       return booking;
    }
 
-   BookingDTO findByEanAndUserId(String ean, Integer userId) {
+   public BookingDTO findByEanAndUserId(String ean, Integer userId) {
       return entityToDTO(bookingRepository.findByEanAndUserId(ean,userId));
    }
 
-   BookingDTO findNextBookingByMediaId(String ean) {
+   public BookingDTO findNextBookingByMediaId(String ean) {
       return entityToDTO(bookingRepository.findNextBookingByMediaId(ean));
    }
 
@@ -192,8 +198,8 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       Booking booking = new Booking();
       UserDTO userDTO = userApiProxy.findUserById(userId);
       MediaDTO mediaDTO = mediaService.findOneByEan(mediaEan);
-      Integer quantity = 0;
-      Integer stock = 0;
+      Integer quantity;
+      Integer stock;
 
       String userStatus = userDTO.getStatus();
       if(userStatus.equals(UserStatus.FORBIDDEN.name()) ){
@@ -357,6 +363,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     * @param date new date
     */
    public void updatePickUpDate(Integer id, Date date) {
-      bookingRepository.updatePickUpDate( id, new java.sql.Date(date.getTime()));
+      if(date!=null) {
+         bookingRepository.updatePickUpDate(id, new java.sql.Date(date.getTime()));
+      } else {
+         bookingRepository.updatePickUpDate(id, null);
+      }
    }
 }

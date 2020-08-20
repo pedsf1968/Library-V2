@@ -1,9 +1,9 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.MediaStatus;
 import com.pedsf.library.dto.business.*;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Media;
-import com.pedsf.library.libraryapi.model.MediaStatus;
 import com.pedsf.library.libraryapi.repository.MediaRepository;
 import com.pedsf.library.libraryapi.repository.MediaSpecification;
 import com.pedsf.library.model.MediaType;
@@ -51,16 +51,13 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
    @Override
    public MediaDTO findById(Integer id) {
-      MediaDTO mediaDTO;
       Optional<Media> media = mediaRepository.findById(id);
 
-      if (media.isPresent()) {
-         mediaDTO = entityToDTO(media.get());
-      } else {
+      if (!media.isPresent()) {
          throw new ResourceNotFoundException(CANNOT_FIND_WITH_ID + id);
       }
 
-      return initialise(mediaDTO);
+      return entityToDTO(media.get());
    }
 
    public MediaDTO initialise(MediaDTO mediaDTO) {
@@ -146,19 +143,10 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
 
    @Override
    public MediaDTO save(MediaDTO mediaDTO) {
-      if (  !StringUtils.isEmpty(mediaDTO.getId()) &&
-            !StringUtils.isEmpty(mediaDTO.getEan()) &&
+      if (  !StringUtils.isEmpty(mediaDTO.getEan()) &&
             !StringUtils.isEmpty(mediaDTO.getMediaType())) {
-
-         try {
-            Integer mediaId = getFirstId(mediaDTO);
-            return findById(mediaId);
-
-         } catch (ResourceNotFoundException ex) {
-            mediaDTO.setId(null);
-            return entityToDTO(mediaRepository.save(dtoToEntity(mediaDTO)));
-         }
-
+         mediaDTO.setId(null);
+         return entityToDTO(mediaRepository.save(dtoToEntity(mediaDTO)));
       } else {
          throw new BadRequestException(CANNOT_SAVE);
       }
@@ -201,7 +189,10 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
    public MediaDTO entityToDTO(Media media) {
       MediaDTO mediaDTO=  modelMapper.map(media, MediaDTO.class);
 
-      return initialise(mediaDTO);
+      if(mediaDTO.getTitle()==null) {
+         mediaDTO = initialise(mediaDTO);
+      }
+      return mediaDTO;
    }
 
    @Override
@@ -225,7 +216,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
       }
    }
 
-   void decreaseStock(MediaDTO mediaDTO) {
+   public void decreaseStock(MediaDTO mediaDTO) {
       if (mediaDTO.getMediaType().equals(MediaType.BOOK.toString())) {
          bookService.decreaseStock(mediaDTO.getEan());
       } else if (mediaDTO.getMediaType().equals(MediaType.GAME.toString())) {
@@ -244,7 +235,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
     * @param ean EAN code of the media
     * @return MediaType of the media
     */
-   MediaType findMediaTypeByEan(String ean) {
+   public MediaType findMediaTypeByEan(String ean) {
       String type = mediaRepository.findMediaTypeByEan(ean);
       return MediaType.valueOf(type);
    }
@@ -256,7 +247,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
     * @param ean EAN code of the media
     * @return media BLOCKED
     */
-   MediaDTO findBlockedByEan(String ean) {
+   public MediaDTO findBlockedByEan(String ean) {
       MediaDTO mediaDTO;
       Media media = mediaRepository.findBlockedByEan(ean);
 
@@ -275,7 +266,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
     * @param ean EAN code of the media
     * @return media BOOKED
     */
-   MediaDTO findBoockedByEan(String ean) {
+   public MediaDTO findBoockedByEan(String ean) {
       MediaDTO mediaDTO;
       Media media = mediaRepository.findBoockedByEan(ean);
 
@@ -293,7 +284,7 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
     *
     * @param ean EAN code of the media
     */
-   void blockFreeByEan(String ean) {
+   public void blockFreeByEan(String ean) {
       mediaRepository.blockFreeByEan(ean);
    }
 
@@ -302,31 +293,30 @@ public class MediaService implements GenericService<MediaDTO, Media,Integer> {
     *
     * @param ean EAN code of the media
     */
-   void bookedFreeByEan(String ean) {
+   public void bookedFreeByEan(String ean) {
       mediaRepository.bookedFreeByEan(ean);
    }
 
 
-   void borrow(Integer mediaId, Date date) {
+   public void borrow(Integer mediaId, Date date) {
       java.sql.Date sDate = new java.sql.Date(date.getTime());
       mediaRepository.borrow(mediaId,sDate);
    }
 
-   void release(Integer mediaId) {
+   public void release(Integer mediaId) {
       mediaRepository.release(mediaId);
    }
 
 
-   void updateReturnDate(Integer mediaId, Date date) {
-      java.sql.Date sDate = new java.sql.Date(date.getTime());
-      mediaRepository.updateReturnDate(sDate, mediaId);
+   public void updateReturnDate(Integer mediaId, Date date) {
+      if(date!=null) {
+         mediaRepository.updateReturnDate(mediaId, new java.sql.Date(date.getTime()));
+      } else {
+         mediaRepository.updateReturnDate(mediaId, null);
+      }
    }
 
-   Date getNextReturnDateByEan(String ean) {
-      return mediaRepository.getNextReturnDateByEan(ean);
-   }
-
-   MediaDTO getNextReturnByEan(String ean) {
+   public MediaDTO getNextReturnByEan(String ean) {
       MediaDTO mediaDTO;
 
       mediaDTO = entityToDTO(mediaRepository.getNextReturnByEan(ean));

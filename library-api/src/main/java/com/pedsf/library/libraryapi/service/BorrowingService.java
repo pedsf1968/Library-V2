@@ -1,17 +1,17 @@
 package com.pedsf.library.libraryapi.service;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.model.Booking;
 import com.pedsf.library.libraryapi.model.Borrowing;
-import com.pedsf.library.libraryapi.model.MediaStatus;
-import com.pedsf.library.libraryapi.model.UserStatus;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingSpecification;
+import lombok.Data;
 import org.apache.commons.lang.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-
+@Data
 @Service("BorrowingService")
 public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,Integer> {
    private static final String CANNOT_FIND_WITH_ID = "Cannot find Borrowing with the id : ";
@@ -55,6 +55,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       this.mediaService = mediaService;
       this.userApiProxy = userApiProxy;
    }
+
 
 
    @Override
@@ -134,7 +135,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
          return entityToDTO(borrowing);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -183,7 +184,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
     * @param ean identification of the media
     * @return true if the user has already borrowed this media
     */
-   Boolean userHadBorrowed(Integer userId, String ean) {
+   public Boolean userHadBorrowed(Integer userId, String ean) {
       return borrowingRepository.userHadBorrowed( userId, ean);
    }
 
@@ -197,7 +198,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
    public BorrowingDTO borrow(Integer userId, String mediaEan) {
       Borrowing borrowing = new Borrowing();
       UserDTO userDTO = userApiProxy.findUserById(userId);
-      MediaDTO mediaDTO = null;
+      MediaDTO mediaDTO;
       // calculate the restitution date adding 4 weeks 28 days
       java.sql.Date today = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
       Calendar calendar = Calendar.getInstance();
@@ -212,7 +213,9 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       }
 
       String userStatus = userDTO.getStatus();
-      if(userStatus.equals(UserStatus.FORBIDDEN.name()) ){
+      if(userStatus == null) {
+         userDTO.setStatus(UserStatus.MEMBER.name());
+      } else if (userStatus.equals(UserStatus.FORBIDDEN.name()) ){
          throw new ForbiddenException(EXCEPTION_FORBIDDEN);
       } else if (userStatus.equals(UserStatus.BAN.name())){
          throw new ForbiddenException(EXCEPTION_BAN);
@@ -230,6 +233,7 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
       if(mediaDTO.getStock() > 0) {
          mediaService.decreaseStock(mediaDTO);
       } else {
+         // stock problem
          throw new ForbiddenException(EXCEPTION_NO_MEDIA);
       }
 
@@ -279,19 +283,22 @@ public class BorrowingService implements GenericService<BorrowingDTO, Borrowing,
 
       // release the media
       mediaService.release(mediaId);
+
+      // search if it's booked
       Booking booking = bookingRepository.findNextBookingByMediaId(mediaDTO.getEan());
 
-      // set this media booked to borrow only by the user
-      mediaService.setStatus(mediaId, MediaStatus.BOOKED);
+      if(booking!=null) {
+         // set this media booked to borrow only by the user
+         mediaService.setStatus(mediaId, MediaStatus.BOOKED);
 
-      // calculate the restitution date adding 2 days
-      java.util.Date today = new java.util.Date();
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(today);
-      calendar.add(Calendar.DATE, daysOfDelay);
+         // calculate the restitution date adding 2 days
+         java.util.Date today = new java.util.Date();
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(today);
+         calendar.add(Calendar.DATE, daysOfDelay);
 
-      bookingRepository.updatePickUpDate(booking.getId(),new java.sql.Date(calendar.getTimeInMillis()));
-
+         bookingRepository.updatePickUpDate(booking.getId(), new java.sql.Date(calendar.getTimeInMillis()));
+      }
 
       return entityToDTO(borrowing);
    }

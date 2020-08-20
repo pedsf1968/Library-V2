@@ -1,18 +1,14 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.dto.business.VideoDTO;
-import com.pedsf.library.libraryapi.model.Video;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.repository.VideoRepository;
-import com.pedsf.library.libraryapi.service.PersonService;
-import com.pedsf.library.libraryapi.service.VideoService;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.libraryapi.model.*;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -24,32 +20,56 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class VideoServiceTestIT {
    private static final String VIDEO_EAN_TEST = "3475001058980";
+   private static final String VIDEO_TITLE_TEST = "New Video Title";
 
-   @TestConfiguration
-   static class videoServiceTestConfiguration {
-      @Autowired
-      private VideoRepository videoRepository;
-      @Autowired
-      private PersonRepository personRepository;
+   private static VideoService videoService;
+   private static PersonService personService;
+   private static Video newVideo;
+   private static VideoDTO newVideoDTO;
+   private static List<VideoDTO> allVideoDTOS;
 
-
-      @Bean
-      public VideoService videoService() {
-         PersonService personService = new PersonService(personRepository);
-
-         return new VideoService(videoRepository,personService);
-      }
+   @BeforeAll
+   static void beforeAll(@Autowired VideoRepository videoRepository,
+                         @Autowired PersonRepository personRepository) {
+      personService = new PersonService(personRepository);
+      videoService = new VideoService(videoRepository,personService);
    }
 
-   @Autowired
-   private VideoService videoService;
+   @BeforeEach
+   void beforeEach() {
+      newVideo = new Video("sdfsdfds","Video of the Day", 1,1,15);
+      newVideo.setDuration(123);
+      newVideo.setFormat(VideoFormat.DVD);
+      newVideo.setType(VideoType.DOCUMENT);
+      newVideo.setUrl("http://www.google.co.kr");
+      newVideo.setHeight(11);
+      newVideo.setLength(11);
+      newVideo.setWidth(11);
+      newVideo.setWeight(220);
+      newVideo.setAudience("Tout public");
+      newVideo.setDuration(310);
+      newVideo.setAudio("5.1");
+
+      newVideoDTO = new VideoDTO("sdfsdfds","Video of the Day", 1,1,personService.findById(14));
+      newVideoDTO.setDuration(123);
+      newVideoDTO.setFormat(VideoFormat.DVD.name());
+      newVideoDTO.setType(VideoType.DOCUMENT.name());
+      newVideoDTO.setUrl("http://www.google.co.kr");
+      newVideoDTO.setHeight(11);
+      newVideoDTO.setLength(11);
+      newVideoDTO.setWidth(11);
+      newVideoDTO.setWeight(220);
+      newVideoDTO.setAudience("Tout public");
+      newVideoDTO.setDuration(310);
+      newVideoDTO.setAudio("5.1");
+
+      allVideoDTOS = videoService.findAll();
+   }
 
    @Test
    @DisplayName("Verify that return TRUE if the Video exist")
    void existsById_returnTrue_OfAnExistingVideoId() {
-      List<VideoDTO> videoDTOS = videoService.findAll();
-
-      for(VideoDTO videoDTO : videoDTOS) {
+      for(VideoDTO videoDTO : allVideoDTOS) {
          String ean = videoDTO.getEan();
          assertThat(videoService.existsById(ean)).isTrue();
       }
@@ -66,11 +86,10 @@ class VideoServiceTestIT {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Video by is ID")
-   void findById_returnUser_ofExistingVideoId() {
-      List<VideoDTO> videoDTOS = videoService.findAll();
+   void findById_returnVideo_ofExistingVideoId() {
       VideoDTO found;
 
-      for(VideoDTO videoDTO : videoDTOS) {
+      for(VideoDTO videoDTO : allVideoDTOS) {
          String ean = videoDTO.getEan();
          found = videoService.findById(ean);
 
@@ -83,9 +102,8 @@ class VideoServiceTestIT {
    @DisplayName("Verify that we can't find user Video wrong ID")
    void findById_returnException_ofInexistingVideoId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         VideoDTO found = videoService.findById("klsdjfh");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById("klsdjfh"));
    }
 
 
@@ -93,18 +111,30 @@ class VideoServiceTestIT {
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Videos")
    void findAll_returnAllVideos() {
+      assertThat(allVideoDTOS.size()).isEqualTo(1);
+
+      // add new Video
+      newVideoDTO = videoService.save(newVideoDTO);
       List<VideoDTO> videoDTOS = videoService.findAll();
-      assertThat(videoDTOS.size()).isEqualTo(1);
+      assertThat(videoDTOS.size()).isEqualTo(2);
+      assertThat(videoDTOS.contains(newVideoDTO)).isTrue();
+
+      videoService.deleteById(newVideoDTO.getEan());
    }
 
    @Test
    @Tag("findAllAllowed")
    @DisplayName("Verify that we got the list of Videos that can be booked")
    void findAllAllowed_returnBookableVideos_ofAllVideos() {
-      List<VideoDTO> videoDTOS = videoService.findAll();
+      newVideo.setStock(-2);
+      VideoDTO dto = videoService.entityToDTO(newVideo);
+      dto = videoService.save(dto);
       List<VideoDTO> alloweds = videoService.findAllAllowed();
 
-      for(VideoDTO videoDTO: videoDTOS) {
+      assertThat(alloweds.contains(dto)).isFalse();
+
+
+      for(VideoDTO videoDTO: allVideoDTOS) {
          if (alloweds.contains(videoDTO)) {
             // allowed
             assertThat(videoDTO.getStock()).isGreaterThan(-videoDTO.getQuantity()*2);
@@ -113,6 +143,9 @@ class VideoServiceTestIT {
             assertThat(videoDTO.getStock()).isLessThanOrEqualTo(-videoDTO.getQuantity()*2);
          }
       }
+
+      newVideo.setStock(1);
+      videoService.deleteById(dto.getEan());
    }
 
 
@@ -134,40 +167,74 @@ class VideoServiceTestIT {
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Video by Director")
+   void getFirstId_returnFirstId_ofFilteredVideoByAuthor() {
+      VideoDTO filter = new VideoDTO();
+      filter.setDirector(personService.findById(4));
+
+      String ean = videoService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("3475001058980");
    }
 
-  /* @Test
+   @Test
+   @Tag("save")
    @DisplayName("Verify that we can create a new Video")
    void save_returnCreatedVideo_ofNewVideo() {
-      VideoDTO videoDTO = videoService.findById(VIDEO_EAN_TEST);
-      String newEan = "newVideoEAN";
-      String newTitle = "NewVideoTitle";
+      VideoDTO videoDTO = videoService.entityToDTO(newVideo);
 
-      videoDTO.setEan(newEan);
-      videoDTO.setTitle(newTitle);
-      videoDTO.setReturnDate(null);
-      videoDTO.setPublicationDate(null);
       videoDTO = videoService.save(videoDTO);
       String ean = videoDTO.getEan();
 
       assertThat(videoService.existsById(ean)).isTrue();
       videoService.deleteById(ean);
    }
-*/
+
    @Test
-   void update() {
+   @Tag("update")
+   @DisplayName("Verify that we can update an Video")
+   void update_returnUpdatedVideo_ofVideoAndNewTitle() {
+      VideoDTO videoDTO = videoService.findById(VIDEO_EAN_TEST);
+      String oldTitle = videoDTO.getTitle();
+      videoDTO.setTitle(VIDEO_TITLE_TEST);
+
+      VideoDTO videoSaved = videoService.update(videoDTO);
+      assertThat(videoSaved).isEqualTo(videoDTO);
+      VideoDTO videoFound = videoService.findById(videoDTO.getEan());
+      assertThat(videoFound).isEqualTo(videoDTO);
+
+      videoDTO.setTitle(oldTitle);
+      videoService.update(videoDTO);
    }
 
    @Test
-   void deleteById() {
+   @Tag("deleteById")
+   @DisplayName("Verify that we can delete a Video by his EAN")
+   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+      VideoDTO videoDTO = videoService.entityToDTO(newVideo);
+
+      videoDTO = videoService.save(videoDTO);
+      String ean = videoDTO.getEan();
+
+      assertThat(videoService.existsById(ean)).isTrue();
+      videoService.deleteById(ean);
+
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> videoService.findById(ean));
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Videos")
    void count_returnTheNumberOfVideos() {
+      VideoDTO videoDTO = videoService.entityToDTO(newVideo);
       assertThat(videoService.count()).isEqualTo(1);
+
+      // add an other video
+      videoDTO = videoService.save(videoDTO);
+      assertThat(videoService.count()).isEqualTo(2);
+      videoService.deleteById(videoDTO.getEan());
    }
 
 
@@ -175,11 +242,9 @@ class VideoServiceTestIT {
    @Tag("dtoToEntity")
    @DisplayName("Verify that Video DTO is converted in right Video Entity")
    void dtoToEntity_returnRightVideoEntity_ofVideoDTO() {
-      List<VideoDTO> videoDTOS = videoService.findAll();
-      String essai;
       Video entity;
 
-      for (VideoDTO dto: videoDTOS) {
+      for (VideoDTO dto: allVideoDTOS) {
          entity = videoService.dtoToEntity(dto);
          assertThat(entity.getEan()).isEqualTo(dto.getEan());
          assertThat(entity.getTitle()).isEqualTo(dto.getTitle());
@@ -208,11 +273,10 @@ class VideoServiceTestIT {
    @Tag("entityToDTO")
    @DisplayName("Verify that Video Entity is converted in right Video DTO")
    void dtoToEntity_returnRightBookDTO_ofBookEntity() {
-      List<VideoDTO> videoDTOS = videoService.findAll();
       List<Video> videos = new ArrayList<>();
       VideoDTO dto;
 
-      for (VideoDTO b: videoDTOS) {
+      for (VideoDTO b: allVideoDTOS) {
          videos.add(videoService.dtoToEntity(b));
       }
 
@@ -262,8 +326,18 @@ class VideoServiceTestIT {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Videos titles")
    void findAllTitles() {
+      VideoDTO videoDTO = videoService.entityToDTO(newVideo);
       List<String> titles = videoService.findAllTitles();
       assertThat(titles.size()).isEqualTo(1);
+
+      // add an other video
+      videoDTO.setTitle(VIDEO_TITLE_TEST);
+      videoDTO = videoService.save(videoDTO);
+      titles = videoService.findAllTitles();
+      assertThat(titles.size()).isEqualTo(2);
+      assertThat(titles.contains(VIDEO_TITLE_TEST)).isTrue();
+
+      videoService.deleteById(videoDTO.getEan());
    }
 
    @Test
@@ -272,9 +346,11 @@ class VideoServiceTestIT {
    void increaseStock_returnVideoWithIncrementedStock_ofOneVideo() {
       VideoDTO videoDTO = videoService.findById(VIDEO_EAN_TEST);
       Integer oldStock = videoDTO.getStock();
+
       videoService.increaseStock(VIDEO_EAN_TEST);
       videoDTO = videoService.findById(VIDEO_EAN_TEST);
       assertThat(videoDTO.getStock()).isEqualTo(oldStock+1);
+
       videoDTO.setStock(oldStock);
       videoService.update(videoDTO);
    }
@@ -289,6 +365,7 @@ class VideoServiceTestIT {
       videoService.decreaseStock(VIDEO_EAN_TEST);
       videoDTO = videoService.findById(VIDEO_EAN_TEST);
       assertThat(videoDTO.getStock()).isEqualTo(oldStock-1);
+
       videoDTO.setStock(oldStock);
       videoService.update(videoDTO);
    }

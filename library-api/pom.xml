@@ -10,7 +10,7 @@
 		<groupId>com.pedsf.library</groupId>
 		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>library-api</artifactId>
@@ -252,9 +252,6 @@
 
 		<profile>
 			<id>test</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<properties>
 				<activatedProperties>test</activatedProperties>
 				<configServer>http://localhost:2000</configServer>

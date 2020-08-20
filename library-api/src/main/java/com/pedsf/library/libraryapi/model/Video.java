@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.VideoFormat;
+import com.pedsf.library.dto.VideoType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,18 +32,6 @@ import java.util.Set;
 @Entity
 @Table(name = "video")
 public class Video extends MediaCommon implements Serializable {
-
-   public Video(String ean,
-                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-                @NotNull Integer quantity,
-                @NotNull Integer stock,
-                @NotNull Integer directorId) {
-      super(ean, title, quantity, stock);
-      this.directorId = directorId;
-   }
-
-   public Video() {
-   }
 
    // Video information
    @NotNull
@@ -84,5 +74,16 @@ public class Video extends MediaCommon implements Serializable {
    @Column(name = "summary", length = Parameters.SUMMARY_MAX)
    private String summary;
 
+   public Video(String ean,
+                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+                @NotNull Integer quantity,
+                @NotNull Integer stock,
+                @NotNull Integer directorId) {
+      super(ean, title, quantity, stock);
+      this.directorId = directorId;
+   }
 
+   public Video() {
+      // nothing to do
+   }
 }

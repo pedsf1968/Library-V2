@@ -10,7 +10,7 @@
 		<groupId>com.pedsf.library</groupId>
 		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>config-server</artifactId>

@@ -1,14 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.libraryapi.model.Book;
-import com.pedsf.library.libraryapi.model.BookFormat;
-import com.pedsf.library.libraryapi.model.BookType;
-import com.pedsf.library.libraryapi.repository.BookRepository;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.service.BookService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.libraryapi.model.*;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +23,22 @@ class BookServiceTestIT {
    private static final String BOOK_TITLE_TEST = "Le Horla";
 
    private static BookService bookService;
+   private static PersonService personService;
    private static Book newBook;
-   private static BookDTO newBookDTO = new BookDTO();
+   private static BookDTO newBookDTO;
    private static List<BookDTO> allBookDTOS;
 
 
    @BeforeAll
-   static void beforeAll(@Autowired BookRepository bookRepository, @Autowired PersonRepository personRepository) {
-      PersonService personService = new PersonService(personRepository);
+   static void beforeAll(@Autowired BookRepository bookRepository,
+                         @Autowired PersonRepository personRepository) {
+      personService = new PersonService(personRepository);
       bookService = new BookService(bookRepository, personService);
    }
 
    @BeforeEach
    void beforeEach() {
-      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
-      newBook.setEditorId(16);
+      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2,16);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);
@@ -58,11 +55,28 @@ class BookServiceTestIT {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newBookDTO = bookService.entityToDTO(newBook);
+      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",personService.findById(2),personService.findById(16));
+      newBookDTO.setPages(125);
+      newBookDTO.setFormat("COMICS");
+      newBookDTO.setType("HUMOR");
+      newBookDTO.setHeight(11);
+      newBookDTO.setLength(11);
+      newBookDTO.setWidth(11);
+      newBookDTO.setWeight(220);
+      newBookDTO.setSummary("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
+              "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin " +
+              "professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur," +
+              " from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered " +
+              "the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et " +
+              "Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory" +
+              " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
+              " comes from a line in section 1.10.32.");
+
       allBookDTOS = bookService.findAll();
    }
 
    @Test
+   @Tag("existsById")
    @DisplayName("Verify that return TRUE if the Book exist")
    void existsById_returnTrue_OfAnExistingBookId() {
       for(BookDTO bookDTO : allBookDTOS) {
@@ -81,7 +95,7 @@ class BookServiceTestIT {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Book by is ID")
-   void findById_returnUser_ofExistingBookId() {
+   void findById_returnBook_ofExistingBookId() {
       BookDTO found;
 
       for(BookDTO bookDTO : allBookDTOS) {
@@ -97,9 +111,8 @@ class BookServiceTestIT {
    @DisplayName("Verify that we can't find Book with wrong ID")
    void findById_returnException_ofInexistingBookId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         BookDTO found = bookService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById("klgqsdf"));
    }
 
    @Test
@@ -109,7 +122,7 @@ class BookServiceTestIT {
       BookDTO newBookDTO = bookService.entityToDTO(newBook);
       assertThat(allBookDTOS.size()).isEqualTo(7);
 
-      // add one book to increasee the list
+      // add one book to increase the list
       newBookDTO = bookService.save(newBookDTO);
       List<BookDTO> bookDTOS = bookService.findAll();
       assertThat(bookDTOS.size()).isEqualTo(8);
@@ -123,9 +136,11 @@ class BookServiceTestIT {
    @DisplayName("Verify that we got the list of Books that can be booked")
    void findAllAllowed_returnBookableBooks_ofAllBooks() {
       newBook.setStock(-2);
-      BookDTO newBookDTO = bookService.entityToDTO(newBook);
-      newBookDTO = bookService.save(newBookDTO);
+      BookDTO dto = bookService.entityToDTO(newBook);
+      dto = bookService.save(dto);
       List<BookDTO> alloweds = bookService.findAllAllowed();
+
+      assertThat(alloweds.contains(dto)).isFalse();
 
       for(BookDTO bookDTO: allBookDTOS) {
          if (alloweds.contains(bookDTO)) {
@@ -138,7 +153,7 @@ class BookServiceTestIT {
       }
 
       newBook.setStock(1);
-      bookService.deleteById(newBookDTO.getEan());
+      bookService.deleteById(dto.getEan());
    }
 
    @Test
@@ -146,6 +161,7 @@ class BookServiceTestIT {
    @DisplayName("Verify that we can find one Book by his title and author")
    void findAllFiltered_returnOnlyOneBook_ofExistingFirstTitleAndAuthor() {
       List<BookDTO> found;
+
       for(BookDTO b:allBookDTOS) {
          BookDTO filter = new BookDTO();
          filter.setTitle(b.getTitle());
@@ -158,7 +174,15 @@ class BookServiceTestIT {
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Book by Author")
+   void getFirstId_returnFirstId_ofFilteredBookByAuthor() {
+      BookDTO filter = new BookDTO();
+      filter.setAuthor(personService.findById(1));
+
+      String ean = bookService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("978-2253004226");
    }
 
    @Test
@@ -176,7 +200,7 @@ class BookServiceTestIT {
 
    @Test
    @Tag("update")
-   @DisplayName("Verify that we can update an Book")
+   @DisplayName("Verify that we can update a Book")
    void update_returnUpdatedBook_ofBookAndNewTitle() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       String oldTitle = bookDTO.getTitle();
@@ -194,7 +218,7 @@ class BookServiceTestIT {
    @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
-   void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
+   void deleteById_returnExceptionWhenGetBookById_ofDeletedBookById() {
       BookDTO bookDTO = bookService.entityToDTO(newBook);
 
       bookDTO = bookService.save(bookDTO);
@@ -203,9 +227,8 @@ class BookServiceTestIT {
       assertThat(bookService.existsById(ean)).isTrue();
       bookService.deleteById(ean);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         bookService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById(ean));
    }
 
    @Test
@@ -218,6 +241,7 @@ class BookServiceTestIT {
       // add an other book
       bookDTO = bookService.save(bookDTO);
       assertThat(bookService.count()).isEqualTo(8);
+
       bookService.deleteById(bookDTO.getEan());
    }
 
@@ -304,18 +328,18 @@ class BookServiceTestIT {
    @Tag("findAllTitles")
    @DisplayName("Verify that we get all Books titles")
    void findAllTitles() {
-      BookDTO newBookDTO = bookService.entityToDTO(newBook);
+      BookDTO bookDTO = bookService.entityToDTO(newBook);
       List<String> titles = bookService.findAllTitles();
       assertThat(titles.size()).isEqualTo(7);
 
       // add an other book
-      newBookDTO.setTitle(BOOK_TITLE_TEST);
-      newBookDTO = bookService.save(newBookDTO);
+      bookDTO.setTitle(BOOK_TITLE_TEST);
+      bookDTO = bookService.save(bookDTO);
       titles = bookService.findAllTitles();
       assertThat(titles.size()).isEqualTo(8);
       assertThat(titles.contains(BOOK_TITLE_TEST)).isTrue();
 
-      bookService.deleteById(newBookDTO.getEan());
+      bookService.deleteById(bookDTO.getEan());
    }
 
    @Test
@@ -324,9 +348,11 @@ class BookServiceTestIT {
    void increaseStock_returnBookWithIncrementedStock_ofOneBook() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       Integer oldStock = bookDTO.getStock();
+
       bookService.increaseStock(BOOK_EAN_TEST);
       bookDTO = bookService.findById(BOOK_EAN_TEST);
       assertThat(bookDTO.getStock()).isEqualTo(oldStock+1);
+
       bookDTO.setStock(oldStock);
       bookService.update(bookDTO);
    }
@@ -337,9 +363,11 @@ class BookServiceTestIT {
    void decreaseStock_returnBookWithDecrementedStock_ofOneBook() {
       BookDTO bookDTO = bookService.findById(BOOK_EAN_TEST);
       Integer oldStock = bookDTO.getStock();
+
       bookService.decreaseStock(BOOK_EAN_TEST);
       bookDTO = bookService.findById(BOOK_EAN_TEST);
       assertThat(bookDTO.getStock()).isEqualTo(oldStock-1);
+
       bookDTO.setStock(oldStock);
       bookService.update(bookDTO);
    }

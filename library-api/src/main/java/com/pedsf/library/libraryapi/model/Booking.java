@@ -50,4 +50,16 @@ public class Booking {
    @NotNull
    @Column(name = "rank")
    private Integer rank;
+
+   public Booking(Integer id, @NotNull String ean, @NotNull Integer userId, Date bookingDate, @NotNull Integer rank) {
+      this.id = id;
+      this.ean = ean;
+      this.userId = userId;
+      this.bookingDate = bookingDate;
+      this.rank = rank;
+   }
+
+   public Booking() {
+      // nothing to do
+   }
 }

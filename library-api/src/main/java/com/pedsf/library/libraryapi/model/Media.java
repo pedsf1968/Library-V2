@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.MediaStatus;
 import com.pedsf.library.model.MediaType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,15 +28,6 @@ import java.sql.Date;
 @Table(name = "media")
 public class Media implements Serializable {
 
-   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType) {
-      this.id = id;
-      this.ean = ean;
-      this.mediaType = mediaType;
-   }
-
-   public Media() {
-   }
-
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy =  GenerationType.IDENTITY)
@@ -48,13 +40,25 @@ public class Media implements Serializable {
    @NotNull
    @Column(name = "media_type", length = Parameters.MEDIA_TYPE_MAX)
    @Enumerated(EnumType.STRING)
-   protected MediaType mediaType;
+   private MediaType mediaType;
+
+   @Column(name = "status", length = Parameters.STATUS_MAX)
+   @Enumerated(EnumType.STRING)
+   private MediaStatus status;
 
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    @Column(name = "return_date")
    private Date returnDate;
 
-   @Column(name = "status", length = Parameters.STATUS_MAX)
-   @Enumerated(EnumType.STRING)
-   private MediaStatus status;
+   public Media(Integer id, @NotNull String ean, @NotNull MediaType mediaType, MediaStatus status, Date returnDate) {
+      this.id = id;
+      this.ean = ean;
+      this.mediaType = mediaType;
+      this.status = status;
+      this.returnDate = returnDate;
+   }
+
+   public Media() {
+      // nothing to do
+   }
 }

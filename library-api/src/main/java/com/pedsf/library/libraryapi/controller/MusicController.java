@@ -105,7 +105,7 @@ public class MusicController {
    }
 
    @PutMapping(value = "/{musicId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<MusicDTO> updateMusic(@PathVariable( "musicId" ) Integer musicId, @Valid @RequestBody MusicDTO musicDTO) {
+   public ResponseEntity<MusicDTO> updateMusic(@PathVariable( "musicId" ) String musicId, @Valid @RequestBody MusicDTO musicDTO) {
 
       try {
          musicDTO = musicService.update(musicDTO);

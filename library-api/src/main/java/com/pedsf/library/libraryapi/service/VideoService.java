@@ -104,15 +104,10 @@ public class VideoService implements GenericMediaService<VideoDTO, Video,String>
       return findAllFiltered(filter).get(0).getEan();
    }
 
-
    @Override
    public VideoDTO save(VideoDTO videoDTO) {
-      if (   !StringUtils.isEmpty(videoDTO.getEan()) &&
-            !StringUtils.isEmpty(videoDTO.getTitle()) &&
-            !StringUtils.isEmpty(videoDTO.getAudience()) &&
+      if (  !StringUtils.isEmpty(videoDTO.getTitle()) &&
             !StringUtils.isEmpty(videoDTO.getDirector()) &&
-            !StringUtils.isEmpty(videoDTO.getDuration()) &&
-            !StringUtils.isEmpty(videoDTO.getAudio()) &&
             !StringUtils.isEmpty(videoDTO.getType()) &&
             !StringUtils.isEmpty(videoDTO.getFormat())) {
 
@@ -147,7 +142,7 @@ public class VideoService implements GenericMediaService<VideoDTO, Video,String>
 
          return entityToDTO(video);
       } else {
-         throw new BadRequestException(CANNOT_SAVE);
+         throw new ConflictException(CANNOT_SAVE);
       }
    }
 

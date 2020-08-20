@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.MusicFormat;
+import com.pedsf.library.dto.MusicType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,22 +29,6 @@ import java.sql.Date;
 @Entity
 @Table(name = "music")
 public class Music extends MediaCommon implements Serializable {
-
-   public Music(String ean,
-                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-                @NotNull Integer quantity,
-                @NotNull Integer stock,
-                Integer authorId,
-                Integer composerId,
-                @NotNull Integer interpreterId) {
-      super(ean, title, quantity, stock);
-      this.authorId = authorId;
-      this.composerId = composerId;
-      this.interpreterId = interpreterId;
-   }
-
-   public Music() {
-   }
 
    // Music information
    @Column(name = "author_id")
@@ -73,4 +59,21 @@ public class Music extends MediaCommon implements Serializable {
 
    @Column(name = "url", length = Parameters.URL_MAX)
    private String url;
+
+   public Music(String ean,
+                @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+                @NotNull Integer quantity,
+                @NotNull Integer stock,
+                Integer authorId,
+                Integer composerId,
+                @NotNull Integer interpreterId) {
+      super(ean, title, quantity, stock);
+      this.authorId = authorId;
+      this.composerId = composerId;
+      this.interpreterId = interpreterId;
+   }
+
+   public Music() {
+      // nothing to do
+   }
 }

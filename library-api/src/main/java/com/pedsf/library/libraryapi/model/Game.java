@@ -1,6 +1,8 @@
 package com.pedsf.library.libraryapi.model;
 
 import com.pedsf.library.Parameters;
+import com.pedsf.library.dto.GameFormat;
+import com.pedsf.library.dto.GameType;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,17 +29,6 @@ import java.sql.Date;
 @Table(name = "game")
 public class Game extends MediaCommon implements Serializable {
 
-   public Game(String ean, @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
-               @NotNull Integer quantity,
-               @NotNull Integer stock,
-               @NotNull Integer editorId) {
-      super(ean, title, quantity, stock);
-      this.editorId = editorId;
-   }
-
-   public Game() {
-   }
-
    // Game information
    @NotNull
    @Column(name = "editor_id")
@@ -63,4 +54,16 @@ public class Game extends MediaCommon implements Serializable {
 
    @Column(name = "summary", length = Parameters.SUMMARY_MAX)
    private String summary;
+
+   public Game(String ean, @NotNull @NotBlank @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX) String title,
+               @NotNull Integer quantity,
+               @NotNull Integer stock,
+               @NotNull Integer editorId) {
+      super(ean, title, quantity, stock);
+      this.editorId = editorId;
+   }
+
+   public Game() {
+      // nothing to do
+   }
 }

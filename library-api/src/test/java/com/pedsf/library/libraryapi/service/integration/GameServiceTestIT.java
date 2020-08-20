@@ -1,11 +1,10 @@
 package com.pedsf.library.libraryapi.service.integration;
 
+import com.pedsf.library.dto.*;
 import com.pedsf.library.dto.business.GameDTO;
 import com.pedsf.library.libraryapi.model.*;
-import com.pedsf.library.libraryapi.repository.GameRepository;
-import com.pedsf.library.libraryapi.repository.PersonRepository;
-import com.pedsf.library.libraryapi.service.GameService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +24,27 @@ class GameServiceTestIT {
    private static final String GAME_TITLE_TEST = "The green tomato";
 
    private static GameService gameService;
+   private static PersonService personService;
    private static Game newGame;
-   private static GameDTO newGameDTO = new GameDTO();
+   private static GameDTO newGameDTO;
    private static List<GameDTO> allGameDTOS;
 
 
    @BeforeAll
    static void beforeAll(@Autowired GameRepository gameRepository, @Autowired PersonRepository personRepository) {
-      PersonService personService = new PersonService(personRepository);
+      personService = new PersonService(personRepository);
       gameService =  new GameService(gameRepository,personService);
    }
 
    @BeforeEach
    void beforeEach() {
-      newGame = new Game();
-
-      newGame.setTitle("The green tomato");
-      newGame.setEditorId(3);
-      newGame.setEan("954-87sdf797");
+      newGame = new Game("954-87sdf797","The green tomato",1,1,16);
       newGame.setFormat(GameFormat.NINTENDO_WII);
       newGame.setType(GameType.ADVENTURE);
       newGame.setHeight(11);
       newGame.setLength(11);
       newGame.setWidth(11);
       newGame.setWeight(220);
-      newGame.setStock(1);
-      newGame.setQuantity(1);
       newGame.setPegi("3+");
       newGame.setSummary("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
             "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin " +
@@ -61,12 +55,29 @@ class GameServiceTestIT {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newGameDTO = gameService.entityToDTO(newGame);
+      newGameDTO = new GameDTO("954-87sdf797","The green tomato",1,1,personService.findById(16));
+      newGame.setFormat(GameFormat.NINTENDO_WII);
+      newGame.setType(GameType.ADVENTURE);
+      newGame.setHeight(11);
+      newGame.setLength(11);
+      newGame.setWidth(11);
+      newGame.setWeight(220);
+      newGame.setPegi("3+");
+      newGame.setSummary("Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of " +
+              "classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin " +
+              "professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur," +
+              " from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered " +
+              "the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et " +
+              "Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory" +
+              " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
+              " comes from a line in section 1.10.32.");
+
       allGameDTOS = gameService.findAll();
    }
 
 
    @Test
+   @Tag("existsById")
    @DisplayName("Verify that return TRUE if the Game exist")
    void existsById_returnTrue_OfAnExistingGameId() {
       for(GameDTO gameDTO : allGameDTOS) {
@@ -79,13 +90,13 @@ class GameServiceTestIT {
    @Tag("existsById")
    @DisplayName("Verify that return FALSE if the Game doesn't exist")
    void existsById_returnFalse_OfAnInexistingGameId() {
-      assertThat(gameService.existsById("5lkjh5")).isFalse();
+      assertThat(gameService.existsById("44lk65465")).isFalse();
    }
 
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Game by is ID")
-   void findById_returnUser_ofExistingGameId() {
+   void findById_returnGame_ofExistingGameId() {
       GameDTO found;
 
       for(GameDTO gameDTO : allGameDTOS) {
@@ -101,15 +112,14 @@ class GameServiceTestIT {
    @DisplayName("Verify that we can't find Game with wrong ID")
    void findById_returnException_ofInexistingGameId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         GameDTO found = gameService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById("klgqsdf"));
    }
 
    @Test
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Games")
-   void findAll_returnAllGamesUser() {
+      void findAll_returnAllGames() {
       GameDTO newGameDTO = gameService.entityToDTO(newGame);
       assertThat(allGameDTOS.size()).isEqualTo(2);
 
@@ -127,12 +137,13 @@ class GameServiceTestIT {
    @DisplayName("Verify that we got the list of Games that can be booked")
    void findAllAllowed_returnBookableGames_ofAllGames() {
       newGame.setStock(-2);
-      GameDTO newGameDTO = gameService.entityToDTO(newGame);
-      newGameDTO = gameService.save(newGameDTO);
-      List<GameDTO> gameDTOS = gameService.findAll();
+      GameDTO dto = gameService.entityToDTO(newGame);
+      dto = gameService.save(dto);
       List<GameDTO> alloweds = gameService.findAllAllowed();
 
-      for(GameDTO gameDTO: gameDTOS) {
+      assertThat(alloweds.contains(dto)).isFalse();
+
+      for(GameDTO gameDTO: allGameDTOS) {
          if (alloweds.contains(gameDTO)) {
             // allowed
             assertThat(gameDTO.getStock()).isGreaterThan(-gameDTO.getQuantity()*2);
@@ -143,10 +154,9 @@ class GameServiceTestIT {
       }
 
       newGame.setStock(1);
-      gameService.deleteById(newGameDTO.getEan());
+      gameService.deleteById(dto.getEan());
 
    }
-
 
    @Test
    @Tag("findAllFiltered")
@@ -165,10 +175,19 @@ class GameServiceTestIT {
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Game by Editor")
+   void getFirstId_returnFirstId_ofFilteredBookByEditor() {
+      GameDTO filter = new GameDTO();
+      filter.setEditor(personService.findById(16));
+
+      String ean = gameService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("5035223122470");
    }
 
    @Test
+   @Tag("save")
    @DisplayName("Verify that we can create a new Game")
    void save_returnCreatedGame_ofNewGame() {
       GameDTO newGameDTO = gameService.entityToDTO(newGame);
@@ -209,13 +228,22 @@ class GameServiceTestIT {
       assertThat(gameService.existsById(ean)).isTrue();
       gameService.deleteById(ean);
 
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> gameService.findById(ean));
+
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Games")
    void count_returnTheNumberOfGames() {
+      GameDTO gameDTO = gameService.entityToDTO(newGame);
       assertThat(gameService.count()).isEqualTo(2);
+
+      // add an other game
+      gameDTO = gameService.save(gameDTO);
+      assertThat(gameService.count()).isEqualTo(3);
+      gameService.deleteById(gameDTO.getEan());
    }
 
 

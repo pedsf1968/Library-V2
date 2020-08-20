@@ -98,16 +98,19 @@
       <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
       <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,../target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
       <sonar.coverage.exclusions>
-         batch/src/main/java/com/pedsf/library/batch/configuration/*.java
-         data-model/src/mail/java/com/pedsf/library/*.java
-         config-server/src/main/java/com/pedsf/library/configserver/*.java
-         eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java
-         mail-api/src/main/java/com/pedsf/library/mailapi/configuration/*.java
-         user-api/src/main/java/com/pedsf/library/userapi/UserApiApplication.java
-         user-api/src/main/java/com/pedsf/library/userapi/configuration/*.java
-         user-api/src/main/java/com/pedsf/library/userapi/model/*.java
-         user-api/src/main/java/com/pedsf/library/userapi/repository/*.java
-         zuul-server/src/main/java/com/pedsf/library/zuulserver/*.java
+         **/configuration/**/*.java,
+         **/dto/**/*.java,
+         **/exception/*Exception.java,
+         **/model/**/*.java,
+         **/repository/**/*.java,
+         config-server/src/main/java/com/pedsf/library/configserver/*.java,
+         eureka-server/src/main/java/com/pedsf/library/eurekaserver/*.java,
+         zuul-server/src/main/java/com/pedsf/library/zuulserver/*.java,
+         data-model/src/mail/java/com/pedsf/library/*.java,
+         **/*Application.java,
+         **/*ApiProxy.java,
+         data-model/src/main/java/com/pedsf/library/Parameters.java,
+         web/src/main/java/com/pedsf/library/web/web/PathTable.java
       </sonar.coverage.exclusions>
    </properties>
 
@@ -124,7 +127,7 @@
       <module>mail-api</module>
       <module>user-api</module>
       <module>library-api</module>
-      <module>web</module>
+      <module>web-api</module>
       <module>batch</module>
    </modules>
 
@@ -258,7 +261,7 @@
          <!-- ========================================================== WEB -->
          <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>web</artifactId>
+            <artifactId>web-api</artifactId>
             <version>${project.version}</version>
          </dependency>
          <!-- ======================================================== BATCH -->
@@ -682,6 +685,9 @@
                   </goals>
                   <configuration>
                      <skipTests>false</skipTests>
+                     <systemPropertyVariables>
+                        <user.timezone>CET</user.timezone>
+                     </systemPropertyVariables>
                      <includes>
                         <include>**/*Test.java</include>
                      </includes>
@@ -695,6 +701,9 @@
                   </goals>
                   <configuration>
                      <skipTests>false</skipTests>
+                     <systemPropertyVariables>
+                        <user.timezone>CET</user.timezone>
+                     </systemPropertyVariables>
                      <includes>
                         <include>**/*IT.*</include>
                         <include>**/*Test.*</include>

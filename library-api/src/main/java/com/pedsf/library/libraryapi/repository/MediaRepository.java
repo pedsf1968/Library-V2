@@ -30,17 +30,14 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
    @Query(value = "SELECT * FROM Media WHERE status = 'FREE' AND ean = :ean LIMIT 1", nativeQuery = true)
    Media findFreeByEan(String ean);
 
-   @Query(value = "SELECT * FROM Media WHERE status = 'BLOCKED' AND ean = :ean", nativeQuery = true)
+   @Query(value = "SELECT * FROM Media WHERE status = 'BLOCKED' AND ean = :ean LIMIT 1", nativeQuery = true)
    Media findBlockedByEan(String ean);
 
-   @Query(value = "SELECT * FROM Media WHERE status = 'BOOKED' AND ean = :ean", nativeQuery = true)
+   @Query(value = "SELECT * FROM Media WHERE status = 'BOOKED' AND ean = :ean LIMIT 1", nativeQuery = true)
    Media findBoockedByEan(String ean);
 
    @Query(value="SELECT media_type FROM Media WHERE ean = :ean LIMIT 1", nativeQuery = true)
    String findMediaTypeByEan(String ean);
-
-   @Query(value ="SELECT return_date FROM media WHERE ean = :ean ORDER BY return_date LIMIT 1", nativeQuery = true)
-   Date getNextReturnDateByEan(String ean);
 
    @Query(value ="SELECT * FROM media WHERE ean = :ean ORDER BY return_date LIMIT 1", nativeQuery = true)
    Media getNextReturnByEan(String ean);
@@ -58,21 +55,21 @@ public interface MediaRepository extends JpaRepository<Media, Integer>, JpaSpeci
 
    @Transactional
    @Modifying(clearAutomatically = true)
-   @Query(value = "UPDATE Media SET status = 'BORROWED', return_date = :date WHERE id = :mediaId", nativeQuery = true)
+   @Query(value = "UPDATE media SET status = 'BORROWED', return_date = :date WHERE id = :mediaId", nativeQuery = true)
    void borrow(Integer mediaId, Date date);
 
    @Transactional
    @Modifying(clearAutomatically = true)
-   @Query("UPDATE Media m SET m.status = 'FREE', m.returnDate = null WHERE m.id = ?1")
+   @Query(value = "UPDATE media SET status = 'FREE', return_date = NULL WHERE id = :mediaId", nativeQuery = true)
    void release(Integer mediaId);
 
    @Transactional
    @Modifying(clearAutomatically = true)
-   @Query("UPDATE Media m SET m.returnDate = ?1 WHERE m.id = ?2")
-   void updateReturnDate(Date date, Integer mediaId);
+   @Query(value = "UPDATE media SET return_date = :returnDate WHERE id = :mediaId", nativeQuery = true)
+   void updateReturnDate(Integer mediaId,Date returnDate);
 
    @Transactional
    @Modifying(clearAutomatically = true)
-   @Query(value = "UPDATE Media SET status = :status WHERE id = :mediaId", nativeQuery = true)
+   @Query(value = "UPDATE media SET status = :status WHERE id = :mediaId", nativeQuery = true)
    void setStatus(Integer mediaId, String status);
 }

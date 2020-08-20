@@ -25,21 +25,6 @@ import java.sql.Date;
 @Table(name = "person")
 public class Person implements Serializable {
 
-   public Person(Integer id,
-                 @NotNull @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
-         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX) String firstName,
-                 @NotNull @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
-         message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX) String lastName,
-                 Date birthDate) {
-      this.id = id;
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.birthDate = birthDate;
-   }
-
-   public Person() {
-   }
-
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy =  GenerationType.IDENTITY)
@@ -68,4 +53,20 @@ public class Person implements Serializable {
    @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    @Column(name = "photo_url", length = Parameters.URL_MAX)
    private String photoUrl;
+
+   public Person(Integer id,
+                 @NotNull @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
+                       message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX) String firstName,
+                 @NotNull @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
+                       message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX) String lastName,
+                 Date birthDate) {
+      this.id = id;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.birthDate = birthDate;
+   }
+
+   public Person() {
+      // nothing to do
+   }
 }

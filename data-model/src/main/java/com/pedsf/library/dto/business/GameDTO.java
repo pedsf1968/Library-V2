@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Game
@@ -31,18 +32,6 @@ import java.sql.Date;
 @Data
 public class GameDTO extends MediaCommonDTO implements Serializable {
 
-   public GameDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
-                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                  @NotNull Integer quantity,
-                  @NotNull Integer stock,
-                  PersonDTO editor) {
-      super(ean, title, quantity, stock);
-      this.editor = editor;
-   }
-
-   public GameDTO() {
-   }
-
    // Game information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
@@ -57,4 +46,37 @@ public class GameDTO extends MediaCommonDTO implements Serializable {
    private String url;
    @Size(max = Parameters.SUMMARY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.SUMMARY_MAX)
    private String summary;
+
+   public GameDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                  @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                  @NotNull Integer quantity,
+                  @NotNull Integer stock,
+                  PersonDTO editor) {
+      super(ean, title, quantity, stock);
+      this.editor = editor;
+   }
+
+   public GameDTO() {
+      // nothing to do
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof GameDTO)) return false;
+      if (!super.equals(o)) return false;
+      GameDTO gameDTO = (GameDTO) o;
+      return Objects.equals(getPublicationDate(), gameDTO.getPublicationDate()) &&
+            getEditor().equals(gameDTO.getEditor()) &&
+            Objects.equals(getType(), gameDTO.getType()) &&
+            Objects.equals(getFormat(), gameDTO.getFormat()) &&
+            Objects.equals(getPegi(), gameDTO.getPegi()) &&
+            Objects.equals(getUrl(), gameDTO.getUrl()) &&
+            Objects.equals(getSummary(), gameDTO.getSummary());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getEditor(), getType(), getFormat(), getPegi(), getUrl(), getSummary());
+   }
 }

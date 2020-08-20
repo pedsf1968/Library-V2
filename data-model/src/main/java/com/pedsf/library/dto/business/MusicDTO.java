@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Music
@@ -34,21 +35,6 @@ import java.sql.Date;
 @Data
 public class MusicDTO extends MediaCommonDTO implements Serializable {
 
-   public MusicDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean, @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                   @NotNull Integer quantity,
-                   @NotNull Integer stock,
-                   PersonDTO author,
-                   PersonDTO composer,
-                   PersonDTO interpreter) {
-      super(ean, title, quantity, stock);
-      this.author = author;
-      this.composer = composer;
-      this.interpreter = interpreter;
-   }
-
-   public MusicDTO() {
-   }
-
    // Music information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
@@ -62,4 +48,41 @@ public class MusicDTO extends MediaCommonDTO implements Serializable {
    private String format;
    @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
+
+   public MusicDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean, @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                   @NotNull Integer quantity,
+                   @NotNull Integer stock,
+                   PersonDTO author,
+                   PersonDTO composer,
+                   PersonDTO interpreter) {
+      super(ean, title, quantity, stock);
+      this.author = author;
+      this.composer = composer;
+      this.interpreter = interpreter;
+   }
+
+   public MusicDTO() {
+      // nothing to do
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof MusicDTO)) return false;
+      if (!super.equals(o)) return false;
+      MusicDTO musicDTO = (MusicDTO) o;
+      return Objects.equals(getPublicationDate(), musicDTO.getPublicationDate()) &&
+            getAuthor().equals(musicDTO.getAuthor()) &&
+            getComposer().equals(musicDTO.getComposer()) &&
+            getInterpreter().equals(musicDTO.getInterpreter()) &&
+            Objects.equals(getDuration(), musicDTO.getDuration()) &&
+            Objects.equals(getType(), musicDTO.getType()) &&
+            Objects.equals(getFormat(), musicDTO.getFormat()) &&
+            Objects.equals(getUrl(), musicDTO.getUrl());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getAuthor(), getComposer(), getInterpreter(), getDuration(), getType(), getFormat(), getUrl());
+   }
 }

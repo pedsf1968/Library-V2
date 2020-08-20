@@ -108,7 +108,7 @@ public class VideoController {
    }
 
    @PutMapping(value = "/{videoId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<VideoDTO> updateVideo(@PathVariable( "videoId" ) Integer videoId, @Valid @RequestBody VideoDTO videoDTO) {
+   public ResponseEntity<VideoDTO> updateVideo(@PathVariable( "videoId" ) String videoId, @Valid @RequestBody VideoDTO videoDTO) {
 
       try {
          videoDTO = videoService.update(videoDTO);

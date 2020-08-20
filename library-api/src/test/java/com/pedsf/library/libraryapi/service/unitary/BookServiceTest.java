@@ -1,19 +1,14 @@
 package com.pedsf.library.libraryapi.service.unitary;
 
-import com.pedsf.library.dto.business.BookDTO;
-import com.pedsf.library.dto.business.PersonDTO;
-import com.pedsf.library.exception.ResourceNotFoundException;
-import com.pedsf.library.libraryapi.model.Book;
-import com.pedsf.library.libraryapi.model.BookFormat;
-import com.pedsf.library.libraryapi.model.BookType;
-import com.pedsf.library.libraryapi.repository.BookRepository;
-import com.pedsf.library.libraryapi.repository.BookSpecification;
-import com.pedsf.library.libraryapi.service.BookService;
-import com.pedsf.library.libraryapi.service.PersonService;
+import com.pedsf.library.dto.*;
+import com.pedsf.library.dto.business.*;
+import com.pedsf.library.exception.*;
+import com.pedsf.library.libraryapi.model.*;
+import com.pedsf.library.libraryapi.repository.*;
+import com.pedsf.library.libraryapi.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -23,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,25 +28,18 @@ import static org.mockito.ArgumentMatchers.anyInt;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 class BookServiceTest {
-   private static final String BOOK_EAN_TEST = "978-2253002864";
    private static final String BOOK_TITLE_TEST = "Le Horla";
-
+   private static final List<PersonDTO> allPersons = new ArrayList<>();
+   private static final List<Book> allBooks = new ArrayList<>();
+   private static final List<Book> allAllowedBooks = new ArrayList<>();
 
    @Mock
    private PersonService personService;
    @Mock
    private BookRepository bookRepository;
-
    private BookService bookService;
-
-
-   private static final List<PersonDTO> allPersons = new ArrayList<>();
-   private static final List<Book> allBooks = new ArrayList<>();
-   private static final List<Book> allAllowedBooks = new ArrayList<>();
-
    private Book newBook;
    private BookDTO newBookDTO;
-
 
    @BeforeAll
    static void beforeAll() {
@@ -71,29 +60,37 @@ class BookServiceTest {
       allPersons.add( new PersonDTO(15,"EA","Electronic Arts",Date.valueOf("1982-05-28")));
       allPersons.add( new PersonDTO(16,"Microsoft","Microsoft",null));
 
-      allBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1));
-      allBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1));
-      allBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1));
-      allBooks.add( new Book("978-2253010692","L'éducation sentimentale",2,-4,"9782253010692",2));
-      allBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2));
-      allBooks.add( new Book("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",3));
-      allBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3));
+      allBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1,11));
+      allBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1,11));
+      allBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1,11));
+      allBooks.add( new Book("978-2253010692","L'éducation sentimentale",2,-4,"9782253010692",2,11));
+      allBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2,11));
+      allBooks.add( new Book("978-2253096337","Les Misérables (Tome 1)",3,-6,"9782253096337",3,11));
+      allBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3,11));
 
-      allAllowedBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1));
-      allAllowedBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1));
-      allAllowedBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1));
-      allAllowedBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2));
-      allAllowedBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3));
+      allAllowedBooks.add( new Book("978-2253004226","Germinal",3,2,"9782253004226",1,11));
+      allAllowedBooks.add( new Book("978-2253002864","Au bonheur des dames",1,0,"9782253002864",1,11));
+      allAllowedBooks.add( new Book("978-2253003656","Nana",2,1,"9782253003656",1,11));
+      allAllowedBooks.add( new Book("978-2070413119","Madame Bovary",2,-1,"9782070413119",2,11));
+      allAllowedBooks.add( new Book("978-2253096344","Les Misérables (Tome 2)",3,1,"9782253096344",3,11));
+
+      for(Book book:allBooks) {
+         book.setFormat(BookFormat.POCKET);
+         book.setType(BookType.NOVEL);
+      }
+
+      for(Book book:allAllowedBooks) {
+         book.setFormat(BookFormat.POCKET);
+         book.setType(BookType.NOVEL);
+      }
 
    }
-
 
    @BeforeEach
    void beforeEach() {
       bookService = new BookService(bookRepository,personService);
 
-      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2);
-      newBook.setEditorId(16);
+      newBook = new Book("954-8789797","The green tomato",1,1,"9548789797",2,10);
       newBook.setPages(125);
       newBook.setFormat(BookFormat.COMICS);
       newBook.setType(BookType.HUMOR);
@@ -110,11 +107,10 @@ class BookServiceTest {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",allPersons.get(1));
-      newBookDTO.setEditor(allPersons.get(15));
+      newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",allPersons.get(1),allPersons.get(9));
       newBookDTO.setPages(125);
-      newBookDTO.setFormat("COMICS");
-      newBookDTO.setType("HUMOR");
+      newBookDTO.setFormat(BookFormat.COMICS.name());
+      newBookDTO.setType(BookType.HUMOR.name());
       newBookDTO.setHeight(11);
       newBookDTO.setLength(11);
       newBookDTO.setWidth(11);
@@ -139,16 +135,12 @@ class BookServiceTest {
       Mockito.lenient().when(bookRepository.findByEan("978-2253096344")).thenReturn(java.util.Optional.ofNullable(allBooks.get(6)));
       Mockito.lenient().when(bookRepository.findByEan("954-8789797")).thenReturn(java.util.Optional.ofNullable(newBook));
 
-      //Mockito.lenient().when(personService.findById(2)).thenReturn(allPersons.get(1));
-      //Mockito.lenient().when(personService.findById(16)).thenReturn(allPersons.get(15));
-
-      ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
       Mockito.lenient().when(personService.findById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allPersons.get((Integer) invocation.getArguments()[0]-1));
-
    }
 
    @Test
+   @Tag("existsById")
    @DisplayName("Verify that return TRUE if the Book exist")
    void existsById_returnTrue_OfAnExistingBookId() {
       for(Book book : allBooks) {
@@ -167,7 +159,7 @@ class BookServiceTest {
    @Test
    @Tag("findById")
    @DisplayName("Verify that we can find Book by is ID")
-   void findById_returnUser_ofExistingBookId() {
+   void findById_returnBook_ofExistingBookId() {
       BookDTO found;
 
       for(Book book : allBooks) {
@@ -183,9 +175,8 @@ class BookServiceTest {
    @DisplayName("Verify that we can't find Book with wrong ID")
    void findById_returnException_ofInexistingBookId() {
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         BookDTO found = bookService.findById("klgqsdf");
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById("klgqsdf"));
    }
 
    @Test
@@ -193,6 +184,7 @@ class BookServiceTest {
    @DisplayName("Verify that we have the list of all Books")
    void findAll_returnAllBooks() {
       List<BookDTO> bookDTOS = bookService.findAll();
+
       assertThat(bookDTOS.size()).isEqualTo(7);
 
       for(Book book: allBooks) {
@@ -200,6 +192,17 @@ class BookServiceTest {
          assertThat(bookDTOS.contains(bookDTO)).isTrue();
       }
    }
+
+   @Test
+   @Tag("findAll")
+   @DisplayName("Verify that we have ResourceNotFoundException if there is no Book")
+   void findAll_throwResourceNotFoundException_ofEmptyList() {
+      List<Book> emptyList = new ArrayList<>();
+      Mockito.lenient().when(bookRepository.findAll()).thenReturn(emptyList);
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.findAll());
+   }
+
 
    @Test
    @Tag("findAllAllowed")
@@ -213,10 +216,10 @@ class BookServiceTest {
 
          if (alloweds.contains(bookDTO)) {
             // allowed
-            assertThat(bookDTO.getStock()).isGreaterThan(-bookDTO.getQuantity()*2);
+            assertThat(bookDTO.getQuantity()*2).isGreaterThan(-bookDTO.getStock());
          } else {
             // not allowed
-            assertThat(bookDTO.getStock()).isLessThanOrEqualTo(-bookDTO.getQuantity()*2);
+            assertThat(bookDTO.getQuantity()*2).isEqualTo(-bookDTO.getStock());
          }
       }
    }
@@ -224,28 +227,38 @@ class BookServiceTest {
    @Test
    @Tag("findAllFiltered")
    @DisplayName("Verify that we can find one Book by his title and author")
-   @Disabled
    void findAllFiltered_returnOnlyOneBook_ofExistingFirstTitleAndAuthor() {
-
       List<BookDTO> found;
+
       for(Book book:allBooks) {
          Book filter = new Book();
          filter.setTitle(book.getTitle());
          filter.setAuthorId(book.getAuthorId());
 
-         BookSpecification bookSpecification = new BookSpecification(filter);
-         Mockito.lenient().when(bookRepository.findAll(bookSpecification)).thenReturn(Arrays.asList(book));
+         Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Collections.singletonList(book));
 
          BookDTO filterDTO = bookService.entityToDTO(filter);
          found = bookService.findAllFiltered(filterDTO);
+
          assertThat(found.size()).isEqualTo(1);
-         assertThat(found.get(0)).isEqualTo(book);
+         assertThat(found.get(0)).isEqualTo(bookService.entityToDTO(book));
       }
    }
 
    @Test
-   void getFirstId() {
+   @Tag("getFirstId")
+   @DisplayName("Verify that we get the first ID of a list of filtered Book by Author")
+   void getFirstId_returnFirstId_ofFilteredBookByAuthor() {
+      BookDTO filter = new BookDTO();
+      filter.setAuthor(personService.findById(1));
+
+      Mockito.lenient().when(bookRepository.findAll(any(BookSpecification.class))).thenReturn(Arrays.asList(allBooks.get(0),allBooks.get(1),allBooks.get(2)));
+
+      String ean = bookService.getFirstId(filter);
+
+      assertThat(ean).isEqualTo("978-2253004226");
    }
+
 
    @Test
    @Tag("save")
@@ -260,6 +273,46 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no title")
+   void save_throwBadRequestException_ofNewBookWithNoTitle() {
+      newBookDTO.setTitle("");
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Author")
+   void save_throwBadRequestException_ofNewBookWithNoAuthor() {
+      newBookDTO.setAuthor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Editor")
+   void save_throwBadRequestException_ofNewBookWithNoEditor() {
+      newBookDTO.setEditor(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Format")
+   void save_throwBadRequestException_ofNewBookWithNoFormat() {
+      newBookDTO.setFormat(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
+   @Tag("save")
+   @DisplayName("Verify that we have BadRequestException when saving a Book with has no Type")
+   void save_throwBadRequestException_ofNewBookWithNoType() {
+      newBookDTO.setType(null);
+      Assertions.assertThrows(BadRequestException.class, ()-> bookService.save(newBookDTO));
+   }
+
+   @Test
    @Tag("update")
    @DisplayName("Verify that we can update an Book")
    void update_returnUpdatedBook_ofBookAndNewTitle() {
@@ -267,7 +320,6 @@ class BookServiceTest {
       newBook.setTitle(BOOK_TITLE_TEST);
       newBookDTO.setTitle(BOOK_TITLE_TEST);
       Mockito.lenient().when(bookRepository.save(any(Book.class))).thenReturn(newBook);
-
 
       BookDTO bookSaved = bookService.update(newBookDTO);
       assertThat(bookSaved).isEqualTo(newBookDTO);
@@ -277,26 +329,80 @@ class BookServiceTest {
    }
 
    @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no title")
+   void update_throwConflictException_ofNewBookWithNoTitle() {
+      newBookDTO.setTitle("");
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Author")
+   void update_throwConflictException_ofNewBookWithNoAuthor() {
+      newBookDTO.setAuthor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Editor")
+   void update_throwConflictException_ofNewBookWithNoEditor() {
+      newBookDTO.setEditor(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Format")
+   void update_throwConflictException_ofNewBookWithNoFormat() {
+      newBookDTO.setFormat(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ConflictException when update a Book with has no Type")
+   void update_throwConflictException_ofNewBookWithNoType() {
+      newBookDTO.setType(null);
+      Assertions.assertThrows(ConflictException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
+   @Tag("update")
+   @DisplayName("Verify that we have ResourceNotFoundException when update a Book with bad ID")
+   void update_throwResourceNotFoundException_ofNewBookWithWrongId() {
+      newBookDTO.setEan("mlkhmlkjmlk");
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.update(newBookDTO));
+   }
+
+   @Test
    @Tag("deleteById")
    @DisplayName("Verify that we can delete a Book by his EAN")
    void deleteById_returnExceptionWhenGetUserById_ofDeletedUserById() {
-
       String ean = newBookDTO.getEan();
 
       assertThat(bookService.existsById(ean)).isTrue();
       bookService.deleteById(ean);
       Mockito.lenient().when(bookRepository.findByEan(ean)).thenThrow(ResourceNotFoundException.class);
 
-      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class, ()-> {
-         bookService.findById(ean);
-      });
+      Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
+            ()-> bookService.findById(ean));
+   }
+
+   @Test
+   @Tag("deleteById")
+   @DisplayName("Verify that we have ResourceNotFoundException when deleting a Book with bad EAN")
+   void deleteById_throwResourceNotFoundException_ofBookWithBadEAN() {
+
+      Assertions.assertThrows(ResourceNotFoundException.class, ()-> bookService.deleteById("WRONG EAN"));
    }
 
    @Test
    @Tag("count")
    @DisplayName("Verify that we have the right number of Books")
    void count_returnTheNumberOfBooks() {
-      Mockito.lenient().when(bookRepository.count()).thenReturn(7l);
+      Mockito.lenient().when(bookRepository.count()).thenReturn(7L);
       assertThat(bookService.count()).isEqualTo(7);
    }
 
@@ -305,6 +411,7 @@ class BookServiceTest {
    @DisplayName("Verify that Book DTO is converted in right Book Entity")
    void dtoToEntity_returnRightBookEntity_ofBookDTO() {
       Book entity = bookService.dtoToEntity(newBookDTO);
+
       assertThat(entity.getEan()).isEqualTo(newBookDTO.getEan());
       assertThat(entity.getTitle()).isEqualTo(newBookDTO.getTitle());
       assertThat(entity.getQuantity()).isEqualTo(newBookDTO.getQuantity());
@@ -331,6 +438,7 @@ class BookServiceTest {
    void dtoToEntity_returnRightBookDTO_ofBookEntity() {
 
       BookDTO dto = bookService.entityToDTO(newBook);
+
       assertThat(dto.getEan()).isEqualTo(newBook.getEan());
       assertThat(dto.getTitle()).isEqualTo(newBook.getTitle());
       assertThat(dto.getQuantity()).isEqualTo(newBook.getQuantity());
@@ -421,7 +529,5 @@ class BookServiceTest {
 
       newBook.setStock(oldStock);
    }
-
-
 
 }

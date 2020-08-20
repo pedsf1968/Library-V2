@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Video
@@ -25,18 +26,6 @@ import java.util.List;
  */
 @Data
 public class VideoDTO extends MediaCommonDTO implements Serializable {
-
-   public VideoDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
-                   @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
-                   @NotNull Integer quantity,
-                   @NotNull Integer stock,
-                   @NotNull PersonDTO director) {
-      super(ean, title, quantity, stock);
-      this.director = director;
-   }
-
-   public VideoDTO() {
-   }
 
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -59,4 +48,41 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
    @Size(max = Parameters.URL_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.URL_MAX)
    private String url;
    private List<PersonDTO> actors;
+
+   public VideoDTO(@NotNull @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX) String ean,
+                   @NotNull @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX + " !") String title,
+                   @NotNull Integer quantity,
+                   @NotNull Integer stock,
+                   @NotNull PersonDTO director) {
+      super(ean, title, quantity, stock);
+      this.director = director;
+   }
+
+   public VideoDTO() {
+      // nothing to do
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof VideoDTO)) return false;
+      if (!super.equals(o)) return false;
+      VideoDTO videoDTO = (VideoDTO) o;
+      return Objects.equals(getPublicationDate(), videoDTO.getPublicationDate()) &&
+            getDirector().equals(videoDTO.getDirector()) &&
+            Objects.equals(getDuration(), videoDTO.getDuration()) &&
+            Objects.equals(getType(), videoDTO.getType()) &&
+            Objects.equals(getFormat(), videoDTO.getFormat()) &&
+            Objects.equals(getImage(), videoDTO.getImage()) &&
+            Objects.equals(getAudio(), videoDTO.getAudio()) &&
+            Objects.equals(getAudience(), videoDTO.getAudience()) &&
+            Objects.equals(getSummary(), videoDTO.getSummary()) &&
+            Objects.equals(getUrl(), videoDTO.getUrl()) &&
+            Objects.equals(getActors(), videoDTO.getActors());
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(super.hashCode(), getPublicationDate(), getDirector(), getDuration(), getType(), getFormat(), getImage(), getAudio(), getAudience(), getSummary(), getUrl(), getActors());
+   }
 }

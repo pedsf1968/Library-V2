@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 
          return userToUserDTO(user);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
 
          return userToUserDTO(user);
       } else {
-         throw new ConflictException(CANNOT_SAVE);
+         throw new BadRequestException(CANNOT_SAVE);
       }
    }
 
