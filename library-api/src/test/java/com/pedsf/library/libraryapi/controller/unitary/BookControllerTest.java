@@ -1,15 +1,12 @@
 package com.pedsf.library.libraryapi.controller.unitary;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.BookFormat;
-import com.pedsf.library.dto.BookType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.BadRequestException;
 import com.pedsf.library.exception.ConflictException;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.controller.BookController;
-import com.pedsf.library.libraryapi.model.Book;
 import com.pedsf.library.libraryapi.service.BookService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
