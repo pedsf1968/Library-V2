@@ -6,16 +6,16 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>zuul-server</artifactId>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module Zuul server</description>
-
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
+
+	<artifactId>zuul-server</artifactId>
+	<name>${project.artifactId}</name>
+	<description>Library multi module Zuul server</description>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>

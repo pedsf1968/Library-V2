@@ -6,16 +6,17 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
+		<version>1.0.0.RELEASE</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
 	<artifactId>batch</artifactId>
-	<name>Library-${project.artifactId}</name>
+	<name>${project.artifactId}</name>
 	<description>Library multi module batch service that query database and send messages to mail-api using Kafka</description>
 
-	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
-		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
-	</parent>
 
 
 	<!-- =========================================================== LICENCES -->
@@ -42,6 +43,17 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>library-api</artifactId>
+		</dependency>
+
 		<!-- ======================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -156,7 +168,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 		</dependency>
-	</dependencies>
+   </dependencies>
 
 
 	<!-- ==================================================================== -->

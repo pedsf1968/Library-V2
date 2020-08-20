@@ -6,16 +6,16 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>mail-api</artifactId>
-	<name>Library-${project.artifactId}</name>
-	<description>Library multi module Mail management with Kafka consumer and REST controller</description>
-
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>multi-module-library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
+
+	<artifactId>mail-api</artifactId>
+	<name>${project.artifactId}</name>
+	<description>Library multi module Mail management with Kafka consumer and REST controller</description>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>
@@ -40,7 +40,14 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
-	<!-- =========================================================== ACTUATOR -->
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+
+		<!-- =========================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
