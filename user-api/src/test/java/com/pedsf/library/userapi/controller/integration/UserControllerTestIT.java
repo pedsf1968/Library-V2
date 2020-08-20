@@ -141,14 +141,13 @@ class UserControllerTestIT {
    void addUser_saveUserSaved_ofUser() throws Exception {
       UserDTO expected = allUserDTOS.get(2);
       expected.setMatchingPassword(expected.getPassword());
-      String json;
       ObjectMapper mapper = new ObjectMapper();
 
       // GIVEN
       when(userService.save(any(UserDTO.class))).thenReturn(expected);
 
       // WHEN
-      json = mapper.writeValueAsString(expected);
+      String json = mapper.writeValueAsString(expected);
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/users")
                   .contentType(MediaType.APPLICATION_JSON)
