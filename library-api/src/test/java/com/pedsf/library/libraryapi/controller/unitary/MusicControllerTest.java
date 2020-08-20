@@ -86,7 +86,6 @@ class MusicControllerTest {
             MockMvcRequestBuilders.get("/musics/allowed"))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
-
    }
 
    @Test
