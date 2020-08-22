@@ -59,6 +59,10 @@ public class MusicController {
 
    }
 
+   public void setBorrowingQuantityMax(Integer borrowingQuantityMax) {
+      this.borrowingQuantityMax = borrowingQuantityMax;
+   }
+
    @GetMapping("/musics")
    public String booksList(Model model, Locale locale){
       List<MusicDTO> musicDTOS = libraryApiProxy.findAllAllowedMusics(1);

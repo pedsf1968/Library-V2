@@ -64,7 +64,6 @@ class BookControllerTest {
               "Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory" +
               " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
               " comes from a line in section 1.10.32.");
-
    }
 
    @Test
@@ -149,7 +148,7 @@ class BookControllerTest {
 
    @Test
    @Tag("addBook")
-   @DisplayName("Verify that we get BadRequest if there are ConflictException when save Book")
+   @DisplayName("Verify that we get BadRequest if there are BadRequestException when save Book")
    void addBook_returnBadRequest_ofBadRequestException() throws Exception {
       // GIVEN
       when(bookService.save(newBookDTO)).thenThrow(BadRequestException.class);

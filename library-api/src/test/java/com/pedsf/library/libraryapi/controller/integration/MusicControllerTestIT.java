@@ -3,7 +3,6 @@ package com.pedsf.library.libraryapi.controller.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pedsf.library.dto.MusicFormat;
 import com.pedsf.library.dto.MusicType;
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.controller.MusicController;

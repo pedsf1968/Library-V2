@@ -51,6 +51,10 @@ public class BookController {
       }
    }
 
+   public void setBorrowingQuantityMax(Integer borrowingQuantityMax) {
+      this.borrowingQuantityMax = borrowingQuantityMax;
+   }
+
    @GetMapping("/books")
    public String booksList(Model model, Locale locale){
       List<BookDTO> bookDTOS = libraryApiProxy.findAllAllowedBooks(1);

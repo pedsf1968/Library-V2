@@ -18,6 +18,9 @@ public interface GameRepository extends JpaRepository<Game, Integer>, JpaSpecifi
    Game save(Game game);
    void deleteByEan(String ean);
 
+   @Query("SELECT DISTINCT editorId FROM Game ORDER BY editorId")
+   List<Integer> findAllEditors();
+
    @Query(value = "SELECT DISTINCT title FROM Game ORDER BY title", nativeQuery = true)
    List<String> findAllTitles();
 
