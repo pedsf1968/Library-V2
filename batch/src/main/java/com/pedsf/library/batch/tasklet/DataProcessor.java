@@ -3,6 +3,7 @@ package com.pedsf.library.batch.tasklet;
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.global.MessageDTO;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -17,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Data
 public class DataProcessor implements Tasklet, StepExecutionListener {
-
 
    private final String libraryMailBorrowingLimitSubject;
    private final String libraryMailBorrowingLimitContent;
@@ -26,7 +27,7 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
    private final String libraryMailBookingContent;
 
    private final String from;
-   private final List<MessageDTO> messageDTOS = new ArrayList<>();
+   private List<MessageDTO> messageDTOS;
    private List<BorrowingDTO> borrowingDTOS;
    private List<BookingDTO> bookingDTOS;
 
@@ -38,6 +39,8 @@ public class DataProcessor implements Tasklet, StepExecutionListener {
       this.libraryMailBorrowingLimitContent = libraryMailBorrowingLimitContent;
       this.libraryMailBookingSubject = libraryMailBookingSubject;
       this.libraryMailBookingContent = libraryMailBookingContent;
+
+      messageDTOS = new ArrayList<>();
    }
 
 
