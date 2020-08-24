@@ -29,7 +29,8 @@ public final class PathTable {
    public static final String BORROWINGS_R = "redirect:/borrowings";
 
    public static final String USER_REGISTRATION = "user/registration";
-
+   public static final String USER_LOGIN = "login";
+   public static final String USER_LOGIN_R = "redirect:/login";
    public static final String USER_ADD = "user/user-add";
    public static final String USER_READ = "user/user-read";
    public static final String USER_READ_R = "redirect:/user/read/";

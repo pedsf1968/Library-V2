@@ -52,7 +52,7 @@ public class UserController {
       if (logout != null)
          model.addAttribute("message", "You have been logged out successfully.");
 
-      return "login";
+      return PathTable.USER_LOGIN;
    }
 
    @PostMapping("/login")
@@ -68,7 +68,7 @@ public class UserController {
          new SecurityContextLogoutHandler().logout(request, response, authentication);
       }
 
-      return "redirect:/login";
+      return PathTable.USER_LOGIN_R;
    }
 
    @GetMapping({"/", "/index"})
@@ -130,30 +130,41 @@ public class UserController {
    public String editUser( Model model){
       // get the authentified user and his address
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
 
-      log.info("/user/edit user : " + userDTO);
+      try {
+         UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
 
-      model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
+         log.info("/user/edit user : " + userDTO);
 
-      return PathTable.USER_UPDATE;
+         model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
+
+         return PathTable.USER_UPDATE;
+      } catch (NullPointerException exception) {
+         // not identified
+         return PathTable.USER_LOGIN;
+      }
+
    }
-
 
    @GetMapping("/user/edit/{userId}")
    public String editOtherUser(@PathVariable("userId") Integer userId, Model model){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      // get the authentified user and his address
-      UserDTO userDTO = userApiProxy.findUserById(userId);
-      UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
+      try {
+         // get the authentified user and his address
+         UserDTO userDTO = userApiProxy.findUserById(userId);
+         UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
 
-      if (userDTO.equals(operator) || operator.getRoles().contains(ROLE_ADMIN)){
-         log.info("/user/edit/" + userId + " user : " + userDTO);
+         if (userDTO.equals(operator) || operator.getRoles().contains(ROLE_ADMIN)) {
+            log.info("/user/edit/" + userId + " user : " + userDTO);
 
-         model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
+            model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
 
-         return PathTable.USER_UPDATE;
+            return PathTable.USER_UPDATE;
+         }
+      } catch (NullPointerException exception) {
+         // not identified
+         return PathTable.USER_LOGIN;
       }
 
       return PathTable.HOME;
@@ -166,7 +177,6 @@ public class UserController {
       if (bindingResultUser.hasErrors() ) {
          return PathTable.USER_UPDATE;
       }
-
 
       // test if the email is valid
       UserDTO otherUser = userApiProxy.findUserByEmail(userDTO.getEmail());
@@ -187,15 +197,19 @@ public class UserController {
    public String editPassword(@PathVariable("userId") Integer userId, Model model){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      // get the authentified user and his address
-      UserDTO userDTO = userApiProxy.findUserById(userId);
-      UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
+      try {
+         // get the authentified user and his address
+         UserDTO userDTO = userApiProxy.findUserById(userId);
+         UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
 
-      if (userDTO.equals(operator) || operator.getRoles().contains(ROLE_ADMIN)){
-         log.info("/user/edit user : " + userDTO);
-         model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
+         if (userDTO.equals(operator) || operator.getRoles().contains(ROLE_ADMIN)) {
+            log.info("/user/edit user : " + userDTO);
+            model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
 
-         return PathTable.USER_UPDATE_PASSWORD;
+            return PathTable.USER_UPDATE_PASSWORD;
+         }
+      } catch (NullPointerException exception) {
+         log.error(exception.getMessage());
       }
 
       return PathTable.HOME;

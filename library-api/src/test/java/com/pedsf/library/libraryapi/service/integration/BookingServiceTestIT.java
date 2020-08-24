@@ -92,14 +92,6 @@ class BookingServiceTestIT {
       allMediaDTOS.add(new MediaDTO(27,"4988064585816","RE BLACKPINK","MUSIC","BORROWED",1,0));
       allMediaDTOS.add(new MediaDTO(28,"8809269506764","MADE","MUSIC","FREE",1,1));
 
-   /*   allBookingDTOS.add(new BookingDTO(1, allUserDTOS.get(4), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),1));
-      allBookingDTOS.add(new BookingDTO(2, allUserDTOS.get(5), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),2));
-      allBookingDTOS.add(new BookingDTO(3, allUserDTOS.get(3), allMediaDTOS.get(26), Date.valueOf("2020-07-20"),3));
-      allBookingDTOS.add(new BookingDTO(4, allUserDTOS.get(5), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 1));
-      allBookingDTOS.add(new BookingDTO(5, allUserDTOS.get(4), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 2));
-      allBookingDTOS.add(new BookingDTO(6, allUserDTOS.get(3), allMediaDTOS.get(5), Date.valueOf("2020-07-20"), 3));
-
-    */
    }
 
    @BeforeEach
