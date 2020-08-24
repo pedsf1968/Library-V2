@@ -233,24 +233,28 @@ public class UserController {
          return PathTable.USER_UPDATE_PASSWORD_R + userDTO.getId();
       }
 
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      try {
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      // get the authentified user and his address
-      UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
+         // get the authentified user and his address
+         UserDTO operator = userApiProxy.findUserByEmail(authentication.getName());
 
 
-      if (operator.equals(userDTO) || operator.getRoles().contains(ROLE_ADMIN)){
+         if (operator.equals(userDTO) || operator.getRoles().contains(ROLE_ADMIN)) {
 
-         // encode password
-         userDTO.setPassword(bCryptPasswordEncoder.encode(newPassword));
-         userDTO.setMatchingPassword(userDTO.getPassword());
+            // encode password
+            userDTO.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            userDTO.setMatchingPassword(userDTO.getPassword());
 
-         userApiProxy.updateUser(userDTO.getId(), userDTO);
-         securityService.autoLogin(userDTO.getEmail(), newPassword);
+            userApiProxy.updateUser(userDTO.getId(), userDTO);
+            securityService.autoLogin(userDTO.getEmail(), newPassword);
 
-         model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
+            model.addAttribute(PathTable.ATTRIBUTE_USER, userDTO);
 
-         return PathTable.USER_UPDATE;
+            return PathTable.USER_UPDATE;
+         }
+      } catch (NullPointerException exception) {
+         log.error(exception.getMessage());
       }
       return PathTable.HOME;
    }

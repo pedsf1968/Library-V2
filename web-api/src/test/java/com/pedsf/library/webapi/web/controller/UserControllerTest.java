@@ -10,7 +10,6 @@ import com.pedsf.library.webapi.web.PathTable;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -66,6 +65,7 @@ class UserControllerTest {
    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
    private UserController userController;
+   private UserDTO newUserDTO;
    private static UserDTO operator = new UserDTO();
 
    @Configuration
@@ -97,6 +97,7 @@ class UserControllerTest {
          allUserDTOS.get(i).setStatus(UserStatus.MEMBER.name());
       }
 
+
       operator.setFirstName("Admin");
       operator.setLastName("Admin");
       operator.setEmail(ADMIN_TEST_EMAIL);
@@ -111,11 +112,26 @@ class UserControllerTest {
    void beforeEach() {
       userController = new UserController(userApiProxy,securityService,bCryptPasswordEncoder);
       mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+      newUserDTO = new UserDTO(11,"Tony","TIAN","tony.tian@gmail.com","$2a$10$PPVu0M.IdSTD.GwxbV6xZ.cP3EqlZRozxwrXkSF.fFUeweCaCQaSS","4, rue du moulin","69003","Lyon");
+      newUserDTO.setMatchingPassword(newUserDTO.getPassword());
 
       when(userApiProxy.findUserByEmail(ADMIN_TEST_EMAIL)).thenReturn(operator);
       when(userApiProxy.findUserById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]));
 
+   }
+
+
+   @Test
+   @Tag("postLogin")
+   @DisplayName("Verify that call the User creation page")
+   @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
+   void postLogin_displayLoginPage() throws Exception {
+      // WHEN
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/login"))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.HOME))
+            .andReturn();
    }
 
    @Test
@@ -133,21 +149,20 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User and redirect to User update page")
    void addUser_returnCreatedUser_ofNewUserData() throws Exception {
-      UserDTO expected = allUserDTOS.get(2);
 
       // GIVEN
-      when(userApiProxy.addUser(any(UserDTO.class))).thenReturn(expected);
+      when(userApiProxy.addUser(any(UserDTO.class))).thenReturn(newUserDTO);
       when(userApiProxy.findUserByEmail(anyString())).thenThrow(ResourceNotFoundException.class);
-      when(bCryptPasswordEncoder.encode(anyString())).thenReturn(expected.getPassword());
+      when(bCryptPasswordEncoder.encode(anyString())).thenReturn(newUserDTO.getPassword());
       doNothing().when(securityService).autoLogin(anyString(),anyString());
 
-      String json = mapper.writeValueAsString(expected);
+      String json = mapper.writeValueAsString(newUserDTO);
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-               .flashAttr("user",expected))
+               .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.USER_UPDATE_R + expected.getId()))
+            .andExpect(view().name(PathTable.USER_UPDATE_R + newUserDTO.getId()))
             .andReturn();
    }
 
@@ -155,15 +170,14 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User with no firstName it redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithNoFirstName() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
-
       // GIVEN
-      expected.setFirstName(null);
-      String json = mapper.writeValueAsString(expected);
+      newUserDTO.setFirstName(null);
+      String json = mapper.writeValueAsString(newUserDTO);
+
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -173,15 +187,14 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User with no lastName it redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithNoLastName() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
-
       // GIVEN
-      expected.setLastName(null);
-      String json = mapper.writeValueAsString(expected);
+      newUserDTO.setLastName(null);
+      String json = mapper.writeValueAsString(newUserDTO);
+
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -191,15 +204,33 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User with no email it redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithNoEmail() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
-
       // GIVEN
-      expected.setEmail(null);
-      String json = mapper.writeValueAsString(expected);
+      newUserDTO.setEmail(null);
+      String json = mapper.writeValueAsString(newUserDTO);
+
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_ADD))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("addUser")
+   @DisplayName("Verify that we add a User with other User email it redirect to the same page")
+   void addUser_returnToTheSamePage_ofUserExistingEmail() throws Exception {
+      UserDTO other = allUserDTOS.get(4);
+
+      // GIVEN
+      newUserDTO.setEmail(null);
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(other);
+      String json = mapper.writeValueAsString(newUserDTO);
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/add")
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -209,15 +240,14 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User with no password it redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithNoPassword() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
-
       // GIVEN
-      expected.setEmail(null);
-      String json = mapper.writeValueAsString(expected);
+      newUserDTO.setEmail(null);
+      String json = mapper.writeValueAsString(newUserDTO);
+
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -227,15 +257,13 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User with existing email it redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithExistingEmail() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
+     // GIVEN
+      String json = mapper.writeValueAsString(newUserDTO);
 
-      // GIVEN
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(expected);
-      String json = mapper.writeValueAsString(expected);
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -245,17 +273,15 @@ class UserControllerTest {
    @Tag("addUser")
    @DisplayName("Verify that we add a User no matching password redirect to the same page")
    void addUser_returnToTheSamePage_ofUserWithNoMatchingPassword() throws Exception {
-      UserDTO expected = allUserDTOS.get(3);
-
       // GIVEN
       when(userApiProxy.findUserByEmail(anyString())).thenThrow(ResourceNotFoundException.class);
-      expected.setMatchingPassword("Not matching");
-      String json = mapper.writeValueAsString(expected);
+      newUserDTO.setMatchingPassword("Not matching");
+      String json = mapper.writeValueAsString(newUserDTO);
 
       // WHEN
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/add")
-                  .flashAttr("user",expected))
+                  .flashAttr("user",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_ADD))
             .andReturn();
@@ -266,6 +292,7 @@ class UserControllerTest {
    @DisplayName("Verify that call the User update page")
    @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
    void editUser_displayUserUpdatePage_ofIdentifiedUser() throws Exception {
+
       // WHEN
       final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit"))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -277,6 +304,7 @@ class UserControllerTest {
    @Tag("editUser")
    @DisplayName("Verify that call login page of non identified user")
    void editUser_displayLoginPage_ofNonIdentifiedUser() throws Exception {
+
       // WHEN
       final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit"))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -287,15 +315,14 @@ class UserControllerTest {
    @Test
    @Tag("editOtherUser")
    @DisplayName("Verify that call the User update page if the user is the Admin")
-   @WithMockUser(username = ADMIN_TEST_EMAIL, password = ADMIN_TEST_PASSWORD, roles = "USER")
+   @WithMockUser(username = ADMIN_TEST_EMAIL, password = ADMIN_TEST_PASSWORD, roles = "ADMIN")
    void editOtherUser_displayUserUpdatePage_ofUserISAdmin() throws Exception {
       // GIVEN
-      UserDTO expected = allUserDTOS.get(3);
-      Integer userId = expected.getId();
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(operator);
+      when(userApiProxy.findUserById(anyInt())).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_UPDATE))
             .andReturn();
@@ -303,16 +330,16 @@ class UserControllerTest {
 
    @Test
    @Tag("editOtherUser")
-   @DisplayName("Verify that call the User update page if the user is himselh")
+   @DisplayName("Verify that call the User update page if the user is himself")
    @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
    void editOtherUser_displayUserUpdatePage_ofUserISHimself() throws Exception {
+
       // GIVEN
-      UserDTO expected = allUserDTOS.get(3);
-      Integer userId = expected.getId();
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(expected);
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(userApiProxy.findUserById(anyInt())).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_UPDATE))
             .andReturn();
@@ -322,12 +349,13 @@ class UserControllerTest {
    @Tag("editOtherUser")
    @DisplayName("Verify that call the login page if the user is not identified")
    void editOtherUser_displayLoginPage_ofNotIdentifiedUser() throws Exception {
+
       // GIVEN
-      UserDTO expected = allUserDTOS.get(3);
-      Integer userId = expected.getId();
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(userApiProxy.findUserById(anyInt())).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_LOGIN))
             .andReturn();
@@ -338,12 +366,13 @@ class UserControllerTest {
    @DisplayName("Verify that call the login page if the user is not himself")
    @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
    void editOtherUser_displayHomePage_ofWrongIdentifiedUser() throws Exception {
+
       // GIVEN
-      UserDTO expected = allUserDTOS.get(3);
-      Integer userId = expected.getId();
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+      when(userApiProxy.findUserById(11)).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_LOGIN))
             .andReturn();
@@ -351,20 +380,18 @@ class UserControllerTest {
 
    @Test
    @Tag("updateUser")
-   @DisplayName("Verify that we update a User and redirect to User update page")
+   @DisplayName("Verify that we update a User and redirect to Home page")
    void updateUser_returnHome_ofUpdatedUserData() throws Exception {
-      UserDTO expected = allUserDTOS.get(2);
-      Integer userId = expected.getId();
 
       // GIVEN
-      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(expected);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
       // set there is no other user with the same email
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(2));
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
 
       // WHEN
       final MvcResult result = mockMvc.perform(
-            MockMvcRequestBuilders.post("/user/update/" + userId)
-                  .flashAttr("userDto",expected))
+            MockMvcRequestBuilders.post("/user/update/" +  newUserDTO.getId())
+                  .flashAttr("userDto",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
             .andExpect(view().name(PathTable.HOME))
             .andReturn();
@@ -372,20 +399,98 @@ class UserControllerTest {
 
    @Test
    @Tag("updateUser")
-   @DisplayName("Verify that when we update a User and we used address it redirect to User update page")
+   @DisplayName("Verify that when we update a User with a wrong email it redirect to User update page")
    void updateUser_returnUpdateUserPage_ofWrongUserEmail() throws Exception {
-      UserDTO expected = allUserDTOS.get(2);
-      Integer userId = expected.getId();
 
       // GIVEN
-      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(expected);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
       // set there is no other user with the same email
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
 
       // WHEN
       final MvcResult result = mockMvc.perform(
-            MockMvcRequestBuilders.post("/user/update/" + userId)
-               .flashAttr("userDto",expected))
+            MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
+               .flashAttr("userDto",newUserDTO))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updateUser")
+   @DisplayName("Verify that when we update a User without firstName it redirect to User update page")
+   void updateUser_returnUpdateUserPage_ofUserWithNoFirstName() throws Exception {
+
+      // GIVEN
+      newUserDTO.setFirstName(null);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
+                  .flashAttr("userDto",newUserDTO))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updateUser")
+   @DisplayName("Verify that when we update a User without lastName it redirect to User update page")
+   void updateUser_returnUpdateUserPage_ofUserWithNoLastName() throws Exception {
+
+      // GIVEN
+      newUserDTO.setLastName(null);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
+                  .flashAttr("userDto",newUserDTO))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updateUser")
+   @DisplayName("Verify that when we update a User without password it redirect to User update page")
+   void updateUser_returnUpdateUserPage_ofUserWithNoPassword() throws Exception {
+
+      // GIVEN
+      newUserDTO.setPassword(null);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
+                  .flashAttr("userDto",newUserDTO))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updateUser")
+   @DisplayName("Verify that when we update a User without email it redirect to User update page")
+   void updateUser_returnUpdateUserPage_ofUserWithNoemail() throws Exception {
+
+      // GIVEN
+      newUserDTO.setEmail(null);
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
+                  .flashAttr("userDto",newUserDTO))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_UPDATE))
             .andReturn();
@@ -397,12 +502,11 @@ class UserControllerTest {
    @WithMockUser(username = ADMIN_TEST_EMAIL, password = ADMIN_TEST_PASSWORD, roles = "USER")
    void editPassword_displayUserUpdatePage_ofUserISAdmin() throws Exception {
       // GIVEN
-      UserDTO expected = allUserDTOS.get(2);
-      Integer userId = expected.getId();
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(operator);
+      when(userApiProxy.findUserById(11)).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_UPDATE_PASSWORD))
             .andReturn();
@@ -414,12 +518,11 @@ class UserControllerTest {
    @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
    void editPassword_displayUserUpdatePage_ofUserHimself() throws Exception {
       // GIVEN
-      UserDTO expected = allUserDTOS.get(2);
-      Integer userId = expected.getId();
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(expected);
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(userApiProxy.findUserById(11)).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
             .andExpect(view().name(PathTable.USER_UPDATE_PASSWORD))
             .andReturn();
@@ -430,12 +533,11 @@ class UserControllerTest {
    @DisplayName("Verify that call Home page if the user is not identified")
    void editPassword_displayHomePage_ofNonIdentifiedUser() throws Exception {
       // GIVEN
-      UserDTO expected = allUserDTOS.get(2);
-      Integer userId = expected.getId();
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(expected);
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(userApiProxy.findUserById(11)).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + newUserDTO.getId()))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
             .andExpect(view().name(PathTable.HOME))
             .andReturn();
@@ -447,14 +549,136 @@ class UserControllerTest {
    @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
    void editPassword_displayHomePage_ofNotUserHimself() throws Exception {
       // GIVEN
-      UserDTO expected = allUserDTOS.get(2);
       UserDTO other =  allUserDTOS.get(3);
-      Integer userId = expected.getId();
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(other);
-      when(userApiProxy.findUserById(anyInt())).thenReturn(expected);
+      when(userApiProxy.findUserById(anyInt())).thenReturn(newUserDTO);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + userId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/user/password/edit/" + newUserDTO.getId()))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.HOME))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updatePassword")
+   @DisplayName("Verify that we update a password and redirect to User update page")
+   @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
+   void updatePassword_returnUpdateUserPage_ofUpdatedPasswordData() throws Exception {
+      Integer userId = newUserDTO.getId();
+
+      // GIVEN
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenReturn(true);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/password/update/")
+                  .flashAttr("userDto",newUserDTO)
+                  .param("oldPassword", USER_TEST_PASSWORD)
+                  .param("newPassword", USER_TEST_PASSWORD)
+                  .param("newMatchingPassword", USER_TEST_PASSWORD))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updatePassword")
+   @DisplayName("Verify that can't update a password if the old password is wrong and redirect to update password page")
+   @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
+   void updatePassword_returnUpdatePasswordPage_ofWrongOldPassword() throws Exception {
+      Integer userId = newUserDTO.getId();
+
+      // GIVEN
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenReturn(false);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/password/update/")
+                  .flashAttr("userDto",newUserDTO)
+                  .param("oldPassword", USER_TEST_PASSWORD)
+                  .param("newPassword", USER_TEST_PASSWORD)
+                  .param("newMatchingPassword", USER_TEST_PASSWORD))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.USER_UPDATE_PASSWORD_R + userId))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updatePassword")
+   @DisplayName("Verify that can't update a password if the new password and matching don't match and redirect to update password page")
+   @WithMockUser(username = USER_TEST_EMAIL, password = USER_TEST_PASSWORD, roles = USER_TEST_ROLE)
+   void updatePassword_returnUpdatePasswordPage_ofNotMatchingPasswords() throws Exception {
+      Integer userId = newUserDTO.getId();
+
+      // GIVEN
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenReturn(true);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/password/update/")
+                  .flashAttr("userDto",newUserDTO)
+                  .param("oldPassword", USER_TEST_PASSWORD)
+                  .param("newPassword", USER_TEST_PASSWORD)
+                  .param("newMatchingPassword", "Not matching"))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.USER_UPDATE_PASSWORD_R + userId))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updatePassword")
+   @DisplayName("Verify that can't update a password with non identified User")
+   void updatePassword_returnHomePage_ofNotIdentifiedUser() throws Exception {
+      Integer userId = newUserDTO.getId();
+
+      // GIVEN
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(newUserDTO);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(newUserDTO);
+      when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenReturn(true);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/password/update/")
+                  .flashAttr("userDto",newUserDTO)
+                  .param("oldPassword", USER_TEST_PASSWORD)
+                  .param("newPassword", USER_TEST_PASSWORD)
+                  .param("newMatchingPassword", USER_TEST_PASSWORD))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.HOME))
+            .andReturn();
+   }
+
+   @Test
+   @Tag("updatePassword")
+   @DisplayName("Verify that can't update a password with wrong User")
+   void updatePassword_returnHomePage_ofWrongUser() throws Exception {
+      UserDTO expected = allUserDTOS.get(2);
+      Integer userId = expected.getId();
+
+      // GIVEN
+      when(userApiProxy.updateUser(anyInt(),any(UserDTO.class))).thenReturn(expected);
+      // set there is no other user with the same email
+      when(userApiProxy.findUserByEmail(anyString())).thenReturn(allUserDTOS.get(3));
+      when(bCryptPasswordEncoder.matches(anyString(),anyString())).thenReturn(true);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/user/password/update/")
+                  .flashAttr("userDto",expected)
+                  .param("oldPassword", USER_TEST_PASSWORD)
+                  .param("newPassword", USER_TEST_PASSWORD)
+                  .param("newMatchingPassword", USER_TEST_PASSWORD))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
             .andExpect(view().name(PathTable.HOME))
             .andReturn();
