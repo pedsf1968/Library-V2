@@ -1,11 +1,9 @@
 package com.pedsf.library.batch.configuration;
 
-
 import com.pedsf.library.batch.tasklet.DataProcessor;
 import com.pedsf.library.batch.tasklet.DataReader;
 import com.pedsf.library.batch.tasklet.DataWriter;
 import com.pedsf.library.dto.global.MessageDTO;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -104,11 +102,11 @@ public class BatchConfig {
       @Override
       public void afterJob(JobExecution jobExecution){
          if( jobExecution.getStatus() == BatchStatus.COMPLETED ){
-            log.info("JOB SUCCEED");
+            log.debug("JOB SUCCEED");
          }
          else if(jobExecution.getStatus() == BatchStatus.FAILED){
             //job failure
-            log.info("JOB FAILED");
+            log.debug("JOB FAILED");
          }
       }
    }
