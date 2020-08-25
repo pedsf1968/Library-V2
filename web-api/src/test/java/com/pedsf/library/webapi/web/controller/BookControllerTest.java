@@ -146,7 +146,6 @@ class BookControllerTest {
       assertThat(foundTypes).hasSameSizeAs(BookType.values());
       assertThat(foundFormats).hasSameSizeAs(BookFormat.values());
 
-
       assertThat(foundBooks).isEqualTo(allBookDTOS);
       assertThat(foundTitles).isEqualTo(booksTitles);
 
@@ -193,7 +192,6 @@ class BookControllerTest {
       assertThat(foundEditors).hasSameSizeAs(booksEditors);
       assertThat(foundTypes).hasSameSizeAs(BookType.values());
       assertThat(foundFormats).hasSameSizeAs(BookFormat.values());
-
 
       assertThat(foundBooks).isEqualTo(allBookDTOS);
       assertThat(foundTitles).isEqualTo(booksTitles);

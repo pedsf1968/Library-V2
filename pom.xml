@@ -110,7 +110,10 @@
          **/*Application.java,
          **/*ApiProxy.java,
          data-model/src/main/java/com/pedsf/library/Parameters.java,
-         web/src/main/java/com/pedsf/library/web/web/PathTable.java
+         library-api/src/main/java/com/pedsf/library/libraryapi/exceptions/CustomErrorDecoder.java,
+         user-api/src/java/com/pedsf/library/userapi/controller/RestPreconditions.java,
+         web/src/main/java/com/pedsf/library/web/web/PathTable.java,
+         web-api/src/main/java/com/pedsf/library/webapi/exceptions/CustomErrorDecoder.java
       </sonar.coverage.exclusions>
    </properties>
 

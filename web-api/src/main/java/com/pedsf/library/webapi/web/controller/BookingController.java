@@ -51,7 +51,6 @@ public class BookingController {
    public String booking(@PathVariable("mediaEan") String mediaEan){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
          try {
