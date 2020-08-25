@@ -158,9 +158,8 @@ class BookControllerTestIT {
       // convert result in UserDTO list
       json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
       List<BookDTO> founds = Arrays.asList(mapper.readValue(json, BookDTO[].class));
-      List<BookDTO> found;
 
-      assertThat(founds.size()).isEqualTo(3);
+      assertThat(founds.size()).isEqualTo(filtered.size());
       for(BookDTO dto: founds) {
          for(BookDTO expected:filtered) {
             if(dto.getEan().equals(expected.getEan())) {

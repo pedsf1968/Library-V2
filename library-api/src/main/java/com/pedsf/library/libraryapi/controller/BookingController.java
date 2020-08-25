@@ -24,7 +24,7 @@ public class BookingController {
    }
 
    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-   public ResponseEntity<List<BookingDTO>> findAllBorrowings(
+   public ResponseEntity<List<BookingDTO>> findAllBookings(
          @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
       List<BookingDTO> bookingDTOS;
 

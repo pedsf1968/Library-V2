@@ -2,6 +2,7 @@ package com.pedsf.library.webapi.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pedsf.library.dto.business.BookingDTO;
+import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.BadRequestException;
@@ -35,7 +36,6 @@ import javax.inject.Inject;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,11 +47,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @ImportAutoConfiguration(RefreshAutoConfiguration.class)
-@Import(BookingController.class)
-@WebMvcTest(controllers = {BookingController.class})
+@Import(BorrowingController.class)
+@WebMvcTest(controllers = {BorrowingController.class})
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
-class BookingControllerTest {
+class BorrowingControllerTest {
 
    @Inject
    private MockMvc mockMvc;
@@ -60,13 +60,13 @@ class BookingControllerTest {
    @MockBean
    private UserApiProxy userApiProxy;
 
-   private BookingController bookingController;
+   private BorrowingController borrowingController;
 
    private static final List<UserDTO> allUserDTOS = new ArrayList<>();
    private static List<MediaDTO> allMediaDTOS = new ArrayList<>();
    private static ObjectMapper mapper = new ObjectMapper();
    private BookingDTO newBookingDTO;
-   private List<BookingDTO> allBookingDTOS = new ArrayList<>();
+   private List<BorrowingDTO> allBorrowingDTOS = new ArrayList<>();
 
    @Configuration
    @EnableWebSecurity
@@ -129,133 +129,112 @@ class BookingControllerTest {
       Mockito.lenient().when(userApiProxy.findUserById(anyInt())).thenAnswer(
             (InvocationOnMock invocation) -> allUserDTOS.get((Integer) invocation.getArguments()[0]));
 
-      allBookingDTOS.add( new BookingDTO(1,allUserDTOS.get(3),allMediaDTOS.get(4), Date.valueOf("2020-08-12"),1));
-      allBookingDTOS.add( new BookingDTO(2,allUserDTOS.get(3),allMediaDTOS.get(7), Date.valueOf("2020-08-12"),1));
-      allBookingDTOS.add( new BookingDTO(3,allUserDTOS.get(3),allMediaDTOS.get(9), Date.valueOf("2020-08-12"),1));
+      allBorrowingDTOS.add( new BorrowingDTO(1, allUserDTOS.get(3), allMediaDTOS.get(4), Date.valueOf("2020-08-12"), Date.valueOf("2020-09-10")));
+      allBorrowingDTOS.add( new BorrowingDTO(2, allUserDTOS.get(3), allMediaDTOS.get(7), Date.valueOf("2020-08-12"), Date.valueOf("2020-09-10")));
+      allBorrowingDTOS.add( new BorrowingDTO(3, allUserDTOS.get(3), allMediaDTOS.get(9), Date.valueOf("2020-08-12"), Date.valueOf("2020-09-10")));
    }
 
    @Test
-   @Tag("bookingsList")
-   @DisplayName("Verify that the controller send all Booking list")
-   void bookingsList_returnBookingList_ofUser() throws Exception {
+   @Tag("borrowingsList")
+   @DisplayName("Verify that the controller send all Borrowing list")
+   void borrowingsList_returnBorrowingList_ofUser() throws Exception {
       // GIVEN
       UserDTO userDTO = allUserDTOS.get(3);
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
-      when(libraryApiProxy.findBookingsByUser(anyInt())).thenReturn(allBookingDTOS);
+      when(libraryApiProxy.findByUserIdNotReturn(anyInt())).thenReturn(allBorrowingDTOS);
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/bookings"))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowings"))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-            .andExpect(view().name(PathTable.BOOKINGS))
+            .andExpect(view().name(PathTable.BORROWINGS))
             .andReturn();
 
       // THEN
-      Map<String, Object> model = result.getModelAndView().getModel();
-      assertThat(model).containsKey(PathTable.ATTRIBUTE_BOOKINGS);
-      List<BookingDTO> founds = (List<BookingDTO>) model.get(PathTable.ATTRIBUTE_BOOKINGS);
+      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BORROWINGS)).isTrue();
+      List<BorrowingDTO> founds = (List<BorrowingDTO>) result.getModelAndView().getModel().get(PathTable.ATTRIBUTE_BORROWINGS);
 
-      assertThat(founds).isEqualTo(allBookingDTOS);
+      assertThat(founds).isEqualTo(allBorrowingDTOS);
    }
 
    @Test
-   @Tag("bookingsList")
-   @DisplayName("Verify that the controller send all Booking list")
-   void bookingsList_returnEmptyList_ofResourceNotFoundException() throws Exception {
+   @Tag("borrowingsList")
+   @DisplayName("Verify that the controller send all Borrowing list")
+   void borrowingsList_returnEmptyList_ofResourceNotFoundException() throws Exception {
       // GIVEN
-      UserDTO userDTO = allUserDTOS.get(3);
+      UserDTO userDTO = allUserDTOS.get(2);
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
-      doThrow(ResourceNotFoundException.class).when(libraryApiProxy).findBookingsByUser(anyInt());
+      doThrow(ResourceNotFoundException.class).when(libraryApiProxy).findByUserIdNotReturn(anyInt());
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/bookings"))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowings"))
             .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-            .andExpect(view().name(PathTable.BOOKINGS))
+            .andExpect(view().name(PathTable.BORROWINGS))
             .andReturn();
 
       // THEN
-      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BOOKINGS)).isFalse();
+      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BORROWINGS)).isFalse();
    }
 
    @Test
-   @Tag("booking")
-   @DisplayName("Verify that redirect to Booking page when saving booking")
+   @Tag("borrowing")
+   @DisplayName("Verify that redirect to Borrowing page when saving Borrowing")
    @WithMockUser(username = "user", password = "pwd", roles = "USER")
-   void booking_returnBooking_ofUserAndBooking() throws Exception {
+   void borrowing_returnBorrowingPage_ofUserAndBorrowing() throws Exception {
       // GIVEN
       String mediaEAN = "987987987";
       UserDTO userDTO = allUserDTOS.get(3);
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
-      when(libraryApiProxy.addBooking(anyInt(),anyString())).thenReturn(allBookingDTOS.get(1));
+      when(libraryApiProxy.addBorrowing(anyInt(),anyString())).thenReturn(allBorrowingDTOS.get(1));
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/booking/" + mediaEAN))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowing/" + mediaEAN))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.BOOKINGS_R))
+            .andExpect(view().name(PathTable.BORROWINGS_R))
             .andReturn();
    }
 
    @Test
-   @Tag("booking")
-   @DisplayName("Verify that redirect to Booking without saving if booking send exception")
-   @WithMockUser(username = "user", password = "pwd", roles = "USER")
-   void booking_returnBookingPage_ofBookingBadRequestException() throws Exception {
+   @Tag("borrowing")
+   @DisplayName("Verify that redirect to Borrowing without saving if no user identified")
+   void borrowing_returnBorrowingPage_ofNonIdentifiedUserAndBorrowing() throws Exception {
       // GIVEN
       String mediaEAN = "987987987";
-      UserDTO userDTO = allUserDTOS.get(3);
-      when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
-      doThrow(BadRequestException.class).when(libraryApiProxy).addBooking(anyInt(),anyString());
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/booking/" + mediaEAN))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowing/" + mediaEAN))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.BOOKINGS_R))
+            .andExpect(view().name(PathTable.BORROWINGS_R))
             .andReturn();
    }
 
    @Test
-   @Tag("booking")
-   @DisplayName("Verify that redirect to Booking without saving if no user identified")
-   void booking_returnBookingPage_ofNonIdentifiedUserAndBooking() throws Exception {
-      // GIVEN
-      String mediaEAN = "987987987";
-      UserDTO userDTO = allUserDTOS.get(3);
-
-      // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/booking/" + mediaEAN))
-            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.BOOKINGS_R))
-            .andReturn();
-   }
-
-   @Test
-   @Tag("cancelBooking")
-   @DisplayName("Verify that redirect to Booking page when cancel booking")
+   @Tag("extend")
+   @DisplayName("Verify that redirect to Borrowing page when extend Borrowing")
    @WithMockUser(username = "user", password = "pwd", roles = "USER")
-   void cancelBooking_returnBookingPage_ofUserAndBooking() throws Exception {
+   void extend_returnBorrowingPage_ofUserAndBorrowing() throws Exception {
       // GIVEN
-      Integer bookingId = allBookingDTOS.get(2).getId();
+      Integer mediaId = 45;
       UserDTO userDTO = allUserDTOS.get(3);
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
-      when(libraryApiProxy.cancelBooking(anyInt(),anyInt())).thenReturn(allBookingDTOS.get(1));
+      when(libraryApiProxy.extendBorrowing(anyInt(),anyInt())).thenReturn(allBorrowingDTOS.get(1));
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/booking/cancel/" + bookingId))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowings/extend/" + mediaId))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.BOOKINGS_R))
+            .andExpect(view().name(PathTable.BORROWINGS_R))
             .andReturn();
    }
 
    @Test
-   @Tag("cancelBooking")
-   @DisplayName("Verify that redirect to Booking page without cancel if User not identified")
-   void cancelBooking_returnBookingPage_ofUserNotIdentifiedAndBooking() throws Exception {
+   @Tag("extend")
+   @DisplayName("Verify that redirect to Borrowing page whithout extend Borrowing if user not identified")
+   void extend_returnBorrowingPage_ofUserNotIdentifiedAndBorrowing() throws Exception {
 
       // WHEN
-      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/booking/cancel/" + 12))
+      final MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/borrowings/extend/" + 654))
             .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-            .andExpect(view().name(PathTable.BOOKINGS_R))
+            .andExpect(view().name(PathTable.BORROWINGS_R))
             .andReturn();
    }
-
 
 }
