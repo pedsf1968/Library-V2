@@ -31,6 +31,7 @@ public class DataReader implements Tasklet, StepExecutionListener {
    private final Integer retryDelay;
    private List<BorrowingDTO> borrowingDTOS;
    private List<BookingDTO> bookingDTOS;
+
    @Autowired
    private RestTemplate restTemplate;
 
@@ -39,6 +40,10 @@ public class DataReader implements Tasklet, StepExecutionListener {
       this.requestBookingEndPoint = requestBookingEndPoint;
       this.requestBorrowingEndPoint = requestBorrowingEndPoint;
       this.retryDelay = retryDelay;
+
+      if(restTemplate==null) {
+         restTemplate = new RestTemplate();
+      }
    }
 
    @SneakyThrows
