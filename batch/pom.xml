@@ -133,6 +133,11 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+
 		<!-- ====================================================== BATCH TEST -->
 		<dependency>
 			<groupId>org.springframework.batch</groupId>

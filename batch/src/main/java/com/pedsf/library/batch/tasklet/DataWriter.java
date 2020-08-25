@@ -1,6 +1,7 @@
 package com.pedsf.library.batch.tasklet;
 
 import com.pedsf.library.dto.global.MessageDTO;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Data
 public class DataWriter implements Tasklet, StepExecutionListener {
 
    private List<MessageDTO> messageDTOS = new ArrayList<>();

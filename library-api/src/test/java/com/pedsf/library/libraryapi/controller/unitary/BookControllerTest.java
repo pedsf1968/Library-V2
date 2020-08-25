@@ -1,15 +1,12 @@
 package com.pedsf.library.libraryapi.controller.unitary;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.BookFormat;
-import com.pedsf.library.dto.BookType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.BadRequestException;
 import com.pedsf.library.exception.ConflictException;
 import com.pedsf.library.exception.ResourceNotFoundException;
 import com.pedsf.library.libraryapi.controller.BookController;
-import com.pedsf.library.libraryapi.model.Book;
 import com.pedsf.library.libraryapi.service.BookService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +64,6 @@ class BookControllerTest {
               "Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory" +
               " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
               " comes from a line in section 1.10.32.");
-
    }
 
    @Test
@@ -152,7 +148,7 @@ class BookControllerTest {
 
    @Test
    @Tag("addBook")
-   @DisplayName("Verify that we get BadRequest if there are ConflictException when save Book")
+   @DisplayName("Verify that we get BadRequest if there are BadRequestException when save Book")
    void addBook_returnBadRequest_ofBadRequestException() throws Exception {
       // GIVEN
       when(bookService.save(newBookDTO)).thenThrow(BadRequestException.class);

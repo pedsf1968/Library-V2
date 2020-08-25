@@ -41,6 +41,9 @@ public interface LibraryApiProxy {
    @GetMapping(value = "/games/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
    GameDTO findGameById(@PathVariable("gameId") String gameId);
 
+   @GetMapping("/games/editors")
+   List<PersonDTO> getAllGamesEditors();
+
    @GetMapping("/games/titles")
    List<String> getAllGamesTitles();
 
