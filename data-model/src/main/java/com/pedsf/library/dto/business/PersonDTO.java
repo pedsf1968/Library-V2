@@ -23,7 +23,6 @@ import java.util.Objects;
 @Data
 public class PersonDTO implements Serializable {
 
-   @NotNull
    private Integer id;
 
    @NotNull

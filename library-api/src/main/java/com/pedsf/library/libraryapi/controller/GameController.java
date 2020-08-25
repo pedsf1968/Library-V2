@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.controller;
 
 import com.pedsf.library.dto.business.GameDTO;
+import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.service.GameService;
 import lombok.extern.slf4j.Slf4j;
@@ -127,6 +128,17 @@ public class GameController {
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
          return ResponseEntity.notFound().build();
+      }
+   }
+
+   @GetMapping("/editors")
+   public ResponseEntity<List<PersonDTO>> getAllBooksEditors() {
+      try {
+         List<PersonDTO> editors = gameService.findAllEditors();
+         return ResponseEntity.ok(editors);
+      } catch (ResourceNotFoundException ex) {
+         log.error(ex.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
    }
 

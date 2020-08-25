@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * Data Transfert Object to manage Media
@@ -33,7 +32,6 @@ import java.util.Objects;
 @Data
 public class MediaDTO extends MediaCommonDTO implements Serializable {
 
-   @NotNull
    protected Integer id;
 
    @NotNull
@@ -60,22 +58,27 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
    }
 
    public MediaDTO( BookDTO dto) {
+      this.mediaType = MediaType.BOOK.name();
       initialise(dto);
    }
 
    public MediaDTO( GameDTO dto) {
+      this.mediaType = MediaType.GAME.name();
       initialise(dto);
    }
 
    public MediaDTO( MusicDTO dto) {
+      this.mediaType = MediaType.MUSIC.name();
       initialise(dto);
    }
 
    public MediaDTO( VideoDTO dto) {
+      this.mediaType = MediaType.VIDEO.name();
       initialise(dto);
    }
 
    public MediaDTO() {
+      this.mediaType = MediaType.OTHER.name();
       this.status = MediaStatus.FREE.name();
    }
 

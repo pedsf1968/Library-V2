@@ -50,6 +50,10 @@ public class VideoController {
       }
    }
 
+   public void setBorrowingQuantityMax(Integer borrowingQuantityMax) {
+      this.borrowingQuantityMax = borrowingQuantityMax;
+   }
+
    @GetMapping("/videos")
    public String booksList(Model model, Locale locale){
       List<VideoDTO> videoDTOS = libraryApiProxy.findAllAllowedVideos(1);

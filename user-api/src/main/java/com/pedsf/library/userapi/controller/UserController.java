@@ -31,9 +31,13 @@ public class UserController {
          @RequestParam(value = "page", defaultValue = "1") int pageNumber) {
       List<UserDTO> userDTOS;
 
-      userDTOS = userService.findAll();
-
-      return ResponseEntity.ok(userDTOS);
+      try {
+         userDTOS = userService.findAll();
+         return ResponseEntity.ok(userDTOS);
+      } catch (ResourceNotFoundException exception) {
+         log.error(exception.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+      }
    }
 
    @PostMapping(value = "/searches", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -42,11 +46,16 @@ public class UserController {
          @RequestBody UserDTO filter) {
       List<UserDTO> userDTOS;
 
-      if (StringUtils.isEmpty(filter)) {
-         filter = new UserDTO();
+      try {
+         if (StringUtils.isEmpty(filter)) {
+            userDTOS = userService.findAll();
+         } else {
+            userDTOS = userService.findAllFiltered(filter);
+         }
+      } catch (ResourceNotFoundException exception) {
+         log.error(exception.getMessage());
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
-
-      userDTOS = userService.findAllFiltered(filter);
 
       return ResponseEntity.ok(userDTOS);
    }

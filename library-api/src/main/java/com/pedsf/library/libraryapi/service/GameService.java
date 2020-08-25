@@ -178,6 +178,17 @@ public class GameService implements GenericMediaService<GameDTO,Game,String> {
       return game;
    }
 
+
+   public List<PersonDTO> findAllEditors() {
+      List<PersonDTO> personDTOS = new ArrayList<>();
+
+      for (int editorId:gameRepository.findAllEditors()){
+         personDTOS.add(personService.findById(editorId));
+      }
+
+      return personDTOS;
+   }
+
    public List<String> findAllTitles() {
       return gameRepository.findAllTitles();
    }

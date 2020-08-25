@@ -116,8 +116,6 @@ class BookingServiceTest {
       allPersons.put(14, new PersonDTO(14, "BigBang", "BigBang", Date.valueOf("2006-08-19")));
       allPersons.put(15, new PersonDTO(15, "EA", "Electronic Arts", Date.valueOf("1982-05-28")));
       allPersons.put(16, new PersonDTO(16, "Microsoft", "Microsoft", null));
-
-
    }
 
    @BeforeEach

@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,6 +33,7 @@ public class GameController {
    private final LibraryApiProxy libraryApiProxy;
    private final UserApiProxy userApiProxy;
    private final List<String> gamesTitles;
+   private final Map<Integer,PersonDTO> gamesEditors = new HashMap<>();
 
    @Value("${library.borrowing.quantity.max}")
    private Integer borrowingQuantityMax;
@@ -39,8 +42,15 @@ public class GameController {
       this.libraryApiProxy = libraryApiProxy;
       this.userApiProxy = userApiProxy;
       this.gamesTitles = libraryApiProxy.getAllGamesTitles();
+
+      for(PersonDTO personDTO : libraryApiProxy.getAllGamesEditors()){
+         gamesEditors.put(personDTO.getId(),personDTO);
+      }
    }
 
+   public void setBorrowingQuantityMax(Integer borrowingQuantityMax) {
+      this.borrowingQuantityMax = borrowingQuantityMax;
+   }
 
    @GetMapping("/games")
    public String booksList(Model model, Locale locale){
@@ -48,6 +58,7 @@ public class GameController {
 
       model.addAttribute(PathTable.ATTRIBUTE_GAMES, gameDTOS);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, gamesTitles);
+      model.addAttribute(PathTable.ATTRIBUTE_FILTER_EDITORS, gamesEditors);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TYPES, GameType.values());
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_FORMATS, GameFormat.values());
       model.addAttribute(PathTable.ATTRIBUTE_FILTER, new GameFilter());
@@ -73,6 +84,7 @@ public class GameController {
       }
 
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TITLES, gamesTitles);
+      model.addAttribute(PathTable.ATTRIBUTE_FILTER_EDITORS, gamesEditors);
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_TYPES, GameType.values());
       model.addAttribute(PathTable.ATTRIBUTE_FILTER_FORMATS, GameFormat.values());
       model.addAttribute(PathTable.ATTRIBUTE_FILTER, filter);

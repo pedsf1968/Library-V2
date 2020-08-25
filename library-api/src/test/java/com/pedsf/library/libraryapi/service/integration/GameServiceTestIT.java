@@ -17,8 +17,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
+@ExtendWith(SpringExtension.class)
 class GameServiceTestIT {
    private static final String GAME_EAN_TEST = "0805529340299";
    private static final String GAME_TITLE_TEST = "The green tomato";
