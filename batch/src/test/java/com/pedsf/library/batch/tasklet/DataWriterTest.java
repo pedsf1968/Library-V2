@@ -6,6 +6,8 @@ import com.pedsf.library.dto.global.UserDTO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.batch.core.ExitStatus;
@@ -16,34 +18,35 @@ import org.springframework.batch.core.scope.context.StepContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.context.SpringBatchTest;
-
+import org.springframework.kafka.core.KafkaTemplate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @SpringBatchTest
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-class DataProcessorTest {
+class DataWriterTest {
+   private static final String TOPIC = "ENC(kcIfopiMeuGjSbBppzqMIPTxlKuzDmehEmGdmuzDark=)";
 
-   private static DataProcessor dataProcessor = new DataProcessor("no-reply@lagrandelibrairie.com",
-         "Borrowing limit exceeded",
-         "Media return date has passed for the media : %s \\n with the title : %s \\n identified by : %s \\n that you borrow the %s \\n thank you for reporting it as soon as possible.",
-         "Media is return",
-         "The media %s is available\\n with the title : %s \\n identified by : %s \\n that you booked the %s \\n thank you for pickup it as soon as possible.");
+   @Mock
+   private KafkaTemplate<String, MessageDTO> kafkaTemplate;
+
+   @InjectMocks
+   private DataWriter dataWriter = new DataWriter(TOPIC, kafkaTemplate);
+
    private static StepExecution stepExecution = MetaDataInstanceFactory.createStepExecution();
-   private static List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
-   private static List<BookingDTO> bookingDTOS = new ArrayList<>();
    private static List<MessageDTO> messageDTOS = new ArrayList<>();
-   private static Date date = new Date();
-   private static UserDTO newUserDTO;
-   private static MediaDTO newMediaDTO;
+
 
    @BeforeAll
    static void beforeAll() {
+      List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
+      List<BookingDTO> bookingDTOS = new ArrayList<>();
+      Date date = new Date();
+
       BookDTO newBookDTO = new BookDTO("954-8789797","The green tomato",1,1,"9548789797",
             new PersonDTO(3, "Victor", "HUGO", java.sql.Date.valueOf("1802-02-26")),
             new PersonDTO(10, "LGF", "Librairie Générale Française", null));
@@ -63,8 +66,8 @@ class DataProcessorTest {
             " of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.." +
             " comes from a line in section 1.10.32.");
 
-      newMediaDTO = new MediaDTO(newBookDTO);
-      newUserDTO =  new UserDTO(11,"John","DOE","john.doe@gmail.com","$2a$10$PPVu0M.IdSTD.GwxbV6xZ.cP3EqlZRozxwrXkSF.fFUeweCaCQaSS","11, rue de la Paix","25000","Besançon");
+      MediaDTO newMediaDTO = new MediaDTO(newBookDTO);
+      UserDTO newUserDTO =  new UserDTO(11,"John","DOE","john.doe@gmail.com","$2a$10$PPVu0M.IdSTD.GwxbV6xZ.cP3EqlZRozxwrXkSF.fFUeweCaCQaSS","11, rue de la Paix","25000","Besançon");
       newUserDTO.setMatchingPassword(newUserDTO.getPassword());
 
       borrowingDTOS.add(new BorrowingDTO(14,newUserDTO,newMediaDTO, date,date));
@@ -109,57 +112,45 @@ class DataProcessorTest {
 
    @Test
    @Tag("beforeStep")
-   @DisplayName("Verify that recovery data from execution context")
-   void beforeStep_returnBorrowingAndBooking_ofContext() {
+   @DisplayName("Verify that recovery data from context")
+   void beforeStep_returnMessage_ofContext() {
 
       // GIVEN
-      stepExecution.getJobExecution().getExecutionContext().put("borrowings", this.borrowingDTOS);
-      stepExecution.getJobExecution().getExecutionContext().put("bookings", this.bookingDTOS);
+      stepExecution.getJobExecution().getExecutionContext().put("messages",messageDTOS);
 
       // WHEN
-      dataProcessor.beforeStep(stepExecution);
+      dataWriter.beforeStep(stepExecution);
 
       // THEN
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("borrowings")).isFalse();
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("bookings")).isFalse();
-      assertThat(dataProcessor.getBookingDTOS()).isEqualTo(bookingDTOS);
-      assertThat(dataProcessor.getBorrowingDTOS()).isEqualTo(borrowingDTOS);
+      assertThat(dataWriter.getMessageDTOS()).isEqualTo(messageDTOS);
    }
 
    @Test
    @Tag("execute")
-   @DisplayName("Verify construct message from datas")
-   void execute_returnMessage_ofBorrowingAndBooking() throws Exception {
+   @DisplayName("Verify that data are initialised")
+   void execute_returnFinished_ofBorrowingAndBookingNotNull() throws Exception {
 
       // GIVEN
       StepContribution stepContribution = new StepContribution(stepExecution);
       ChunkContext chunkContext = new ChunkContext( new StepContext(stepExecution));
-      dataProcessor.setBookingDTOS(bookingDTOS);
-      dataProcessor.setBorrowingDTOS(borrowingDTOS);
 
       // WHEN
-      RepeatStatus repeatStatus = dataProcessor.execute(stepContribution, chunkContext);
+      RepeatStatus repeatStatus = dataWriter.execute(stepContribution,chunkContext);
 
       // THEN
       assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
-      assertThat(dataProcessor.getMessageDTOS()).isEqualTo(messageDTOS);
-
    }
+
 
    @Test
    @Tag("afterStep")
    @DisplayName("Verify that save data into execution context")
    void afterStep_returnNewContext_ofMessages() {
-      // GIVEN
-      dataProcessor.setMessageDTOS(messageDTOS);
 
       // WHEN
-      ExitStatus exitStatus = dataProcessor.afterStep(stepExecution);
+      ExitStatus exitStatus = dataWriter.afterStep(stepExecution);
 
       // THEN
       assertThat(exitStatus).isEqualTo(ExitStatus.COMPLETED);
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("messages")).isTrue();
-      assertThat(stepExecution.getJobExecution().getExecutionContext().get("messages")).isEqualTo(messageDTOS);
-
    }
 }

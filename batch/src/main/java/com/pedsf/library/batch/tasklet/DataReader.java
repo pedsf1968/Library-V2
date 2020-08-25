@@ -2,6 +2,7 @@ package com.pedsf.library.batch.tasklet;
 
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
+import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
@@ -11,6 +12,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 @Slf4j
+@Data
 public class DataReader implements Tasklet, StepExecutionListener {
    private static final String DATE_FORMAT = "ddMMyyyy";
    private final String requestBookingEndPoint;
@@ -28,6 +31,9 @@ public class DataReader implements Tasklet, StepExecutionListener {
    private final Integer retryDelay;
    private List<BorrowingDTO> borrowingDTOS;
    private List<BookingDTO> bookingDTOS;
+   @Autowired
+   private RestTemplate restTemplate;
+
 
    public DataReader(String requestBorrowingEndPoint, String requestBookingEndPoint, Integer retryDelay) {
       this.requestBookingEndPoint = requestBookingEndPoint;
@@ -35,11 +41,9 @@ public class DataReader implements Tasklet, StepExecutionListener {
       this.retryDelay = retryDelay;
    }
 
-
    @SneakyThrows
    @Override
    public void beforeStep(StepExecution stepExecution) {
-      RestTemplate restTemplate = new RestTemplate();
       ResponseEntity<List<BorrowingDTO>> responseEntityBorrowing = null;
       ResponseEntity<List<BookingDTO>> responseEntityBooking = null;
 
@@ -82,14 +86,15 @@ public class DataReader implements Tasklet, StepExecutionListener {
          }
       }
 
-
       log.info("Data Reader initialized.");
    }
 
    @Override
    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
-
+         if(borrowingDTOS==null && bookingDTOS==null) {
+            this.beforeStep(stepContribution.getStepExecution());
+         }
 
          return RepeatStatus.FINISHED;
    }

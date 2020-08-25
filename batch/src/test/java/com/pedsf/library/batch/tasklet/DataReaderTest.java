@@ -1,11 +1,12 @@
 package com.pedsf.library.batch.tasklet;
 
 import com.pedsf.library.dto.business.*;
-import com.pedsf.library.dto.global.MessageDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.batch.core.ExitStatus;
@@ -16,28 +17,40 @@ import org.springframework.batch.core.scope.context.StepContext;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.context.SpringBatchTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 
 @SpringBatchTest
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-class DataProcessorTest {
+class DataReaderTest {
+   private static final String BORROWING_ENDPOINT = "http://localhost:7000/borrowings/delayed/";
+   private static final String BOOKING_ENDPOINT = "http://localhost:2200/library-api/bookings/pickup/";
+   private static final String DATE_FORMAT = "ddMMyyyy";
+   private static final int RETRY_DELAY = 1;
 
-   private static DataProcessor dataProcessor = new DataProcessor("no-reply@lagrandelibrairie.com",
-         "Borrowing limit exceeded",
-         "Media return date has passed for the media : %s \\n with the title : %s \\n identified by : %s \\n that you borrow the %s \\n thank you for reporting it as soon as possible.",
-         "Media is return",
-         "The media %s is available\\n with the title : %s \\n identified by : %s \\n that you booked the %s \\n thank you for pickup it as soon as possible.");
+   @Mock
+   private RestTemplate restTemplate;
+
+   @InjectMocks
+   private DataReader dataReader = new DataReader(
+         BORROWING_ENDPOINT,
+         BOOKING_ENDPOINT,
+         RETRY_DELAY);
    private static StepExecution stepExecution = MetaDataInstanceFactory.createStepExecution();
    private static List<BorrowingDTO> borrowingDTOS = new ArrayList<>();
    private static List<BookingDTO> bookingDTOS = new ArrayList<>();
-   private static List<MessageDTO> messageDTOS = new ArrayList<>();
    private static Date date = new Date();
    private static UserDTO newUserDTO;
    private static MediaDTO newMediaDTO;
@@ -69,81 +82,69 @@ class DataProcessorTest {
 
       borrowingDTOS.add(new BorrowingDTO(14,newUserDTO,newMediaDTO, date,date));
       bookingDTOS.add(new BookingDTO(15,newUserDTO,newMediaDTO, date, 2));
-      StringBuilder sb = new StringBuilder();
-      sb.append("Media return date has passed for the media : ");
-      sb.append(newMediaDTO.getMediaType());
-      sb.append(" \\n with the title : ");
-      sb.append(newMediaDTO.getTitle());
-      sb.append(" \\n identified by : ");
-      sb.append(newMediaDTO.getEan());
-      sb.append(" \\n that you borrow the ");
-      sb.append(date);
-      sb.append(" \\n thank you for reporting it as soon as possible.");
-
-      messageDTOS.add(new MessageDTO(newUserDTO.getFirstName(),
-            newUserDTO.getLastName(),
-            "no-reply@lagrandelibrairie.com",
-            newUserDTO.getEmail(),
-            "Borrowing limit exceeded",
-            sb.toString()));
-
-      sb = new StringBuilder();
-      sb.append("The media ");
-      sb.append(newMediaDTO.getMediaType());
-      sb.append(" is available\\n with the title : ");
-      sb.append(newMediaDTO.getTitle());
-      sb.append(" \\n identified by : ");
-      sb.append(newMediaDTO.getEan());
-      sb.append(" \\n that you booked the ");
-      sb.append(date);
-      sb.append(" \\n thank you for pickup it as soon as possible.");
-
-
-      messageDTOS.add(new MessageDTO(newUserDTO.getFirstName(),
-            newUserDTO.getLastName(),
-            "no-reply@lagrandelibrairie.com",
-            newUserDTO.getEmail(),
-            "Media is return",
-            sb.toString()));
    }
 
    @Test
    @Tag("beforeStep")
-   @DisplayName("Verify that recovery data from execution context")
-   void beforeStep_returnBorrowingAndBooking_ofContext() {
+   @DisplayName("Verify that recovery data from httprequest")
+   void beforeStep_returnBorrowingAndBooking_ofHttpRequest() {
+      SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+      String date = format.format(new Date());
 
       // GIVEN
-      stepExecution.getJobExecution().getExecutionContext().put("borrowings", this.borrowingDTOS);
-      stepExecution.getJobExecution().getExecutionContext().put("bookings", this.bookingDTOS);
+      ResponseEntity<List<BorrowingDTO>> responseEntityBorrowing = ResponseEntity.ok(borrowingDTOS);
+      when( restTemplate.exchange(
+                  BORROWING_ENDPOINT + date,
+                  HttpMethod.GET,
+                  null,
+                  new ParameterizedTypeReference<List<BorrowingDTO>>() { }))
+            .thenReturn(responseEntityBorrowing);
+
+      ResponseEntity<List<BookingDTO>> responseEntityBooking = ResponseEntity.ok(bookingDTOS);
+      when( restTemplate.exchange(
+                  BOOKING_ENDPOINT,
+                  HttpMethod.GET,
+                  null,
+                  new ParameterizedTypeReference<List<BookingDTO>>() { }))
+            .thenReturn(responseEntityBooking);
 
       // WHEN
-      dataProcessor.beforeStep(stepExecution);
+      dataReader.beforeStep(stepExecution);
 
       // THEN
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("borrowings")).isFalse();
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("bookings")).isFalse();
-      assertThat(dataProcessor.getBookingDTOS()).isEqualTo(bookingDTOS);
-      assertThat(dataProcessor.getBorrowingDTOS()).isEqualTo(borrowingDTOS);
+      assertThat(dataReader.getBookingDTOS()).isEqualTo(bookingDTOS);
+      assertThat(dataReader.getBorrowingDTOS()).isEqualTo(borrowingDTOS);
    }
 
    @Test
    @Tag("execute")
-   @DisplayName("Verify construct message from datas")
-   void execute_returnMessage_ofBorrowingAndBooking() throws Exception {
+   @DisplayName("Verify that data are initialised")
+   void execute_returnFinished_ofBorrowingAndBookingNotNull() throws Exception {
+
+      // GIVEN
+      dataReader.setBorrowingDTOS(borrowingDTOS);
+      dataReader.setBookingDTOS(bookingDTOS);
+      StepContribution stepContribution = new StepContribution(stepExecution);
+      ChunkContext chunkContext = new ChunkContext( new StepContext(stepExecution));
+
+      // WHEN
+      RepeatStatus repeatStatus = dataReader.execute(stepContribution,chunkContext);
+
+      // THEN
+      assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
+   }
+
+   @Test
+   @Tag("execute")
+   @DisplayName("Verify that restart previous step if datas are null")
+   void execute_restartPreviousStep_ofBorrowingAndBookingNull() throws Exception {
 
       // GIVEN
       StepContribution stepContribution = new StepContribution(stepExecution);
       ChunkContext chunkContext = new ChunkContext( new StepContext(stepExecution));
-      dataProcessor.setBookingDTOS(bookingDTOS);
-      dataProcessor.setBorrowingDTOS(borrowingDTOS);
 
       // WHEN
-      RepeatStatus repeatStatus = dataProcessor.execute(stepContribution, chunkContext);
-
-      // THEN
-      assertThat(repeatStatus).isEqualTo(RepeatStatus.FINISHED);
-      assertThat(dataProcessor.getMessageDTOS()).isEqualTo(messageDTOS);
-
+      Assertions.assertThrows(Exception.class, () -> dataReader.execute(stepContribution,chunkContext));
    }
 
    @Test
@@ -151,15 +152,18 @@ class DataProcessorTest {
    @DisplayName("Verify that save data into execution context")
    void afterStep_returnNewContext_ofMessages() {
       // GIVEN
-      dataProcessor.setMessageDTOS(messageDTOS);
+      dataReader.setBorrowingDTOS(borrowingDTOS);
+      dataReader.setBookingDTOS(bookingDTOS);
 
       // WHEN
-      ExitStatus exitStatus = dataProcessor.afterStep(stepExecution);
+      ExitStatus exitStatus = dataReader.afterStep(stepExecution);
 
       // THEN
       assertThat(exitStatus).isEqualTo(ExitStatus.COMPLETED);
-      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("messages")).isTrue();
-      assertThat(stepExecution.getJobExecution().getExecutionContext().get("messages")).isEqualTo(messageDTOS);
+      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("borrowings")).isTrue();
+      assertThat(stepExecution.getJobExecution().getExecutionContext().get("borrowings")).isEqualTo(borrowingDTOS);
+      assertThat(stepExecution.getJobExecution().getExecutionContext().containsKey("bookings")).isTrue();
+      assertThat(stepExecution.getJobExecution().getExecutionContext().get("bookings")).isEqualTo(bookingDTOS);
 
    }
 }
