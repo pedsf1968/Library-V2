@@ -33,10 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -150,7 +147,7 @@ class BookingControllerTest {
             .andReturn();
 
       // THEN
-      Map<String, Object> model = result.getModelAndView().getModel();
+      Map<String, Object> model = Objects.requireNonNull(result.getModelAndView()).getModel();
       assertThat(model).containsKey(PathTable.ATTRIBUTE_BOOKINGS);
       List<BookingDTO> founds = (List<BookingDTO>) model.get(PathTable.ATTRIBUTE_BOOKINGS);
 
@@ -173,7 +170,9 @@ class BookingControllerTest {
             .andReturn();
 
       // THEN
-      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BOOKINGS)).isFalse();
+      Map<String, Object> model = Objects.requireNonNull(result.getModelAndView()).getModel();
+      assertThat(model).doesNotContainKey(PathTable.ATTRIBUTE_BOOKINGS);
+
    }
 
    @Test

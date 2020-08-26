@@ -1,7 +1,6 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -242,6 +241,112 @@ class BorrowingControllerTestIT {
       assertThat(found).isEqualTo(newBorrowingDTO);
    }
 
+   @Test
+   @Tag("extendBorrowing")
+   @DisplayName("Verify that we can extend a Borrowing")
+   void extendBorrowing_returnNewBorrowing_ofMediaEanAndUserId() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      Integer mediaId = newBorrowingDTO.getMedia().getId();
 
+      // GIVEN
+      when(borrowingService.extend(anyInt(),anyInt())).thenReturn(newBorrowingDTO);
+
+      // WHEN
+      String json = mapper.writeValueAsString(mediaId);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/borrowings/"  + userId + "/extend")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BorrowingDTO found = mapper.readValue(json, BorrowingDTO.class);
+
+      assertThat(found).isEqualTo(newBorrowingDTO);
+   }
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that we can create a Borrowing")
+   void borrow_returnNewBorrowing_ofMediaEanAndUserId() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      String mediaEan = newBorrowingDTO.getMedia().getEan();
+
+      // GIVEN
+      when(borrowingService.borrow(anyInt(),anyString())).thenReturn(newBorrowingDTO);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/borrowings/"  + userId + "/" + mediaEan))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BorrowingDTO found = mapper.readValue(json, BorrowingDTO.class);
+
+      assertThat(found).isEqualTo(newBorrowingDTO);
+   }
+
+   @Test
+   @Tag("addGiveBack")
+   @DisplayName("Verify that we can restitute a Borrowing")
+   void addGiveBack_returnBorrowingRestitute_ofMediaIdAndUserId() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      Integer mediaId = newBorrowingDTO.getMedia().getId();
+
+      // GIVEN
+      when(borrowingService.restitute(anyInt(),anyInt())).thenReturn(newBorrowingDTO);
+
+      // WHEN
+      String json = mapper.writeValueAsString(mediaId);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/borrowings/"  + userId + "/restitute")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BorrowingDTO found = mapper.readValue(json, BorrowingDTO.class);
+
+      assertThat(found).isEqualTo(newBorrowingDTO);
+   }
+
+   @Test
+   @Tag("findDelayed")
+   @DisplayName("Verify that return delayed Borrowing")
+   void findDelayed_returnDelayedBorrowing_ofOutOfDateBorrowing() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      String mediaEan = newBorrowingDTO.getMedia().getEan();
+
+      // GIVEN
+      when(borrowingService.findDelayed(any(java.util.Date.class))).thenReturn(allBorrowingDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/borrowings/delayed/11052020"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<BorrowingDTO> founds = Arrays.asList(mapper.readValue(json, BorrowingDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(allBorrowingDTOS.size());
+      for(BorrowingDTO dto: founds) {
+         for(BorrowingDTO expected:allBorrowingDTOS) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
 
 }

@@ -1,7 +1,6 @@
 package com.pedsf.library.libraryapi.controller.unitary;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -28,9 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = {BorrowingController.class})
@@ -45,10 +42,10 @@ class BorrowingControllerTest {
    @MockBean
    private BorrowingService borrowingService;
 
-   private static Map<Integer, UserDTO> allUserDTOS = new HashMap<>();
-   private static List<MediaDTO> allMediaDTOS = new ArrayList<>();
+   private static final Map<Integer, UserDTO> allUserDTOS = new HashMap<>();
+   private static final List<MediaDTO> allMediaDTOS = new ArrayList<>();
    private BorrowingDTO newBorrowingDTO;
-   private List<BorrowingDTO> allBorrowingDTOS = new ArrayList<>();
+   private static final List<BorrowingDTO> allBorrowingDTOS = new ArrayList<>();
    private static ObjectMapper mapper = new ObjectMapper();
 
    @BeforeAll
@@ -160,7 +157,7 @@ class BorrowingControllerTest {
    @Test
    @Tag("findBorrowingById")
    @DisplayName("Verify that we get NotFound if there are no Borrowing for this Id")
-   void findBorrowingById_rreturnNotFound_ofResourceNotFoundException() throws Exception {
+   void findBorrowingById_returnNotFound_ofResourceNotFoundException() throws Exception {
 
       // GIVEN
       when(borrowingService.findById(anyInt())).thenThrow(ResourceNotFoundException.class);
@@ -174,9 +171,8 @@ class BorrowingControllerTest {
 
    @Test
    @Tag("addBorrowing")
-   @DisplayName("Verify that we can add Borrowing")
-   void addBorrowing_returnNewBorrowing_ofMediaEanAndUserId() throws Exception {
-      Integer userId = newBorrowingDTO.getUser().getId();
+   @DisplayName("Verify that we get NotFound if MediaEAN is wrong")
+   void addBorrowing_returnNotFound_ofResourceNotFoundException() throws Exception {
       String mediaEan = newBorrowingDTO.getMedia().getEan();
 
       // GIVEN
@@ -184,11 +180,87 @@ class BorrowingControllerTest {
 
       // WHEN
       String json = mapper.writeValueAsString(mediaEan);
-      final MvcResult result = mockMvc.perform(
+      mockMvc.perform(
             MockMvcRequestBuilders.post("/borrowings/"  + 987)
                   .contentType(javax.ws.rs.core.MediaType.APPLICATION_JSON)
                   .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
                   .content(json))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn();
+   }
+
+   @Test
+   @Tag("extendBorrowing")
+   @DisplayName("Verify that we can add extend a Borrowing with wrong Id")
+   void extendBorrowing_returnNotFound_ofResourceNotFoundException() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      Integer mediaId = newBorrowingDTO.getMedia().getId();
+
+      // GIVEN
+      when(borrowingService.extend(anyInt(),anyInt())).thenThrow(ResourceNotFoundException.class);
+
+      // WHEN
+      String json = mapper.writeValueAsString(mediaId);
+      mockMvc.perform(
+            MockMvcRequestBuilders.post("/borrowings/"  + userId + "/extend")
+                  .contentType(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn();
+   }
+
+   @Test
+   @Tag("borrow")
+   @DisplayName("Verify that return BadRequest if return null when creating Borrowing")
+   void borrow_returnBadRequest_ofWrongMediaEanAndUserId() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      String mediaEan = newBorrowingDTO.getMedia().getEan();
+
+      // GIVEN
+      when(borrowingService.borrow(anyInt(),anyString())).thenReturn(null);
+
+      // WHEN
+      mockMvc.perform(
+            MockMvcRequestBuilders.get("/borrowings/"  + userId + "/" + mediaEan)
+                  .contentType(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andReturn();
+   }
+
+   @Test
+   @Tag("addGiveBack")
+   @DisplayName("Verify that return BadRequest if return null when creating Borrowing")
+   void addGiveBack__returnBadRequest_ofWrongMediaEanAndUserId() throws Exception {
+      Integer userId = newBorrowingDTO.getUser().getId();
+      Integer mediaId = newBorrowingDTO.getMedia().getId();
+
+      // GIVEN
+      when(borrowingService.restitute(anyInt(),anyInt())).thenReturn(null);
+
+      // WHEN
+      String json = mapper.writeValueAsString(mediaId);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/borrowings/"  + userId + "/restitute")
+                  .contentType(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andReturn();
+   }
+
+   @Test
+   @Tag("findDelayed")
+   @DisplayName("Verify that return NotFound if there is no delayed Borrowing")
+   void findDelayed_returnNotFount_ofEmptyDelayedBorrowing() throws Exception {
+
+      // GIVEN
+      when(borrowingService.findDelayed(any(java.util.Date.class))).thenThrow(ResourceNotFoundException.class);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/borrowings/delayed/11052020"))
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andReturn();
    }

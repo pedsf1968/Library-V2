@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,6 +45,8 @@ class UserControllerTestIT {
 
    @MockBean
    private Role role;
+
+   private ObjectMapper mapper = new ObjectMapper();
 
    @BeforeAll
    static void beforeAll() {
@@ -81,8 +84,32 @@ class UserControllerTestIT {
    }
 
    @Test
-   void findAllFilteredUsers() {
+   @Tag("findAllFilteredUsers")
+   @DisplayName("Verify that we get one user by his firstName and lastName")
+   void findAllFilteredUsers_returnUser_ofUserName() throws Exception {
+      UserDTO filter = new UserDTO();
 
+      // GIVEN
+      filter.setFirstName(allUserDTOS.get(0).getFirstName());
+      filter.setLastName(allUserDTOS.get(0).getLastName());
+      when(userService.findAllFiltered(any(UserDTO.class))).thenReturn(Collections.singletonList(allUserDTOS.get(0)));
+
+      // WHEN
+      String json = mapper.writeValueAsString(filter);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/users/searches")
+                  .contentType(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<UserDTO> founds = Arrays.asList(mapper.readValue(json, UserDTO[].class));
+
+      assertThat(founds.size()).isEqualTo(1);
+      assertThat(founds.get(0)).isEqualTo(allUserDTOS.get(0));
    }
 
    @Test
@@ -103,7 +130,6 @@ class UserControllerTestIT {
 
       // convert result in UserDTO list
       String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
-      ObjectMapper mapper = new ObjectMapper();
       UserDTO found = mapper.readValue(json, UserDTO.class);
 
       // THEN

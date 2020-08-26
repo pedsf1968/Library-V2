@@ -34,9 +34,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -150,8 +148,10 @@ class BorrowingControllerTest {
             .andReturn();
 
       // THEN
-      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BORROWINGS)).isTrue();
-      List<BorrowingDTO> founds = (List<BorrowingDTO>) result.getModelAndView().getModel().get(PathTable.ATTRIBUTE_BORROWINGS);
+      Map<String,Object> model = Objects.requireNonNull(result.getModelAndView()).getModel();
+
+      assertThat(model).containsKey(PathTable.ATTRIBUTE_BORROWINGS);
+      List<BorrowingDTO> founds = (List<BorrowingDTO>) model.get(PathTable.ATTRIBUTE_BORROWINGS);
 
       assertThat(founds).isEqualTo(allBorrowingDTOS);
    }
@@ -172,7 +172,8 @@ class BorrowingControllerTest {
             .andReturn();
 
       // THEN
-      assertThat(result.getModelAndView().getModel().containsKey(PathTable.ATTRIBUTE_BORROWINGS)).isFalse();
+      Map<String, Object> model = Objects.requireNonNull(result.getModelAndView()).getModel();
+      assertThat(model).doesNotContainKey(PathTable.ATTRIBUTE_BOOKINGS);
    }
 
    @Test
@@ -213,7 +214,7 @@ class BorrowingControllerTest {
    @WithMockUser(username = "user", password = "pwd", roles = "USER")
    void extend_returnBorrowingPage_ofUserAndBorrowing() throws Exception {
       // GIVEN
-      Integer mediaId = 45;
+      int mediaId = 45;
       UserDTO userDTO = allUserDTOS.get(3);
       when(userApiProxy.findUserByEmail(anyString())).thenReturn(userDTO);
       when(libraryApiProxy.extendBorrowing(anyInt(),anyInt())).thenReturn(allBorrowingDTOS.get(1));
