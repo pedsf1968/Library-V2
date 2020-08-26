@@ -1,7 +1,6 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
@@ -10,8 +9,6 @@ import com.pedsf.library.libraryapi.service.BookingService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,8 +27,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -47,10 +44,9 @@ class BookingControllerTestIT {
 
    private static final List<UserDTO> allUserDTOS = new ArrayList<>();
    private static List<MediaDTO> allMediaDTOS = new ArrayList<>();
-   private static ObjectMapper mapper = new ObjectMapper();
    private BookingDTO newBookingDTO;
    private List<BookingDTO> allBookingDTOS = new ArrayList<>();
-
+   private static ObjectMapper mapper = new ObjectMapper();
 
    @BeforeAll
    static void beforeAll() {
@@ -69,25 +65,6 @@ class BookingControllerTestIT {
       allMediaDTOS.add(new MediaDTO(7,"978-2253003656","Nana","BOOK","BORROWED",2,1));
       allMediaDTOS.add(new MediaDTO(8,"978-2253003656","Nana","BOOK","FREE",2,1));
       allMediaDTOS.add(new MediaDTO(9,"978-2253010692","L'éducation sentimentale","BOOK","FREE",2,0));
-      allMediaDTOS.add(new MediaDTO(10,"978-2253010692","L'éducation sentimentale","BOOK","FREE",2,0));
-      allMediaDTOS.add(new MediaDTO(11,"978-2070413119","Madame Bovary","BOOK","BORROWED",3,1));
-      allMediaDTOS.add(new MediaDTO(12,"978-2070413119","Madame Bovary","BOOK","FREE",3,1));
-      allMediaDTOS.add(new MediaDTO(13,"978-2070413119","Madame Bovary","BOOK","FREE",3,1));
-      allMediaDTOS.add(new MediaDTO(14,"978-2253096337","Les Misérables (Tome 1)","BOOK","FREE",3,3));
-      allMediaDTOS.add(new MediaDTO(15,"978-2253096337","Les Misérables (Tome 1)","BOOK","FREE",3,3));
-      allMediaDTOS.add(new MediaDTO(16,"978-2253096337","Les Misérables (Tome 1)","BOOK","FREE",3,3));
-      allMediaDTOS.add(new MediaDTO(17,"978-2253096344","Les Misérables (Tome 2)","BOOK","BORROWED",3,2));
-      allMediaDTOS.add(new MediaDTO(18,"978-2253096344","Les Misérables (Tome 2)","BOOK","FREE",3,2));
-      allMediaDTOS.add(new MediaDTO(19,"978-2253096344","Les Misérables (Tome 2)","BOOK","FREE",3,2));
-      allMediaDTOS.add(new MediaDTO(20,"3475001058980","Parasite","VIDEO","BORROWED",3,2));
-      allMediaDTOS.add(new MediaDTO(21,"3475001058980","Parasite","VIDEO","FREE",3,2));
-      allMediaDTOS.add(new MediaDTO(22,"3475001058980","Parasite","VIDEO","FREE",3,2));
-      allMediaDTOS.add(new MediaDTO(23,"8809634380036","Kill This Love","MUSIC","FREE",2,2));
-      allMediaDTOS.add(new MediaDTO(24,"8809634380036","Kill This Love","MUSIC","FREE",2,2));
-      allMediaDTOS.add(new MediaDTO(25,"4988064587100","DDU-DU DDU-DU","MUSIC","FREE",2,2));
-      allMediaDTOS.add(new MediaDTO(26,"4988064587100","DDU-DU DDU-DU","MUSIC","FREE",2,2));
-      allMediaDTOS.add(new MediaDTO(27,"4988064585816","RE BLACKPINK","MUSIC","BORROWED",1,0));
-      allMediaDTOS.add(new MediaDTO(28,"8809269506764","MADE","MUSIC","FREE",1,1));
 
       TimeZone.setDefault(TimeZone.getTimeZone("CET"));
       mapper.setTimeZone(TimeZone.getTimeZone("CET"));
@@ -95,10 +72,11 @@ class BookingControllerTestIT {
 
    @BeforeEach
    void beforeEach() {
+      newBookingDTO = new BookingDTO(5,allUserDTOS.get(2),allMediaDTOS.get(5), Date.valueOf("2020-08-12"),1);
 
-      allBookingDTOS.add( new BookingDTO(1,allUserDTOS.get(3),allMediaDTOS.get(4), Date.valueOf("2020-08-12"),1));
-      allBookingDTOS.add( new BookingDTO(2,allUserDTOS.get(3),allMediaDTOS.get(7), Date.valueOf("2020-08-12"),1));
-      allBookingDTOS.add( new BookingDTO(3,allUserDTOS.get(3),allMediaDTOS.get(9), Date.valueOf("2020-08-12"),1));
+      allBookingDTOS.add( new BookingDTO(1,allUserDTOS.get(3),allMediaDTOS.get(2), Date.valueOf("2020-08-12"),1));
+      allBookingDTOS.add( new BookingDTO(2,allUserDTOS.get(3),allMediaDTOS.get(5), Date.valueOf("2020-08-12"),1));
+      allBookingDTOS.add( new BookingDTO(3,allUserDTOS.get(3),allMediaDTOS.get(8), Date.valueOf("2020-08-12"),1));
    }
 
    @Test
@@ -132,7 +110,7 @@ class BookingControllerTestIT {
    @Test
    @Tag("findAllFilteredBorrowings")
    @DisplayName("Verify that we get Booking list of User")
-   void findAllFilteredBorrowings() throws Exception {
+   void findAllFilteredBorrowings_returnUserBooking_ofUserAndBookingList() throws Exception {
       BookingDTO filter = new BookingDTO();
 
       // GIVEN
@@ -161,7 +139,131 @@ class BookingControllerTestIT {
             }
          }
       }
+   }
 
+   @Test
+   @Tag("findBookingsByUserId")
+   @DisplayName("Verify that we have the list of User Booking")
+   void findBookingsByUserId_returnUserBooking_ofUserId() throws Exception {
+      // GIVEN
+      Integer userId = allBookingDTOS.get(1).getUser().getId();
+      when(bookingService.findBookingsByUserId(userId)).thenReturn(allBookingDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bookings/user/" + userId))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<BookingDTO> founds = Arrays.asList(mapper.readValue(json, BookingDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(allBookingDTOS.size());
+      for(BookingDTO dto: founds) {
+         for(BookingDTO expected:allBookingDTOS) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("addBooking")
+   @DisplayName("Verify that we can add Booking")
+   void addBooking_returnNewBooking_ofMediaEanAndUserId() throws Exception {
+      Integer userId = newBookingDTO.getUser().getId();
+      String mediaEan = newBookingDTO.getMedia().getEan();
+
+      // GIVEN
+      when(bookingService.booking(anyInt(),anyString())).thenReturn(newBookingDTO);
+
+      // WHEN
+      String json = mapper.writeValueAsString(mediaEan);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/bookings/"  + userId)
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BookingDTO found = mapper.readValue(json, BookingDTO.class);
+
+      assertThat(found).isEqualTo(newBookingDTO);
+   }
+
+   @Test
+   @Tag("cancelBooking")
+   @DisplayName("Verify that we can cancel a Booking")
+   void cancelBooking_returnCancelledBooking_ofBookingIdAndUserId() throws Exception {
+      Integer userId = newBookingDTO.getUser().getId();
+      Integer bookingId = newBookingDTO.getId();
+
+      // GIVEN
+      when(bookingService.cancelBooking(bookingId)).thenReturn(newBookingDTO);
+
+      // WHEN
+      String json = mapper.writeValueAsString(bookingId);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/bookings/cancel/"  + userId)
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      BookingDTO found = mapper.readValue(json, BookingDTO.class);
+
+      assertThat(found).isEqualTo(newBookingDTO);
+   }
+
+   @Test
+   @Tag("findReadyToPickUp")
+   @DisplayName("Verify that we have the list of all Booking ready to pickup")
+   void findReadyToPickUp_returnBookingListReadyToPickUp() throws Exception {
+      // GIVEN
+      when(bookingService.findReadyToPickUp()).thenReturn(allBookingDTOS);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bookings/pickup"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<BookingDTO> founds = Arrays.asList(mapper.readValue(json, BookingDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(allBookingDTOS.size());
+      for(BookingDTO dto: founds) {
+         for(BookingDTO expected:allBookingDTOS) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("cancelOutOfDate")
+   @DisplayName("Verify that we can cancel Booking out of date")
+   void cancelOutOfDate() throws Exception {
+      // GIVEN
+      doNothing().when(bookingService).cancelOutOfDate();
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/bookings/release"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
    }
 
 }

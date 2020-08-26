@@ -261,6 +261,39 @@ class VideoControllerTestIT {
    }
 
    @Test
+   @Tag("getAllVideosActors")
+   @DisplayName("Verify that we get all actors list")
+   void getAllVideosActors() throws Exception {
+      List<PersonDTO> actors = new ArrayList<>();
+      for(VideoDTO videoDTO : allVideoDTOS) {
+         actors.add(videoDTO.getDirector());
+      }
+
+      // GIVEN
+      when(videoService.findAllActors()).thenReturn(actors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/videos/actors"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(actors.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:actors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
    @Tag("getAllVideosTitles")
    @DisplayName("Verify that we get all titles list")
    void getAllVideosTitles() throws Exception {

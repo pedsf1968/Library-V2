@@ -88,8 +88,7 @@ public class BorrowingController {
 
    @PostMapping(value = "/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    public ResponseEntity<BorrowingDTO> addBorrowing(@PathVariable("userId") Integer userId,
-                                                 @RequestBody String mediaEan
-   ) {
+                                                 @RequestBody String mediaEan) {
       try {
 
          BorrowingDTO borrowingCreated = borrowingService.borrow(userId, mediaEan);

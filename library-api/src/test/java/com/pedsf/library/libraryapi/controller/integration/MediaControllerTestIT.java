@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @Slf4j
 @WebMvcTest(controllers = {MediaController.class})
 @ExtendWith(SpringExtension.class)
-public class MediaControllerTestIT {
+class MediaControllerTestIT {
 
    private static final List<MediaDTO> allMediaDTOS = new ArrayList<>();
 

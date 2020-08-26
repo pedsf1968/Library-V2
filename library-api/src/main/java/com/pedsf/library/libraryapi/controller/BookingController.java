@@ -109,9 +109,9 @@ public class BookingController {
    }
 
    @GetMapping(value = "/release")
-   public ResponseEntity.BodyBuilder cancelOutOfDate(){
+   public ResponseEntity<Void> cancelOutOfDate(){
          bookingService.cancelOutOfDate();
-         return ResponseEntity.status(HttpStatus.OK);
+         return ResponseEntity.status(HttpStatus.OK).body(null);
    }
 
 }

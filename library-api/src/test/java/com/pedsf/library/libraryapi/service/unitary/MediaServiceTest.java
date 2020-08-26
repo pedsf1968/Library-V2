@@ -835,12 +835,6 @@ class MediaServiceTest {
    }
 
    @Test
-   @Tag("borrow")
-   void borrow() {
-   }
-
-
-   @Test
    @Tag("release")
    @DisplayName("Verify hat we can reinitialise the status and the returnDate of a Media")
    void release_setFREEAndReturnDateNull_ofMediaByID() {

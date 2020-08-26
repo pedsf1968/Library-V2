@@ -3,7 +3,6 @@ package com.pedsf.library.mediaapi.controller;
 
 import com.pedsf.library.mediaapi.model.FileType;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,21 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Controller
-public class ResourcesController {
-
-
-   @Value("${media-api.images.repository}")
-   private String imagesRepository;
-   @Value("${media-api.book.images.repository}")
-   private String bookImagesRepository;
-   @Value("${media-api.music.images.repository}")
-   private  String musicImagesRepository;
-   @Value("${media-api.video.images.repository}")
-   private  String videoImagesRepository;
-   @Value("${media-api.game.images.repository}")
-   private  String gameImagesRepository;
-   @Value("${media-api.user.images.repository}")
-   private  String userImagesRepository;
+public class ResourcesController extends MediaControllerInit{
 
    @GetMapping("/images/{imageName}")
    public @ResponseBody byte[] getImage(@PathVariable("imageName") String imageName) throws IOException {

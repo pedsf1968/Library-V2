@@ -1,6 +1,7 @@
 package com.pedsf.library.libraryapi.controller;
 
 import com.pedsf.library.dto.business.BookDTO;
+import com.pedsf.library.dto.business.BookingDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.exception.*;
 import com.pedsf.library.libraryapi.service.BookService;
