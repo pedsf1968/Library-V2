@@ -2,11 +2,9 @@ package com.pedsf.library.mailapi.service;
 
 import com.pedsf.library.dto.global.MessageDTO;
 import com.pedsf.library.mailapi.configuration.SpringMailConfig;
+import org.hibernate.validator.constraints.ModCheck;
 import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -26,10 +24,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -42,6 +37,8 @@ import static org.mockito.Mockito.*;
 @Import( SpringMailConfig.class)
 class EmailServiceTest {
    private static final String EMAIL_TEMPLATE = "email.html";
+   private static final String SMTP_HOST = "smtp.example.com";
+   private static final String SMTP_PORT = "25";
    private static final String PNG_MIME = "image/png";
 
    @Value("${mail-api.mail.background}")
@@ -69,8 +66,8 @@ class EmailServiceTest {
    @BeforeAll
    static void beforeAll() {
       Properties properties = new Properties();
-      properties.put("mail.smtp.host", "smtp.example.com");
-      properties.put("mail.smtp.port", "25");
+      properties.put("mail.smtp.host", SMTP_HOST);
+      properties.put("mail.smtp.port", SMTP_PORT);
       Session session = Session.getDefaultInstance(properties, null);
       mimeMessage= new MimeMessage(session);
 
@@ -92,9 +89,31 @@ class EmailServiceTest {
             "Message content");
    }
 
+   @Test
+   @Tag("sendMailSynch")
+   @DisplayName("Verify that is waiting before sending Mail")
+   void sendMailSynch() throws InterruptedException {
+      // GIVEN
+      String output = "OUTPUT";
+      when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+      when(templateEngine.process(anyString(),any(Context.class))).thenReturn(output);
+      long startTime = new Date().getTime();
+      emailService.sendMail(newMessageDTO, new Locale.Builder().build());
+      long referenceTime = startTime - new Date().getTime();
+
+      // WHEN
+      long endTime = new Date().getTime();
+      emailService.sendMailSynch(newMessageDTO, new Locale.Builder().build());
+
+      // THEN
+      long endDate = new Date().getTime();
+      assertThat(endTime-startTime).isGreaterThan(referenceTime);
+   }
+
 
    @Test
    @Tag("sendMail")
+   @DisplayName("Verify that all datas in mail")
    void sendMail() {
       // GIVEN
       ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
@@ -121,8 +140,7 @@ class EmailServiceTest {
       assertThat(capturedContext.get(0).getVariable("mailContent")).isEqualTo(newMessageDTO.getContent());
       Date found = (Date) capturedContext.get(0).getVariable("mailDate");
       assertThat(found).isEqualToIgnoringHours(new Date());
-      assertThat(capturedMimeMessage.get(0).getSession().getProperties().get("mail.smtp.host")).isEqualTo("smtp.example");
-      assertThat(capturedMimeMessage.get(0).getSession().getProperties().get("mail.smtp.port")).isEqualTo("25");
-      //assertThat(capturedMimeMessage.get(0).getFrom()).isEqualTo(newMessageDTO.getFrom());
+      assertThat(capturedMimeMessage.get(0).getSession().getProperties().get("mail.smtp.host")).isEqualTo(SMTP_HOST);
+      assertThat(capturedMimeMessage.get(0).getSession().getProperties().get("mail.smtp.port")).isEqualTo(SMTP_PORT);
    }
 }
