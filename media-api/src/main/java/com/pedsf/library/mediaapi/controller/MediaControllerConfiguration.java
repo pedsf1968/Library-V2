@@ -3,8 +3,8 @@ package com.pedsf.library.mediaapi.controller;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class MediaControllerInit {
+//@Configuration
+public class MediaControllerConfiguration {
 
    @Value("${media-api.images.repository}")
    public String imagesRepository;

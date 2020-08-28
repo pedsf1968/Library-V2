@@ -199,7 +199,6 @@
 				<activatedProperties>development</activatedProperties>
 				<configServer>http://localhost:2000</configServer>
 			</properties>
-
 		</profile>
 
 		<profile>

@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
-public class FileController extends MediaControllerInit{
+public class FileController extends MediaControllerConfiguration {
    private final FileService fileService;
 
    public FileController(FileService fileService) {
@@ -31,10 +31,6 @@ public class FileController extends MediaControllerInit{
                                     @RequestParam("fileType") FileType fileType,
                                     @RequestParam("fileName") String fileName) {
 
-      if (!fileName.matches("[a-zA-Z0-9]")) {
-         throw new ConflictException("Invalid fileName "+ fileName);
-      }
-
       if (fileType.equals(FileType.BOOK)) {
          fileService.uploadFile(file, bookImagesRepository, fileName);
       } else if (fileType.equals(FileType.MUSIC)) {
@@ -43,8 +39,6 @@ public class FileController extends MediaControllerInit{
          fileService.uploadFile(file, videoImagesRepository, fileName);
       } else if (fileType.equals(FileType.GAME)) {
          fileService.uploadFile(file, gameImagesRepository, fileName);
-      } else if (fileType.equals(FileType.USER)) {
-         fileService.uploadFile(file, userImagesRepository,fileName);
       } else {
          fileService.uploadFile(file, imagesRepository, fileName);
       }
