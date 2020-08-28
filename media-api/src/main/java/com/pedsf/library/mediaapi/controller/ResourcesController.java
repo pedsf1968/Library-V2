@@ -15,18 +15,24 @@ import java.io.*;
 @Slf4j
 @Controller
 public class ResourcesController extends MediaControllerConfiguration {
+   private static final String FILE_REGEX = "^\\p{ASCII}*.(png|jpg|gif|bmp)";
+   private static final String STRING_REGEX = "^\\p{ASCII}*$";
 
    @GetMapping("/images/{imageName}")
    public @ResponseBody byte[] getImage(@PathVariable("imageName") String imageName) throws IOException {
-      File fileUnsafe = new File(imagesRepository+imageName);
 
-      try {
-         if (fileUnsafe.exists()) {
-            InputStream in = new FileInputStream(imagesRepository + imageName);
-            return IOUtils.toByteArray(in);
+      if(imageName.matches(FILE_REGEX)) {
+         try {
+            File fileUnsafe = new File(imagesRepository + imageName);
+            File directory = new File(imagesRepository);
+
+            if (FileUtils.directoryContains(directory, fileUnsafe)) {
+               InputStream in = new FileInputStream(fileUnsafe);
+               return IOUtils.toByteArray(in);
+            }
+         } catch (NullPointerException | FileNotFoundException exception) {
+            log.error(exception.getMessage());
          }
-      }catch (FileNotFoundException exception) {
-         log.error(exception.getMessage());
       }
       return new byte[0];
    }
@@ -48,15 +54,19 @@ public class ResourcesController extends MediaControllerConfiguration {
          } else {
             sb.append(imagesRepository);
          }
-         sb.append(imageName).append(".jpg");
+         if (imageName.matches(STRING_REGEX)) {
+            sb.append(imageName).append(".jpg");
 
-         File fileUnsafe = new File(sb.toString());;
+            File fileUnsafe = new File(sb.toString());
+            ;
+            File directory = new File(imagesRepository);
 
-         if (fileUnsafe.exists()) {
-            in = new FileInputStream(sb.toString());
-            return IOUtils.toByteArray(in);
+            if (FileUtils.directoryContains(directory, fileUnsafe)) {
+               in = new FileInputStream(fileUnsafe);
+               return IOUtils.toByteArray(in);
+            }
          }
-      }catch (FileNotFoundException exception) {
+      }catch (NullPointerException | FileNotFoundException exception) {
          log.error(exception.getMessage());
       }
       return new byte[0];
