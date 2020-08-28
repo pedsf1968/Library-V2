@@ -1,16 +1,12 @@
 package com.pedsf.library.libraryapi.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedsf.library.dto.BookFormat;
-import com.pedsf.library.dto.BookType;
 import com.pedsf.library.dto.GameFormat;
 import com.pedsf.library.dto.GameType;
 import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.dto.business.GameDTO;
-import com.pedsf.library.dto.business.MusicDTO;
 import com.pedsf.library.dto.business.PersonDTO;
 import com.pedsf.library.libraryapi.controller.GameController;
-import com.pedsf.library.libraryapi.controller.VideoController;
 import com.pedsf.library.libraryapi.service.GameService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -138,6 +134,41 @@ class GameControllerTestIT {
    }
 
    @Test
+   @Tag("findAllFilteredGames")
+   @DisplayName("Verify that we get Game list from first editor")
+   void findAllFilteredBooks() throws Exception {
+      List<GameDTO> filtered = allGameDTOS.subList(0,3);
+      GameDTO filter = new GameDTO();
+
+      // GIVEN
+      filter.setEditor(filtered.get(0).getEditor());
+      when(gameService.findAllFiltered(any(GameDTO.class))).thenReturn(filtered);
+
+      // WHEN
+      String json = mapper.writeValueAsString(filter);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/games/searches")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<GameDTO> founds = Arrays.asList(mapper.readValue(json, GameDTO[].class));
+
+      assertThat(founds.size()).isEqualTo(filtered.size());
+      for(GameDTO dto: founds) {
+         for(GameDTO expected:filtered) {
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
    @Tag("findGameById")
    @DisplayName("Verify that we can get Game by his EAN")
    void findGameById()  throws Exception {
@@ -237,6 +268,38 @@ class GameControllerTestIT {
               .andReturn();
    }
 
+   @Test
+   @Tag("getAllBooksEditors")
+   @DisplayName("Verify that we get all editors list")
+   void getAllBooksEditors() throws Exception {
+      List<PersonDTO> editors = new ArrayList<>();
+      for(GameDTO gameDTO : allGameDTOS) {
+         editors.add(gameDTO.getEditor());
+      }
+
+      // GIVEN
+      when(gameService.findAllEditors()).thenReturn(editors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/games/editors"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(editors.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:editors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
 
    @Test
    @Tag("getAllGamesTitles")

@@ -19,13 +19,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -217,6 +222,21 @@ class GameControllerTest {
               MockMvcRequestBuilders.delete("/games/"+456))
               .andExpect(MockMvcResultMatchers.status().isNotFound())
               .andReturn();
+   }
+
+   @Test
+   @Tag("getAllBooksEditors")
+   @DisplayName("Verify that we get NotFound if there are no Game Editors")
+   void getAllBooksEditorsreturnNotFound_ofResourceNotFoundException() throws Exception {
+
+      // GIVEN
+      when(gameService.findAllEditors()).thenThrow(ResourceNotFoundException.class);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/games/editors"))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andReturn();
    }
 
    @Test

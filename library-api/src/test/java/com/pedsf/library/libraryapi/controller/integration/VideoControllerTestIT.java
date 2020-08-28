@@ -132,6 +132,41 @@ class VideoControllerTestIT {
    }
 
    @Test
+   @Tag("findAllFilteredVideos")
+   @DisplayName("Verify that we get Book list from first author")
+   void findAllFilteredBooks() throws Exception {
+      List<VideoDTO> filtered = allVideoDTOS.subList(0,3);
+      VideoDTO filter = new VideoDTO();
+
+      // GIVEN
+      filter.setDirector(filtered.get(0).getDirector());
+      when(videoService.findAllFiltered(any(VideoDTO.class))).thenReturn(filtered);
+
+      // WHEN
+      String json = mapper.writeValueAsString(filter);
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.post("/videos/searches")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .characterEncoding(String.valueOf(StandardCharsets.UTF_8))
+                  .content(json))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<VideoDTO> founds = Arrays.asList(mapper.readValue(json, VideoDTO[].class));
+
+      assertThat(founds.size()).isEqualTo(filtered.size());
+      for(VideoDTO dto: founds) {
+         for(VideoDTO expected:filtered) {
+            if(dto.getEan().equals(expected.getEan())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
    @Tag("findVideoById")
    @DisplayName("Verify that we can get Video by his EAN")
    void findVideoById()  throws Exception {
@@ -253,6 +288,39 @@ class VideoControllerTestIT {
       assertThat(founds.size()).isEqualTo(directors.size());
       for(PersonDTO dto: founds) {
          for(PersonDTO expected:directors) {
+            if(dto.getId().equals(expected.getId())) {
+               assertThat(dto).isEqualTo(expected);
+            }
+         }
+      }
+   }
+
+   @Test
+   @Tag("getAllVideosActors")
+   @DisplayName("Verify that we get all actors list")
+   void getAllVideosActors() throws Exception {
+      List<PersonDTO> actors = new ArrayList<>();
+      for(VideoDTO videoDTO : allVideoDTOS) {
+         actors.add(videoDTO.getDirector());
+      }
+
+      // GIVEN
+      when(videoService.findAllActors()).thenReturn(actors);
+
+      // WHEN
+      final MvcResult result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/videos/actors"))
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andReturn();
+
+      // convert result in UserDTO list
+      String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+      List<PersonDTO> founds = Arrays.asList(mapper.readValue(json, PersonDTO[].class));
+
+      // THEN
+      assertThat(founds.size()).isEqualTo(actors.size());
+      for(PersonDTO dto: founds) {
+         for(PersonDTO expected:actors) {
             if(dto.getId().equals(expected.getId())) {
                assertThat(dto).isEqualTo(expected);
             }

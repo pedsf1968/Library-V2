@@ -36,7 +36,7 @@ public class MessageDTO implements Serializable {
 
    @JsonCreator
    public MessageDTO(
-         @JsonProperty("firstname") String firstName,
+         @JsonProperty("firstName") String firstName,
          @JsonProperty("lastName") String lastName,
          @JsonProperty("from") String from,
          @JsonProperty("to") String to,

@@ -61,7 +61,6 @@ public class BorrowingController {
    public String borrowing(@PathVariable("mediaEan") String mediaEan){
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
       if(!authentication.getName().equals("anonymousUser")) {
          UserDTO userDTO = userApiProxy.findUserByEmail(authentication.getName());
          libraryApiProxy.addBorrowing(userDTO.getId(), mediaEan);

@@ -56,9 +56,6 @@ class MediaServiceTestIT {
       videoService = new VideoService(videoRepository, personService);
 
       mediaService = new MediaService(mediaRepository, bookService, gameService, musicService, videoService);
-
-
-
    }
 
    @BeforeEach
@@ -644,16 +641,29 @@ class MediaServiceTestIT {
 
    @Test
    @Tag("bookedFreeByEan")
-   @DisplayName("Verify tha we don't BOOK a not FREE Media")
+   @DisplayName("Verify that we don't BOOK a not FREE Media")
    void bookedFreeByEan_statusNotChanged_ofNotFREEMedia() {
       mediaService.bookedFreeByEan("978-2253002864");
 
       Assertions.assertThrows(com.pedsf.library.exception.ResourceNotFoundException.class,
             ()-> mediaService.findBlockedByEan("978-2253002864"));
    }
+
    @Test
    @Tag("borrow")
+   @DisplayName("Verify that when we borrow a media date and status are modified")
    void borrow() {
+      // GIVEN
+      Integer mediaId = allMediaFree.get(2).getId();
+      Date newDate = Date.valueOf("2020-10-11");
+      mediaService.borrow(mediaId,newDate);
+
+      // WHEN
+      MediaDTO found = mediaService.findById(mediaId);
+
+      // THEN
+      assertThat(found.getReturnDate()).isEqualToIgnoringHours(newDate);
+      assertThat(found.getStatus()).isEqualTo(MediaStatus.BORROWED.name());
    }
 
    @Test

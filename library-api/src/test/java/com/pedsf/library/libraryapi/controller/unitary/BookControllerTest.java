@@ -70,6 +70,7 @@ class BookControllerTest {
    @Tag("findAllBooks")
    @DisplayName("Verify that we get NotFound if there are no Books")
    void findAllBooks_returnNotFound_ofResourceNotFoundException() throws Exception {
+
       // GIVEN
       when(bookService.findAll()).thenThrow(ResourceNotFoundException.class);
 

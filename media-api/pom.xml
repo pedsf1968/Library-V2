@@ -145,6 +145,20 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- ======================================================= POWERMOCK -->
+		<!--dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>2.0.7</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.7.4</version>
+			<scope>test</scope>
+		</dependency-->
    </dependencies>
 
 	<!-- ==================================================================== -->
@@ -168,7 +182,6 @@
 				<activatedProperties>local</activatedProperties>
 				<configServer>http://localhost:2000</configServer>
 			</properties>
-
 		</profile>
 
 		<profile>
@@ -177,6 +190,28 @@
 				<activatedProperties>docker</activatedProperties>
 				<configServer>http://10.5.0.1:2000</configServer>
 			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>local</activatedProperties>
+			</properties>
+			<build>
+				<testResources>
+					<testResource>
+						<directory>src/test/resources</directory>
+					</testResource>
+					<testResource>
+						<directory>src/main/resources</directory>
+						<excludes>
+							<exclude>
+								src/main/resources/bootstrap.properties
+							</exclude>
+						</excludes>
+					</testResource>
+				</testResources>
+			</build>
 		</profile>
 	</profiles>
 
