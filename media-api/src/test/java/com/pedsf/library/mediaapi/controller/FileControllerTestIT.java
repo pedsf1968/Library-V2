@@ -1,6 +1,5 @@
 package com.pedsf.library.mediaapi.controller;
 
-import com.pedsf.library.dto.business.BookDTO;
 import com.pedsf.library.mediaapi.model.FileType;
 import com.pedsf.library.mediaapi.service.FileService;
 import org.junit.jupiter.api.BeforeEach;
