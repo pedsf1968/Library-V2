@@ -65,7 +65,6 @@ class BookControllerTest {
    @MockBean
    private UserApiProxy userApiProxy;
 
-   private BookController bookController;
 
    @Configuration
    @EnableWebSecurity
@@ -112,6 +111,8 @@ class BookControllerTest {
 
    @BeforeEach
    void beforeEach() {
+      BookController bookController;
+
       when(libraryApiProxy.findAllAllowedBooks(anyInt())).thenReturn(allBookDTOS);
       when(libraryApiProxy.getAllBooksAuthors()).thenReturn(booksAuthors);
       when(libraryApiProxy.getAllBooksEditors()).thenReturn(booksEditors);
@@ -145,7 +146,6 @@ class BookControllerTest {
       assertThat(foundEditors).hasSameSizeAs(booksEditors);
       assertThat(foundTypes).hasSameSizeAs(BookType.values());
       assertThat(foundFormats).hasSameSizeAs(BookFormat.values());
-
 
       assertThat(foundBooks).isEqualTo(allBookDTOS);
       assertThat(foundTitles).isEqualTo(booksTitles);
@@ -193,7 +193,6 @@ class BookControllerTest {
       assertThat(foundEditors).hasSameSizeAs(booksEditors);
       assertThat(foundTypes).hasSameSizeAs(BookType.values());
       assertThat(foundFormats).hasSameSizeAs(BookFormat.values());
-
 
       assertThat(foundBooks).isEqualTo(allBookDTOS);
       assertThat(foundTitles).isEqualTo(booksTitles);

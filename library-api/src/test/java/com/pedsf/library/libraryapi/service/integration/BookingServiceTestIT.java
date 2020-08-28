@@ -2,12 +2,10 @@ package com.pedsf.library.libraryapi.service.integration;
 
 import com.pedsf.library.dto.UserStatus;
 import com.pedsf.library.dto.business.BookingDTO;
-import com.pedsf.library.dto.business.BorrowingDTO;
 import com.pedsf.library.dto.business.MediaDTO;
 import com.pedsf.library.dto.global.UserDTO;
 import com.pedsf.library.exception.ForbiddenException;
 import com.pedsf.library.libraryapi.model.Booking;
-import com.pedsf.library.libraryapi.model.Borrowing;
 import com.pedsf.library.libraryapi.proxy.UserApiProxy;
 import com.pedsf.library.libraryapi.repository.BookingRepository;
 import com.pedsf.library.libraryapi.repository.BorrowingRepository;

@@ -45,18 +45,19 @@ public class MediaController {
          @RequestBody MediaDTO filter) {
       List<MediaDTO> mediaDTOS;
 
-      if (StringUtils.isEmpty(filter)) {
-         filter = new MediaDTO();
-      }
 
       try {
-         mediaDTOS = mediaService.findAllFiltered(filter);
-         return ResponseEntity.ok(mediaDTOS);
+         if (StringUtils.isEmpty(filter)) {
+            mediaDTOS = mediaService.findAll();
+         } else {
+            mediaDTOS = mediaService.findAllFiltered(filter);
+         }
       } catch (ResourceNotFoundException ex) {
          log.error(ex.getMessage());
          return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
 
+      return ResponseEntity.ok(mediaDTOS);
    }
 
 

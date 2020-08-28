@@ -5,5 +5,5 @@ public enum FileType {
    MUSIC,
    VIDEO,
    GAME,
-   USER;
+   OTHER;
 }

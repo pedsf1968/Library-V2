@@ -94,7 +94,6 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          bookingDTOS.add(entityToDTO(b));
       }
 
-
       if (!bookingDTOS.isEmpty()) {
          return bookingDTOS;
       } else {
@@ -158,8 +157,8 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
 
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
-//      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
-      MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
+      // findOneByEan(booking.getEan())
+      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
 
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);

@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
@@ -21,6 +21,9 @@ import java.util.Locale;
 @Slf4j
 @Service
 public class EmailService {
+   private static final String EMAIL_TEMPLATE = "email.html";
+   private static final String PNG_MIME = "image/png";
+
    @Value("${mail-api.mail.background}")
    private String mailBackground;
    @Value("${mail-api.mail.banner}")
@@ -32,14 +35,12 @@ public class EmailService {
    @Value("${mail-api.mail.count.down}")
    private Integer mailCountDown;
 
-   private static final String EMAIL_TEMPLATE = "email.html";
-   private static final String PNG_MIME = "image/png";
+   @Autowired
+   protected JavaMailSender mailSender;
 
    @Autowired
-   private JavaMailSender mailSender;
+   protected ITemplateEngine templateEngine;
 
-   @Autowired
-   private TemplateEngine templateEngine;
 
    /**
     * sendMailAsynch : for the controller MailController
@@ -73,11 +74,11 @@ public class EmailService {
     * @param locale : not used now
     */
    public void sendMail(MessageDTO messageDTO, Locale locale) {
-      final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
-      final MimeMessageHelper message;
+      MimeMessage mimeMessage = mailSender.createMimeMessage();
+      MimeMessageHelper message;
 
       // Prepare the evaluation context
-      final Context ctx = new Context(locale);
+      Context ctx = new Context(locale);
       ctx.setVariable("toFirstName", messageDTO.getFirstName());
       ctx.setVariable("toLastName", messageDTO.getLastName());
       ctx.setVariable("mailSubject", messageDTO.getSubject());
@@ -85,7 +86,7 @@ public class EmailService {
       ctx.setVariable("mailDate", new Date());
 
       // Create the HTML body using Thymeleaf
-      final String output = templateEngine.process(EMAIL_TEMPLATE, ctx);
+      String output = templateEngine.process(EMAIL_TEMPLATE, ctx);
 
       try {
          message = new MimeMessageHelper(mimeMessage, true /* multipart */, "UTF-8");
