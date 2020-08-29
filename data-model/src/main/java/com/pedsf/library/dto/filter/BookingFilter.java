@@ -5,7 +5,6 @@ import com.pedsf.library.dto.global.UserDTO;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
