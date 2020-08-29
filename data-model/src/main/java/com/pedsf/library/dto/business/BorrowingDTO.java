@@ -23,9 +23,7 @@ import java.util.Date;
 public class BorrowingDTO implements Serializable {
 
    protected Integer id;
-   @NotNull
    protected UserDTO user;
-   @NotNull
    protected MediaDTO media;
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date borrowingDate;

@@ -17,23 +17,18 @@ public class UserDTO implements Serializable {
 
     private Integer id;
 
-    @NotNull
     @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " AND " + Parameters.FIRSTNAME_MAX + " !")
     private String firstName;
 
-    @NotNull
     @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " AND " + Parameters.LASTNAME_MAX + " !")
     private String lastName;
 
-    @NotNull
     @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
     private String password;
 
-    @NotNull
     @Size(min = Parameters.PASSWORD_MIN, max = Parameters.PASSWORD_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.PASSWORD_MIN + " AND " + Parameters.PASSWORD_MAX + " !")
     private String matchingPassword;
 
-    @NotNull
     @Size(min = Parameters.EMAIL_MIN, max = Parameters.EMAIL_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.EMAIL_MIN + " AND " + Parameters.EMAIL_MAX + " !")
     @Pattern(regexp = Parameters.EMAIL_REGEXP, message = Parameters.ERROR_EMAIL_FORMAT)
     private String email;
@@ -50,7 +45,6 @@ public class UserDTO implements Serializable {
     private Integer counter;
     private List<String> roles;
 
-    @NotNull
     @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
     private String street1;
 
@@ -60,11 +54,9 @@ public class UserDTO implements Serializable {
     @Size(max = Parameters.STREET_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.STREET_MAX + " !")
     private String street3;
 
-    @NotNull
     @Size(min = Parameters.ZIP_MIN, max = Parameters.ZIP_MAX, message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.ZIP_MIN + " AND " + Parameters.ZIP_MAX + " !")
     private String zipCode;
 
-    @NotNull
     @Size(max = Parameters.CITY_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.CITY_MAX + " !")
     private String city;
 
