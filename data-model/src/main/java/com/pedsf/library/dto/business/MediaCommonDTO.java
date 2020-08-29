@@ -26,18 +26,14 @@ import java.util.Objects;
 public class MediaCommonDTO implements Serializable {
 
    // Media information
-   @NotNull
    @Size(max = Parameters.EAN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.EAN_MAX)
    protected String ean;
 
-   @NotNull
    @Size(min = Parameters.TITLE_MIN, max = Parameters.TITLE_MAX,
          message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.TITLE_MIN + " and " + Parameters.TITLE_MAX  + " !")
    protected String title;
 
-   @NotNull
    protected Integer quantity;
-   @NotNull
    protected Integer stock;
 
    protected Integer weight;

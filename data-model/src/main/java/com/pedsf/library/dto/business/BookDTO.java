@@ -27,12 +27,9 @@ import java.util.Objects;
 public class BookDTO extends MediaCommonDTO implements Serializable {
 
    // Book attributes
-   @NotNull
    @Size(max = Parameters.ISBN_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.ISBN_MAX)
    private String isbn;
-   @NotNull
    private PersonDTO author;
-   @NotNull
    private PersonDTO editor;
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;

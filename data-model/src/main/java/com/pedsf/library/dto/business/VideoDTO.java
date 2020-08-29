@@ -30,7 +30,6 @@ public class VideoDTO extends MediaCommonDTO implements Serializable {
    // Video information
    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
    private Date publicationDate;
-   @NotNull
    private PersonDTO director;
    private Integer duration;
    @Size(max = Parameters.TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.TYPE_MAX)

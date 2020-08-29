@@ -34,7 +34,6 @@ public class MediaDTO extends MediaCommonDTO implements Serializable {
 
    protected Integer id;
 
-   @NotNull
    @Size(max = Parameters.MEDIA_TYPE_MAX, message = Parameters.ERROR_FORMAT_LESS + Parameters.MEDIA_TYPE_MAX)
    protected String mediaType;
 
