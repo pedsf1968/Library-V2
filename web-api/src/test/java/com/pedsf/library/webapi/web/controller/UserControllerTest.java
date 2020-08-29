@@ -491,8 +491,8 @@ class UserControllerTest {
       final MvcResult result = mockMvc.perform(
             MockMvcRequestBuilders.post("/user/update/" + newUserDTO.getId())
                   .flashAttr("userDto",newUserDTO))
-            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-            .andExpect(view().name(PathTable.USER_UPDATE))
+            .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+            .andExpect(view().name(PathTable.HOME))
             .andReturn();
    }
 

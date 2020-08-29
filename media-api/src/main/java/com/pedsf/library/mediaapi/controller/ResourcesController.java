@@ -58,7 +58,7 @@ public class ResourcesController extends MediaControllerConfiguration {
             sb.append(imageName).append(".jpg");
 
             File fileUnsafe = new File(sb.toString());
-            ;
+
             File directory = new File(imagesRepository);
 
             if (FileUtils.directoryContains(directory, fileUnsafe)) {

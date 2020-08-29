@@ -25,13 +25,11 @@ public class PersonDTO implements Serializable {
 
    private Integer id;
 
-   @NotNull
    @NotBlank
    @Size(min = Parameters.FIRSTNAME_MIN, max = Parameters.FIRSTNAME_MAX,
          message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.FIRSTNAME_MIN + " and " + Parameters.FIRSTNAME_MAX)
    private String firstName;
 
-   @NotNull
    @NotBlank
    @Size(min = Parameters.LASTNAME_MIN, max = Parameters.LASTNAME_MAX,
          message = Parameters.ERROR_FORMAT_BETWEEN + Parameters.LASTNAME_MIN + " and " + Parameters.LASTNAME_MAX)

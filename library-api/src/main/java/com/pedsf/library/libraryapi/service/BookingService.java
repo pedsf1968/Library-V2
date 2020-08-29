@@ -74,7 +74,6 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
          bookingDTOS.add(entityToDTO(booking));
       }
 
-
       if (!bookingDTOS.isEmpty()) {
          return bookingDTOS;
       } else {
@@ -151,15 +150,14 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    }
 
    @Override
+   // older call to getNextReturnByEan
    public BookingDTO entityToDTO(Booking booking) {
 
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
 
       UserDTO userDTO = userApiProxy.findUserById( booking.getUserId());
-      // findOneByEan(booking.getEan())
-      MediaDTO mediaDTO = mediaService.getNextReturnByEan(booking.getEan());
-
+      MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
 
@@ -171,8 +169,16 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       Booking booking = modelMapper.map(bookingDTO, Booking.class);
 
-      booking.setUserId(bookingDTO.getUser().getId());
-      booking.setEan(bookingDTO.getMedia().getEan());
+      if (bookingDTO.getUser()!=null) {
+         booking.setUserId(bookingDTO.getUser().getId());
+      } else {
+         booking.setUserId(null);
+      }
+      if (bookingDTO.getMedia()!=null) {
+         booking.setEan(bookingDTO.getMedia().getEan());
+      } else {
+         booking.setEan(null);
+      }
 
       return booking;
    }

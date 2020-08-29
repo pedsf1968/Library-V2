@@ -118,7 +118,6 @@ class BookingServiceTestIT {
                  return null;
               });
 
-
       allBookingDTOS =bookingService.findAll();
    }
 

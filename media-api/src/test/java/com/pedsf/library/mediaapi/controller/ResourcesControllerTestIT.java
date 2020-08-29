@@ -65,7 +65,7 @@ class ResourcesControllerTestIT extends MediaControllerConfiguration {
    @Tag("getBusinessImage")
    @DisplayName("Verify that we get image from /images/book directory")
    void getBusinessImage_returnBOOKImage_ofBOOKFileName() throws Exception {
-      FileInputStream fis = new FileInputStream( bookImagesRepository + "\\"+ BOOK_IMAGE + ".jpg");
+      FileInputStream fis = new FileInputStream( bookImagesRepository + "/"+ BOOK_IMAGE + ".jpg");
       byte[] expected  = IOUtils.toByteArray(fis);
 
       // WHEN
@@ -82,7 +82,7 @@ class ResourcesControllerTestIT extends MediaControllerConfiguration {
    @Tag("getBusinessImage")
    @DisplayName("Verify that we get image from /images/game directory")
    void getBusinessImage_returnGAMEImage_ofGAMEFileName() throws Exception {
-      FileInputStream fis = new FileInputStream( gameImagesRepository + "\\"+ GAME_IMAGE + ".jpg");
+      FileInputStream fis = new FileInputStream( gameImagesRepository + "/"+ GAME_IMAGE + ".jpg");
       byte[] expected  = IOUtils.toByteArray(fis);
 
       // WHEN
@@ -99,7 +99,7 @@ class ResourcesControllerTestIT extends MediaControllerConfiguration {
    @Tag("getBusinessImage")
    @DisplayName("Verify that we get image from /images/music directory")
    void getBusinessImage_returnMUSICImage_ofMUSICFileName() throws Exception {
-      FileInputStream fis = new FileInputStream( musicImagesRepository + "\\"+ MUSIC_IMAGE + ".jpg");
+      FileInputStream fis = new FileInputStream( musicImagesRepository + "/"+ MUSIC_IMAGE + ".jpg");
       byte[] expected  = IOUtils.toByteArray(fis);
 
       // WHEN
@@ -116,7 +116,7 @@ class ResourcesControllerTestIT extends MediaControllerConfiguration {
    @Tag("getBusinessImage")
    @DisplayName("Verify that we get image from /images/video directory")
    void getBusinessImage_returnVIDEOImage_ofVIDEOFileName() throws Exception {
-      FileInputStream fis = new FileInputStream( videoImagesRepository + "\\"+ VIDEO_IMAGE + ".jpg");
+      FileInputStream fis = new FileInputStream( videoImagesRepository + "/"+ VIDEO_IMAGE + ".jpg");
       byte[] expected  = IOUtils.toByteArray(fis);
 
       // WHEN
