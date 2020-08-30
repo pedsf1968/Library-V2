@@ -4,26 +4,41 @@ import com.pedsf.library.dto.global.MessageDTO;
 import com.pedsf.library.mailapi.configuration.SpringMailConfig;
 import org.hibernate.validator.constraints.ModCheck;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.Email;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,34 +46,26 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@SpringBootConfiguration
-@ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
-@Import( SpringMailConfig.class)
+@ContextConfiguration
+@TestPropertySource(locations = {"classpath:test.properties"})
+@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
+@Import( {EmailService.class, SpringMailConfig.class})
 class EmailServiceTest {
+
    private static final String EMAIL_TEMPLATE = "email.html";
    private static final String SMTP_HOST = "smtp.example.com";
    private static final String SMTP_PORT = "25";
    private static final String PNG_MIME = "image/png";
 
-   @Value("${mail-api.mail.background}")
-   private String mailBackground;
-   @Value("${mail-api.mail.banner}")
-   private String mailBanner;
-   @Value("${mail-api.mail.logo}")
-   private String mailLogo;
-   @Value("${mail-api.mail.logo.background}")
-   private String mailLogoBackground;
-   @Value("${mail-api.mail.count.down}")
-   private Integer mailCountDown;
 
-   @Mock
+   @MockBean
    private JavaMailSender mailSender;
 
-   @Mock
+   @MockBean(name = "emailTemplateEngine")
    private ITemplateEngine templateEngine;
 
-   @InjectMocks
+   @Autowired
    private EmailService emailService;
    private MessageDTO newMessageDTO;
    private static MimeMessage mimeMessage;
@@ -75,11 +82,6 @@ class EmailServiceTest {
 
    @BeforeEach
    void beforeEach() {
-      ReflectionTestUtils.setField(emailService,"mailBackground",this.mailBackground);
-      ReflectionTestUtils.setField(emailService,"mailBanner",this.mailBanner);
-      ReflectionTestUtils.setField(emailService,"mailLogo",this.mailLogo);
-      ReflectionTestUtils.setField(emailService,"mailLogoBackground",this.mailLogoBackground);
-      ReflectionTestUtils.setField(emailService,"mailCountDown",this.mailCountDown);
 
       newMessageDTO = new MessageDTO("Martin",
             "DUPONT",

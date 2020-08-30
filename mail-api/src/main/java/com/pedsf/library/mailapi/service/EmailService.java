@@ -39,7 +39,7 @@ public class EmailService {
    protected JavaMailSender mailSender;
 
    @Autowired
-   protected ITemplateEngine templateEngine;
+   protected ITemplateEngine emailTemplateEngine;
 
 
    /**
@@ -86,7 +86,7 @@ public class EmailService {
       ctx.setVariable("mailDate", new Date());
 
       // Create the HTML body using Thymeleaf
-      String output = templateEngine.process(EMAIL_TEMPLATE, ctx);
+      String output = emailTemplateEngine.process(EMAIL_TEMPLATE, ctx);
 
       try {
          message = new MimeMessageHelper(mimeMessage, true /* multipart */, "UTF-8");

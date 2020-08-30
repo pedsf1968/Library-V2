@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -55,19 +56,19 @@ public class SpringMailConfig {
 
 
    @Bean
-   public TemplateEngine emailTemplateEngine() {
-      final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+   public ITemplateEngine emailTemplateEngine() {
+      final SpringTemplateEngine emailTemplateEngine = new SpringTemplateEngine();
 
       // Resolver for TEXT emails
-      templateEngine.addTemplateResolver(textTemplateResolver());
+      emailTemplateEngine.addTemplateResolver(textTemplateResolver());
       // Resolver for HTML emails (except the editable one)
-      templateEngine.addTemplateResolver(htmlTemplateResolver());
+      emailTemplateEngine.addTemplateResolver(htmlTemplateResolver());
       // Resolver for HTML editable emails (which will be treated as a String)
-      templateEngine.addTemplateResolver(stringTemplateResolver());
+      emailTemplateEngine.addTemplateResolver(stringTemplateResolver());
       // Message source, internationalization specific to emails
-      templateEngine.setTemplateEngineMessageSource(emailMessageSource());
+      emailTemplateEngine.setTemplateEngineMessageSource(emailMessageSource());
 
-      return templateEngine;
+      return emailTemplateEngine;
    }
 
    private ITemplateResolver textTemplateResolver() {
