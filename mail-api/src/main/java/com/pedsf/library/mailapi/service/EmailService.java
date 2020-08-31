@@ -39,7 +39,7 @@ public class EmailService {
    protected JavaMailSender mailSender;
 
    @Autowired
-   protected ITemplateEngine emailTemplateEngine;
+   protected ITemplateEngine templateEngine;
 
 
    /**
@@ -60,7 +60,7 @@ public class EmailService {
     *
     * @param messageDTO : message to be send by mail
     * @param locale : not used now
-    * @throws InterruptedException
+    * @throws InterruptedException send by Thread.sleep
     */
    public void sendMailSynch(MessageDTO messageDTO, Locale locale) throws InterruptedException {
       Thread.sleep(mailCountDown*1000L);
@@ -86,7 +86,7 @@ public class EmailService {
       ctx.setVariable("mailDate", new Date());
 
       // Create the HTML body using Thymeleaf
-      String output = emailTemplateEngine.process(EMAIL_TEMPLATE, ctx);
+      String output = templateEngine.process(EMAIL_TEMPLATE, ctx);
 
       try {
          message = new MimeMessageHelper(mimeMessage, true /* multipart */, "UTF-8");

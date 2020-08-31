@@ -164,12 +164,12 @@ class BookingServiceTestIT {
    @Tag("findAll")
    @DisplayName("Verify that we have the list of all Booking")
    void findAll() {
-      assertThat(allBookingDTOS.size()).isEqualTo(3);
+      assertThat(allBookingDTOS.size()).isEqualTo(4);
 
       // add one Booking to increase the list
       BookingDTO added = bookingService.save(newBookingDTO);
       List<BookingDTO> listFound = bookingService.findAll();
-      assertThat(listFound.size()).isEqualTo(4);
+      assertThat(listFound.size()).isEqualTo(5);
       assertThat(listFound.contains(added)).isTrue();
 
       bookingService.deleteById(added.getId());
@@ -255,11 +255,11 @@ class BookingServiceTestIT {
    @Tag("count")
    @DisplayName("Verify that we have the right number of Bookings")
    void count_returnTheNumberOfBookings() {
-      assertThat(bookingService.count()).isEqualTo(3);
+      assertThat(bookingService.count()).isEqualTo(4);
 
       // add one borrowing to increase the list
       BookingDTO added = bookingService.save(newBookingDTO);
-      assertThat(bookingService.count()).isEqualTo(4);
+      assertThat(bookingService.count()).isEqualTo(5);
 
       bookingService.deleteById(added.getId());
    }
@@ -329,7 +329,7 @@ class BookingServiceTestIT {
 
       BookingDTO found = bookingService.findNextBookingByMediaId(ean);
 
-      assertThat(found).isEqualTo(bookingService.findById(2));
+      assertThat(found).isEqualTo(bookingService.findById(3));
 
       bookingService.save(toBeRemoved);
    }
@@ -425,8 +425,8 @@ class BookingServiceTestIT {
    void findBookingsByUserId_returnBookingList_ofOneUser() {
       List<BookingDTO> founds = bookingService.findBookingsByUserId(5);
       List<BookingDTO> expected = new ArrayList<>();
-      expected.add(allBookingDTOS.get(1));
       expected.add(allBookingDTOS.get(2));
+      expected.add(allBookingDTOS.get(3));
 
       assertThat(founds.size()).isEqualTo(expected.size());
       for(BookingDTO b : founds) {
@@ -455,6 +455,7 @@ class BookingServiceTestIT {
    @Tag("findReadyToPickUp")
    @DisplayName("Verify that we have the list of Media to be PickUp")
    void findReadyToPickUp() {
+      List<BookingDTO> expected = bookingService.findReadyToPickUp();
       UserDTO userDTO = allUserDTOS.get(2);
       userDTO.setStatus(UserStatus.BORROWER.name());
       MediaDTO mediaDTO = allMediaDTOS.get(9);
@@ -462,14 +463,14 @@ class BookingServiceTestIT {
       Integer bookingId = bookingDTO.getId();
       Calendar calendar= Calendar.getInstance();
       calendar.add(Calendar.DATE,2);
-           // ;;
+
       bookingService.updatePickUpDate(bookingId,calendar.getTime());
 
       bookingDTO = bookingService.findById(bookingId);
       List<BookingDTO> founds = bookingService.findReadyToPickUp();
 
-      assertThat(founds.size()).isEqualTo(1);
-      assertThat(founds.get(0)).isEqualTo(bookingDTO);
+      assertThat(founds.size()).isEqualTo(expected.size()+1);
+      assertThat(founds).contains(bookingDTO);
       bookingDTO = bookingService.cancelBooking(bookingId);
 
    }

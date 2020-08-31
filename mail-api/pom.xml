@@ -176,6 +176,10 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- ==================================================================== -->
@@ -206,6 +210,13 @@
 			<properties>
 				<activatedProperties>docker</activatedProperties>
 				<configServer>http://10.5.0.1:2000</configServer>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
 			</properties>
 		</profile>
 	</profiles>

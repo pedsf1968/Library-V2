@@ -160,6 +160,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       MediaDTO mediaDTO = mediaService.findOneByEan(booking.getEan());
       bookingDTO.setUser(userDTO);
       bookingDTO.setMedia(mediaDTO);
+      bookingDTO.setMediaId(booking.getMediaId());
 
       return bookingDTO;
    }
@@ -168,6 +169,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    public Booking dtoToEntity(BookingDTO bookingDTO) {
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       Booking booking = modelMapper.map(bookingDTO, Booking.class);
+      booking.setMediaId(bookingDTO.getMediaId());
 
       if (bookingDTO.getUser()!=null) {
          booking.setUserId(bookingDTO.getUser().getId());

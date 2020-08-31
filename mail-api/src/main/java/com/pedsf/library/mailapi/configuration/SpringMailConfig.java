@@ -1,6 +1,7 @@
 package com.pedsf.library.mailapi.configuration;
 
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 import java.util.Collections;
+
 @Configuration
 public class SpringMailConfig {
 
@@ -54,7 +56,7 @@ public class SpringMailConfig {
       return messageSource;
    }
 
-
+   //@Qualifier("emailTemplateEngine")
    @Bean
    public ITemplateEngine emailTemplateEngine() {
       final SpringTemplateEngine emailTemplateEngine = new SpringTemplateEngine();

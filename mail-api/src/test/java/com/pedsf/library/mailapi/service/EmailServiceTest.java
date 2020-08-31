@@ -2,43 +2,24 @@ package com.pedsf.library.mailapi.service;
 
 import com.pedsf.library.dto.global.MessageDTO;
 import com.pedsf.library.mailapi.configuration.SpringMailConfig;
-import org.hibernate.validator.constraints.ModCheck;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.MockitoRule;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-import javax.validation.constraints.Email;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,12 +38,12 @@ class EmailServiceTest {
    private static final String SMTP_HOST = "smtp.example.com";
    private static final String SMTP_PORT = "25";
    private static final String PNG_MIME = "image/png";
-
+   private static final String output = "OUTPUT";
 
    @MockBean
    private JavaMailSender mailSender;
 
-   @MockBean(name = "emailTemplateEngine")
+   @MockBean(name = "templateEngine")
    private ITemplateEngine templateEngine;
 
    @Autowired
@@ -82,6 +63,7 @@ class EmailServiceTest {
 
    @BeforeEach
    void beforeEach() {
+    //  MockitoAnnotations.initMocks(this);
 
       newMessageDTO = new MessageDTO("Martin",
             "DUPONT",
@@ -96,7 +78,6 @@ class EmailServiceTest {
    @DisplayName("Verify that is waiting before sending Mail")
    void sendMailSynch() throws InterruptedException {
       // GIVEN
-      String output = "OUTPUT";
       when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
       when(templateEngine.process(anyString(),any(Context.class))).thenReturn(output);
       long startTime = new Date().getTime();
@@ -112,7 +93,6 @@ class EmailServiceTest {
       assertThat(endTime-startTime).isGreaterThan(referenceTime);
    }
 
-
    @Test
    @Tag("sendMail")
    @DisplayName("Verify that all datas in mail")
@@ -122,9 +102,8 @@ class EmailServiceTest {
       ArgumentCaptor<Context> contextCaptor = ArgumentCaptor.forClass(Context.class);
       ArgumentCaptor<MimeMessage> mimeMessageCaptor = ArgumentCaptor.forClass(MimeMessage.class);
 
-      String output = "OUTPUT";
       when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-      when(templateEngine.process(anyString(),any(Context.class))).thenReturn(output);
+      when(templateEngine.process(anyString(),any())).thenReturn(output);
 
       // WHEN
       emailService.sendMail(newMessageDTO, new Locale.Builder().build());
