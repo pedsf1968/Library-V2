@@ -153,6 +153,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    // older call to getNextReturnByEan
    public BookingDTO entityToDTO(Booking booking) {
 
+      if(booking==null) {
+         return null;
+      }
+
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
 
@@ -167,6 +171,11 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
    @Override
    public Booking dtoToEntity(BookingDTO bookingDTO) {
+
+      if(bookingDTO==null) {
+         return null;
+      }
+
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       Booking booking = modelMapper.map(bookingDTO, Booking.class);
       booking.setMediaId(bookingDTO.getMediaId());
