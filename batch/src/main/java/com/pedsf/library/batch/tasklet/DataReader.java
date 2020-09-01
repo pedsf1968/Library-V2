@@ -55,9 +55,9 @@ public class DataReader implements Tasklet, StepExecutionListener {
       // calculate the date daysOfDelay before now
       SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
       String url = requestBorrowingEndPoint + format.format(new Date());
-      log.info("GET Request : " + url);
 
       try {
+         log.info("GET Request : " + url);
          responseEntityBorrowing = restTemplate.exchange(
                url,
                HttpMethod.GET,
@@ -75,6 +75,7 @@ public class DataReader implements Tasklet, StepExecutionListener {
       }
 
       try {
+         log.info("GET Request : " + requestBookingEndPoint);
          responseEntityBooking = restTemplate.exchange(
                requestBookingEndPoint,
                HttpMethod.GET,

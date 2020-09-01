@@ -70,6 +70,21 @@ You can change database content in ini.sql.
 Remove the volume project-library_pgdata to start with a new database.
 
 
+# Tests
+## Unitary
+Launch unitary tests with command :
+- mvn clean test -P test
+
+## Integration
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=pedsf1968_Library-V2)](https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2)
+
+Launch integration tests with command :
+- mvn verify sonar:sonar -P test
+
+See Sonar results in the link below
+- https://sonarcloud.io/dashboard?id=pedsf1968_Library-V2
+
+
 # Microservices
 ## config-server
 Cloud configuration server that you need to start first.
@@ -123,3 +138,5 @@ Use the port 9000
 ## Database library
 PostgreSQL:alpine 
 Use the port 5433
+
+

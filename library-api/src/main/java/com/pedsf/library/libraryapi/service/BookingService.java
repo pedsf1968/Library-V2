@@ -153,6 +153,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
    // older call to getNextReturnByEan
    public BookingDTO entityToDTO(Booking booking) {
 
+      if(booking==null) {
+         return null;
+      }
+
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
 
@@ -167,6 +171,11 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
 
    @Override
    public Booking dtoToEntity(BookingDTO bookingDTO) {
+
+      if(bookingDTO==null) {
+         return null;
+      }
+
       modelMapper.getConfiguration().setAmbiguityIgnored(true);
       Booking booking = modelMapper.map(bookingDTO, Booking.class);
       booking.setMediaId(bookingDTO.getMediaId());
@@ -338,6 +347,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     */
    public List<BookingDTO> findReadyToPickUp() {
 
+      // remove booking out of date
       cancelOutOfDate();
       List<Booking> bookings = bookingRepository.findReadyToPickUp();
 
@@ -357,8 +367,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(new Date());
       calendar.add(Calendar.DATE, daysOfDelay);
+      // find the booking that has pickup_date before today
       List<Booking> bookings = bookingRepository.findOutOfDate(new java.sql.Date(calendar.getTimeInMillis()));
 
+      // cancel all bookings of the list
       for( Booking b : bookings) {
          cancelBooking(b.getId());
       }
