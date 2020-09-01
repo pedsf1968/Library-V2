@@ -42,7 +42,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-
 class MailControllerTest {
 
    @Inject

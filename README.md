@@ -20,6 +20,45 @@ Library project
 
 
 # How to
+## Starting in development mode with in memory database
+Clone all microservices project.
+Select development profile
+Launch microservices in following order starting with servers :
+- config-server
+- eureka-server
+- zuul-server
+
+Continue with backend REST api
+- media-api
+- user-api
+- library-api
+- mail-api
+
+Finish with frontend web user interface and batch
+- web-api
+- batch
+
+Use following credentials below to play with the application
+- emile.zola@free.fr /zola
+- victor.hugo@gmail.com / hugo
+- martin.dupont@gmail.com / martin
+
+## Starting local mode with PostgreSQL database
+### create library database
+Database is configured with :
+- host : localhost
+- port : 5433
+- database : library
+
+You can change the spring.datasource.url property in files :
+- config-server/properties-repository/library-api-local.properties
+- config-server/properties-repository/user-api-local.properties
+
+Execute the SQL script below to create database with datas
+- db-init-from-scratch.sql
+
+Launch microservices like previous section with profile local.
+
 ## Starting with Docker
 - Copy docker-compose.yml.
 - Copy init.sql in the same directory.
@@ -30,35 +69,6 @@ Library project
 You can change database content in ini.sql. 
 Remove the volume project-library_pgdata to start with a new database.
 
-## Starting development mode
-- clone all microservices in the same directory.
-- select development profile
-- launch microservices in the way list and specify the port for user-api and library-api.   
-
-
-## Starting local mode
-- you must have a PostgreSQL server running.
-- In user-api-local.properties and library -api-local.properties set :
-  - spring.datasource.initialize=true
-  - spring.jpa.hibernate.ddl-auto = create
-- Clone all microservices GitLab repositories in the same directory.
-- Select local profile
-- Launch microservices in the way list and specify the port for user-api and library-api.
-  -Dserver.port=7xxx for user-api
-  -Dserver.port=8xxx for library-api 
-- Execute the SQL scripts data.sql located in :
-   - \library-api\src\main\resources\data.sql  
-   - \user-api\src\main\resources\data.sql  
-- Create the directory trees for media-api images :
-  - media-api.upload.tmp=/TMP/
-  - media-api.images.repository=/images/library/
-  - media-api.book.images.repository=/images/library/book/
-  - media-api.music.images.repository=/images/library/music/
-  - media-api.video.images.repository=/images/library/video/
-  - media-api.game.images.repository=/images/library/game/
-  - media-api.user.images.repository=/images/library/user/
-- If needed you can change it in media-api-development.properties
-Image name is the media.id with jpg extension and must be placed in the right directory. 
 
 # Microservices
 ## config-server
@@ -112,4 +122,4 @@ Use the port 9000
 
 ## Database library
 PostgreSQL:alpine 
-Use the port 5432
+Use the port 5433

@@ -52,7 +52,7 @@ services:
       POSTGRES_PASSWORD: ${LIBRARY_DB_PASSWORD}
       POSTGRES_DB: library
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db-init-from-scratch.sql:/docker-entrypoint-initdb.d/db-init-from-scratch.sql
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"

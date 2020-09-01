@@ -60,7 +60,7 @@ public class EmailService {
     *
     * @param messageDTO : message to be send by mail
     * @param locale : not used now
-    * @throws InterruptedException
+    * @throws InterruptedException send by Thread.sleep
     */
    public void sendMailSynch(MessageDTO messageDTO, Locale locale) throws InterruptedException {
       Thread.sleep(mailCountDown*1000L);

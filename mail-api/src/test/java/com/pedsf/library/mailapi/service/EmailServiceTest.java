@@ -2,23 +2,19 @@ package com.pedsf.library.mailapi.service;
 
 import com.pedsf.library.dto.global.MessageDTO;
 import com.pedsf.library.mailapi.configuration.SpringMailConfig;
-import org.hibernate.validator.constraints.ModCheck;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -31,34 +27,26 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@SpringBootConfiguration
-@ExtendWith(MockitoExtension.class)
-@RunWith(MockitoJUnitRunner.class)
-@Import( SpringMailConfig.class)
+@ContextConfiguration
+@TestPropertySource(locations = {"classpath:test.properties"})
+@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
+@Import( {EmailService.class, SpringMailConfig.class})
 class EmailServiceTest {
+
    private static final String EMAIL_TEMPLATE = "email.html";
    private static final String SMTP_HOST = "smtp.example.com";
    private static final String SMTP_PORT = "25";
    private static final String PNG_MIME = "image/png";
+   private static final String output = "OUTPUT";
 
-   @Value("${mail-api.mail.background}")
-   private String mailBackground;
-   @Value("${mail-api.mail.banner}")
-   private String mailBanner;
-   @Value("${mail-api.mail.logo}")
-   private String mailLogo;
-   @Value("${mail-api.mail.logo.background}")
-   private String mailLogoBackground;
-   @Value("${mail-api.mail.count.down}")
-   private Integer mailCountDown;
-
-   @Mock
+   @MockBean
    private JavaMailSender mailSender;
 
-   @Mock
+   @MockBean(name = "templateEngine")
    private ITemplateEngine templateEngine;
 
-   @InjectMocks
+   @Autowired
    private EmailService emailService;
    private MessageDTO newMessageDTO;
    private static MimeMessage mimeMessage;
@@ -75,11 +63,7 @@ class EmailServiceTest {
 
    @BeforeEach
    void beforeEach() {
-      ReflectionTestUtils.setField(emailService,"mailBackground",this.mailBackground);
-      ReflectionTestUtils.setField(emailService,"mailBanner",this.mailBanner);
-      ReflectionTestUtils.setField(emailService,"mailLogo",this.mailLogo);
-      ReflectionTestUtils.setField(emailService,"mailLogoBackground",this.mailLogoBackground);
-      ReflectionTestUtils.setField(emailService,"mailCountDown",this.mailCountDown);
+    //  MockitoAnnotations.initMocks(this);
 
       newMessageDTO = new MessageDTO("Martin",
             "DUPONT",
@@ -94,7 +78,6 @@ class EmailServiceTest {
    @DisplayName("Verify that is waiting before sending Mail")
    void sendMailSynch() throws InterruptedException {
       // GIVEN
-      String output = "OUTPUT";
       when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
       when(templateEngine.process(anyString(),any(Context.class))).thenReturn(output);
       long startTime = new Date().getTime();
@@ -110,7 +93,6 @@ class EmailServiceTest {
       assertThat(endTime-startTime).isGreaterThan(referenceTime);
    }
 
-
    @Test
    @Tag("sendMail")
    @DisplayName("Verify that all datas in mail")
@@ -120,9 +102,8 @@ class EmailServiceTest {
       ArgumentCaptor<Context> contextCaptor = ArgumentCaptor.forClass(Context.class);
       ArgumentCaptor<MimeMessage> mimeMessageCaptor = ArgumentCaptor.forClass(MimeMessage.class);
 
-      String output = "OUTPUT";
       when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-      when(templateEngine.process(anyString(),any(Context.class))).thenReturn(output);
+      when(templateEngine.process(anyString(),any())).thenReturn(output);
 
       // WHEN
       emailService.sendMail(newMessageDTO, new Locale.Builder().build());
