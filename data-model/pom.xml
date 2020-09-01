@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <!-- ==================================================================== -->
+   <!-- 									                       PROJECT INFORMATIONS -->
+   <!-- ==================================================================== -->
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>com.pedsf.library</groupId>
+      <artifactId>library</artifactId>
+      <version>1.0.0.RELEASE</version>
+      <relativePath>../pom.xml</relativePath>
+   </parent>
+
+   <artifactId>data-model</artifactId>
+   <packaging>jar</packaging>
+   <name>${project.artifactId}</name>
+   <description>Data model for Library project</description>
+
+   <!-- ==================================================================== -->
+   <!--                                                           PROPERTIES -->
+   <!-- ==================================================================== -->
+   <properties>
+      <java.version>1.8</java.version>
+   </properties>
+
+
+
+   <!-- ==================================================================== -->
+   <!--                                                             PROFILES -->
+   <!-- ==================================================================== -->
+   <profiles>
+      <profile>
+         <id>development</id>
+         <properties>
+            <maven.test.skip>true</maven.test.skip>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>local</id>
+         <properties>
+            <maven.test.skip>true</maven.test.skip>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>docker</id>
+         <properties>
+            <maven.test.skip>true</maven.test.skip>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>test</id>
+         <properties>
+            <maven.test.skip>true</maven.test.skip>
+         </properties>
+      </profile>
+
+   </profiles>
+
+   <!-- ==================================================================== -->
+   <!--                                                         DEPENDENCIES -->
+   <!-- ==================================================================== -->
+   <dependencies>
+      <!-- ======================================================== ACTUATOR -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-actuator</artifactId>
+      </dependency>
+
+      <!-- ========================================================== CLIENT -->
+      <dependency>
+         <groupId>de.codecentric</groupId>
+         <artifactId>spring-boot-admin-starter-client</artifactId>
+      </dependency>
+
+      <!-- ========================================================== CONFIG -->
+      <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-config</artifactId>
+      </dependency>
+
+      <!-- ======================================================= DATA REST -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-rest</artifactId>
+      </dependency>
+
+      <!-- ======================================================== DATA JPA -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-jpa</artifactId>
+      </dependency>
+
+      <!-- ======================================================= DATA JDBC -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-data-jdbc</artifactId>
+      </dependency>
+
+      <!-- ======================================================== DEVTOOLS -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-devtools</artifactId>
+         <optional>true</optional>
+      </dependency>
+
+      <!-- ========================================================== EUREKA -->
+      <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      </dependency>
+
+      <!-- ========================================================== JASYPT -->
+      <dependency>
+         <groupId>com.github.ulisesbocchio</groupId>
+         <artifactId>jasypt-spring-boot-starter</artifactId>
+      </dependency>
+
+      <!-- =========================================================== JBOSS -->
+      <dependency>
+         <groupId>org.webjars</groupId>
+         <artifactId>webjars-locator-jboss-vfs</artifactId>
+      </dependency>
+
+      <!-- =========================================================== KAFKA -->
+      <dependency>
+         <groupId>org.springframework.kafka</groupId>
+         <artifactId>spring-kafka</artifactId>
+      </dependency>
+
+      <!-- ========================================================== LOMBOK -->
+      <dependency>
+         <groupId>org.projectlombok</groupId>
+         <artifactId>lombok</artifactId>
+         <optional>true</optional>
+      </dependency>
+
+      <!-- ===================================================== MODELMAPPER -->
+      <dependency>
+         <groupId>org.modelmapper</groupId>
+         <artifactId>modelmapper</artifactId>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- ====================================================== OPENAPI-UI -->
+      <dependency>
+         <groupId>org.springdoc</groupId>
+         <artifactId>springdoc-openapi-ui</artifactId>
+      </dependency>
+
+      <!-- ======================================================= OPENFEIGN -->
+      <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-openfeign</artifactId>
+      </dependency>
+
+      <!-- =========================================================== RIBON -->
+      <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+      </dependency>
+
+      <!-- ============================================================= WEB -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-web</artifactId>
+      </dependency>
+
+      <!-- ==================================================== STARTER TEST -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-test</artifactId>
+         <scope>test</scope>
+         <exclusions>
+            <exclusion>
+               <groupId>org.springframework.cloud</groupId>
+               <artifactId>spring-cloud-config-client</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.junit.vintage</groupId>
+               <artifactId>junit-vintage-engine</artifactId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+      <dependency>
+         <groupId>org.apache.httpcomponents</groupId>
+         <artifactId>httpclient</artifactId>
+      </dependency>
+
+
+   </dependencies>
+
+
+   <!-- ==================================================================== -->
+   <!--                                                                BUILD -->
+   <!-- ==================================================================== -->
+   <build>
+   </build>
+
+</project>

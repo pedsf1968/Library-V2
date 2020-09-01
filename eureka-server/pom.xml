@@ -5,16 +5,17 @@
 	<!-- 									                       PROJECT INFORMATIONS -->
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
+		<version>1.0.0.RELEASE</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
 	<artifactId>eureka-server</artifactId>
 	<name>${project.artifactId}</name>
 	<description>Library multi module Eureka server</description>
 
-	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
-		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
-	</parent>
 
 	<!-- =========================================================== LICENCES -->
 	<licenses>

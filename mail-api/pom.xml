@@ -7,10 +7,10 @@
 	<!-- ==================================================================== -->
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.pedsf</groupId>
-		<artifactId>Library</artifactId>
+		<groupId>com.pedsf.library</groupId>
+		<artifactId>library</artifactId>
 		<version>1.0.0.RELEASE</version>
-		<relativePath>..</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>mail-api</artifactId>
@@ -40,7 +40,14 @@
 	<!--                                                         DEPENDENCIES -->
 	<!-- ==================================================================== -->
 	<dependencies>
-	<!-- =========================================================== ACTUATOR -->
+		<!-- ========================================================= MODULES -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>data-model</artifactId>
+		</dependency>
+
+
+		<!-- =========================================================== ACTUATOR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -169,6 +176,10 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
 	</dependencies>
 
 	<!-- ==================================================================== -->
@@ -192,7 +203,6 @@
 				<activatedProperties>development</activatedProperties>
 				<configServer>http://localhost:2000</configServer>
 			</properties>
-
 		</profile>
 
 		<profile>
@@ -200,6 +210,13 @@
 			<properties>
 				<activatedProperties>docker</activatedProperties>
 				<configServer>http://10.5.0.1:2000</configServer>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
 			</properties>
 		</profile>
 	</profiles>

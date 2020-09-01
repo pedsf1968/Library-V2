@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+<div class="container-fluid page">
+   <nav th:replace="~{fragments/nav :: nav}"></nav>
+
+   <header class="jumbotron">
+      <div class="row">
+         <div class="col-sm my-auto">
+            <H1  class="display-4 float-left" th:text="${borrowings}==null ? #{message.noBorrowing} : #{title.borrowingList}">Borrowings list</H1>
+         </div>
+      </div>
+   </header>
+
+   <div class="row endpage">
+      <div class="card-deck col-lg-4 col-sm-6 col-xs-12 mx-auto" th:each="borrowing : ${borrowings}">
+         <div class="card col-md-12" th:style="${borrowing.borrowingDate > restitutionDate} ? 'background:white' : 'background:red'">
+            <div class="card-header row">
+               <div class="col-sm">
+                  <h5 th:text="${borrowing.media.title}"></h5>
+               </div>
+               <div class="col-sm">
+
+               </div>
+            </div>
+            <div class="card-body center">
+               <img  th:if="${borrowing.media.mediaType=='BOOK'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/BOOK/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='GAME'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/GAME/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='MUSIC'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/MUSIC/' + borrowing.media.ean}" alt="photo"/>
+               <img  th:if="${borrowing.media.mediaType=='VIDEO'}" class="img-fluid" th:src="${@environment.getProperty('zuul.url') + 'media-api/images/VIDEO/' + borrowing.media.ean}" alt="photo"/>
+            </div>
+            <div class="card-footer">
+               <div class="input-group">
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.borrowingDate}">Borrowing date</div>
+                  </div>
+                  <span class="form-control" th:text="${#dates.format(borrowing.borrowingDate, 'dd-MM-yyyy')}">Borrowing date</span>
+               </div>
+
+               <div class="input-group">
+                  <div class="input-group-prepend mb-2">
+                     <div class="input-group-text" th:text="#{label.numberOfExtensions}">Number of extensions</div>
+                  </div>
+                  <span class="form-control" th:text="${borrowing.extended}">Extended</span>
+                  <a th:if="${borrowing.borrowingDate > restitutionDate}" class="btn btn-secondary mb-2" th:href="@{'/borrowings/extend/' + ${borrowing.media.id}}" th:text="#{label.extend}">Extend</a>
+                  <a th:if="${borrowing.borrowingDate < restitutionDate}" class="btn btn-success mb-2" th:href="@{'/borrowings/extend/' + ${borrowing.media.id}}" th:text="#{label.extend}">Extend</a>
+               </div>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+   <footer th:replace="~{fragments/footer :: footer}">&copy; 2020 La Grande Librarie</footer>
+</body>
+</html>
