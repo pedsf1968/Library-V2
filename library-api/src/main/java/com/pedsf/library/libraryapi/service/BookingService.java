@@ -347,6 +347,7 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
     */
    public List<BookingDTO> findReadyToPickUp() {
 
+      // remove booking out of date
       cancelOutOfDate();
       List<Booking> bookings = bookingRepository.findReadyToPickUp();
 
@@ -366,8 +367,10 @@ public class BookingService implements GenericService<BookingDTO, Booking,Intege
       Calendar calendar = Calendar.getInstance();
       calendar.setTime(new Date());
       calendar.add(Calendar.DATE, daysOfDelay);
+      // find the booking that has pickup_date before today
       List<Booking> bookings = bookingRepository.findOutOfDate(new java.sql.Date(calendar.getTimeInMillis()));
 
+      // cancel all bookings of the list
       for( Booking b : bookings) {
          cancelBooking(b.getId());
       }
