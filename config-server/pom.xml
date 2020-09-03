@@ -106,7 +106,7 @@
 		</plugins>
 		<resources>
 			<resource>
-				<targetPath>/properties-repository</targetPath>
+				<targetPath>config-server/properties-repository</targetPath>
 				<directory>${project.basedir}/properties-repository/</directory>
 			</resource>
 		</resources>
