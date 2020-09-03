@@ -11,7 +11,7 @@ before_install:
 jobs:
   include:
     - stage: test
-      script: ./mvnw clean test -P test
+      script: ./mvnw clean test -P test -X
     - stage: sonar
       script: ./mvnw verify sonar:sonar -P test
 
