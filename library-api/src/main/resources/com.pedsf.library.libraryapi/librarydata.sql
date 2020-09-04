@@ -57,30 +57,30 @@ VALUES ('5035223122470','NFS Need for Speed™ Heat',2,2,'2019-11-08',16,'COURSE
     ('0805529340299','Flight Simulator 2004 : Un Siècle d''Aviation',1,1,'2003-08-29',17,'SIMULATION','PC','3+','https://www.youtube.com/embed/myMYQeBqKLw','Partez à la conquête des cieux dans Flight Simulator 2004 : Un Siècle d''Aviation sur PC. En plus des vols d''appareils classiques cet opus vous permet de voler avec des légendes de l''aviation, les premiers avions existants et de recréer leurs vols en temps réel.');
 
 INSERT INTO media (id,ean, media_type, status, return_date)
-VALUES (1,'978-2253004226','BOOK','BORROWED','2020-08-10'), (2,'978-2253004226','BOOK','BORROWED','2020-08-17'), (3,'978-2253004226','BOOK','FREE',null), (4,'978-2253004226','BOOK','FREE',null),
-    (5,'978-2253002864','BOOK','BORROWED','2020-08-10'), (6,'978-2253002864','BOOK','BORROWED','2020-08-12'),
-    (7,'978-2253003656','BOOK','BORROWED','2020-08-17'), (8,'978-2253003656','BOOK','FREE',null),
+VALUES (1,'978-2253004226','BOOK','BORROWED','2020-09-03'), (2,'978-2253004226','BOOK','BORROWED','2020-09-10'), (3,'978-2253004226','BOOK','FREE',null), (4,'978-2253004226','BOOK','FREE',null),
+    (5,'978-2253002864','BOOK','BORROWED','2020-09-27'), (6,'978-2253002864','BOOK','BORROWED','2020-09-12'),
+    (7,'978-2253003656','BOOK','BORROWED','2020-09-27'), (8,'978-2253003656','BOOK','FREE',null),
     (9,'978-2253010692','BOOK','FREE',null), (10,'978-2253010692','BOOK','FREE',null),
-    (11,'978-2070413119','BOOK','BORROWED','2020-08-17'), (12,'978-2070413119','BOOK','FREE',null), (13,'978-2070413119','BOOK','FREE',null),
+    (11,'978-2070413119','BOOK','BORROWED','2020-09-27'), (12,'978-2070413119','BOOK','FREE',null), (13,'978-2070413119','BOOK','FREE',null),
     (14,'978-2253096337','BOOK','FREE',null), (15,'978-2253096337','BOOK','FREE',null), (16,'978-2253096337','BOOK','FREE',null),
-    (17,'978-2253096344','BOOK','BORROWED','2020-08-17'), (18,'978-2253096344','BOOK','FREE',null), (19,'978-2253096344','BOOK','FREE',null),
-    (20,'3475001058980','VIDEO','BORROWED','2020-08-17'), (21,'3475001058980','VIDEO','FREE',null), (22,'3475001058980','VIDEO','FREE',null),
+    (17,'978-2253096344','BOOK','BORROWED','2020-09-27'), (18,'978-2253096344','BOOK','FREE',null), (19,'978-2253096344','BOOK','FREE',null),
+    (20,'3475001058980','VIDEO','BORROWED','2020-09-27'), (21,'3475001058980','VIDEO','FREE',null), (22,'3475001058980','VIDEO','FREE',null),
     (23,'8809634380036','MUSIC','FREE',null), (24,'8809634380036','MUSIC','FREE',null),
     (25,'4988064587100','MUSIC','FREE',null), (26,'4988064587100','MUSIC','FREE',null),
-    (27,'4988064585816','MUSIC','BORROWED','2020-08-10'),
+    (27,'4988064585816','MUSIC','BORROWED','2020-09-10'),
     (28,'8809269506764','MUSIC','FREE',null),
     (29,'5035223122470','GAME','FREE',null), (30,'5035223122470','GAME','FREE',null),
     (31,'0805529340299','GAME','FREE',null);
 
 INSERT INTO borrowing (user_id,media_id,borrowing_date,extended)
-VALUES (4,1,'2020-08-01',0), (4,5,'2020-08-20',0), (4,7,'2020-08-20',0),  (4,20,'2020-08-20',0),
-        (5,2,'2020-08-13',0), (5,11,'2020-08-20',0), (5,17,'2020-08-20',0), (5,27,'2020-08-13',0),
+VALUES (4,1,'2020-08-05',0), (4,5,'2020-08-30',0), (4,7,'2020-08-30',0),  (4,20,'2020-08-30',0),
+        (5,2,'2020-08-13',0), (5,11,'2020-08-30',0), (5,17,'2020-08-30',0), (5,27,'2020-08-13',0),
         (3,6,'2020-08-15',0);
 
 
 INSERT INTO booking (ean,user_id,booking_date, rank, pickup_date,media_id)
 VALUES ('4988064585816',4,'2020-08-20',1,null,null),
-    ('8809269506764',4,'2020-08-20',1,'2020-09-02',28),
+    ('8809269506764',4,'2020-08-20',1,'2020-09-07',28),
     ('4988064585816',5,'2020-08-25',2,null,null),
     ('978-2253002864',5,'2020-08-20', 1,null,null);
 
