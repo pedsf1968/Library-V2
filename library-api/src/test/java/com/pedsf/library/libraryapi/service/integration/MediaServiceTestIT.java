@@ -716,12 +716,22 @@ class MediaServiceTestIT {
    @Tag("getNextReturnByEan")
    @DisplayName("Verify that we can get the next return Media by EAN")
    void getNextReturnByEan() {
+      String ean = "978-2253004226";
       MediaDTO found;
+      List<MediaDTO> expected = new ArrayList<>();
 
-      found = mediaService.getNextReturnByEan("978-2253002864");
-      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
-      found = mediaService.getNextReturnByEan("4988064585816");
-      assertThat(found.getReturnDate()).isEqualTo(Date.valueOf("2020-08-10"));
+      found = mediaService.getNextReturnByEan(ean);
+
+      for(MediaDTO mediaDTO :mediaService.findAll()) {
+         if(mediaDTO.getEan() == ean) {
+            expected.add(mediaDTO);
+         }
+      }
+
+      for(MediaDTO mediaDTO : expected) {
+         assertThat(found.getReturnDate()).isBeforeOrEqualTo(mediaDTO.getReturnDate());
+      }
+
    }
 
    @Test
