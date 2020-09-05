@@ -716,14 +716,14 @@ class MediaServiceTestIT {
    @Tag("getNextReturnByEan")
    @DisplayName("Verify that we can get the next return Media by EAN")
    void getNextReturnByEan() {
-      String ean = "978-2253004226";
+      String ean = "978-2253002864";
       MediaDTO found;
       List<MediaDTO> expected = new ArrayList<>();
 
       found = mediaService.getNextReturnByEan(ean);
 
       for(MediaDTO mediaDTO :mediaService.findAll()) {
-         if(mediaDTO.getEan() == ean) {
+         if(mediaDTO.getEan().equals(ean)) {
             expected.add(mediaDTO);
          }
       }
