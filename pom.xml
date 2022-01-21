@@ -69,7 +69,7 @@
       <!-- ========================================================== VERSIONS -->
       <com.fasterxml.jackson.core.version>2.11.1</com.fasterxml.jackson.core.version>
       <com.github.ulisesbocchio.version>2.0.0</com.github.ulisesbocchio.version>
-      <com.h2database.version>1.4.200</com.h2database.version>
+      <com.h2database.version>2.1.210</com.h2database.version>
       <commons-io.version>2.7</commons-io.version>
       <de.codecentric.version>2.2.3</de.codecentric.version>
       <jacoco.version>0.8.5</jacoco.version>
