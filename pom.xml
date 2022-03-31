@@ -75,7 +75,7 @@
       <jacoco.version>0.8.5</jacoco.version>
 
       <org.apache.commons.version>3.10</org.apache.commons.version>
-      <org.springframework.boot.version>2.3.2.RELEASE</org.springframework.boot.version>
+      <org.springframework.boot.version>2.5.12</org.springframework.boot.version>
       <org.springframework.cloud.version>2.2.3.RELEASE</org.springframework.cloud.version>
       <org.springframework.cloud.pom.version>Hoxton.SR3</org.springframework.cloud.pom.version>
       <org.springframework.kafka.version>2.5.3.RELEASE</org.springframework.kafka.version>
