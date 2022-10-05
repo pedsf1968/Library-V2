@@ -67,7 +67,7 @@
 
 
       <!-- ========================================================== VERSIONS -->
-      <com.fasterxml.jackson.core.version>2.11.1</com.fasterxml.jackson.core.version>
+      <com.fasterxml.jackson.core.version>2.12.6.1</com.fasterxml.jackson.core.version>
       <com.github.ulisesbocchio.version>2.0.0</com.github.ulisesbocchio.version>
       <com.h2database.version>1.4.200</com.h2database.version>
       <commons-io.version>2.7</commons-io.version>
